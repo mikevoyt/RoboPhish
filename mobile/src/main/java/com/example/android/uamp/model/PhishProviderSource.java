@@ -17,27 +17,45 @@ import cz.msebera.android.httpclient.Header;
 public class PhishProviderSource implements MusicProviderSource  {
 
     private static final String TAG = LogHelper.makeLogTag(PhishProviderSource.class);
-    ArrayList<String> mYears;
 
     @Override
     public Iterator<MediaMetadataCompat> iterator() {
-            ArrayList<MediaMetadataCompat> tracks = new ArrayList<>();
-            return tracks.iterator();
-    }
 
+        final ArrayList<MediaMetadataCompat> tracks = new ArrayList<>();
 
-    private void fetchYears() {
         HttpClient.get("years.json", null, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                mYears = ParseUtils.parseYears(response);
-            }
+                ArrayList<String> mYears = ParseUtils.parseYears(response);
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+                if (mYears != null) {
+                    for (String year : mYears) {
+                        tracks.add(buildFromYear(year));
+                    }
+                }
             }
         });
 
+
+        return tracks.iterator();
     }
+
+    private MediaMetadataCompat buildFromYear(String year) {
+
+        // Since we don't have a unique ID in the server, we fake one using the hashcode of
+        // the music source. In a real world app, this could come from the server.
+        String id = String.valueOf(year.hashCode());
+
+        // Adding the music source to the MediaMetadata (and consequently using it in the
+        // mediaSession.setMetadata) is not a good idea for a real world music app, because
+        // the session metadata can be accessed by notification listeners. This is done in this
+        // sample for convenience only.
+        //noinspection ResourceType
+        return new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, id)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, year)
+                .build();
+    }
+
 }

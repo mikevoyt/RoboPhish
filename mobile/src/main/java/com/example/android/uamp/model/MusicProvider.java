@@ -68,8 +68,9 @@ public class MusicProvider {
     }
 
     public MusicProvider() {
-        this(new RemoteJSONSource());
+        this(new PhishProviderSource());
     }
+//  public MusicProvider() { this(new RemoteJSONSource()); }
     public MusicProvider(MusicProviderSource source) {
         mSource = source;
         mMusicListByGenre = new ConcurrentHashMap<>();
