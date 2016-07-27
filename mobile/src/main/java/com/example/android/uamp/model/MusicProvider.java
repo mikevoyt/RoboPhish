@@ -54,7 +54,7 @@ public class MusicProvider {
 
     // Categorized caches for music track data:
     private ConcurrentMap<String, List<MediaMetadataCompat>> mMusicListByGenre;
-    private ConcurrentMap<String, List<MediaMetadataCompat>> mMusicListByYear;
+    private ConcurrentMap<String, List<MediaMetadataCompat>> mShowListByYear;
     private final ConcurrentMap<String, MutableMediaMetadata> mMusicListById;
 
     private final Set<String> mFavoriteTracks;
@@ -76,7 +76,7 @@ public class MusicProvider {
     public MusicProvider(MusicProviderSource source) {
         mSource = source;
         mMusicListByGenre = new ConcurrentHashMap<>();
-        mMusicListByYear = new ConcurrentHashMap<>();
+        mShowListByYear = new ConcurrentHashMap<>();
         mMusicListById = new ConcurrentHashMap<>();
         mFavoriteTracks = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
     }
@@ -94,7 +94,7 @@ public class MusicProvider {
     }
 
     /**
-     * Get an iterator over the list of genres
+     * Get an iterator over the list of years
      *
      * @return genres
      */
@@ -102,7 +102,7 @@ public class MusicProvider {
         if (mCurrentState != State.INITIALIZED) {
             return Collections.emptyList();
         }
-        return mMusicListByYear.keySet();
+        return mShowListByYear.keySet();
     }
 
     /**
@@ -131,11 +131,15 @@ public class MusicProvider {
         return mMusicListByGenre.get(genre);
     }
 
-    public Iterable<MediaMetadataCompat> getMusicsByYear(String genre) {
-        if (mCurrentState != State.INITIALIZED || !mMusicListByYear.containsKey(genre)) {
+    /**
+     * Get shows for the given year
+     *
+     */
+    public Iterable<MediaMetadataCompat> getShowsByYear(String year) {
+        if (mCurrentState != State.INITIALIZED || !mShowListByYear.containsKey(year)) {
             return Collections.emptyList();
         }
-        return mMusicListByYear.get(genre);
+        return mShowListByYear.get(year);
     }
 
     /**
@@ -288,7 +292,7 @@ public class MusicProvider {
             }
             list.add(m.metadata);
         }
-        mMusicListByYear = newMusicListByYear;
+        mShowListByYear = newMusicListByYear;
     }
 
     private synchronized void retrieveMedia() {
@@ -332,8 +336,8 @@ public class MusicProvider {
             }
 
         } else if (MEDIA_ID_MUSICS_BY_YEAR.equals(mediaId)) {
-            for (String genre : getYears()) {
-                mediaItems.add(createBrowsableMediaItemForGenre(genre, resources));
+            for (String year : getYears()) {
+                mediaItems.add(createBrowsableMediaItemForYear(year, resources));
             }
 
         } else if (mediaId.startsWith(MEDIA_ID_MUSICS_BY_GENRE)) {
@@ -351,8 +355,8 @@ public class MusicProvider {
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForRoot(Resources resources) {
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
                 .setMediaId(MEDIA_ID_MUSICS_BY_YEAR)
-                .setTitle(resources.getString(R.string.browse_genres))
-                .setSubtitle(resources.getString(R.string.browse_genre_subtitle))
+                .setTitle(resources.getString(R.string.browse_years))
+                .setSubtitle(resources.getString(R.string.browse_years_subtitle))
                 .setIconUri(Uri.parse("android.resource://" +
                         "com.example.android.uamp/drawable/ic_by_genre"))
                 .build();
@@ -371,6 +375,19 @@ public class MusicProvider {
         return new MediaBrowserCompat.MediaItem(description,
                 MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
     }
+
+    private MediaBrowserCompat.MediaItem createBrowsableMediaItemForYear(String year,
+                                                                          Resources resources) {
+        MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
+                .setMediaId(createMediaID(null, MEDIA_ID_MUSICS_BY_YEAR, year))
+                .setTitle(year)
+                .setSubtitle(resources.getString(
+                        R.string.browse_musics_by_genre_subtitle, year))
+                .build();
+        return new MediaBrowserCompat.MediaItem(description,
+                MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
+    }
+
 
     private MediaBrowserCompat.MediaItem createMediaItem(MediaMetadataCompat metadata) {
         // Since mediaMetadata fields are immutable, we need to create a copy, so we
