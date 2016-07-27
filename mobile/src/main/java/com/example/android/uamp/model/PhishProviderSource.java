@@ -17,6 +17,8 @@ import cz.msebera.android.httpclient.Header;
 public class PhishProviderSource implements MusicProviderSource  {
 
     private static final String TAG = LogHelper.makeLogTag(PhishProviderSource.class);
+    private static ArrayList<String> mYears;
+    private static ArrayList<Show> mShows;
 
     @Override
     public Iterator<MediaMetadataCompat> iterator() {
@@ -27,7 +29,7 @@ public class PhishProviderSource implements MusicProviderSource  {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                ArrayList<String> mYears = ParseUtils.parseYears(response);
+                mYears = ParseUtils.parseYears(response);
 
                 if (mYears != null) {
                     for (String year : mYears) {
@@ -36,6 +38,27 @@ public class PhishProviderSource implements MusicProviderSource  {
                 }
             }
         });
+
+        if (mYears != null) {
+            for (String year : mYears) {
+                HttpClient.get("years/" + year + ".json", null, new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        mShows = ParseUtils.parseShows(response);
+
+                        if (mShows != null) {
+                            for (Show show: mShows) {
+                                LogHelper.w(TAG, "date: ", show.getDateSimple());
+                                LogHelper.w(TAG, "venue: ", show.getVenueName());
+                                //entry.put("title", show.getDateSimple());
+                                //entry.put("content", show.getVenueName());
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
 
         return tracks.iterator();
