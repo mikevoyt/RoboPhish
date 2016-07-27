@@ -53,6 +53,7 @@ public class MusicProvider {
 
     // Categorized caches for music track data:
     private ConcurrentMap<String, List<MediaMetadataCompat>> mMusicListByGenre;
+    private ConcurrentMap<String, List<MediaMetadataCompat>> mMusicListByYear;
     private final ConcurrentMap<String, MutableMediaMetadata> mMusicListById;
 
     private final Set<String> mFavoriteTracks;
@@ -74,6 +75,7 @@ public class MusicProvider {
     public MusicProvider(MusicProviderSource source) {
         mSource = source;
         mMusicListByGenre = new ConcurrentHashMap<>();
+        mMusicListByYear = new ConcurrentHashMap<>();
         mMusicListById = new ConcurrentHashMap<>();
         mFavoriteTracks = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
     }
@@ -88,6 +90,18 @@ public class MusicProvider {
             return Collections.emptyList();
         }
         return mMusicListByGenre.keySet();
+    }
+
+    /**
+     * Get an iterator over the list of genres
+     *
+     * @return genres
+     */
+    public Iterable<String> getYears() {
+        if (mCurrentState != State.INITIALIZED) {
+            return Collections.emptyList();
+        }
+        return mMusicListByYear.keySet();
     }
 
     /**
@@ -114,6 +128,13 @@ public class MusicProvider {
             return Collections.emptyList();
         }
         return mMusicListByGenre.get(genre);
+    }
+
+    public Iterable<MediaMetadataCompat> getMusicsByYear(String genre) {
+        if (mCurrentState != State.INITIALIZED || !mMusicListByYear.containsKey(genre)) {
+            return Collections.emptyList();
+        }
+        return mMusicListByYear.get(genre);
     }
 
     /**
@@ -254,6 +275,21 @@ public class MusicProvider {
         mMusicListByGenre = newMusicListByGenre;
     }
 
+    private synchronized void buildListsByYear() {
+        ConcurrentMap<String, List<MediaMetadataCompat>> newMusicListByYear = new ConcurrentHashMap<>();
+
+        for (MutableMediaMetadata m : mMusicListById.values()) {
+            String title = m.metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+            List<MediaMetadataCompat> list = newMusicListByYear.get(title);
+            if (list == null) {
+                list = new ArrayList<>();
+                newMusicListByYear.put(title, list);
+            }
+            list.add(m.metadata);
+        }
+        mMusicListByYear = newMusicListByYear;
+    }
+
     private synchronized void retrieveMedia() {
         try {
             if (mCurrentState == State.NON_INITIALIZED) {
@@ -265,7 +301,8 @@ public class MusicProvider {
                     String musicId = item.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
                     mMusicListById.put(musicId, new MutableMediaMetadata(musicId, item));
                 }
-                buildListsByGenre();
+                //buildListsByGenre();
+                buildListsByYear();
                 mCurrentState = State.INITIALIZED;
             }
         } finally {

@@ -16,11 +16,11 @@
   -->
 <resources>
 
-    <string name="app_name">Universal Music Player</string>
+    <string name="app_name">RoboPhish</string>
     <string name="favorite">Favorite</string>
     <string name="error_no_metadata">Unable to retrieve metadata.</string>
     <string name="browse_genres">Years</string>
-    <string name="browse_genre_subtitle">Songs by genre</string>
+    <string name="browse_genre_subtitle">Shows by year</string>
     <string name="browse_musics_by_genre_subtitle">%1$s songs</string>
     <string name="random_queue_title">Random music</string>
     <string name="error_no_connection">Cannot connect to server. Please, check your Internet connectivity.</string>
