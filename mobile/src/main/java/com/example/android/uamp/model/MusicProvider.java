@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static com.example.android.uamp.utils.MediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE;
+import static com.example.android.uamp.utils.MediaIDHelper.MEDIA_ID_MUSICS_BY_YEAR;
 import static com.example.android.uamp.utils.MediaIDHelper.MEDIA_ID_ROOT;
 import static com.example.android.uamp.utils.MediaIDHelper.createMediaID;
 
@@ -330,6 +331,11 @@ public class MusicProvider {
                 mediaItems.add(createBrowsableMediaItemForGenre(genre, resources));
             }
 
+        } else if (MEDIA_ID_MUSICS_BY_YEAR.equals(mediaId)) {
+            for (String genre : getYears()) {
+                mediaItems.add(createBrowsableMediaItemForGenre(genre, resources));
+            }
+
         } else if (mediaId.startsWith(MEDIA_ID_MUSICS_BY_GENRE)) {
             String genre = MediaIDHelper.getHierarchy(mediaId)[1];
             for (MediaMetadataCompat metadata : getMusicsByGenre(genre)) {
@@ -344,7 +350,7 @@ public class MusicProvider {
 
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForRoot(Resources resources) {
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
-                .setMediaId(MEDIA_ID_MUSICS_BY_GENRE)
+                .setMediaId(MEDIA_ID_MUSICS_BY_YEAR)
                 .setTitle(resources.getString(R.string.browse_genres))
                 .setSubtitle(resources.getString(R.string.browse_genre_subtitle))
                 .setIconUri(Uri.parse("android.resource://" +
