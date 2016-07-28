@@ -180,7 +180,7 @@ public class MusicProvider {
             }.execute();
 
 
-        } else if (MEDIA_ID_SHOWS_BY_YEAR.equals(mediaId)) {
+        } else if (mediaId.startsWith(MEDIA_ID_SHOWS_BY_YEAR)) {
 
             // Asynchronously load the music catalog in a separate thread
             new AsyncTask<Void, Void, State>() {

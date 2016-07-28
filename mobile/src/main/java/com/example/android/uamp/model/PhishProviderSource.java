@@ -46,7 +46,7 @@ public class PhishProviderSource implements MusicProviderSource  {
     public Iterable<MediaMetadataCompat> showsInYear(String year) {
         final ArrayList<MediaMetadataCompat> shows = new ArrayList<>();
 
-        HttpClient.getAsync("years/" + year + ".json", null, new JsonHttpResponseHandler() {
+        HttpClient.get("years/" + year + ".json", null, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
