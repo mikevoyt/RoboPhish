@@ -85,7 +85,6 @@ public class MusicProvider {
 
     /**
      * Get shows for the given year
-     *
      */
     public Iterable<MediaMetadataCompat> getShowsByYear(String year) {
         if (mCurrentState != State.INITIALIZED || !mYears.contains(year)) {
@@ -96,7 +95,6 @@ public class MusicProvider {
 
     /**
      * Get tracks for the given show
-     *
      */
     public Iterable<MediaMetadataCompat> getTracksForShow(String showId) {
         if (mCurrentState != State.INITIALIZED) {
@@ -139,17 +137,17 @@ public class MusicProvider {
         mutableMetadata.metadata = metadata;
     }
 
-        public void setFavorite(String musicId, boolean favorite) {
-                if (favorite) {
-                        mFavoriteTracks.add(musicId);
-                    } else {
-                        mFavoriteTracks.remove(musicId);
-                    }
-            }
+    public void setFavorite(String musicId, boolean favorite) {
+        if (favorite) {
+            mFavoriteTracks.add(musicId);
+        } else {
+            mFavoriteTracks.remove(musicId);
+        }
+    }
 
-        public boolean isFavorite(String musicId) {
-                return mFavoriteTracks.contains(musicId);
-            }
+    public boolean isFavorite(String musicId) {
+        return mFavoriteTracks.contains(musicId);
+    }
 
 
     public boolean isInitialized() {
@@ -252,7 +250,7 @@ public class MusicProvider {
 
 
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForYear(String year,
-                                                                          Resources resources) {
+                                                                         Resources resources) {
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
                 .setMediaId(createMediaID(null, MEDIA_ID_SHOWS_BY_YEAR, year))
                 .setTitle(year)

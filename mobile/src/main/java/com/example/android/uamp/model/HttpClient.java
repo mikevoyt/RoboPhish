@@ -9,9 +9,14 @@ public class HttpClient {
     private static final String BASE_URL = "http://phish.in/api/v1/";
 
     private static SyncHttpClient client = new SyncHttpClient();
+    private static AsyncHttpClient asyncClient = new AsyncHttpClient();
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(getAbsoluteUrl(url), params, responseHandler);
+    }
+
+    public static void getAsync(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        asyncClient.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {
