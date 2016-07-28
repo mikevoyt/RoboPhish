@@ -192,8 +192,7 @@ public class MusicProvider {
 
                     Iterable<MediaMetadataCompat> shows = mSource.showsInYear(year);
                     for (MediaMetadataCompat show : shows) {
-                        String id = show.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
-                        mediaItems.add(createBrowsableMediaItemForShow(id, resources));
+                        mediaItems.add(createBrowsableMediaItemForShow(show, resources));
                     }
 
                     return null;
@@ -257,13 +256,18 @@ public class MusicProvider {
                 MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
     }
 
-    private MediaBrowserCompat.MediaItem createBrowsableMediaItemForShow(String showId,
+    private MediaBrowserCompat.MediaItem createBrowsableMediaItemForShow(MediaMetadataCompat show,
                                                                          Resources resources) {
+
+        String showId = show.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+        String venue = show.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE);
+        String date = show.getString(MediaMetadataCompat.METADATA_KEY_DATE);
+
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
                 .setMediaId(createMediaID(null, MEDIA_ID_TRACKS_BY_SHOW, showId))
-                .setTitle(showId)
+                .setTitle(venue)
                 .setSubtitle(resources.getString(
-                        R.string.browse_musics_by_genre_subtitle, showId))
+                        R.string.browse_musics_by_genre_subtitle, date))
                 .build();
         return new MediaBrowserCompat.MediaItem(description,
                 MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
