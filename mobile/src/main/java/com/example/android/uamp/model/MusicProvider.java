@@ -182,7 +182,7 @@ public class MusicProvider {
 
         } else if (mediaId.startsWith(MEDIA_ID_SHOWS_BY_YEAR)) {
 
-            // Asynchronously load the music catalog in a separate thread
+            // Asynchronously load the shows in a separate thread
             new AsyncTask<Void, Void, State>() {
                 @Override
                 protected State doInBackground(Void... params) {
@@ -207,18 +207,20 @@ public class MusicProvider {
                 }
             }.execute();
 
+        } else if (mediaId.startsWith(MEDIA_ID_TRACKS_BY_SHOW)) {
 
-
-        } else if (mediaId.startsWith(MEDIA_ID_SHOWS_BY_YEAR)) {
-            final String year = MediaIDHelper.getHierarchy(mediaId)[1];
-            LogHelper.w(TAG, "year: ", year);
-
-            // Asynchronously load the music catalog in a separate thread
+            // Asynchronously load the shows in a separate thread
             new AsyncTask<Void, Void, State>() {
                 @Override
                 protected State doInBackground(Void... params) {
-                    for (MediaMetadataCompat metadata : getShowsByYear(year)) {
-                        mediaItems.add(createMediaItem(metadata));
+
+                    final String showId = MediaIDHelper.getHierarchy(mediaId)[1];
+                    LogHelper.w(TAG, "showId: ", showId);
+
+                    Iterable<MediaMetadataCompat> tracks = mSource.tracksInShow(showId);
+                    for (MediaMetadataCompat track : tracks) {
+                        String id = track.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+                        mediaItems.add(createMediaItem(track));
                     }
                     return null;
                 }
@@ -231,7 +233,8 @@ public class MusicProvider {
                 }
             }.execute();
 
-        } else if (mediaId.startsWith(MEDIA_ID_TRACKS_BY_SHOW)) {
+
+
             String showId = MediaIDHelper.getHierarchy(mediaId)[1];
             for (MediaMetadataCompat metadata : getTracksForShow(showId)) {
                 mediaItems.add(createMediaItem(metadata));
@@ -241,20 +244,6 @@ public class MusicProvider {
             LogHelper.w(TAG, "Skipping unmatched mediaId: ", mediaId);
         }
     }
-
-/*
-    private MediaBrowserCompat.MediaItem createBrowsableMediaItemForRoot(Resources resources) {
-        MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
-                .setMediaId(MEDIA_ID_SHOWS_BY_YEAR)
-                .setTitle(resources.getString(R.string.browse_years))
-                .setSubtitle(resources.getString(R.string.browse_years_subtitle))
-                .setIconUri(Uri.parse("android.resource://" +
-                        "com.example.android.uamp/drawable/ic_by_genre"))
-                .build();
-        return new MediaBrowserCompat.MediaItem(description,
-                MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
-    }
-*/
 
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForYear(String year,
                                                                          Resources resources) {
