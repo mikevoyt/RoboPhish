@@ -24,6 +24,6 @@ import java.util.Iterator;
 public interface MusicProviderSource {
     String CUSTOM_METADATA_TRACK_SOURCE = "__SOURCE__";
     ArrayList<String> years();
-    Iterator<MediaMetadataCompat> showsInYear(String year);
-    Iterator<MediaMetadataCompat> tracksInShow(String showId);
+    Iterable<MediaMetadataCompat> showsInYear(String year);
+    Iterable<MediaMetadataCompat> tracksInShow(String showId);
 }

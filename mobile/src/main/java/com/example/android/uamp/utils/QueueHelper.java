@@ -55,12 +55,13 @@ public class QueueHelper {
 
         Iterable<MediaMetadataCompat> tracks = null;
         // This sample only supports genre and by_search category types.
+/*
         if (categoryType.equals(MEDIA_ID_MUSICS_BY_GENRE)) {
             tracks = musicProvider.getMusicsByGenre(categoryValue);
         } else if (categoryType.equals(MEDIA_ID_MUSICS_BY_SEARCH)) {
             tracks = musicProvider.searchMusicBySongTitle(categoryValue);
         }
-
+*/
         if (tracks == null) {
             LogHelper.e(TAG, "Unrecognized category type: ", categoryType, " for media ", mediaId);
             return null;
@@ -86,6 +87,8 @@ public class QueueHelper {
         }
 
         Iterable<MediaMetadataCompat> result = null;
+
+/*
         if (params.isAlbumFocus) {
             result = musicProvider.searchMusicByAlbum(params.album);
         } else if (params.isGenreFocus) {
@@ -106,7 +109,7 @@ public class QueueHelper {
             // song title only. A real world application could search on other fields as well.
             result = musicProvider.searchMusicBySongTitle(query);
         }
-
+*/
         return convertToQueue(result, MEDIA_ID_MUSICS_BY_SEARCH, query);
     }
 
@@ -168,6 +171,8 @@ public class QueueHelper {
      */
     public static List<MediaSessionCompat.QueueItem> getRandomQueue(MusicProvider musicProvider) {
         List<MediaMetadataCompat> result = new ArrayList<>(RANDOM_QUEUE_SIZE);
+
+/*
         Iterable<MediaMetadataCompat> shuffled = musicProvider.getShuffledMusic();
         for (MediaMetadataCompat metadata: shuffled) {
             if (result.size() == RANDOM_QUEUE_SIZE) {
@@ -176,7 +181,7 @@ public class QueueHelper {
             result.add(metadata);
         }
         LogHelper.d(TAG, "getRandomQueue: result.size=", result.size());
-
+*/
         return convertToQueue(result, MEDIA_ID_MUSICS_BY_SEARCH, "random");
     }
 

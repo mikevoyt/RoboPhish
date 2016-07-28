@@ -43,7 +43,7 @@ public class PhishProviderSource implements MusicProviderSource  {
         return years;
     }
 
-    public Iterator<MediaMetadataCompat> showsInYear(String year) {
+    public Iterable<MediaMetadataCompat> showsInYear(String year) {
         final ArrayList<MediaMetadataCompat> shows = new ArrayList<>();
 
         HttpClient.get("years/" + year + ".json", null, new JsonHttpResponseHandler() {
@@ -69,11 +69,11 @@ public class PhishProviderSource implements MusicProviderSource  {
             }
         });
 
-        return shows.iterator();
+        return shows;
     }
 
 
-    public Iterator<MediaMetadataCompat> tracksInShow(String showId) {
+    public Iterable<MediaMetadataCompat> tracksInShow(String showId) {
 
         final ArrayList<MediaMetadataCompat> tracks = new ArrayList<>();
 
@@ -105,7 +105,7 @@ public class PhishProviderSource implements MusicProviderSource  {
             }
         });
 
-        return tracks.iterator();
+        return tracks;
     }
 
 }
