@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/playback_controls_fragment"
-        android:name="com.example.android.uamp.ui.tv.TvPlaybackFragment"
+        android:name="com.bayapps.android.robophish.ui.tv.TvPlaybackFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

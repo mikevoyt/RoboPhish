@@ -16,7 +16,7 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.android.uamp"
+    package="com.bayapps.android.robophish"
     android:versionCode="0"
     android:versionName="0.1"
     >

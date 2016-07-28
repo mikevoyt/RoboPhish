@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/vertical_grid_fragment"
-        android:name="com.example.android.uamp.ui.tv.TvVerticalGridFragment"
+        android:name="com.bayapps.android.robophish.ui.tv.TvVerticalGridFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>
