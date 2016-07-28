@@ -53,11 +53,9 @@ public class MusicProvider {
     private MusicProviderSource mSource;
 
     // Categorized caches for music track data:
-    private ConcurrentMap<String, List<MediaMetadataCompat>> mMusicListByGenre;
-    private ConcurrentMap<String, List<MediaMetadataCompat>> mShowListByYear;
-    private final ConcurrentMap<String, MutableMediaMetadata> mMusicListById;
-
-    private final Set<String> mFavoriteTracks;
+    private List<String> mYears;
+    private ConcurrentMap<String, List<MediaMetadataCompat>> mShowsInYearYear;
+    private ConcurrentMap<String, List<MediaMetadataCompat>> mTracksInShow;
 
     enum State {
         NON_INITIALIZED, INITIALIZING, INITIALIZED
@@ -75,10 +73,9 @@ public class MusicProvider {
 //  public MusicProvider() { this(new RemoteJSONSource()); }
     public MusicProvider(MusicProviderSource source) {
         mSource = source;
-        mMusicListByGenre = new ConcurrentHashMap<>();
-        mShowListByYear = new ConcurrentHashMap<>();
-        mMusicListById = new ConcurrentHashMap<>();
-        mFavoriteTracks = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+        mYears = new ArrayList<String>();
+        mShowsInYearYear = new ConcurrentHashMap<>();
+        mTracksInShow = new ConcurrentHashMap<>();
     }
 
     /**
@@ -93,17 +90,6 @@ public class MusicProvider {
         return mMusicListByGenre.keySet();
     }
 
-    /**
-     * Get an iterator over the list of years
-     *
-     * @return genres
-     */
-    public Iterable<String> getYears() {
-        if (mCurrentState != State.INITIALIZED) {
-            return Collections.emptyList();
-        }
-        return mShowListByYear.keySet();
-    }
 
     /**
      * Get an iterator over a shuffled collection of all songs
@@ -136,7 +122,7 @@ public class MusicProvider {
      *
      */
     public Iterable<MediaMetadataCompat> getShowsByYear(String year) {
-        if (mCurrentState != State.INITIALIZED || !mShowListByYear.containsKey(year)) {
+        if (mCurrentState != State.INITIALIZED || !mYears.contains(year)) {
             return Collections.emptyList();
         }
         return mShowListByYear.get(year);
@@ -235,8 +221,7 @@ public class MusicProvider {
     }
 
     /**
-     * Get the list of music tracks from a server and caches the track information
-     * for future reference, keying tracks by musicId and grouping by genre.
+     * Get the list of years from server
      */
     public void retrieveMediaAsync(final Callback callback) {
         LogHelper.d(TAG, "retrieveMediaAsync called");
@@ -252,7 +237,7 @@ public class MusicProvider {
         new AsyncTask<Void, Void, State>() {
             @Override
             protected State doInBackground(Void... params) {
-                retrieveMedia();
+                retrieveYears();
                 return mCurrentState;
             }
 
@@ -295,12 +280,12 @@ public class MusicProvider {
         mShowListByYear = newMusicListByYear;
     }
 
-    private synchronized void retrieveMedia() {
+    private synchronized void retrieveYears() {
         try {
             if (mCurrentState == State.NON_INITIALIZED) {
                 mCurrentState = State.INITIALIZING;
 
-                Iterator<MediaMetadataCompat> tracks = mSource.iterator();
+                Iterator<MediaMetadataCompat> years = mSource.years();
                 while (tracks.hasNext()) {
                     MediaMetadataCompat item = tracks.next();
                     String musicId = item.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
@@ -336,7 +321,7 @@ public class MusicProvider {
             }
 
         } else if (MEDIA_ID_MUSICS_BY_YEAR.equals(mediaId)) {
-            for (String year : getYears()) {
+            for (String year : mYears) {
                 mediaItems.add(createBrowsableMediaItemForYear(year, resources));
             }
 

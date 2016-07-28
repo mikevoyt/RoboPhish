@@ -18,9 +18,12 @@ package com.example.android.uamp.model;
 
 import android.support.v4.media.MediaMetadataCompat;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface MusicProviderSource {
     String CUSTOM_METADATA_TRACK_SOURCE = "__SOURCE__";
-    Iterator<MediaMetadataCompat> iterator();
+    ArrayList<String> years();
+    Iterator<MediaMetadataCompat> showsInYear(String year);
+    Iterator<MediaMetadataCompat> tracksInShow(String showId);
 }
