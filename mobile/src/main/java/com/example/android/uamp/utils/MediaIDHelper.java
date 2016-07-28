@@ -30,8 +30,8 @@ public class MediaIDHelper {
     public static final String MEDIA_ID_MUSICS_BY_GENRE = "__BY_GENRE__";
     public static final String MEDIA_ID_MUSICS_BY_YEAR = "__BY_YEAR__";
     public static final String MEDIA_ID_MUSICS_BY_SEARCH = "__BY_SEARCH__";
-    public static final String MEDIA_ID_SHOWS_BY_YEAR = "__SHOW_BY_YEAR__";
-    public static final String MEDIA_ID_TRACKS_BY_SHOW = "__TRACKS_BY_YEAR__";
+    public static final String MEDIA_ID_SHOWS_BY_YEAR = "__SHOWS_BY_YEAR__";
+    public static final String MEDIA_ID_TRACKS_BY_SHOW = "__TRACKS_BY_SHOW__";
 
     private static final char CATEGORY_SEPARATOR = '/';
     private static final char LEAF_SEPARATOR = '|';

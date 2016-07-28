@@ -249,8 +249,6 @@ public class MusicProvider {
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
                 .setMediaId(createMediaID(null, MEDIA_ID_SHOWS_BY_YEAR, year))
                 .setTitle(year)
-                .setSubtitle(resources.getString(
-                        R.string.browse_musics_by_genre_subtitle, year))
                 .build();
         return new MediaBrowserCompat.MediaItem(description,
                 MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
