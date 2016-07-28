@@ -99,6 +99,7 @@ public class PhishProviderSource implements MusicProviderSource  {
                                 .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.getUrl())
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, track.getDuration())
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getTitle())
+                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.getDurationString())
                                 .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, showId)
                                 .build());
                     }

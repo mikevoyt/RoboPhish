@@ -241,11 +241,12 @@ public class MusicProvider {
             }.execute();
 
 
-
+/*
             String showId = MediaIDHelper.getHierarchy(mediaId)[1];
             for (MediaMetadataCompat metadata : getTracksForShow(showId)) {
                 mediaItems.add(createMediaItem(metadata));
             }
+*/
 
         } else {
             LogHelper.w(TAG, "Skipping unmatched mediaId: ", mediaId);
