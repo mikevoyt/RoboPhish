@@ -284,7 +284,7 @@ public class MusicProvider {
         ConcurrentMap<String, List<MediaMetadataCompat>> newMusicListByYear = new ConcurrentHashMap<>();
 
         for (MutableMediaMetadata m : mMusicListById.values()) {
-            String title = m.metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+            String title = m.metadata.getString(MediaMetadataCompat.METADATA_KEY_COMPILATION);
             List<MediaMetadataCompat> list = newMusicListByYear.get(title);
             if (list == null) {
                 list = new ArrayList<>();

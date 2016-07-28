@@ -17,8 +17,9 @@ import cz.msebera.android.httpclient.Header;
 public class PhishProviderSource implements MusicProviderSource  {
 
     private static final String TAG = LogHelper.makeLogTag(PhishProviderSource.class);
-    private static ArrayList<String> mYears;
-    private static ArrayList<Show> mShows;
+    private ArrayList<String> mYears;
+    private ArrayList<Show> mShows;
+
 
     @Override
     public Iterator<MediaMetadataCompat> iterator() {
@@ -40,7 +41,7 @@ public class PhishProviderSource implements MusicProviderSource  {
         });
 
         if (mYears != null) {
-            for (String year : mYears) {
+            for (final String year : mYears) {
                 HttpClient.get("years/" + year + ".json", null, new JsonHttpResponseHandler() {
 
                     @Override
@@ -51,8 +52,10 @@ public class PhishProviderSource implements MusicProviderSource  {
                             for (Show show: mShows) {
                                 LogHelper.w(TAG, "date: ", show.getDateSimple());
                                 LogHelper.w(TAG, "venue: ", show.getVenueName());
-                                //entry.put("title", show.getDateSimple());
-                                //entry.put("content", show.getVenueName());
+
+                                for (Track track: show.getTracks()) {
+                                    tracks.add(buildFromTrack(year, show, track));
+                                }
                             }
                         }
                     }
@@ -77,7 +80,28 @@ public class PhishProviderSource implements MusicProviderSource  {
         //noinspection ResourceType
         return new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, id)
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, year)
+                .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, year)
+                .build();
+    }
+
+    private MediaMetadataCompat buildFromTrack(String year, Show show, Track track) {
+
+        String id = String.valueOf(track.getId());
+
+        // Adding the music source to the MediaMetadata (and consequently using it in the
+        // mediaSession.setMetadata) is not a good idea for a real world music app, because
+        // the session metadata can be accessed by notification listeners. This is done in this
+        // sample for convenience only.
+        //noinspection ResourceType
+
+        return new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, id)
+                .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.getUrl())
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, track.getDuration())
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, show.getVenueName())
+                .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, year)
+                .putString(MediaMetadataCompat.METADATA_KEY_DATE, show.getDate().toString())
                 .build();
     }
 
