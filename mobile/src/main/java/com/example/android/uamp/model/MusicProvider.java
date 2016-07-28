@@ -64,7 +64,7 @@ public class MusicProvider {
     private volatile State mCurrentState = State.NON_INITIALIZED;
 
     public interface Callback {
-        void onMusicCatalogReady(boolean success);
+        void children(List<MediaBrowserCompat.MediaItem> mediaItems);
     }
 
     public MusicProvider() {
@@ -150,81 +150,86 @@ public class MusicProvider {
     }
 
 
-    public boolean isInitialized() {
-        return mCurrentState == State.INITIALIZED;
-    }
+    public synchronized void getChildrenAsync(final String mediaId, final Resources resources, final Callback callback) {
 
-    /**
-     * Get the list of years from server
-     */
-    public void retrieveMediaAsync(final Callback callback) {
-        LogHelper.d(TAG, "retrieveMediaAsync called");
-        if (mCurrentState == State.INITIALIZED) {
-            if (callback != null) {
-                // Nothing to do, execute callback immediately
-                callback.onMusicCatalogReady(true);
-            }
-            return;
-        }
-
-        // Asynchronously load the music catalog in a separate thread
-        new AsyncTask<Void, Void, State>() {
-            @Override
-            protected State doInBackground(Void... params) {
-                retrieveYears();
-                return mCurrentState;
-            }
-
-            @Override
-            protected void onPostExecute(State current) {
-                if (callback != null) {
-                    callback.onMusicCatalogReady(current == State.INITIALIZED);
-                }
-            }
-        }.execute();
-    }
-
-    private synchronized void retrieveYears() {
-        try {
-            if (mCurrentState == State.NON_INITIALIZED) {
-                mCurrentState = State.INITIALIZING;
-
-                mYears = mSource.years();
-                mCurrentState = State.INITIALIZED;
-            }
-        } finally {
-            if (mCurrentState != State.INITIALIZED) {
-                // Something bad happened, so we reset state to NON_INITIALIZED to allow
-                // retries (eg if the network connection is temporary unavailable)
-                mCurrentState = State.NON_INITIALIZED;
-            }
-        }
-    }
-
-
-    public List<MediaBrowserCompat.MediaItem> getChildren(String mediaId, Resources resources) {
-        List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+        final List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
 
         if (!MediaIDHelper.isBrowseable(mediaId)) {
-            return mediaItems;
+            callback.children(mediaItems);
         }
 
-        if (MEDIA_ID_ROOT.equals(mediaId)) {
-            mediaItems.add(createBrowsableMediaItemForRoot(resources));
+        else if (MEDIA_ID_ROOT.equals(mediaId)) {
+
+            // Asynchronously load the years in a separate thread
+            new AsyncTask<Void, Void, State>() {
+                @Override
+                protected State doInBackground(Void... params) {
+                    mYears = mSource.years();
+                    for (String year : mYears) {
+                        mediaItems.add(createBrowsableMediaItemForYear(year, resources));
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(State current) {
+                    if (callback != null) {
+                        callback.children(mediaItems);
+                    }
+                }
+            }.execute();
 
 
         } else if (MEDIA_ID_SHOWS_BY_YEAR.equals(mediaId)) {
-            for (String year : mYears) {
-                mediaItems.add(createBrowsableMediaItemForYear(year, resources));
-            }
+
+            // Asynchronously load the music catalog in a separate thread
+            new AsyncTask<Void, Void, State>() {
+                @Override
+                protected State doInBackground(Void... params) {
+
+                    final String year = MediaIDHelper.getHierarchy(mediaId)[1];
+                    LogHelper.w(TAG, "year: ", year);
+
+                    Iterable<MediaMetadataCompat> shows = mSource.showsInYear(year);
+                    for (MediaMetadataCompat show : shows) {
+                        String id = show.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+                        mediaItems.add(createBrowsableMediaItemForShow(id, resources));
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(State current) {
+                    if (callback != null) {
+                        callback.children(mediaItems);
+                    }
+                }
+            }.execute();
+
+
 
         } else if (mediaId.startsWith(MEDIA_ID_SHOWS_BY_YEAR)) {
-            String year = MediaIDHelper.getHierarchy(mediaId)[1];
+            final String year = MediaIDHelper.getHierarchy(mediaId)[1];
             LogHelper.w(TAG, "year: ", year);
 
-            for (MediaMetadataCompat metadata : getShowsByYear(year)) {
-                mediaItems.add(createMediaItem(metadata));
-            }
+            // Asynchronously load the music catalog in a separate thread
+            new AsyncTask<Void, Void, State>() {
+                @Override
+                protected State doInBackground(Void... params) {
+                    for (MediaMetadataCompat metadata : getShowsByYear(year)) {
+                        mediaItems.add(createMediaItem(metadata));
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(State current) {
+                    if (callback != null) {
+                        callback.children(mediaItems);
+                    }
+                }
+            }.execute();
 
         } else if (mediaId.startsWith(MEDIA_ID_TRACKS_BY_SHOW)) {
             String showId = MediaIDHelper.getHierarchy(mediaId)[1];
@@ -235,9 +240,9 @@ public class MusicProvider {
         } else {
             LogHelper.w(TAG, "Skipping unmatched mediaId: ", mediaId);
         }
-        return mediaItems;
     }
 
+/*
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForRoot(Resources resources) {
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
                 .setMediaId(MEDIA_ID_SHOWS_BY_YEAR)
@@ -249,7 +254,7 @@ public class MusicProvider {
         return new MediaBrowserCompat.MediaItem(description,
                 MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);
     }
-
+*/
 
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForYear(String year,
                                                                          Resources resources) {
