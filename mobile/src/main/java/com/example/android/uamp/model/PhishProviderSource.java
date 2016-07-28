@@ -73,7 +73,7 @@ public class PhishProviderSource implements MusicProviderSource  {
     }
 
 
-    public Iterable<MediaMetadataCompat> tracksInShow(String showId) {
+    public Iterable<MediaMetadataCompat> tracksInShow(final String showId) {
 
         final ArrayList<MediaMetadataCompat> tracks = new ArrayList<>();
 
@@ -99,6 +99,7 @@ public class PhishProviderSource implements MusicProviderSource  {
                                 .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.getUrl())
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, track.getDuration())
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getTitle())
+                                .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, showId)
                                 .build());
                     }
                 }

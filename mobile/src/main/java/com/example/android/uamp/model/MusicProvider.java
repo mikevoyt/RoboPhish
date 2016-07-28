@@ -61,7 +61,7 @@ public class MusicProvider {
         NON_INITIALIZED, INITIALIZING, INITIALIZED
     }
 
-    private volatile State mCurrentState = State.NON_INITIALIZED;
+    //private volatile State mCurrentState = State.NON_INITIALIZED;
 
     public interface Callback {
         void children(List<MediaBrowserCompat.MediaItem> mediaItems);
@@ -87,7 +87,7 @@ public class MusicProvider {
      * Get shows for the given year
      */
     public Iterable<MediaMetadataCompat> getShowsByYear(String year) {
-        if (mCurrentState != State.INITIALIZED || !mYears.contains(year)) {
+        if (!mYears.contains(year)) {
             return Collections.emptyList();
         }
         return mSource.showsInYear(year);
@@ -97,10 +97,14 @@ public class MusicProvider {
      * Get tracks for the given show
      */
     public Iterable<MediaMetadataCompat> getTracksForShow(String showId) {
-        if (mCurrentState != State.INITIALIZED) {
-            return Collections.emptyList();
-        }
         return mSource.tracksInShow(showId);
+    }
+
+    /**
+     * Get cached tracks for the given show
+     */
+    public Iterable<MediaMetadataCompat> getCachedTracksForShow(String showId) {
+        return mTracksInShow.get(showId);
     }
 
 
@@ -216,11 +220,15 @@ public class MusicProvider {
                     final String showId = MediaIDHelper.getHierarchy(mediaId)[1];
                     LogHelper.w(TAG, "showId: ", showId);
 
+                    List<MediaMetadataCompat> toAdd = new ArrayList<>(); //FIXME: can we just convert tracks to a List<MediaMetadataCompat> ?
                     Iterable<MediaMetadataCompat> tracks = mSource.tracksInShow(showId);
                     for (MediaMetadataCompat track : tracks) {
                         String id = track.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
                         mediaItems.add(createMediaItem(track));
+                        toAdd.add(track);
+                        mMusicListById.put(id, new MutableMediaMetadata(id, track));
                     }
+                    mTracksInShow.put(showId, toAdd);
                     return null;
                 }
 
@@ -276,9 +284,10 @@ public class MusicProvider {
         // can set a hierarchy-aware mediaID. We will need to know the media hierarchy
         // when we get a onPlayFromMusicID call, so we can create the proper queue based
         // on where the music was selected from (by artist, by genre, random, etc)
-        String title = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+        String title = metadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+        String showId = metadata.getString(MediaMetadataCompat.METADATA_KEY_COMPILATION);
         String hierarchyAwareMediaID = MediaIDHelper.createMediaID(
-                metadata.getDescription().getMediaId(), MEDIA_ID_TRACKS_BY_SHOW, title);
+                metadata.getDescription().getMediaId(), MEDIA_ID_TRACKS_BY_SHOW, showId);
         MediaMetadataCompat copy = new MediaMetadataCompat.Builder(metadata)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, hierarchyAwareMediaID)
                 .build();
