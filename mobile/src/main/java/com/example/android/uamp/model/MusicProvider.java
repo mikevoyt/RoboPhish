@@ -219,8 +219,10 @@ public class MusicProvider {
             }
 
         } else if (mediaId.startsWith(MEDIA_ID_SHOWS_BY_YEAR)) {
-            String genre = MediaIDHelper.getHierarchy(mediaId)[1];
-            for (MediaMetadataCompat metadata : getShowsByYear(genre)) {
+            String year = MediaIDHelper.getHierarchy(mediaId)[1];
+            LogHelper.w(TAG, "year: ", year);
+
+            for (MediaMetadataCompat metadata : getShowsByYear(year)) {
                 mediaItems.add(createMediaItem(metadata));
             }
 
