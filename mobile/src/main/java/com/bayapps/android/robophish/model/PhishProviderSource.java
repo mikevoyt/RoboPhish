@@ -6,6 +6,7 @@ import com.loopj.android.http.*;
 import org.json.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -15,7 +16,34 @@ import cz.msebera.android.httpclient.Header;
 
 public class PhishProviderSource implements MusicProviderSource  {
 
+    private static ArrayList<String> mImages = new ArrayList<>();
+    private Random mRandomGenerator;
     private static final String TAG = LogHelper.makeLogTag(PhishProviderSource.class);
+
+    PhishProviderSource() {
+        mRandomGenerator = new Random();
+        //add some random images to display
+        mImages.add("http://intensityadvisors.com/wp-content/uploads/portfolio/movies/phish-3d-concert-experience/phish3d3.jpg");
+        mImages.add("http://www.brooklynvegan.com/files/img/as/phish-msg-2015.jpg");
+        mImages.add("http://seatgeek.com/blog/wp-content/uploads/2011/06/phish-1stbank-center-tickets_6351.png1.jpeg");
+        mImages.add("https://steveneudaly.files.wordpress.com/2012/08/20120829-200636.jpg");
+        mImages.add("http://imgs.l4lmcdn.com/2013/09/phish-lights.jpg");
+        mImages.add("http://images1.westword.com/imager/outside-the-phish-show-weed-is-for-sharin/u/original/6431248/phishcrowdshakedown.jpg");
+        mImages.add("http://www.northcountrypublicradio.org/news/images/phish_watkins_glen.jpg");
+        mImages.add("http://phishthoughts.com/wp-content/uploads/2010/08/Rogell_Telly1_1a.jpg");
+        mImages.add("https://consequenceofsound.files.wordpress.com/2015/03/screen-shot-2015-03-18-at-2-49-51-pm.png?w=807");
+        mImages.add("http://theconcertdatabase.com/sites/theconcertdatabase.com/files/phish.jpg");
+        mImages.add("http://livedesignonline.com/site-files/livedesignonline.com/files/gallery_images/Phish%202014%2004.jpg?1421937442");
+        mImages.add("http://media.tumblr.com/5a2b9964eeb04fa3a4f6c6e204312932/tumblr_inline_mley97bZIq1qz4rgp.jpg");
+        mImages.add("https://s3.amazonaws.com/ssglobalcdn/performers/wide/phish.jpg");
+        mImages.add("http://livedesignonline.com/site-files/livedesignonline.com/files/gallery_images/Phish%202014%2004.jpg?1421937442");
+        mImages.add("http://images1.villagevoice.com/imager/u/original/8104637/trey-anastasio-phish-msg-credit-jason-speakman-village-voice.jpg");
+        mImages.add("http://media.philly.com/images/600*450/Phish_08.11.15-3.jpg");
+        mImages.add("http://image.syracuse.com/home/syr-media/width960/img/post-standard/photo/2016/07/10/-f93d34cacda62e7e.JPG");
+        mImages.add("http://cdn1-www.craveonline.com/assets/uploads/2014/04/phish-1.jpg");
+        mImages.add("http://www.kansascity.com/entertainment/ent-columns-blogs/back-to-rockville/v4lqdg/picture30213282/ALTERNATES/FREE_640/Phish%20FY%20080515%20rs%200651f");
+        mImages.add("http://static.bangordailynews.com/wp-content/uploads/2013/07/10076301_H10809241-600x436.jpg?strip=all");
+    }
 
     @Override
     public ArrayList<String> years() {
@@ -71,6 +99,12 @@ public class PhishProviderSource implements MusicProviderSource  {
         return shows;
     }
 
+    private String getRandomImage() {
+
+        int index = mRandomGenerator.nextInt(mImages.size());
+        String image = mImages.get(index);
+        return  image;
+    }
 
     public Iterable<MediaMetadataCompat> tracksInShow(final String showId) {
 
@@ -102,6 +136,7 @@ public class PhishProviderSource implements MusicProviderSource  {
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, show.getVenueName())
                                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.getDurationString())
                                 .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, showId)
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getRandomImage())
                                 .build());
                     }
                 }
