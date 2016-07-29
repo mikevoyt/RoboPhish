@@ -226,16 +226,19 @@ public class MusicProvider {
                     final String showId = MediaIDHelper.getHierarchy(mediaId)[1];
                     LogHelper.w(TAG, "showId: ", showId);
 
-                    List<MediaMetadataCompat> toAdd = new ArrayList<>(); //FIXME: can we just convert tracks to a List<MediaMetadataCompat> ?
-                    Iterable<MediaMetadataCompat> tracks = mSource.tracksInShow(showId);
+                    List<MediaMetadataCompat> tracks = mTracksInShow.get(showId);
+
+                    if (tracks == null || tracks.isEmpty()) {
+                        tracks = Lists.newArrayList(mSource.tracksInShow(showId));
+                        mTracksInShow.put(showId, tracks);
+                    }
                     for (MediaMetadataCompat track : tracks) {
                         String id = track.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
 
                         mediaItems.add(createMediaItem(track));
-                        toAdd.add(track);
                         mMusicListById.put(id, new MutableMediaMetadata(id, track));
                     }
-                    mTracksInShow.put(showId, toAdd);
+
                     return null;
                 }
 
