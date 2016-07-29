@@ -29,6 +29,7 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bayapps.android.robophish.R;
+import com.bayapps.android.robophish.model.MusicProvider;
+import com.bayapps.android.robophish.model.MusicProviderSource;
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
@@ -59,6 +62,8 @@ public class MediaBrowserFragment extends Fragment {
     private static final String TAG = LogHelper.makeLogTag(MediaBrowserFragment.class);
 
     private static final String ARG_MEDIA_ID = "media_id";
+    private static final String ARG_TITLE = "title";
+    private static final String ARG_SUBTITLE = "subtitle";
 
     private BrowseAdapter mBrowserAdapter;
     private String mMediaId;
@@ -216,9 +221,27 @@ public class MediaBrowserFragment extends Fragment {
         return null;
     }
 
-    public void setMediaId(String mediaId) {
-        Bundle args = new Bundle(1);
+    public String getTitle() {
+        Bundle args = getArguments();
+        if (args != null) {
+            return args.getString(ARG_TITLE);
+        }
+        return null;
+    }
+
+    public String getSubTitle() {
+        Bundle args = getArguments();
+        if (args != null) {
+            return args.getString(ARG_SUBTITLE);
+        }
+        return null;
+    }
+
+    public void setMediaId(String title, String subtitle, String mediaId) {
+        Bundle args = new Bundle(3);
         args.putString(MediaBrowserFragment.ARG_MEDIA_ID, mediaId);
+        args.putString(MediaBrowserFragment.ARG_TITLE, title);
+        args.putString(MediaBrowserFragment.ARG_SUBTITLE, subtitle);
         setArguments(args);
     }
 
@@ -286,6 +309,21 @@ public class MediaBrowserFragment extends Fragment {
     }
 
     private void updateTitle() {
+
+        if (mMediaId.startsWith(MediaIDHelper.MEDIA_ID_SHOWS_BY_YEAR)) {
+
+            String year = MediaIDHelper.getHierarchy(mMediaId)[1];
+            mMediaFragmentListener.setToolbarTitle(year);
+            return;
+        }
+
+        if (mMediaId.startsWith(MediaIDHelper.MEDIA_ID_TRACKS_BY_SHOW)) {
+
+            mMediaFragmentListener.setToolbarTitle(getTitle() + ": " + getSubTitle());
+            return;
+        }
+
+
         if (MediaIDHelper.MEDIA_ID_ROOT.equals(mMediaId)) {
             mMediaFragmentListener.setToolbarTitle(null);
             return;
@@ -310,6 +348,7 @@ public class MediaBrowserFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
             MediaBrowserCompat.MediaItem item = getItem(position);
             int itemState = MediaItemViewHolder.STATE_NONE;
             if (item.isPlayable()) {
@@ -333,6 +372,8 @@ public class MediaBrowserFragment extends Fragment {
                     }
                 }
             }
+
+
             return MediaItemViewHolder.setupView((Activity) getContext(), convertView, parent,
                 item.getDescription(), itemState);
         }

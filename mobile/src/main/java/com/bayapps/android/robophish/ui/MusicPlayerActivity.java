@@ -84,7 +84,20 @@ public class MusicPlayerActivity extends BaseActivity
             getSupportMediaController().getTransportControls()
                     .playFromMediaId(item.getMediaId(), null);
         } else if (item.isBrowsable()) {
-            navigateToBrowser(item.getMediaId());
+
+            String title = "";
+            String subtitle = "";
+
+            if (item.getDescription().getTitle() != null) {
+                title = item.getDescription().getTitle().toString();
+            }
+
+            if (item.getDescription().getSubtitle() != null) {
+                subtitle = item.getDescription().getSubtitle().toString();
+            }
+
+            navigateToBrowser(title, subtitle, item.getMediaId());
+
         } else {
             LogHelper.w(TAG, "Ignoring MediaItem that is neither browsable nor playable: ",
                     "mediaId=", item.getMediaId());
@@ -134,16 +147,16 @@ public class MusicPlayerActivity extends BaseActivity
                 mediaId = savedInstanceState.getString(SAVED_MEDIA_ID);
             }
         }
-        navigateToBrowser(mediaId);
+        navigateToBrowser(null, null, mediaId);
     }
 
-    private void navigateToBrowser(String mediaId) {
+    private void navigateToBrowser(String title, String subtitle, String mediaId) {
         LogHelper.d(TAG, "navigateToBrowser, mediaId=" + mediaId);
         MediaBrowserFragment fragment = getBrowseFragment();
 
         if (fragment == null || !TextUtils.equals(fragment.getMediaId(), mediaId)) {
             fragment = new MediaBrowserFragment();
-            fragment.setMediaId(mediaId);
+            fragment.setMediaId(title, subtitle, mediaId);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setCustomAnimations(
                 R.animator.slide_in_from_right, R.animator.slide_out_to_left,

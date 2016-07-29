@@ -249,6 +249,10 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         mToolbar.setTitle(title);
     }
 
+    public void setSubtitle(CharSequence title) {
+        mToolbar.setSubtitle(title);
+    }
+
     @Override
     public void setTitle(int titleId) {
         super.setTitle(titleId);
