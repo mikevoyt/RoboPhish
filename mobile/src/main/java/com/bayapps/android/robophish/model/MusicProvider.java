@@ -39,6 +39,8 @@ import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_SHOWS_B
 import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_TRACKS_BY_SHOW;
 import static com.bayapps.android.robophish.utils.MediaIDHelper.createMediaID;
 
+import com.google.common.collect.Lists;
+
 /**
  * Simple data provider for music tracks. The actual metadata source is delegated to a
  * MusicProviderSource defined by a constructor argument of this class.
@@ -167,7 +169,7 @@ public class MusicProvider {
             new AsyncTask<Void, Void, State>() {
                 @Override
                 protected State doInBackground(Void... params) {
-                    mYears = mSource.years();
+                    if (mYears.isEmpty()) mYears = mSource.years();
                     for (String year : mYears) {
                         mediaItems.add(createBrowsableMediaItemForYear(year, resources));
                     }
@@ -193,7 +195,12 @@ public class MusicProvider {
                     final String year = MediaIDHelper.getHierarchy(mediaId)[1];
                     LogHelper.w(TAG, "year: ", year);
 
-                    Iterable<MediaMetadataCompat> shows = mSource.showsInYear(year);
+                    List<MediaMetadataCompat> shows = mShowsInYearYear.get(year);
+                    if (shows == null || shows.isEmpty()) {
+                        shows = Lists.newArrayList(mSource.showsInYear(year));
+                        mShowsInYearYear.put(year, shows);
+                    }
+
                     for (MediaMetadataCompat show : shows) {
                         mediaItems.add(createBrowsableMediaItemForShow(show, resources));
                     }
@@ -223,6 +230,7 @@ public class MusicProvider {
                     Iterable<MediaMetadataCompat> tracks = mSource.tracksInShow(showId);
                     for (MediaMetadataCompat track : tracks) {
                         String id = track.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+
                         mediaItems.add(createMediaItem(track));
                         toAdd.add(track);
                         mMusicListById.put(id, new MutableMediaMetadata(id, track));
@@ -285,12 +293,17 @@ public class MusicProvider {
         // when we get a onPlayFromMusicID call, so we can create the proper queue based
         // on where the music was selected from (by artist, by genre, random, etc)
         String title = metadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
+
+        String venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE);
+
         String showId = metadata.getString(MediaMetadataCompat.METADATA_KEY_COMPILATION);
         String hierarchyAwareMediaID = MediaIDHelper.createMediaID(
                 metadata.getDescription().getMediaId(), MEDIA_ID_TRACKS_BY_SHOW, showId);
         MediaMetadataCompat copy = new MediaMetadataCompat.Builder(metadata)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, hierarchyAwareMediaID)
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, venue)
                 .build();
+
         return new MediaBrowserCompat.MediaItem(copy.getDescription(),
                 MediaBrowserCompat.MediaItem.FLAG_PLAYABLE);
 

@@ -331,6 +331,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         LogHelper.d(TAG, "updateMediaDescription called ");
         mLine1.setText(description.getTitle());
         mLine2.setText(description.getSubtitle());
+        //mLine2.setText(description.getDescription());
         fetchImageAsync(description);
     }
 
