@@ -84,6 +84,12 @@ public interface Playback {
     void play(QueueItem item);
 
     /**
+     * @param item to play after the currently playing item, using gapless playback
+     *             returns true if gapless is supported, false otherwise
+     */
+    boolean playNext(QueueItem item);
+
+    /**
      * Pause the current playing item
      */
     void pause();

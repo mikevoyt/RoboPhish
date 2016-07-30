@@ -79,11 +79,11 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
     private MediaPlayer mMediaPlayerA;
     private MediaPlayer mMediaPlayerB;
     private MediaPlayer mMediaPlayer;
+    private boolean mMediaPlayersSwapping;
 
-    private MediaPlayer swapMediaPlayers() {
-        if (mMediaPlayer == mMediaPlayerA) mMediaPlayer = mMediaPlayerB;
-        else mMediaPlayer = mMediaPlayerA;
-        return mMediaPlayer;
+    private MediaPlayer nextMediaPlayer() {
+        if (mMediaPlayer == mMediaPlayerA) return mMediaPlayerB;
+        return mMediaPlayerA;
     }
 
     private final IntentFilter mAudioNoisyIntentFilter =
@@ -165,8 +165,47 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         }
     }
 
+    public boolean playNext(QueueItem item) {
+        MediaPlayer nextPlayer;
+        if (mMediaPlayer == mMediaPlayerA) {
+            nextPlayer = mMediaPlayerB;
+        }
+        else nextPlayer = mMediaPlayerA;
+
+        MediaMetadataCompat track = mMusicProvider.getMusic(
+                MediaIDHelper.extractMusicIDFromMediaID(item.getDescription().getMediaId()));
+
+        //noinspection ResourceType
+        String source = track.getString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE);
+
+        nextPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        try {
+            nextPlayer.setDataSource(source);
+        } catch (IOException ex) {
+            LogHelper.e(TAG, ex, "Exception playing song");
+            if (mCallback != null) {
+                mCallback.onError(ex.getMessage());
+            }
+        }
+
+        // Starts preparing the media player in the background. When
+        // it's done, it will call our OnPreparedListener (that is,
+        // the onPrepared() method on this class, since we set the
+        // listener to 'this'). Until the media player is prepared,
+        // we *cannot* call start() on it!
+        nextPlayer.prepareAsync();
+
+        mMediaPlayersSwapping = true;
+        return true;
+    }
+
+
     @Override
     public void play(QueueItem item) {
+
+        if (mMediaPlayersSwapping) return;  //TESTING
+
         mPlayOnFocusGain = true;
         tryToGetAudioFocus();
         registerAudioNoisyReceiver();
@@ -423,6 +462,12 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
     @Override
     public void onPrepared(MediaPlayer player) {
         LogHelper.d(TAG, "onPrepared from MediaPlayer");
+
+        if (mMediaPlayersSwapping) {
+            mMediaPlayer.setNextMediaPlayer(nextMediaPlayer());
+            return; //TEST!!
+        }
+
         // The media player is done preparing. That means we can start playing if we
         // have audio focus.
         configMediaPlayerState();

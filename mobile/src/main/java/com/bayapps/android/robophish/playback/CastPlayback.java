@@ -119,6 +119,11 @@ public class CastPlayback implements Playback {
     }
 
     @Override
+    public boolean playNext(QueueItem item) {
+        return false;
+    }
+
+    @Override
     public void play(QueueItem item) {
         try {
             loadMedia(item.getDescription().getMediaId(), true);

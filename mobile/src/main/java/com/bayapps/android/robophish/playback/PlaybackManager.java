@@ -24,6 +24,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.model.MusicProvider;
@@ -45,7 +46,7 @@ public class PlaybackManager implements Playback.Callback {
     // Action to thumbs up a media item
     private static final String CUSTOM_ACTION_THUMBS_UP = "com.example.android.uamp.THUMBS_UP";
 
-    private static final long QUEUE_NEXT_TRACK_TIME = 5000;  //queue next track 5 seconds before this one ends
+    private static final long QUEUE_NEXT_TRACK_TIME = 10;  //queue next track 5 seconds before this one ends
     private static final long PROGRESS_UPDATE_INTERNAL = 1000;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 100;
 
@@ -105,12 +106,27 @@ public class PlaybackManager implements Playback.Callback {
         }
 
         if (mPlayback.isPlaying()) {
-            long currentPosition = mPlayback.getCurrentStreamPosition();
-            long duration = mQueueManager.getDuration();
-            LogHelper.w(TAG, "current: " + currentPosition);
+            long currentPosition = mPlayback.getCurrentStreamPosition()/1000;
+            long duration = mQueueManager.getDuration()/1000;
+            long delta = duration - currentPosition;
+            Log.d(TAG, "delta: " + delta);
 
-            if (duration - currentPosition < QUEUE_NEXT_TRACK_TIME) {
-                LogHelper.w(TAG, "Queing up next track!");
+            if (duration - currentPosition == QUEUE_NEXT_TRACK_TIME) {
+
+                if (mQueueManager.skipQueuePosition(1)) {
+
+                    MediaSessionCompat.QueueItem currentMusic = mQueueManager.getCurrentMusic();
+                    if (currentMusic != null) {
+                        //mServiceCallback.onPlaybackStart();
+                        Log.d(TAG, "Queing up next track : " + currentMusic.getDescription().getTitle());
+                        mPlayback.playNext(currentMusic);
+                    }
+
+                } else {
+                    handleStopRequest("Cannot skip");
+                }
+
+
             }
         }
 
