@@ -1,46 +1,14 @@
-Universal Android Music Player Sample
-=====================================
+RoboPhish
+=========
 
-This sample shows how to implement an audio media app that works
-across multiple form factors and provide a consistent user experience
-on Android phones, tablets, Android Auto, Android Wear, Android TV and Google Cast devices.
-
+A Phish music player.  Forked from [Android Universal Music Player](https://github.com/googlesamples/android-UniversalMusicPlayer).
 
 Pre-requisites
 --------------
 
 - Android SDK v17
 
-Getting Started
----------------
 
-This sample uses the Gradle build system. To build this project, use the
-"gradlew build" command or use "Import Project" in Android Studio.
-
-Screenshots
------------
-
-![Phone](screenshots/phone.png "On a phone")
-![Lock screen](screenshots/phone_lockscreen.png "Lockscreen background and controls")
-![Full screen player](screenshots/phone_fullscreen_player.png "A basic full screen activity")
-![Cast dialog](screenshots/phone_cast_dialog.png "Casting to Google Cast devices")
-![Android Auto](screenshots/android_auto.png "Running on an Android Auto car")
-![Android TV](screenshots/android_tv.png "Running on an Android TV")
-
-![Android Wear watch face](screenshots/android_wear_1.png "MediaStyle notifications on an Android Wear watch")
-![Android Wear controls](screenshots/android_wear_2.png "Media playback controls on an Android Wear watch")
-
-Support
--------
-
-- Google+ Community: https://plus.google.com/communities/105153134372062985968
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
-
-If you've found an error in this sample, please file an issue:
-https://github.com/googlesamples/android-UniversalMusicPlayer/issues
-
-Patches are encouraged, and may be submitted by forking this project and
-submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
 
 License
 -------
