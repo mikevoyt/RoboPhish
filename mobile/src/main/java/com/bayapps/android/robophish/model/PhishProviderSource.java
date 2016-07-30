@@ -4,10 +4,12 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 
 import com.bayapps.android.robophish.utils.LogHelper;
+import com.google.common.collect.Lists;
 import com.loopj.android.http.*;
 import org.json.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
@@ -62,6 +64,8 @@ public class PhishProviderSource implements MusicProviderSource  {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 ArrayList<String> yearStrings = ParseUtils.parseYears(response);
+
+                Collections.reverse(yearStrings);
 
                 if (yearStrings != null) {
                     for (String year : yearStrings) {
