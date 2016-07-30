@@ -29,7 +29,7 @@ public class PhishProviderSource implements MusicProviderSource  {
         //add some random images to display
         mImages.add("http://intensityadvisors.com/wp-content/uploads/portfolio/movies/phish-3d-concert-experience/phish3d3.jpg");
         mImages.add("http://www.brooklynvegan.com/files/img/as/phish-msg-2015.jpg");
-        mImages.add("http://seatgeek.com/blog/wp-content/uploads/2011/06/phish-1stbank-center-tickets_6351.png1.jpeg");
+        //mImages.add("http://seatgeek.com/blog/wp-content/uploads/2011/06/phish-1stbank-center-tickets_6351.png1.jpeg");
         mImages.add("https://steveneudaly.files.wordpress.com/2012/08/20120829-200636.jpg");
         mImages.add("http://imgs.l4lmcdn.com/2013/09/phish-lights.jpg");
         mImages.add("http://images1.westword.com/imager/outside-the-phish-show-weed-is-for-sharin/u/original/6431248/phishcrowdshakedown.jpg");
@@ -52,6 +52,29 @@ public class PhishProviderSource implements MusicProviderSource  {
         mImages.add("https://i.ytimg.com/vi/shK8B1iKNfQ/maxresdefault.jpg");
         mImages.add("http://assets.noisey.com/content-images/contentimage/35342/P0ThI3i.jpg");
         mImages.add("http://www.sevendaysvt.com/general/multimedia/interactives/110613_phish/img/phish4.jpg");
+        mImages.add("http://phishthoughts.com/wp-content/uploads/2012/08/DSC_0641.jpg");
+        mImages.add("http://cdn.phillymag.com/wp-content/uploads/2015/08/DSC08938.jpg");
+        mImages.add("http://cdn.phillymag.com/wp-content/uploads/2014/07/phish-banner.png");
+        mImages.add("https://i.ytimg.com/vi/ZWQ24h3k69E/maxresdefault.jpg");
+        mImages.add("http://livemusicblog.com/wp-content/uploads/2015/01/IMG_1329.jpg");
+        mImages.add("https://i.ytimg.com/vi/shK8B1iKNfQ/maxresdefault.jpg");
+        mImages.add("http://phish.com/wp-content/uploads/2015/08/08-02-15_DPV_8100_Phish_Tuscaloosa_AL_by_Dave_Vann-452x301.jpg");
+        mImages.add("https://pbs.twimg.com/profile_images/578591325949284352/SiA_0myv.jpeg");
+        mImages.add("http://www.jazzmusicarchives.com/images/artists/phish-20120704124659.jpg");
+        mImages.add("http://trey.com/wp-content/uploads/2012/12/phish1.jpg");
+        mImages.add("http://onlinephishtour.com/wp-content/uploads/2015/07/CK0tz79UEAAMGfZ.jpg");
+        mImages.add("http://treethugger.com/wp-content/uploads/2013/02/phish-2013-breakup-rumors-tour-dates.jpg");
+        mImages.add("http://america.pink/images/3/5/0/0/2/0/8/en/3-phish-tours.jpg");
+        mImages.add("http://imgs.l4lmcdn.com/phish_zdDO2_1018.jpg");
+        mImages.add("http://images.popmatters.com/reviews_art/p/phish2009.jpg");
+        mImages.add("http://phishthoughts.com/wp-content/uploads/2015/02/photo-2-3.jpg");
+        mImages.add("https://uproxx.files.wordpress.com/2015/10/phish.jpg?quality=90&w=650");
+        mImages.add("http://phishthoughts.com/wp-content/uploads/2014/11/692A5111.jpg");
+        mImages.add("http://phishthoughts.com/wp-content/uploads/2011/01/3.jpeg");
+        mImages.add("https://i.ytimg.com/vi/Tdcl8KSr9mc/maxresdefault.jpg");
+        mImages.add("http://blog.wcgworld.com/wp-content/uploads/2014/08/Phish1.jpg");
+        mImages.add("http://2ab9pu2w8o9xpg6w26xnz04d.wpengine.netdna-cdn.com/wp-content/uploads/2016/06/fishchi-screenshot-980x541.jpg");
+        mImages.add("https://pbs.twimg.com/profile_images/73181757/phish1990_400x400.jpg");
     }
 
     @Override
