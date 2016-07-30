@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DURATION;
+
 /**
  * Simple data provider for queues. Keeps track of a current queue and a current index in the
  * queue. Also provides methods to set the current queue based on common queries, relying on a
@@ -173,6 +175,26 @@ public class QueueManager {
         }
         mCurrentIndex = Math.max(index, 0);
         mListener.onQueueUpdated(title, newQueue);
+    }
+
+    public long getDuration() {
+        MediaSessionCompat.QueueItem currentMusic = getCurrentMusic();
+        if (currentMusic == null) {
+            return -1;
+        }
+
+        final String musicId = MediaIDHelper.extractMusicIDFromMediaID(
+                currentMusic.getDescription().getMediaId());
+
+        MediaMetadataCompat metadata = mMusicProvider.getMusic(musicId);
+
+            if (metadata == null) {
+                throw new IllegalArgumentException("Invalid musicId " + musicId);
+            }
+
+            long duration = metadata.getLong(METADATA_KEY_DURATION);
+
+            return duration;
     }
 
     public void updateMetadata() {

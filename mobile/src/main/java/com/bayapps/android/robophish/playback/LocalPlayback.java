@@ -23,6 +23,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
@@ -75,7 +76,15 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
     // Type of audio focus we have:
     private int mAudioFocus = AUDIO_NO_FOCUS_NO_DUCK;
     private final AudioManager mAudioManager;
+    private MediaPlayer mMediaPlayerA;
+    private MediaPlayer mMediaPlayerB;
     private MediaPlayer mMediaPlayer;
+
+    private MediaPlayer swapMediaPlayers() {
+        if (mMediaPlayer == mMediaPlayerA) mMediaPlayer = mMediaPlayerB;
+        else mMediaPlayer = mMediaPlayerA;
+        return mMediaPlayer;
+    }
 
     private final IntentFilter mAudioNoisyIntentFilter =
             new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
@@ -435,31 +444,38 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         return true; // true indicates we handled the error
     }
 
-    /**
-     * Makes sure the media player exists and has been reset. This will create
-     * the media player if needed, or reset the existing media player if one
-     * already exists.
-     */
     private void createMediaPlayerIfNeeded() {
-        LogHelper.d(TAG, "createMediaPlayerIfNeeded. needed? ", (mMediaPlayer==null));
-        if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
+        mMediaPlayerA = createMediaPlayer(mMediaPlayerA);
+        mMediaPlayerB = createMediaPlayer(mMediaPlayerB);
+        if (mMediaPlayer == null) mMediaPlayer = mMediaPlayerA;
+    }
+            /**
+             * Makes sure the media player exists and has been reset. This will create
+             * the media player if needed, or reset the existing media player if one
+             * already exists.
+             */
+    private MediaPlayer createMediaPlayer(MediaPlayer player) {
+        LogHelper.d(TAG, "createMediaPlayerIfNeeded. needed? ", (player==null));
+        if (player == null) {
+            player = new MediaPlayer();
 
             // Make sure the media player will acquire a wake-lock while
             // playing. If we don't do that, the CPU might go to sleep while the
             // song is playing, causing playback to stop.
-            mMediaPlayer.setWakeMode(mContext.getApplicationContext(),
+            player.setWakeMode(mContext.getApplicationContext(),
                     PowerManager.PARTIAL_WAKE_LOCK);
 
             // we want the media player to notify us when it's ready preparing,
             // and when it's done playing:
-            mMediaPlayer.setOnPreparedListener(this);
-            mMediaPlayer.setOnCompletionListener(this);
-            mMediaPlayer.setOnErrorListener(this);
-            mMediaPlayer.setOnSeekCompleteListener(this);
+            player.setOnPreparedListener(this);
+            player.setOnCompletionListener(this);
+            player.setOnErrorListener(this);
+            player.setOnSeekCompleteListener(this);
         } else {
-            mMediaPlayer.reset();
+            player.reset();
         }
+
+        return  player;
     }
 
     /**

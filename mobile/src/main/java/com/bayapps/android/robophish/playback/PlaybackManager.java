@@ -19,6 +19,7 @@ package com.bayapps.android.robophish.playback;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -30,6 +31,11 @@ import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.WearHelper;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Manage the interactions among the container service, the queue manager and the actual playback.
  */
@@ -39,12 +45,22 @@ public class PlaybackManager implements Playback.Callback {
     // Action to thumbs up a media item
     private static final String CUSTOM_ACTION_THUMBS_UP = "com.example.android.uamp.THUMBS_UP";
 
+    private static final long QUEUE_NEXT_TRACK_TIME = 5000;  //queue next track 5 seconds before this one ends
+    private static final long PROGRESS_UPDATE_INTERNAL = 1000;
+    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 100;
+
     private MusicProvider mMusicProvider;
     private QueueManager mQueueManager;
     private Resources mResources;
     private Playback mPlayback;
     private PlaybackServiceCallback mServiceCallback;
     private MediaSessionCallback mMediaSessionCallback;
+    private long mLastPlaybackPosition;
+    private ScheduledFuture<?> mScheduleFuture;
+    private final ScheduledExecutorService mExecutorService =
+            Executors.newSingleThreadScheduledExecutor();
+    private final Handler mHandler = new Handler();
+
 
     public PlaybackManager(PlaybackServiceCallback serviceCallback, Resources resources,
                            MusicProvider musicProvider, QueueManager queueManager,
@@ -66,6 +82,30 @@ public class PlaybackManager implements Playback.Callback {
         return mMediaSessionCallback;
     }
 
+    private final Runnable mMonitorPositionTask = new Runnable() {
+        @Override
+        public void run() {
+            monitorPosition();
+        }
+    };
+
+    private void monitorPosition() {
+
+        if (mPlayback == null) {
+            return;
+        }
+
+        if (mPlayback.isPlaying()) {
+            long currentPosition = mPlayback.getCurrentStreamPosition();
+            long duration = mQueueManager.getDuration();
+
+            if (duration - currentPosition < QUEUE_NEXT_TRACK_TIME) {
+                LogHelper.w(TAG, "Queing up next track!");
+            }
+        }
+
+    }
+
     /**
      * Handle a request to play music
      */
@@ -76,6 +116,15 @@ public class PlaybackManager implements Playback.Callback {
             mServiceCallback.onPlaybackStart();
             mPlayback.play(currentMusic);
         }
+
+        mScheduleFuture = mExecutorService.scheduleAtFixedRate(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        mHandler.post(mMonitorPositionTask);
+                    }
+                }, PROGRESS_UPDATE_INITIAL_INTERVAL,
+                PROGRESS_UPDATE_INTERNAL, TimeUnit.MILLISECONDS);
     }
 
     /**
