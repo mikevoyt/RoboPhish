@@ -130,6 +130,7 @@ public class PhishProviderSource implements MusicProviderSource  {
             }
         });
 
+        Collections.reverse(shows);
         return shows;
     }
 
