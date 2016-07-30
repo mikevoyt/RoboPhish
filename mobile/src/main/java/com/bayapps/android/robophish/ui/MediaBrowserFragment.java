@@ -314,12 +314,14 @@ public class MediaBrowserFragment extends Fragment {
 
             String year = MediaIDHelper.getHierarchy(mMediaId)[1];
             mMediaFragmentListener.setToolbarTitle(year);
+            mMediaFragmentListener.setToolbarSubTitle("");
             return;
         }
 
         if (mMediaId.startsWith(MediaIDHelper.MEDIA_ID_TRACKS_BY_SHOW)) {
 
-            mMediaFragmentListener.setToolbarTitle(getTitle() + ": " + getSubTitle());
+            mMediaFragmentListener.setToolbarTitle(getTitle());
+            mMediaFragmentListener.setToolbarSubTitle(getSubTitle());
             return;
         }
 
@@ -382,6 +384,7 @@ public class MediaBrowserFragment extends Fragment {
     public interface MediaFragmentListener extends MediaBrowserProvider {
         void onMediaItemSelected(MediaBrowserCompat.MediaItem item);
         void setToolbarTitle(CharSequence title);
+        void setToolbarSubTitle(CharSequence title);
     }
 
 }

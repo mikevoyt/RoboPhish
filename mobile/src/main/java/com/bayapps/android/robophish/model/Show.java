@@ -14,6 +14,7 @@ public class Show {
     private boolean mSbd;
     private long mTourId;
     private String mVenueName;
+    private String mLocation;
     private String mTaperNotes;
     private ArrayList<Track> mTracks;
 
@@ -72,6 +73,14 @@ public class Show {
 
     public void setVenueName(String venueName) {
         mVenueName = venueName;
+    }
+
+    public String getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(String location) {
+        mLocation = location;
     }
 
     public String getTaperNotes() {

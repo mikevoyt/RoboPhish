@@ -269,7 +269,8 @@ public class MusicProvider {
                                                                          Resources resources) {
 
         String showId = show.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
-        String venue = show.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE);
+        String venue = show.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE);
+        String location = show.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE);
         String date = show.getString(MediaMetadataCompat.METADATA_KEY_DATE);
 
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
@@ -277,6 +278,7 @@ public class MusicProvider {
                 .setTitle(venue)
                 .setSubtitle(resources.getString(
                         R.string.browse_musics_by_genre_subtitle, date))
+                .setDescription(location)
                 .build();
         return new MediaBrowserCompat.MediaItem(description,
                 MediaBrowserCompat.MediaItem.FLAG_BROWSABLE);

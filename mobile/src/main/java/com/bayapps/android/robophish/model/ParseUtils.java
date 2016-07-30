@@ -67,9 +67,16 @@ public class ParseUtils {
                 //full show data contains a venue object
                 String venueName = venue.getString("name");
                 show.setVenueName(venueName);
+
+                String location = venue.getString("location");
+                show.setLocation(location);
+
             } else {
                 String venueName = data.getString("venue_name");
                 show.setVenueName(venueName);
+
+                String location = data.getString("location");
+                show.setLocation(location);
             }
 
             //parse 'tracks' if available (if this is more that "simple data")

@@ -114,6 +114,15 @@ public class MusicPlayerActivity extends BaseActivity
     }
 
     @Override
+    public void setToolbarSubTitle(CharSequence subTitlle) {
+        LogHelper.d(TAG, "Setting toolbar title to ", subTitlle);
+        if (subTitlle == null) {
+            subTitlle = "";
+        }
+        setSubtitle(subTitlle);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         LogHelper.d(TAG, "onNewIntent, intent=" + intent);
         initializeFromParams(null, intent);

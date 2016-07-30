@@ -123,7 +123,8 @@ public class PhishProviderSource implements MusicProviderSource  {
                         shows.add(new MediaMetadataCompat.Builder()
                                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, id)
                                 .putString(MediaMetadataCompat.METADATA_KEY_DATE, show.getDateSimple())
-                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, show.getVenueName())
+                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, show.getVenueName())
+                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, show.getLocation())
                                 .build());
                     }
                 }
