@@ -1,6 +1,8 @@
 package com.bayapps.android.robophish.model;
 
 import android.support.v4.media.MediaMetadataCompat;
+import android.util.Log;
+
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.loopj.android.http.*;
 import org.json.*;
@@ -118,7 +120,9 @@ public class PhishProviderSource implements MusicProviderSource  {
 
                 if (show != null) {
                     for (Track track: show.getTracks()) {
-                        LogHelper.d(TAG, "name: ", track.getTitle());
+                        Log.d(TAG, "name: " + track.getTitle());
+                        String image = getRandomImage();
+                        Log.d(TAG, "image: " + image);
 
                         String id = String.valueOf(track.getId());
 
@@ -137,7 +141,7 @@ public class PhishProviderSource implements MusicProviderSource  {
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, show.getDateSimple())
                                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.getDurationString())
                                 .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, showId)
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getRandomImage())
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, image)
                                 .build());
                     }
                 }

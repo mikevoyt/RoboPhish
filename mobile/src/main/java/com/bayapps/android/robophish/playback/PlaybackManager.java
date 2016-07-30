@@ -72,6 +72,15 @@ public class PlaybackManager implements Playback.Callback {
         mMediaSessionCallback = new MediaSessionCallback();
         mPlayback = playback;
         mPlayback.setCallback(this);
+
+        mScheduleFuture = mExecutorService.scheduleAtFixedRate(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        mHandler.post(mMonitorPositionTask);
+                    }
+                }, PROGRESS_UPDATE_INITIAL_INTERVAL,
+                PROGRESS_UPDATE_INTERNAL, TimeUnit.MILLISECONDS);
     }
 
     public Playback getPlayback() {
@@ -98,6 +107,7 @@ public class PlaybackManager implements Playback.Callback {
         if (mPlayback.isPlaying()) {
             long currentPosition = mPlayback.getCurrentStreamPosition();
             long duration = mQueueManager.getDuration();
+            LogHelper.w(TAG, "current: " + currentPosition);
 
             if (duration - currentPosition < QUEUE_NEXT_TRACK_TIME) {
                 LogHelper.w(TAG, "Queing up next track!");
@@ -117,14 +127,6 @@ public class PlaybackManager implements Playback.Callback {
             mPlayback.play(currentMusic);
         }
 
-        mScheduleFuture = mExecutorService.scheduleAtFixedRate(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        mHandler.post(mMonitorPositionTask);
-                    }
-                }, PROGRESS_UPDATE_INITIAL_INTERVAL,
-                PROGRESS_UPDATE_INTERNAL, TimeUnit.MILLISECONDS);
     }
 
     /**
