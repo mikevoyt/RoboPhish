@@ -32,6 +32,7 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -102,7 +103,12 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         @Override
         public void onMetadataChanged(MediaMetadataCompat metadata) {
             if (metadata != null) {
-                updateMediaDescription(metadata.getDescription());
+                String venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM);
+                Log.d(TAG, "venue: " + venue);
+                String location = metadata.getString(MediaMetadataCompat.METADATA_KEY_AUTHOR);
+                Log.d(TAG, "location: " + location);
+
+                updateMediaDescription(metadata.getDescription(), venue, location);
                 updateDuration(metadata);
             }
         }
@@ -209,7 +215,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
 
         // Only update from the intent if we are not recreating from a config change:
         if (savedInstanceState == null) {
-            updateFromParams(getIntent());
+            //updateFromParams(getIntent());  //FIXME:  Why were they doing this???
         }
 
         mMediaBrowser = new MediaBrowserCompat(this,
@@ -229,7 +235,12 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         updatePlaybackState(state);
         MediaMetadataCompat metadata = mediaController.getMetadata();
         if (metadata != null) {
-            updateMediaDescription(metadata.getDescription());
+            String venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM);
+            Log.d(TAG, "venue: " + venue);
+            String location = metadata.getString(MediaMetadataCompat.METADATA_KEY_AUTHOR);
+            Log.d(TAG, "location: " + location);
+
+            updateMediaDescription(metadata.getDescription(), venue, location);
             updateDuration(metadata);
         }
         updateProgress();
@@ -244,7 +255,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             MediaDescriptionCompat description = intent.getParcelableExtra(
                 MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION);
             if (description != null) {
-                updateMediaDescription(description);
+                //updateMediaDescription(description);  //FIXME: is this necessary??
             }
         }
     }
@@ -324,13 +335,14 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         }
     }
 
-    private void updateMediaDescription(MediaDescriptionCompat description) {
+    private void updateMediaDescription(MediaDescriptionCompat description, String venue, String location) {
         if (description == null) {
             return;
         }
         LogHelper.d(TAG, "updateMediaDescription called ");
         mLine1.setText(description.getTitle());
         mLine2.setText(description.getDescription());
+        mLine3.setText(venue + ", " + location);
         fetchImageAsync(description);
     }
 

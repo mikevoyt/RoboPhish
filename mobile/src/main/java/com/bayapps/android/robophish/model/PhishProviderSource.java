@@ -170,11 +170,16 @@ public class PhishProviderSource implements MusicProviderSource  {
                                 .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.getUrl())
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, track.getDuration())
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getTitle())
+
+                                //pretty hokey, but we're overloading these fields so we can save venue and location, and showId
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, show.getVenueName())
+                                .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, show.getLocation())
+                                .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, showId)
+
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, track.getTitle())
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, track.getDurationString())
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, show.getDateSimple())
                                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.getDurationString())
-                                .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, showId)
                                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, image)
                                 .build());
                     }
