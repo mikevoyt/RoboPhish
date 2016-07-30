@@ -35,16 +35,21 @@ public class PhishProviderSource implements MusicProviderSource  {
         mImages.add("http://phishthoughts.com/wp-content/uploads/2010/08/Rogell_Telly1_1a.jpg");
         mImages.add("https://consequenceofsound.files.wordpress.com/2015/03/screen-shot-2015-03-18-at-2-49-51-pm.png?w=807");
         mImages.add("http://theconcertdatabase.com/sites/theconcertdatabase.com/files/phish.jpg");
-        mImages.add("http://livedesignonline.com/site-files/livedesignonline.com/files/gallery_images/Phish%202014%2004.jpg?1421937442");
         mImages.add("http://media.tumblr.com/5a2b9964eeb04fa3a4f6c6e204312932/tumblr_inline_mley97bZIq1qz4rgp.jpg");
         mImages.add("https://s3.amazonaws.com/ssglobalcdn/performers/wide/phish.jpg");
-        mImages.add("http://livedesignonline.com/site-files/livedesignonline.com/files/gallery_images/Phish%202014%2004.jpg?1421937442");
         mImages.add("http://images1.villagevoice.com/imager/u/original/8104637/trey-anastasio-phish-msg-credit-jason-speakman-village-voice.jpg");
         mImages.add("http://media.philly.com/images/600*450/Phish_08.11.15-3.jpg");
         mImages.add("http://image.syracuse.com/home/syr-media/width960/img/post-standard/photo/2016/07/10/-f93d34cacda62e7e.JPG");
         mImages.add("http://cdn1-www.craveonline.com/assets/uploads/2014/04/phish-1.jpg");
         mImages.add("http://www.kansascity.com/entertainment/ent-columns-blogs/back-to-rockville/v4lqdg/picture30213282/ALTERNATES/FREE_640/Phish%20FY%20080515%20rs%200651f");
         mImages.add("http://static.bangordailynews.com/wp-content/uploads/2013/07/10076301_H10809241-600x436.jpg?strip=all");
+        mImages.add("http://smedia.pnet-static.com/img/NYE.JPG");
+        mImages.add("http://imgs.l4lmcdn.com/Phish%20Mayan%20Riviera_20160116_DSC05185.jpg");
+        mImages.add("http://imgs.l4lmcdn.com/hish%20Mayan%20Riviera_20160116__03A8903.jpg");
+        mImages.add("http://www.jambase.com/wp-content/uploads/2015/06/Phish-1480x832.jpg");
+        mImages.add("https://i.ytimg.com/vi/shK8B1iKNfQ/maxresdefault.jpg");
+        mImages.add("http://assets.noisey.com/content-images/contentimage/35342/P0ThI3i.jpg");
+        mImages.add("http://www.sevendaysvt.com/general/multimedia/interactives/110613_phish/img/phish4.jpg");
     }
 
     @Override
