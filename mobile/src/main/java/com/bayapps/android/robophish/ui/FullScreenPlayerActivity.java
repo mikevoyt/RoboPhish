@@ -70,6 +70,8 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
     private TextView mLine1;
     private TextView mLine2;
     private TextView mLine3;
+    private TextView mLine4;
+    private TextView mLine5;
     private ProgressBar mLoading;
     private View mControllers;
     private Drawable mPauseDrawable;
@@ -149,6 +151,8 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         mLine1 = (TextView) findViewById(R.id.line1);
         mLine2 = (TextView) findViewById(R.id.line2);
         mLine3 = (TextView) findViewById(R.id.line3);
+        mLine4 = (TextView) findViewById(R.id.line4);
+        mLine5 = (TextView) findViewById(R.id.line5);
         mLoading = (ProgressBar) findViewById(R.id.progressBar1);
         mControllers = findViewById(R.id.controllers);
 
@@ -342,7 +346,8 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         LogHelper.d(TAG, "updateMediaDescription called ");
         mLine1.setText(description.getTitle());
         mLine2.setText(description.getDescription());
-        mLine3.setText(venue + ", " + location);
+        mLine3.setText(venue);
+        mLine4.setText(location);
         fetchImageAsync(description);
     }
 
@@ -366,7 +371,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
                     .getExtras().getString(MusicService.EXTRA_CONNECTED_CAST);
             String line3Text = castName == null ? "" : getResources()
                         .getString(R.string.casting_to_device, castName);
-            mLine3.setText(line3Text);
+            mLine5.setText(line3Text);
         }
 
         switch (state.getState()) {
@@ -394,7 +399,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             case PlaybackStateCompat.STATE_BUFFERING:
                 mPlayPause.setVisibility(INVISIBLE);
                 mLoading.setVisibility(VISIBLE);
-                mLine3.setText(R.string.loading);
+                mLine5.setText(R.string.loading);
                 stopSeekbarUpdate();
                 break;
             default:
