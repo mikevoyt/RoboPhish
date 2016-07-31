@@ -119,7 +119,7 @@ public class PlaybackManager implements Playback.Callback {
                     if (currentMusic != null) {
                         //mServiceCallback.onPlaybackStart();
                         Log.d(TAG, "Queing up next track : " + currentMusic.getDescription().getTitle());
-                        mPlayback.playNext(currentMusic);
+                        //mPlayback.playNext(currentMusic);
                     }
 
                 } else {
