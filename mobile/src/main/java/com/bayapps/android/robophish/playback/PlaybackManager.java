@@ -113,20 +113,20 @@ public class PlaybackManager implements Playback.Callback {
 
             if (duration - currentPosition == QUEUE_NEXT_TRACK_TIME) {
 
+/*
                 if (mQueueManager.skipQueuePosition(1)) {
 
                     MediaSessionCompat.QueueItem currentMusic = mQueueManager.getCurrentMusic();
                     if (currentMusic != null) {
                         //mServiceCallback.onPlaybackStart();
                         Log.d(TAG, "Queing up next track : " + currentMusic.getDescription().getTitle());
-                        //mPlayback.playNext(currentMusic);
+                        mPlayback.playNext(currentMusic);
                     }
 
                 } else {
                     handleStopRequest("Cannot skip");
                 }
-
-
+*/
             }
         }
 
