@@ -114,6 +114,12 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
                     case R.id.navigation_playlists:
                         activityClass = PlaceholderActivity.class;
                         break;
+                    case R.id.navigation_downloads:
+                        activityClass = PlaceholderActivity.class;
+                        break;
+                    case R.id.navigation_about:
+                        activityClass = AboutActivity.class;
+                        break;
                 }
                 if (activityClass != null) {
                     startActivity(new Intent(ActionBarCastActivity.this, activityClass), extras);

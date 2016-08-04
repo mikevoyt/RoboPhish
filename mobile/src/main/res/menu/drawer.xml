@@ -25,5 +25,13 @@
             android:id="@+id/navigation_playlists"
             android:icon="@drawable/ic_playlist_music_black_24dp"
             android:title="@string/drawer_playlists_title"/>
+        <item
+            android:id="@+id/navigation_downloads"
+            android:icon="@drawable/ic_offline_pin_black_24dp"
+            android:title="@string/downloads"/>
+        <item
+            android:id="@+id/navigation_about"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="@string/about"/>
     </group>
 </menu>
