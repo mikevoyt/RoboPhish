@@ -77,6 +77,11 @@ public class CastPlayback implements Playback {
     }
 
     @Override
+    public boolean supportsGapless() {
+        return false;
+    }
+
+    @Override
     public void start() {
         VideoCastManager.getInstance().addVideoCastConsumer(mCastConsumer);
     }

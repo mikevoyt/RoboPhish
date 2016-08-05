@@ -46,7 +46,7 @@ public class PlaybackManager implements Playback.Callback {
     // Action to thumbs up a media item
     private static final String CUSTOM_ACTION_THUMBS_UP = "com.example.android.uamp.THUMBS_UP";
 
-    private static final long QUEUE_NEXT_TRACK_TIME = 10;  //queue next track 5 seconds before this one ends
+    private static final long QUEUE_NEXT_TRACK_TIME = 10;  //queue next track N seconds before this one ends
     private static final long PROGRESS_UPDATE_INTERNAL = 1000;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 100;
 
@@ -61,7 +61,7 @@ public class PlaybackManager implements Playback.Callback {
     private final ScheduledExecutorService mExecutorService =
             Executors.newSingleThreadScheduledExecutor();
     private final Handler mHandler = new Handler();
-
+    private boolean mGaplessQueued;
 
     public PlaybackManager(PlaybackServiceCallback serviceCallback, Resources resources,
                            MusicProvider musicProvider, QueueManager queueManager,
@@ -105,7 +105,7 @@ public class PlaybackManager implements Playback.Callback {
             return;
         }
 
-        if (mPlayback.isPlaying()) {
+        if (mPlayback.supportsGapless() && mPlayback.isPlaying() && !mGaplessQueued) {
             long currentPosition = mPlayback.getCurrentStreamPosition()/1000;
             long duration = mQueueManager.getDuration()/1000;
             long delta = duration - currentPosition;
@@ -113,7 +113,6 @@ public class PlaybackManager implements Playback.Callback {
 
             if (duration - currentPosition == QUEUE_NEXT_TRACK_TIME) {
 
-/*
                 if (mQueueManager.skipQueuePosition(1)) {
 
                     MediaSessionCompat.QueueItem currentMusic = mQueueManager.getCurrentMusic();
@@ -121,12 +120,13 @@ public class PlaybackManager implements Playback.Callback {
                         //mServiceCallback.onPlaybackStart();
                         Log.d(TAG, "Queing up next track : " + currentMusic.getDescription().getTitle());
                         mPlayback.playNext(currentMusic);
+                        mGaplessQueued = true;
                     }
 
                 } else {
                     handleStopRequest("Cannot skip");
                 }
-*/
+
             }
         }
 
@@ -136,6 +136,7 @@ public class PlaybackManager implements Playback.Callback {
      * Handle a request to play music
      */
     public void handlePlayRequest() {
+        mGaplessQueued = false;  //this was a request from user.  mPlayback.play will cancel gapless
         LogHelper.d(TAG, "handlePlayRequest: mState=" + mPlayback.getState());
         MediaSessionCompat.QueueItem currentMusic = mQueueManager.getCurrentMusic();
         if (currentMusic != null) {
@@ -257,7 +258,14 @@ public class PlaybackManager implements Playback.Callback {
     public void onCompletion() {
         // The media player finished playing the current song, so we go ahead
         // and start the next.
-        if (mQueueManager.skipQueuePosition(1)) {
+
+        if (mGaplessQueued) {
+            mServiceCallback.onPlaybackStart();
+            mQueueManager.updateMetadata();
+            mGaplessQueued = false;
+        }
+
+        else if (mQueueManager.skipQueuePosition(1)) {
             handlePlayRequest();
             mQueueManager.updateMetadata();
         } else {

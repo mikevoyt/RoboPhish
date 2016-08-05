@@ -80,6 +80,12 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
     private MediaPlayer mMediaPlayerB;
     private MediaPlayer mMediaPlayer;
     private boolean mMediaPlayersSwapping;
+    private volatile String mNextMediaId;
+
+    @Override
+    public boolean supportsGapless() {
+        return true;
+    }
 
     private MediaPlayer nextMediaPlayer() {
         if (mMediaPlayer == mMediaPlayerA) return mMediaPlayerB;
@@ -172,6 +178,12 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         }
         else nextPlayer = mMediaPlayerA;
 
+        String mediaId = item.getDescription().getMediaId();
+        boolean mediaHasChanged = !TextUtils.equals(mediaId, mCurrentMediaId);
+        if (mediaHasChanged) {
+            mNextMediaId = mediaId;
+        }
+
         MediaMetadataCompat track = mMusicProvider.getMusic(
                 MediaIDHelper.extractMusicIDFromMediaID(item.getDescription().getMediaId()));
 
@@ -204,7 +216,10 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
     @Override
     public void play(QueueItem item) {
 
-        if (mMediaPlayersSwapping) return;  //TESTING
+        //we never call this if we're auto-queued due to gapless
+        if (mMediaPlayersSwapping) {
+            mMediaPlayersSwapping = false;
+        }
 
         mPlayOnFocusGain = true;
         tryToGetAudioFocus();
@@ -449,9 +464,21 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         LogHelper.d(TAG, "onCompletion from MediaPlayer");
         // The media player finished playing the current song, so we go ahead
         // and start the next.
+
+        if (mMediaPlayersSwapping) {
+            mCurrentPosition = 0;
+            mCurrentMediaId = mNextMediaId;
+            MediaPlayer old = mMediaPlayer;
+            mMediaPlayer = nextMediaPlayer();  //we're now using the new media player
+            mMediaPlayersSwapping = false;
+            old.reset();  //required for the next time we swap
+            mCallback.onPlaybackStatusChanged(mState);
+        }
+
         if (mCallback != null) {
             mCallback.onCompletion();
         }
+
     }
 
     /**
@@ -464,8 +491,9 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         LogHelper.d(TAG, "onPrepared from MediaPlayer");
 
         if (mMediaPlayersSwapping) {
+            //when the next player is prepared, go ahead and set it as next
             mMediaPlayer.setNextMediaPlayer(nextMediaPlayer());
-            return; //TEST!!
+            return;
         }
 
         // The media player is done preparing. That means we can start playing if we
