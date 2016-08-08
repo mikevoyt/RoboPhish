@@ -27,7 +27,9 @@ public class PhishProviderSource implements MusicProviderSource  {
     PhishProviderSource() {
         mRandomGenerator = new Random();
         //add some random images to display
-        //Images used with permission (c) Andrea Nusinov, AZN Photography www.instagram.com/aznpics
+
+        //Images used with permission (c) Andrea Nusinov, AZN Photography
+        //www.instagram.com/aznpics
         mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13732130_277319952649047_849294057_n.jpg");
         mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13743448_1424000554280417_912332374_n.jpg");
         mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13712772_641757285973222_527297489_n.jpg");
@@ -64,6 +66,22 @@ public class PhishProviderSource implements MusicProviderSource  {
         mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13099145_1618175438508664_747258233_n.jpg");
         mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/s750x750/sh0.08/e35/13092312_223483031360791_69669016_n.jpg");
 
+
+        //Images used with permission (c) David Logan, David Logan Photography
+        //https://www.flickr.com/photos/davidloganphotography
+        mImages.add("https://c2.staticflickr.com/8/7428/9407135018_df133c9c28_b.jpg");
+        mImages.add("https://c2.staticflickr.com/6/5344/9407138068_2d4f876588_b.jpg");
+        mImages.add("https://c1.staticflickr.com/3/2827/9407148598_3b53cc5e1b_b.jpg");
+        mImages.add("https://c2.staticflickr.com/4/3805/9404388499_6b446a4e0c_b.jpg");
+        mImages.add("https://c2.staticflickr.com/6/5327/9407144032_01fb41745c_b.jpg");
+        mImages.add("https://c2.staticflickr.com/8/7365/9404384233_75eebb6e76_b.jpg");
+        mImages.add("https://c1.staticflickr.com/9/8229/8394959099_d4b1d30017_b.jpg");
+        mImages.add("https://c1.staticflickr.com/9/8361/8394958861_af3d802945_b.jpg");
+        mImages.add("https://c1.staticflickr.com/9/8189/8394665046_0c6a426395_b.jpg");
+        mImages.add("https://c1.staticflickr.com/3/2478/3654332535_c3826a066b_b.jpg");
+        mImages.add("https://c2.staticflickr.com/4/3359/3655135680_276263f359_b.jpg");
+        mImages.add("https://c1.staticflickr.com/3/2443/3655134046_d9f4697a4a_b.jpg");
+        mImages.add("https://c1.staticflickr.com/3/2776/4151295029_abc36c90c4_b.jpg");
     }
 
     @Override
