@@ -30,6 +30,13 @@
             android:id="@+id/toolbar_container"
             layout="@layout/include_toolbar" />
 
+        <WebView
+            android:id="@+id/about_webview"
+            android:layout_below="@+id/toolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/controls_container" />
+
         <android.support.v7.widget.CardView
             android:id="@+id/controls_container"
             android:layout_width="match_parent"
@@ -47,45 +54,15 @@
 
         </android.support.v7.widget.CardView>
 
-<!---
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="64dp">
-!-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true">
+    </RelativeLayout>
 
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer" />
 
-                <TextView
-                    android:id="@+id/authors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:gravity="center_horizontal"
-                    android:shadowColor="@android:color/black"
-                    android:shadowRadius="20"
-                    android:text="Authors:"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/fullscreen_secondary_line_color" />
-
-            </RelativeLayout>
-
-        <!---
-                </ScrollView>
--->
-
-            </RelativeLayout>
-
-            <android.support.design.widget.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:headerLayout="@layout/nav_header"
-                app:menu="@menu/drawer" />
-
-        </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>

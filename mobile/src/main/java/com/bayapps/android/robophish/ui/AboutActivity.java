@@ -16,6 +16,7 @@
 package com.bayapps.android.robophish.ui;
 
 import android.os.Bundle;
+import android.webkit.WebView;
 
 import com.bayapps.android.robophish.R;
 
@@ -25,11 +26,20 @@ import com.bayapps.android.robophish.R;
  */
 public class AboutActivity extends BaseActivity {
 
+    private static WebView mWebView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_screen);
+
+        mWebView = (WebView)findViewById(R.id.about_webview);
+
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.loadUrl("file:///android_asset/about.html");
+
         initializeToolbar();
     }
+
 
 }

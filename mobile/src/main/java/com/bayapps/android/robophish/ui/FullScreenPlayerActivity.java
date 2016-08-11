@@ -339,6 +339,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         }
     }
 
+
     private void updateMediaDescription(MediaDescriptionCompat description, String venue, String location) {
         if (description == null) {
             return;
