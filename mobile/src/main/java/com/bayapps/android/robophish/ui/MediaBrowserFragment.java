@@ -24,15 +24,19 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -45,9 +49,21 @@ import com.bayapps.android.robophish.model.MusicProviderSource;
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * A Fragment that lists all the various browsable queues available
@@ -148,18 +164,126 @@ public class MediaBrowserFragment extends Fragment {
         mMediaFragmentListener = (MediaFragmentListener) activity;
     }
 
+    //private static AsyncHttpClient mSyncClient = new AsyncHttpClient();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         LogHelper.d(TAG, "fragment.onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+
+        View rootView;
+
+        String mediaId = getMediaId();
+        ListView listView;
+
+        if (mediaId != null && MediaIDHelper.isShow(mediaId)) {
+            rootView = inflater.inflate(R.layout.fragment_list_show, container, false);
+
+            ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+            viewPager.setAdapter(new ShowPagerAdapter(inflater, rootView));
+            viewPager.setOffscreenPageLimit(2);
+
+            TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.sliding_tabs);
+            tabLayout.setupWithViewPager(viewPager);
+
+            final WebView setlist = (WebView)rootView.findViewById(R.id.setlist_webview);
+            setlist.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    return true;
+                }
+            });
+            setlist.getSettings().setJavaScriptEnabled(true);
+
+            AsyncHttpClient setlistClient = new AsyncHttpClient();
+            RequestParams setlistParams = new RequestParams();
+            setlistParams.put("api", "2.0");
+            setlistParams.put("method", "pnet.shows.setlists.get");
+            setlistParams.put("showdate", getSubTitle());
+            setlistParams.put("apikey", "C01AEE2002E80723E9E7");
+            setlistParams.put("format", "json");
+            setlistClient.get("http://api.phish.net/api.js", setlistParams, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+                    try {
+                        JSONObject result = response.getJSONObject(0);
+                        String setlistdata = result.getString("setlistdata");
+                        String setlistnotes = result.getString("setlistnotes");
+                        setlist.loadData(setlistdata + setlistnotes, "text/html", null);
+                    }  catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    }
+            );
+
+            final WebView reviews = (WebView)rootView.findViewById(R.id.reviews_webview);
+            reviews.getSettings().setJavaScriptEnabled(true);
+
+            AsyncHttpClient reviewsClient = new AsyncHttpClient();
+            RequestParams reviewsParams = new RequestParams();
+            reviewsParams.put("api", "2.0");
+            reviewsParams.put("method", "pnet.reviews.query");
+            reviewsParams.put("showdate", getSubTitle());
+            reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
+            reviewsParams.put("format", "json");
+            reviewsClient.get("http://api.phish.net/api.js", reviewsParams, new JsonHttpResponseHandler() {
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                String display = "";
+
+                                int len = response.length();
+                                for (int i=0; i<len; i++) {
+                                    JSONObject entry = response.getJSONObject(i);
+                                    String author = entry.getString("author");
+                                    String review = entry.getString("review");
+                                    String tstamp = entry.getString("tstamp");
+
+                                    Date reviewTime = new Date(Long.parseLong(tstamp)*1000);
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String reviewDate = dateFormat.format(reviewTime);
+
+                                    String reviewSubs = review.replaceAll("\n", "<br/>");
+
+                                    display += "<h2>" + author + "</h2>" + "<h4>" + reviewDate + "</h4>";
+                                    display += reviewSubs + "<br/>";
+                                }
+
+                                reviews.loadData(display, "text/html", null);
+                            }  catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    }
+            );
+
+
+
+        } else {
+            rootView = inflater.inflate(R.layout.fragment_list, container, false);
+        }
 
         mErrorView = rootView.findViewById(R.id.playback_error);
         mErrorMessage = (TextView) mErrorView.findViewById(R.id.error_message);
 
         mBrowserAdapter = new BrowseAdapter(getActivity());
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view);
+        listView = (ListView) rootView.findViewById(R.id.list_view);
         listView.setAdapter(mBrowserAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
