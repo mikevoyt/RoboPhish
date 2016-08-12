@@ -187,12 +187,6 @@ public class MediaBrowserFragment extends Fragment {
             tabLayout.setupWithViewPager(viewPager);
 
             final WebView setlist = (WebView)rootView.findViewById(R.id.setlist_webview);
-            setlist.setWebViewClient(new WebViewClient(){
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    return true;
-                }
-            });
             setlist.getSettings().setJavaScriptEnabled(true);
 
             AsyncHttpClient setlistClient = new AsyncHttpClient();
