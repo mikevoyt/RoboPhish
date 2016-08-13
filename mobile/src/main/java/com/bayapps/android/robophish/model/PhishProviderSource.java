@@ -132,6 +132,9 @@ public class PhishProviderSource implements MusicProviderSource  {
                                 .putString(MediaMetadataCompat.METADATA_KEY_DATE, show.getDateSimple())
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, show.getVenueName())
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, show.getLocation())
+
+                                //we're using 'Author' here for taper notes
+                                .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, show.getTaperNotes())
                                 .build());
                     }
                 }

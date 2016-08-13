@@ -101,6 +101,14 @@ public class MediaIDHelper {
         return null;
     }
 
+    public static String extractShowFromMediaID(@NonNull String mediaID) {
+        int pos = mediaID.indexOf(CATEGORY_SEPARATOR);
+        if (pos >= 0) {
+            return mediaID.substring(pos+1);
+        }
+        return null;
+    }
+
     /**
      * Extracts category and categoryValue from the mediaID. mediaID is, by this sample's
      * convention, a concatenation of category (eg "by_genre"), categoryValue (eg "Classical") and

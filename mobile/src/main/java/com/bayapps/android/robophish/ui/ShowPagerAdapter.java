@@ -32,6 +32,7 @@ public class ShowPagerAdapter extends PagerAdapter {
         if (position == 0) view = mRootView.findViewById(R.id.tracks);
         if (position == 1) view = mRootView.findViewById(R.id.setlist);
         if (position == 2) view = mRootView.findViewById(R.id.reviews);
+        if (position == 3) view = mRootView.findViewById(R.id.tapernotes);
         collection.addView(view);
 
         return view;
@@ -46,7 +47,7 @@ public class ShowPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -60,6 +61,7 @@ public class ShowPagerAdapter extends PagerAdapter {
             case 0: return "Tracks";
             case 1: return "Setlist";
             case 2: return "Reviews";
+            case 3: return "Taper Notes";
         }
         return null;
     }

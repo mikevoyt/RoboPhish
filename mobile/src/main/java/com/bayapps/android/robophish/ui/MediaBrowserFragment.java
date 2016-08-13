@@ -65,6 +65,8 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.bayapps.android.robophish.utils.MediaIDHelper.extractShowFromMediaID;
+
 /**
  * A Fragment that lists all the various browsable queues available
  * from a {@link android.service.media.MediaBrowserService}.
@@ -181,7 +183,7 @@ public class MediaBrowserFragment extends Fragment {
 
             ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
             viewPager.setAdapter(new ShowPagerAdapter(inflater, rootView));
-            viewPager.setOffscreenPageLimit(2);
+            viewPager.setOffscreenPageLimit(3);
 
             TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.sliding_tabs);
             tabLayout.setupWithViewPager(viewPager);
@@ -203,9 +205,17 @@ public class MediaBrowserFragment extends Fragment {
                     super.onSuccess(statusCode, headers, response);
                     try {
                         JSONObject result = response.getJSONObject(0);
+                        String city = result.getString("city");
+                        String state = result.getString("state");
+                        String country = result.getString("country");
+                        String venue = result.getString("venue");
+
+                        String header = "<h1>" + venue + "</h1>" + "<h2>" + city + "</h2>" +
+                                 "<br/>" + state + "<h3>" + country + "</h3>";
+
                         String setlistdata = result.getString("setlistdata");
                         String setlistnotes = result.getString("setlistnotes");
-                        setlist.loadData(setlistdata + setlistnotes, "text/html", null);
+                        setlist.loadData(header + setlistdata + setlistnotes, "text/html", null);
                     }  catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -266,6 +276,36 @@ public class MediaBrowserFragment extends Fragment {
                     }
             );
 
+
+            final WebView tapernotesWebview = (WebView)rootView.findViewById(R.id.tapernotes_webview);
+            tapernotesWebview.getSettings().setJavaScriptEnabled(true);
+
+            String showId = extractShowFromMediaID(mediaId);
+            final AsyncHttpClient tapernotesClient = new AsyncHttpClient();
+            tapernotesClient.get("http://phish.in/api/v1/shows/" + showId + ".json",
+                    null, new JsonHttpResponseHandler() {
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                JSONObject data = response.getJSONObject("data");
+                                String tapernotes = data.getString("taper_notes");
+                                if (tapernotes.equals("null")) tapernotes = "Not available";
+                                String notesSubs = tapernotes.replaceAll("\n", "<br/>");
+
+                                tapernotesWebview.loadData(notesSubs, "text/html", null);
+                            }  catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    }
+            );
 
 
         } else {

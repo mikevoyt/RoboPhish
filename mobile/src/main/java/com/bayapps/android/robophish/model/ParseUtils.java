@@ -100,6 +100,14 @@ public class ParseUtils {
                 }
             }
 
+            String taperNotes = data.getString("taper_notes");
+            if (taperNotes != null) {
+                show.setTaperNotes(taperNotes);
+            }
+
+            boolean sbd = data.getBoolean("sbd");
+            show.setSbd(sbd);
+
         } catch (Exception e) {
             Log.d(TAG, "failed to parse show!");
             e.printStackTrace();
