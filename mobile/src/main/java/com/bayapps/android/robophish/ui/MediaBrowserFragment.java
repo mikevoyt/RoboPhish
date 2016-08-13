@@ -210,8 +210,8 @@ public class MediaBrowserFragment extends Fragment {
                         String country = result.getString("country");
                         String venue = result.getString("venue");
 
-                        String header = "<h1>" + venue + "</h1>" + "<h2>" + city + "</h2>" +
-                                 "<br/>" + state + "<h3>" + country + "</h3>";
+                        String header = "<h1>" + venue + "</h1>" + "<h2>" + city +
+                                 ", " + state + "<br/>" + country + "</h2>";
 
                         String setlistdata = result.getString("setlistdata");
                         String setlistnotes = result.getString("setlistnotes");
