@@ -169,7 +169,13 @@ public class MusicProvider {
             new AsyncTask<Void, Void, State>() {
                 @Override
                 protected State doInBackground(Void... params) {
-                    if (mYears.isEmpty()) mYears = mSource.years();
+                    List<YearData> years = mSource.years();  //always refresh years so we get fresh show count
+                    if (!mYears.isEmpty() && (years.get(0).getShowCount() != mYears.get(0).getShowCount())) {
+                        mShowsInYearYear = new ConcurrentHashMap<>();  //clear cache if number of shows have changed
+                    }
+
+                    mYears = years;
+
                     for (YearData year : mYears) {
                         mediaItems.add(createBrowsableMediaItemForYear(year.getYear(), year.getShowCount(), resources));
                     }
