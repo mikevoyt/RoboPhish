@@ -116,27 +116,20 @@ public class ParseUtils {
 
         return show;
     }
-    //returns an ArrayList of all years
-    public static ArrayList<String> parseYears(String jsonString) {
-        JSONObject json = null;
-        try {
-            json = new JSONObject(jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return parseYears(json);
-    }
 
-    public static ArrayList<String> parseYears(JSONObject json) {
+    public static ArrayList<YearData> parseYears(JSONObject json) {
 
-        ArrayList<String> yearList = new ArrayList<String>();
+        ArrayList<YearData> yearList = new ArrayList<>();
 
         try {
             //parse 'data' which contains the array of years
             JSONArray years = json.getJSONArray("data");
             for (int i = 0; i < years.length(); i++) {
-                String year = years.getString(i);
-                yearList.add(year);
+                JSONObject entry = years.getJSONObject(i);
+                String year = entry.getString("date");
+                String showCount = entry.getString("show_count");
+                YearData data = new YearData(year, showCount);
+                yearList.add(data);
             }
         } catch (JSONException e) {
             e.printStackTrace();

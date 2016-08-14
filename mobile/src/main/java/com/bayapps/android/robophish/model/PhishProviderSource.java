@@ -85,23 +85,24 @@ public class PhishProviderSource implements MusicProviderSource  {
     }
 
     @Override
-    public ArrayList<String> years() {
+    public ArrayList<YearData> years() {
 
-        final ArrayList<String> years = new ArrayList<>();
+        final ArrayList<YearData> years = new ArrayList<>();
 
-        HttpClient.get("years.json", null, new JsonHttpResponseHandler() {
+        RequestParams yearsParams = new RequestParams();
+        yearsParams.put("include_show_counts", "true");
+        HttpClient.get("years.json", yearsParams, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                ArrayList<String> yearStrings = ParseUtils.parseYears(response);
+                ArrayList<YearData> yearEntries = ParseUtils.parseYears(response);
 
-                Collections.reverse(yearStrings);
+                Collections.reverse(yearEntries);
 
-                if (yearStrings != null) {
-                    for (String year : yearStrings) {
+                if (yearEntries != null) {
+                    for (YearData year : yearEntries) {
 
-                        LogHelper.d(TAG, "year: ", year);
-
+                        Log.d(TAG, "year: " + year.getYear());
                         years.add(year);
                     }
                 }

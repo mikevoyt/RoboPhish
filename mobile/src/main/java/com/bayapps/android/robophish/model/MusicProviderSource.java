@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public interface MusicProviderSource {
     String CUSTOM_METADATA_TRACK_SOURCE = "__SOURCE__";
-    ArrayList<String> years();
+    ArrayList<YearData> years();
     Iterable<MediaMetadataCompat> showsInYear(String year);
     Iterable<MediaMetadataCompat> tracksInShow(String showId);
 }
