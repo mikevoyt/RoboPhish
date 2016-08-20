@@ -33,6 +33,9 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -46,6 +49,7 @@ import android.widget.Toast;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.model.MusicProvider;
 import com.bayapps.android.robophish.model.MusicProviderSource;
+import com.bayapps.android.robophish.utils.Downloader;
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
@@ -88,6 +92,8 @@ public class MediaBrowserFragment extends Fragment {
     private MediaFragmentListener mMediaFragmentListener;
     private View mErrorView;
     private TextView mErrorMessage;
+    private JSONObject mShowData;
+
     private final BroadcastReceiver mConnectivityChangeReceiver = new BroadcastReceiver() {
         private boolean oldOnline = false;
         @Override
@@ -166,7 +172,26 @@ public class MediaBrowserFragment extends Fragment {
         mMediaFragmentListener = (MediaFragmentListener) activity;
     }
 
-    //private static AsyncHttpClient mSyncClient = new AsyncHttpClient();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case 0:
+                // start DownloadManager
+                String showId = extractShowFromMediaID(getMediaId());
+                Downloader dl = new Downloader(getActivity(), showId, mShowData);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item); // important line
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflater.inflate(R.menu.menu_sample, menu);
+        menu.add("Download Show");
+        super.onCreateOptionsMenu(menu,inflater);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -179,6 +204,9 @@ public class MediaBrowserFragment extends Fragment {
         ListView listView;
 
         if (mediaId != null && MediaIDHelper.isShow(mediaId)) {
+
+            setHasOptionsMenu(true);  //show option to download
+
             rootView = inflater.inflate(R.layout.fragment_list_show, container, false);
 
             ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
@@ -289,6 +317,7 @@ public class MediaBrowserFragment extends Fragment {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
+                                mShowData = response;
                                 JSONObject data = response.getJSONObject("data");
                                 String tapernotes = data.getString("taper_notes");
                                 if (tapernotes.equals("null")) tapernotes = "Not available";
@@ -468,6 +497,9 @@ public class MediaBrowserFragment extends Fragment {
 
     private void updateTitle() {
 
+        mMediaFragmentListener.updateDrawerToggle();
+
+
         if (mMediaId.startsWith(MediaIDHelper.MEDIA_ID_SHOWS_BY_YEAR)) {
 
             String year = MediaIDHelper.getHierarchy(mMediaId)[1];
@@ -543,6 +575,7 @@ public class MediaBrowserFragment extends Fragment {
         void onMediaItemSelected(MediaBrowserCompat.MediaItem item);
         void setToolbarTitle(CharSequence title);
         void setToolbarSubTitle(CharSequence title);
+        void updateDrawerToggle();
     }
 
 }

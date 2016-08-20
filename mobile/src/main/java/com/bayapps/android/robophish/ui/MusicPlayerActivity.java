@@ -25,6 +25,7 @@ import android.text.TextUtils;
 
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.utils.LogHelper;
+import com.bayapps.android.robophish.utils.MediaIDHelper;
 
 /**
  * Main activity for the music player.
@@ -123,6 +124,11 @@ public class MusicPlayerActivity extends BaseActivity
     }
 
     @Override
+    public void updateDrawerToggle() {
+        super.updateDrawerToggle();
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         LogHelper.d(TAG, "onNewIntent, intent=" + intent);
         initializeFromParams(null, intent);
@@ -150,13 +156,30 @@ public class MusicPlayerActivity extends BaseActivity
             mVoiceSearchParams = intent.getExtras();
             LogHelper.d(TAG, "Starting from voice search query=",
                 mVoiceSearchParams.getString(SearchManager.QUERY));
-        } else {
+        } else if (intent.getAction() != null
+                && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_SEARCH)) {
+
+            Bundle extras = intent.getExtras();
+            String title = extras.getString("title");
+            String subtitle = extras.getString("subtitle");
+            mediaId = extras.getString("showid");
+
+            String year = subtitle.split("-")[0];
+            //browse to year...
+            navigateToBrowser(null, null, MediaIDHelper.MEDIA_ID_SHOWS_BY_YEAR + "/" + year);
+
+            //now launch as show
+            navigateToBrowser(title, subtitle, mediaId);
+        }
+
+
+        else {
             if (savedInstanceState != null) {
                 // If there is a saved media ID, use it
                 mediaId = savedInstanceState.getString(SAVED_MEDIA_ID);
             }
+            navigateToBrowser(null, null, mediaId);
         }
-        navigateToBrowser(null, null, mediaId);
     }
 
     private void navigateToBrowser(String title, String subtitle, String mediaId) {

@@ -16,23 +16,35 @@
 package com.bayapps.android.robophish.ui;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
+import com.bayapps.android.robophish.gcm.QuickstartPreferences;
+import com.bayapps.android.robophish.gcm.RegistrationIntentService;
 import com.bayapps.android.robophish.utils.ResourceHelper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
  * Base activity for activities that need to show a playback control fragment when media is playing.
@@ -41,8 +53,11 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
 
     private static final String TAG = LogHelper.makeLogTag(BaseActivity.class);
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private MediaBrowserCompat mMediaBrowser;
     private PlaybackControlsFragment mControlsFragment;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private boolean isReceiverRegistered;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,54 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         // Connect a media browser just to get the media session token. There are other ways
         // this can be done, for example by sharing the session token directly.
         mMediaBrowser = new MediaBrowserCompat(this,
-            new ComponentName(this, MusicService.class), mConnectionCallback, null);
+                new ComponentName(this, MusicService.class), mConnectionCallback, null);
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    //mInformationTextView.setText(getString(R.string.gcm_send_message));
+                } else {
+                    //mInformationTextView.setText(getString(R.string.token_error_message));
+                }
+            }
+        };
+
+
+        // Registering BroadcastReceiver
+        registerReceiver();
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    private void registerReceiver(){
+        if(!isReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+            isReceiverRegistered = true;
+        }
+    }
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode == ConnectionResult.SUCCESS) {
+            return true;
+        }
+        return false;  //just don't start RegistrationIntentService if not available
     }
 
     @Override
