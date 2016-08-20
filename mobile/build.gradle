@@ -23,8 +23,8 @@ android {
         applicationId "com.bayapps.android.robophish"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 15
-        versionName "0.8-beta"
+        versionCode 16
+        versionName "0.9-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
