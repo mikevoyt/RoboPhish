@@ -84,8 +84,7 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void showNotification(String title, String subtitle, String mediaId) {
         Intent intent = new Intent(this, MusicPlayerActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(MusicPlayerActivity.EXTRA_START_FULLSCREEN, true);
+        intent.putExtra(MusicPlayerActivity.EXTRA_START_FULLSCREEN, false);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         //TEST

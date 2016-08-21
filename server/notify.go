@@ -51,12 +51,8 @@ func main() {
 		fmt.Println(year.ShowCount)
 	}
 
-	t := time.NewTicker(time.Second * 30)
+	t := time.NewTicker(time.Minute * 30)
 	for {
-		//TEST
-		mYears[len(mYears)-1].ShowCount--
-		mYears[len(mYears)-1].ShowCount--
-
 		checkForUpdate()
 		<-t.C
 	}

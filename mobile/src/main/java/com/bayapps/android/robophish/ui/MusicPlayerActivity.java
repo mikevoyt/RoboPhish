@@ -159,6 +159,8 @@ public class MusicPlayerActivity extends BaseActivity
         } else if (intent.getAction() != null
                 && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_SEARCH)) {
 
+            navigateToBrowser(null, null, null);
+
             Bundle extras = intent.getExtras();
             String title = extras.getString("title");
             String subtitle = extras.getString("subtitle");
