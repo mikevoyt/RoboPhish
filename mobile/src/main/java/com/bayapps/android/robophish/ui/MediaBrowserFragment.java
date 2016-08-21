@@ -188,8 +188,7 @@ public class MediaBrowserFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.menu_sample, menu);
-        menu.add("Download Show");
+        //menu.add("Download Show");  //TODO: enable once downloads are working
         super.onCreateOptionsMenu(menu,inflater);
     }
 
