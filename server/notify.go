@@ -85,7 +85,6 @@ func sendGsm(request []byte) {
 	url := "https://android.googleapis.com/gcm/send"
 	fmt.Println("URL:>", url)
 
-	//var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(request))
 	req.Header.Set("Authorization", "key="+API_KEY)
 	req.Header.Set("Content-Type", "application/json")
