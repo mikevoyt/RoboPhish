@@ -149,6 +149,7 @@ public class MediaBrowserFragment extends Fragment {
                     LogHelper.d(TAG, "fragment onChildrenLoaded, parentId=" + parentId +
                         "  count=" + children.size());
                     checkForUserVisibleErrors(children.isEmpty());
+                    mProgressBar.setVisibility(View.INVISIBLE);
                     mBrowserAdapter.clear();
                     for (MediaBrowserCompat.MediaItem item : children) {
                         mBrowserAdapter.add(item);
@@ -220,7 +221,7 @@ public class MediaBrowserFragment extends Fragment {
 
             final WebView setlist = (WebView)rootView.findViewById(R.id.setlist_webview);
             setlist.getSettings().setJavaScriptEnabled(true);
-            
+
             AsyncHttpClient setlistClient = new AsyncHttpClient();
             RequestParams setlistParams = new RequestParams();
             setlistParams.put("api", "2.0");
@@ -233,9 +234,6 @@ public class MediaBrowserFragment extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     super.onSuccess(statusCode, headers, response);
-
-                    mProgressBar.setVisibility(View.INVISIBLE);
-
                     try {
                         JSONObject result = response.getJSONObject(0);
                         String city = result.getString("city");
@@ -257,7 +255,6 @@ public class MediaBrowserFragment extends Fragment {
                 @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            mProgressBar.setVisibility(View.INVISIBLE);
                         }
                     }
             );
