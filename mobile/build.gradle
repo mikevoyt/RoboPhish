@@ -22,9 +22,9 @@ android {
     defaultConfig {
         applicationId "com.bayapps.android.robophish"
         minSdkVersion 17
-        targetSdkVersion 23
-        versionCode 18
-        versionName "0.11-beta"
+        targetSdkVersion 26
+        versionCode 20
+        versionName "0.13-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -32,7 +32,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     lintOptions {
-        abortOnError true
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
     buildTypes {
         release {
