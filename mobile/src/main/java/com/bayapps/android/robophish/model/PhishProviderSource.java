@@ -28,44 +28,52 @@ public class PhishProviderSource implements MusicProviderSource  {
         mRandomGenerator = new Random();
         //add some random images to display
 
+        //Images used with permission (c) Jason Guss, James Bryan, Mike Rambo, Evan Krohn
+        mImages.add("https://i.imgur.com/qhqUJWh.jpg");
+        mImages.add("https://i.imgur.com/uvxpvkQ.jpg");
+        mImages.add("https://i.imgur.com/AHls6H6.jpg");
+        mImages.add("https://i.imgur.com/uxJVage.jpg");
+        mImages.add("https://i.imgur.com/u4ShCFi.jpg");
+        mImages.add("https://i.imgur.com/Fywi5vG.jpg");
+        mImages.add("https://i.imgur.com/aZrqwDT.jpg");
+        mImages.add("https://i.imgur.com/AECeOue.jpg");
+        mImages.add("https://i.imgur.com/MHGKZqL.jpg");
+        mImages.add("https://i.imgur.com/Oi3DnPt.jpg");
+        mImages.add("https://i.imgur.com/FsfazYF.jpg");
+        mImages.add("https://i.imgur.com/LAT9Q16.jpg");
+        mImages.add("https://i.imgur.com/bhkGDLT.jpg");
+
         //Images used with permission (c) Andrea Nusinov, AZN Photography
         //www.instagram.com/aznpics
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13732130_277319952649047_849294057_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13743448_1424000554280417_912332374_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13712772_641757285973222_527297489_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/s750x750/sh0.08/e35/13686862_1661410967519458_575510883_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13696381_596811543812270_718415472_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13628089_520932384778359_1628447580_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13732257_934099963365955_157717453_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13774432_598410456995460_1883253030_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13671286_1738702579712984_1828007626_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13725783_1784029171816866_1135447234_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13694461_1746810545586939_1641430204_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13649203_148077172263735_1989313152_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13597766_512279878963643_508373685_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13651695_268150956894013_1993777333_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13551840_952015738244562_751260068_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13556851_628850483957932_521834997_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13561960_600855040088485_20488278_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13551751_287919871562463_632078807_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13573427_297801313942007_1545221600_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13573538_1583041068663702_1520971806_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13549372_102349943533649_1364815772_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13557337_529348170606610_854510542_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13549347_508619289348001_1212737386_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13422833_1757416541208167_221982649_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13402244_1107858905968328_797946278_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13473229_1583944085237525_1319394460_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13381249_1047654198659884_1615737703_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13381193_622176694615237_375729107_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13391267_1025370187541825_410877554_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13249932_286351681704740_1911431023_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13249877_1713730188914408_1427093185_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13167326_1676536365945367_1939985831_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13129389_1607174089597163_64056422_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/13099145_1618175438508664_747258233_n.jpg");
-        mImages.add("https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/s750x750/sh0.08/e35/13092312_223483031360791_69669016_n.jpg");
-
+        mImages.add("https://i.imgur.com/XAp4BUA.jpg");
+        mImages.add("https://i.imgur.com/9qRlnMl.jpg");
+        mImages.add("https://i.imgur.com/LTTNpG6.jpg");
+        mImages.add("https://i.imgur.com/Iv9EGzr.jpg");
+        mImages.add("https://i.imgur.com/MYuqi0Z.jpg");
+        mImages.add("https://i.imgur.com/PQfiuPy.jpg");
+        mImages.add("https://i.imgur.com/YBRbMYv.jpg");
+        mImages.add("https://i.imgur.com/GJyOac0.jpg");
+        mImages.add("https://i.imgur.com/v3wsHr0.jpg");
+        mImages.add("https://i.imgur.com/WzcS3Sc.jpg");
+        mImages.add("https://i.imgur.com/ej1eiy1.jpg");
+        mImages.add("https://i.imgur.com/ZYA1ilw.jpg");
+        mImages.add("https://i.imgur.com/Fi9TXU1.jpg");
+        mImages.add("https://i.imgur.com/2WN1PBC.jpg");
+        mImages.add("https://i.imgur.com/ZukejZd.jpg");
+        mImages.add("https://i.imgur.com/uPohYjt.jpg");
+        mImages.add("https://i.imgur.com/MEYqCKP.jpg");
+        mImages.add("https://i.imgur.com/2UnuEMB.jpg");
+        mImages.add("https://i.imgur.com/TanyMAh.jpg");
+        mImages.add("https://i.imgur.com/sSCeoR3.jpg");
+        mImages.add("https://i.imgur.com/YYLy4hd.jpg");
+        mImages.add("https://i.imgur.com/84i9wEt.jpg");
+        mImages.add("https://i.imgur.com/p3My2pv.jpg");
+        mImages.add("https://i.imgur.com/6aG3Wdr.jpg");
+        mImages.add("https://i.imgur.com/owGLpm2.jpg");
+        mImages.add("https://i.imgur.com/1HN6ifl.jpg");
+        mImages.add("https://i.imgur.com/6QPf69F.jpg");
+        mImages.add("https://i.imgur.com/TX1Aok3.jpg");
+        mImages.add("https://i.imgur.com/ha1doJI.jpg");
 
         //Images used with permission (c) David Logan, David Logan Photography
         //https://www.flickr.com/photos/davidloganphotography

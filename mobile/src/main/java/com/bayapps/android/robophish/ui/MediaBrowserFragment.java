@@ -43,6 +43,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,7 @@ public class MediaBrowserFragment extends Fragment {
     private MediaFragmentListener mMediaFragmentListener;
     private View mErrorView;
     private TextView mErrorMessage;
+    private ProgressBar mProgressBar;
     private JSONObject mShowData;
 
     private final BroadcastReceiver mConnectivityChangeReceiver = new BroadcastReceiver() {
@@ -126,6 +128,7 @@ public class MediaBrowserFragment extends Fragment {
             LogHelper.d(TAG, "Received metadata change to media ",
                     metadata.getDescription().getMediaId());
             mBrowserAdapter.notifyDataSetChanged();
+            mProgressBar.setVisibility(View.INVISIBLE);  //hide progress bar when we receive metadata
         }
 
         @Override
@@ -146,6 +149,7 @@ public class MediaBrowserFragment extends Fragment {
                     LogHelper.d(TAG, "fragment onChildrenLoaded, parentId=" + parentId +
                         "  count=" + children.size());
                     checkForUserVisibleErrors(children.isEmpty());
+                    mProgressBar.setVisibility(View.INVISIBLE);
                     mBrowserAdapter.clear();
                     for (MediaBrowserCompat.MediaItem item : children) {
                         mBrowserAdapter.add(item);
@@ -342,6 +346,8 @@ public class MediaBrowserFragment extends Fragment {
 
         mErrorView = rootView.findViewById(R.id.playback_error);
         mErrorMessage = (TextView) mErrorView.findViewById(R.id.error_message);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         mBrowserAdapter = new BrowseAdapter(getActivity());
 
@@ -489,6 +495,7 @@ public class MediaBrowserFragment extends Fragment {
             }
         }
         mErrorView.setVisibility(showError ? View.VISIBLE : View.GONE);
+        if (showError) mProgressBar.setVisibility(View.INVISIBLE);
         LogHelper.d(TAG, "checkForUserVisibleErrors. forceError=", forceError,
             " showError=", showError,
             " isOnline=", NetworkHelper.isOnline(getActivity()));
