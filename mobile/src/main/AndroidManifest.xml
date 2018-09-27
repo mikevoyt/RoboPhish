@@ -30,10 +30,6 @@
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <permission android:name="com.bayapps.android.robophish.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.bayapps.android.robophish.permission.C2D_MESSAGE" />
-
     <!-- sample looks like this instead:
        <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     -->
