@@ -12,6 +12,7 @@ public class HttpClient {
     private static AsyncHttpClient asyncClient = new AsyncHttpClient();
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.setTimeout(60*1000);
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
