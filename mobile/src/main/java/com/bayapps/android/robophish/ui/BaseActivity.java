@@ -40,8 +40,6 @@ import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
-import com.bayapps.android.robophish.gcm.QuickstartPreferences;
-import com.bayapps.android.robophish.gcm.RegistrationIntentService;
 import com.bayapps.android.robophish.utils.ResourceHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -88,34 +86,11 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
                 //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-                    //mInformationTextView.setText(getString(R.string.gcm_send_message));
-                } else {
-                    //mInformationTextView.setText(getString(R.string.token_error_message));
-                }
             }
         };
 
-
-        // Registering BroadcastReceiver
-        registerReceiver();
-
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
     }
 
-    private void registerReceiver(){
-        if(!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
-        }
-    }
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
