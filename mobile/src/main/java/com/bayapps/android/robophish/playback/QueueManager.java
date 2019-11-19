@@ -19,9 +19,10 @@ package com.bayapps.android.robophish.playback;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+
+import androidx.annotation.NonNull;
 
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.R;

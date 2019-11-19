@@ -18,9 +18,10 @@ package com.bayapps.android.robophish.ui.tv;
 import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
@@ -87,7 +88,7 @@ public class TvVerticalGridActivity extends FragmentActivity
                     try {
                         MediaControllerCompat mediaController = new MediaControllerCompat(
                                 TvVerticalGridActivity.this, mMediaBrowser.getSessionToken());
-                        setSupportMediaController(mediaController);
+                        MediaControllerCompat.setMediaController(TvVerticalGridActivity.this, mediaController);
                         browse();
                     } catch (RemoteException e) {
                         LogHelper.e(TAG, e, "could not connect media controller");
@@ -102,7 +103,7 @@ public class TvVerticalGridActivity extends FragmentActivity
                 @Override
                 public void onConnectionSuspended() {
                     LogHelper.d(TAG, "onConnectionSuspended");
-                    setSupportMediaController(null);
+                    MediaControllerCompat.setMediaController(TvVerticalGridActivity.this, null);
                 }
             };
 

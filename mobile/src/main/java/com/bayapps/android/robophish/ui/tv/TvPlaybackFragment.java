@@ -22,32 +22,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v17.leanback.app.BackgroundManager;
-import android.support.v17.leanback.app.PlaybackOverlayFragment;
-import android.support.v17.leanback.app.PlaybackOverlaySupportFragment;
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.support.v17.leanback.widget.Action;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.ControlButtonPresenterSelector;
-import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.PlaybackControlsRow;
-import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.SkipNextAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.SkipPreviousAction;
-import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+
+import androidx.leanback.app.BackgroundManager;
+import androidx.leanback.app.PlaybackSupportFragment;
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.Action;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ClassPresenterSelector;
+import androidx.leanback.widget.ControlButtonPresenterSelector;
+import androidx.leanback.widget.HeaderItem;
+import androidx.leanback.widget.ListRow;
+import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.OnActionClickedListener;
+import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRowPresenter;
+import androidx.leanback.widget.Presenter;
+import androidx.leanback.widget.Row;
+import androidx.leanback.widget.RowPresenter;
 
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.utils.LogHelper;
@@ -57,18 +54,18 @@ import java.util.List;
 /*
  * Show details of the currently playing song, along with playback controls and the playing queue.
  */
-public class TvPlaybackFragment extends PlaybackOverlaySupportFragment {
+public class TvPlaybackFragment extends PlaybackSupportFragment {
     private static final String TAG = LogHelper.makeLogTag(TvPlaybackFragment.class);
 
-    private static final int BACKGROUND_TYPE = PlaybackOverlayFragment.BG_DARK;
+    private static final int BACKGROUND_TYPE = PlaybackSupportFragment.BG_DARK;
     private static final int DEFAULT_UPDATE_PERIOD = 1000;
     private static final int UPDATE_PERIOD = 16;
 
     private ArrayObjectAdapter mRowsAdapter;
     private ArrayObjectAdapter mPrimaryActionsAdapter;
-    protected PlayPauseAction mPlayPauseAction;
-    private SkipNextAction mSkipNextAction;
-    private SkipPreviousAction mSkipPreviousAction;
+    protected PlaybackControlsRow.PlayPauseAction mPlayPauseAction;
+    private PlaybackControlsRow.SkipNextAction mSkipNextAction;
+    private PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
     private PlaybackControlsRow mPlaybackControlsRow;
     private List <MediaSessionCompat.QueueItem> mPlaylistQueue;
     private int mDuration;
@@ -112,34 +109,32 @@ public class TvPlaybackFragment extends PlaybackOverlaySupportFragment {
         playbackControlsRowPresenter = new PlaybackControlsRowPresenter(
                 new DescriptionPresenter());
 
-        playbackControlsRowPresenter.setOnActionClickedListener(new OnActionClickedListener() {
-            public void onActionClicked(Action action) {
-                if (getActivity() == null) {
-                    return;
+        playbackControlsRowPresenter.setOnActionClickedListener(action -> {
+            if (getActivity() == null) {
+                return;
+            }
+            MediaControllerCompat controller = MediaControllerCompat.getMediaController(getActivity());
+            if (controller == null) {
+                return;
+            }
+            MediaControllerCompat.TransportControls controls = controller.getTransportControls();
+            if (action.getId() == mPlayPauseAction.getId()) {
+                if (mPlayPauseAction.getIndex() == PlaybackControlsRow.PlayPauseAction.PLAY) {
+                    controls.play();
+                } else {
+                    controls.pause();
                 }
-                MediaControllerCompat controller = getActivity().getSupportMediaController();
-                if (controller == null) {
-                    return;
-                }
-                MediaControllerCompat.TransportControls controls = controller.getTransportControls();
-                if (action.getId() == mPlayPauseAction.getId()) {
-                    if (mPlayPauseAction.getIndex() == PlayPauseAction.PLAY) {
-                        controls.play();
-                    } else {
-                        controls.pause();
-                    }
-                } else if (action.getId() == mSkipNextAction.getId()) {
-                    controls.skipToNext();
-                    resetPlaybackRow();
-                } else if (action.getId() == mSkipPreviousAction.getId()) {
-                    controls.skipToPrevious();
-                    resetPlaybackRow();
-                }
+            } else if (action.getId() == mSkipNextAction.getId()) {
+                controls.skipToNext();
+                resetPlaybackRow();
+            } else if (action.getId() == mSkipPreviousAction.getId()) {
+                controls.skipToPrevious();
+                resetPlaybackRow();
+            }
 
-                if (action instanceof PlaybackControlsRow.MultiAction) {
-                    ((PlaybackControlsRow.MultiAction) action).nextIndex();
-                    notifyChanged(action);
-                }
+            if (action instanceof PlaybackControlsRow.MultiAction) {
+                ((PlaybackControlsRow.MultiAction) action).nextIndex();
+                notifyChanged(action);
             }
         });
 
@@ -158,7 +153,7 @@ public class TvPlaybackFragment extends PlaybackOverlaySupportFragment {
         mPrimaryActionsAdapter = new ArrayObjectAdapter(presenterSelector);
         mPlaybackControlsRow.setPrimaryActionsAdapter(mPrimaryActionsAdapter);
 
-        mPlayPauseAction = new PlayPauseAction(getActivity());
+        mPlayPauseAction = new PlaybackControlsRow.PlayPauseAction(getActivity());
         mSkipNextAction = new PlaybackControlsRow.SkipNextAction(getActivity());
         mSkipPreviousAction = new PlaybackControlsRow.SkipPreviousAction(getActivity());
 
@@ -211,7 +206,7 @@ public class TvPlaybackFragment extends PlaybackOverlaySupportFragment {
 
         if (mListRow == null) {
             int queueSize = 0;
-            MediaControllerCompat controller = getActivity().getSupportMediaController();
+            MediaControllerCompat controller = MediaControllerCompat.getMediaController(getActivity());
             if (controller != null && controller.getQueue() != null) {
                 queueSize = controller.getQueue().size();
             }
@@ -313,15 +308,15 @@ public class TvPlaybackFragment extends PlaybackOverlaySupportFragment {
         switch (state.getState()) {
             case PlaybackStateCompat.STATE_PLAYING:
                 startProgressAutomation();
-                mPlayPauseAction.setIndex(PlayPauseAction.PAUSE);
+                mPlayPauseAction.setIndex(PlaybackControlsRow.PlayPauseAction.PAUSE);
                 break;
             case PlaybackStateCompat.STATE_PAUSED:
                 stopProgressAutomation();
-                mPlayPauseAction.setIndex(PlayPauseAction.PLAY);
+                mPlayPauseAction.setIndex(PlaybackControlsRow.PlayPauseAction.PLAY);
                 break;
         }
 
-        MediaControllerCompat controller = getActivity().getSupportMediaController();
+        MediaControllerCompat controller = MediaControllerCompat.getMediaController(getActivity());
         updatePlayListRow(controller.getQueue());
         mRowsAdapter.notifyArrayItemRangeChanged(
                 mRowsAdapter.indexOf(mPlaybackControlsRow), 1);
@@ -343,7 +338,7 @@ public class TvPlaybackFragment extends PlaybackOverlaySupportFragment {
 
             if (item instanceof MediaSessionCompat.QueueItem) {
                 LogHelper.d(TAG, "item: ", item.toString());
-                MediaControllerCompat controller = getActivity().getSupportMediaController();
+                MediaControllerCompat controller = MediaControllerCompat.getMediaController(getActivity());
                 controller.getTransportControls().skipToQueueItem(
                         ((MediaSessionCompat.QueueItem) item).getQueueId());
             }

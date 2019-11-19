@@ -17,6 +17,8 @@ package com.bayapps.android.robophish;
 
 import android.app.Application;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.bayapps.android.robophish.ui.FullScreenPlayerActivity;
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
@@ -24,7 +26,7 @@ import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 /**
  * The {@link Application} for the uAmp application.
  */
-public class UAMPApplication extends Application {
+public class UAMPApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {

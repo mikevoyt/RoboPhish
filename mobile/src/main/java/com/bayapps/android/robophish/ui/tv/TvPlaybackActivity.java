@@ -18,12 +18,13 @@ package com.bayapps.android.robophish.ui.tv;
 import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
@@ -130,4 +131,12 @@ public class TvPlaybackActivity extends FragmentActivity {
             mPlaybackFragment.updateMetadata(metadata);
         }
     };
+
+    private MediaControllerCompat getSupportMediaController() {
+        return MediaControllerCompat.getMediaController(this);
+    }
+
+    private void setSupportMediaController(MediaControllerCompat mediaController) {
+        MediaControllerCompat.setMediaController(this, mediaController);
+    }
 }

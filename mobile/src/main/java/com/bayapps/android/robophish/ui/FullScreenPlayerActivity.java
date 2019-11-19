@@ -23,8 +23,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -233,7 +234,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             finish();
             return;
         }
-        setSupportMediaController(mediaController);
+        MediaControllerCompat.setMediaController(this, mediaController);
         mediaController.registerCallback(mCallback);
         PlaybackStateCompat state = mediaController.getPlaybackState();
         updatePlaybackState(state);
@@ -367,6 +368,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             return;
         }
         mLastPlaybackState = state;
+        MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(this);
         if (getSupportMediaController() != null && getSupportMediaController().getExtras() != null) {
             String castName = getSupportMediaController()
                     .getExtras().getString(MusicService.EXTRA_CONNECTED_CAST);
@@ -428,5 +430,9 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             currentPosition += (int) timeDelta * mLastPlaybackState.getPlaybackSpeed();
         }
         mSeekbar.setProgress((int) currentPosition);
+    }
+
+    private MediaControllerCompat getSupportMediaController() {
+        return MediaControllerCompat.getMediaController(this);
     }
 }

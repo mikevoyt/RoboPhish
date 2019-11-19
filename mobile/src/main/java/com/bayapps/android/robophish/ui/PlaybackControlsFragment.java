@@ -19,9 +19,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -91,7 +91,7 @@ public class PlaybackControlsFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                MediaControllerCompat controller = ((FragmentActivity) getActivity())
+                MediaControllerCompat controller = ((BaseActivity) getActivity())
                         .getSupportMediaController();
                 MediaMetadataCompat metadata = controller.getMetadata();
                 if (metadata != null) {
@@ -108,7 +108,7 @@ public class PlaybackControlsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         LogHelper.d(TAG, "fragment.onStart");
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             onConnected();
@@ -119,7 +119,7 @@ public class PlaybackControlsFragment extends Fragment {
     public void onStop() {
         super.onStop();
         LogHelper.d(TAG, "fragment.onStop");
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.unregisterCallback(mCallback);
@@ -127,7 +127,7 @@ public class PlaybackControlsFragment extends Fragment {
     }
 
     public void onConnected() {
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         LogHelper.d(TAG, "onConnected, mediaController==null? ", controller == null);
         if (controller != null) {
@@ -220,7 +220,7 @@ public class PlaybackControlsFragment extends Fragment {
                     ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_36dp));
         }
 
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         String extraInfo = null;
         if (controller != null && controller.getExtras() != null) {
@@ -235,7 +235,7 @@ public class PlaybackControlsFragment extends Fragment {
     private final View.OnClickListener mButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            MediaControllerCompat controller = ((FragmentActivity) getActivity())
+            MediaControllerCompat controller = ((BaseActivity) getActivity())
                     .getSupportMediaController();
             PlaybackStateCompat stateObj = controller.getPlaybackState();
             final int state = stateObj == null ?
@@ -259,7 +259,7 @@ public class PlaybackControlsFragment extends Fragment {
     };
 
     private void playMedia() {
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.getTransportControls().play();
@@ -267,7 +267,7 @@ public class PlaybackControlsFragment extends Fragment {
     }
 
     private void pauseMedia() {
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.getTransportControls().pause();

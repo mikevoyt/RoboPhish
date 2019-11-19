@@ -14,22 +14,26 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.application'
+apply plugin: 'phishin-api-key-provider'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.bayapps.android.robophish"
         minSdkVersion 17
-        targetSdkVersion 26
+        targetSdkVersion 29
         versionCode 24
         versionName "0.17-beta"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        buildConfigField("String", "PHISHIN_API_KEY", "\"$phishinApiKey\"")
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
         checkReleaseBuilds false
@@ -43,32 +47,35 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
 
-repositories {
-    flatDir {
-        dirs 'libs'
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-cast:9.4.0'
-    compile 'com.google.android.support:wearable:1.3.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:mediarouter-v7:23.4.0'
-    compile 'com.android.support:leanback-v17:23.4.0'
-    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.4'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.google.guava:guava:19.0'
+    implementation 'com.google.android.gms:play-services-cast:17.1.0'
+    compileOnly 'com.google.android.support:wearable:2.5.0'
+    compileOnly 'com.google.android.wearable:wearable:2.5.0'
+    implementation 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
+    implementation 'com.google.android.material:material:1.0.0'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:23.4.0'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.mediarouter:mediarouter:1.1.0'
+    implementation 'androidx.leanback:leanback:1.0.0'
+
+    // appears to be a bug in 1.4.10 where you can't use synchronous http anymore
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.google.guava:guava:28.1-android'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:3.1.0'
+
+    androidTestImplementation 'org.mockito:mockito-android:3.1.0'
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
 }
-
-apply plugin: 'com.google.gms.google-services'

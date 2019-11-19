@@ -23,15 +23,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -47,17 +42,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.model.MusicProvider;
-import com.bayapps.android.robophish.model.MusicProviderSource;
 import com.bayapps.android.robophish.utils.Downloader;
 import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
+import com.google.android.material.tabs.TabLayout;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.SyncHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -212,14 +208,14 @@ public class MediaBrowserFragment extends Fragment {
 
             rootView = inflater.inflate(R.layout.fragment_list_show, container, false);
 
-            ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+            ViewPager viewPager = rootView.findViewById(R.id.viewpager);
             viewPager.setAdapter(new ShowPagerAdapter(inflater, rootView));
             viewPager.setOffscreenPageLimit(3);
 
-            TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.sliding_tabs);
+            TabLayout tabLayout = rootView.findViewById(R.id.sliding_tabs);
             tabLayout.setupWithViewPager(viewPager);
 
-            final WebView setlist = (WebView)rootView.findViewById(R.id.setlist_webview);
+            final WebView setlist = rootView.findViewById(R.id.setlist_webview);
             setlist.getSettings().setJavaScriptEnabled(true);
 
             AsyncHttpClient setlistClient = new AsyncHttpClient();
@@ -391,7 +387,7 @@ public class MediaBrowserFragment extends Fragment {
         if (mediaBrowser != null && mediaBrowser.isConnected() && mMediaId != null) {
             mediaBrowser.unsubscribe(mMediaId);
         }
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.unregisterCallback(mMediaControllerCallback);
@@ -464,7 +460,7 @@ public class MediaBrowserFragment extends Fragment {
         mMediaFragmentListener.getMediaBrowser().subscribe(mMediaId, mSubscriptionCallback);
 
         // Add MediaController callback so we can redraw the list when metadata changes:
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.registerCallback(mMediaControllerCallback);
@@ -479,7 +475,7 @@ public class MediaBrowserFragment extends Fragment {
             showError = true;
         } else {
             // otherwise, if state is ERROR and metadata!=null, use playback state error message:
-            MediaControllerCompat controller = ((FragmentActivity) getActivity())
+            MediaControllerCompat controller = ((BaseActivity) getActivity())
                     .getSupportMediaController();
             if (controller != null
                 && controller.getMetadata() != null
@@ -551,7 +547,7 @@ public class MediaBrowserFragment extends Fragment {
             int itemState = MediaItemViewHolder.STATE_NONE;
             if (item.isPlayable()) {
                 itemState = MediaItemViewHolder.STATE_PLAYABLE;
-                MediaControllerCompat controller = ((FragmentActivity) getContext())
+                MediaControllerCompat controller = ((BaseActivity) getContext())
                         .getSupportMediaController();
                 if (controller != null && controller.getMetadata() != null) {
                     String currentPlaying = controller.getMetadata().getDescription().getMediaId();

@@ -100,7 +100,6 @@ public class PhishProviderSource implements MusicProviderSource  {
         RequestParams yearsParams = new RequestParams();
         yearsParams.put("include_show_counts", "true");
         HttpClient.get("years.json", yearsParams, new JsonHttpResponseHandler() {
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 ArrayList<YearData> yearEntries = ParseUtils.parseYears(response);

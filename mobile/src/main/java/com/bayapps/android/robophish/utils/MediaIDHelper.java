@@ -16,10 +16,9 @@
 
 package com.bayapps.android.robophish.utils;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.bayapps.android.robophish.ui.MusicPlayerActivity;
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 
