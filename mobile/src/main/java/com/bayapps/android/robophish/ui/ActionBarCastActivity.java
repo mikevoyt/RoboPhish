@@ -69,12 +69,12 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
 
         @Override
         public void onFailed(int resourceId, int statusCode) {
-            Timber.d("onFailed ", resourceId, " status ", statusCode);
+            Timber.d("onFailed %s status %s", resourceId,  statusCode);
         }
 
         @Override
         public void onConnectionSuspended(int cause) {
-            Timber.d("onConnectionSuspended() was called with cause: ", cause);
+            Timber.d("onConnectionSuspended() was called with cause: %s", cause);
         }
 
         @Override
