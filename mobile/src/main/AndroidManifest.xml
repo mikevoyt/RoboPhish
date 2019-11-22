@@ -49,16 +49,10 @@
         android:label="@string/app_name"
         android:theme="@style/UAmpAppTheme"
         android:banner="@drawable/banner_tv"
+        android:fullBackupContent="true"
+        tools:targetApi="lollipop"
+        tools:ignore="GoogleAppIndexingWarning"
         >
-
-<!--
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
--->
 
         <!-- Main activity for music browsing on phone -->
         <activity
@@ -67,6 +61,16 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- trying to make the app index-able by google -->
+            <intent-filter
+                    android:autoVerify="true"
+                    android:label="@string/app_name"
+                    tools:targetApi="m">
+                <action android:name="android.intent.action.View" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
 
             <!-- Use this intent filter to get voice searches, like "Play The Beatles" -->
@@ -180,8 +184,8 @@
         <!-- A receiver that will receive media buttons and send as
             intents to your MediaBrowserServiceCompat implementation.
             Required on pre-Lollipop. More information at
-            http://developer.android.com/reference/android/support/v4/media/session/MediaButtonReceiver.html -->
-        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver" >
+           https://developer.android.com/reference/androidx/media/session/MediaButtonReceiver -->
+        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
