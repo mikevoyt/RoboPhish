@@ -28,7 +28,7 @@ import timber.log.Timber;
 /**
  * The {@link Application} for the uAmp application.
  */
-public class UAMPApplication extends MultiDexApplication {
+public class RoboPhishApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {

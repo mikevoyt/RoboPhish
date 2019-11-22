@@ -43,7 +43,7 @@
         android:required="false" />
 
     <application
-        android:name=".UAMPApplication"
+        android:name=".RoboPhishApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
