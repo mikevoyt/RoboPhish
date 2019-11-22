@@ -51,7 +51,6 @@
         android:banner="@drawable/banner_tv"
         android:fullBackupContent="true"
         tools:targetApi="lollipop"
-        tools:ignore="GoogleAppIndexingWarning"
         >
 
         <!-- Main activity for music browsing on phone -->
@@ -63,14 +62,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- trying to make the app index-able by google -->
-            <intent-filter
-                    android:autoVerify="true"
-                    android:label="@string/app_name"
-                    tools:targetApi="m">
-                <action android:name="android.intent.action.View" />
+            <!-- App links for http -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="android.bayapps.com"
+                    android:pathPattern="/robophish"
+                    android:scheme="http" />
+            </intent-filter>
+
+            <!-- App links for https -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="android.bayapps.com"
+                    android:pathPattern="/robophish"
+                    android:scheme="https" />
             </intent-filter>
 
             <!-- Use this intent filter to get voice searches, like "Play The Beatles" -->
