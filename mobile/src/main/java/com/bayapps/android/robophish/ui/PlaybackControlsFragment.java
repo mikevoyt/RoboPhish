@@ -37,15 +37,13 @@ import android.widget.Toast;
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+
+import timber.log.Timber;
 
 /**
  * A class that shows the Media Queue to the user.
  */
 public class PlaybackControlsFragment extends Fragment {
-
-    private static final String TAG = LogHelper.makeLogTag(PlaybackControlsFragment.class);
-
     private ImageButton mPlayPause;
     private TextView mTitle;
     private TextView mSubtitle;
@@ -57,7 +55,7 @@ public class PlaybackControlsFragment extends Fragment {
     private final MediaControllerCompat.Callback mCallback = new MediaControllerCompat.Callback() {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
-            LogHelper.d(TAG, "Received playback state change to state ", state.getState());
+            Timber.d("Received playback state change to state %s", state.getState());
             PlaybackControlsFragment.this.onPlaybackStateChanged(state);
         }
 
@@ -66,9 +64,9 @@ public class PlaybackControlsFragment extends Fragment {
             if (metadata == null) {
                 return;
             }
-            LogHelper.d(TAG, "Received metadata state change to mediaId=",
+            Timber.d("Received metadata state change to mediaId=%s song=%s",
                     metadata.getDescription().getMediaId(),
-                    " song=", metadata.getDescription().getTitle());
+                    metadata.getDescription().getTitle());
             PlaybackControlsFragment.this.onMetadataChanged(metadata);
         }
     };
@@ -107,7 +105,7 @@ public class PlaybackControlsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        LogHelper.d(TAG, "fragment.onStart");
+        Timber.d("fragment.onStart");
         MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
@@ -118,7 +116,7 @@ public class PlaybackControlsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        LogHelper.d(TAG, "fragment.onStop");
+        Timber.d("fragment.onStop");
         MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
@@ -129,7 +127,7 @@ public class PlaybackControlsFragment extends Fragment {
     public void onConnected() {
         MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
-        LogHelper.d(TAG, "onConnected, mediaController==null? ", controller == null);
+        Timber.d("onConnected, mediaController==null? %s", controller == null);
         if (controller != null) {
             onMetadataChanged(controller.getMetadata());
             onPlaybackStateChanged(controller.getPlaybackState());
@@ -138,9 +136,9 @@ public class PlaybackControlsFragment extends Fragment {
     }
 
     private void onMetadataChanged(MediaMetadataCompat metadata) {
-        LogHelper.d(TAG, "onMetadataChanged ", metadata);
+        Timber.d("onMetadataChanged %s", metadata);
         if (getActivity() == null) {
-            LogHelper.w(TAG, "onMetadataChanged called when getActivity null," +
+            Timber.w("onMetadataChanged called when getActivity null," +
                     "this should not happen if the callback was properly unregistered. Ignoring.");
             return;
         }
@@ -168,8 +166,8 @@ public class PlaybackControlsFragment extends Fragment {
                             @Override
                             public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
                                 if (icon != null) {
-                                    LogHelper.d(TAG, "album art icon of w=", icon.getWidth(),
-                                            " h=", icon.getHeight());
+                                    Timber.d("album art icon of w=%s h=%ss",
+                                            icon.getWidth(), icon.getHeight());
                                     if (isAdded()) {
                                         mAlbumArt.setImageBitmap(icon);
                                     }
@@ -191,9 +189,9 @@ public class PlaybackControlsFragment extends Fragment {
     }
 
     private void onPlaybackStateChanged(PlaybackStateCompat state) {
-        LogHelper.d(TAG, "onPlaybackStateChanged ", state);
+        Timber.d("onPlaybackStateChanged %s", state);
         if (getActivity() == null) {
-            LogHelper.w(TAG, "onPlaybackStateChanged called when getActivity null," +
+            Timber.w("onPlaybackStateChanged called when getActivity null," +
                     "this should not happen if the callback was properly unregistered. Ignoring.");
             return;
         }
@@ -207,7 +205,7 @@ public class PlaybackControlsFragment extends Fragment {
                 enablePlay = true;
                 break;
             case PlaybackStateCompat.STATE_ERROR:
-                LogHelper.e(TAG, "error playbackstate: ", state.getErrorMessage());
+                Timber.e("error playbackstate: %s", state.getErrorMessage());
                 Toast.makeText(getActivity(), state.getErrorMessage(), Toast.LENGTH_LONG).show();
                 break;
         }
@@ -240,10 +238,10 @@ public class PlaybackControlsFragment extends Fragment {
             PlaybackStateCompat stateObj = controller.getPlaybackState();
             final int state = stateObj == null ?
                     PlaybackStateCompat.STATE_NONE : stateObj.getState();
-            LogHelper.d(TAG, "Button pressed, in state " + state);
+            Timber.d("Button pressed, in state " + state);
             switch (v.getId()) {
                 case R.id.play_pause:
-                    LogHelper.d(TAG, "Play button pressed, in state " + state);
+                    Timber.d("Play button pressed, in state " + state);
                     if (state == PlaybackStateCompat.STATE_PAUSED ||
                             state == PlaybackStateCompat.STATE_STOPPED ||
                             state == PlaybackStateCompat.STATE_NONE) {

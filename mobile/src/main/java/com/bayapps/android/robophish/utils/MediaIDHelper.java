@@ -16,18 +16,16 @@
 
 package com.bayapps.android.robophish.utils;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.Arrays;
+
+import timber.log.Timber;
 
 /**
  * Utility class to help on queue related tasks.
  */
 public class MediaIDHelper {
-
-    private static final String TAG = LogHelper.makeLogTag(MediaIDHelper.class);
 
     // Media IDs used on browseable items of MediaBrowser
     public static final String MEDIA_ID_ROOT = "__ROOT__";
@@ -137,7 +135,7 @@ public class MediaIDHelper {
     }
 
     public static boolean isShow(@NonNull String mediaID) {
-        Log.d(TAG, mediaID);
+        Timber.d(mediaID);
         String[] hierarchy = getHierarchy(mediaID);
         if (hierarchy[0].matches(MEDIA_ID_TRACKS_BY_SHOW)) return true;
         return false;

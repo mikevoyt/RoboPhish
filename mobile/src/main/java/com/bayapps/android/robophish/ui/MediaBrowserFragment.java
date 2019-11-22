@@ -47,7 +47,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.utils.Downloader;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
 import com.google.android.material.tabs.TabLayout;
@@ -65,6 +64,7 @@ import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import timber.log.Timber;
 
 import static com.bayapps.android.robophish.utils.MediaIDHelper.extractShowFromMediaID;
 
@@ -77,8 +77,6 @@ import static com.bayapps.android.robophish.utils.MediaIDHelper.extractShowFromM
  * All {@link MediaBrowserCompat.MediaItem}'s that can be browsed are shown in a ListView.
  */
 public class MediaBrowserFragment extends Fragment {
-
-    private static final String TAG = LogHelper.makeLogTag(MediaBrowserFragment.class);
 
     private static final String ARG_MEDIA_ID = "media_id";
     private static final String ARG_TITLE = "title";
@@ -121,7 +119,7 @@ public class MediaBrowserFragment extends Fragment {
             if (metadata == null) {
                 return;
             }
-            LogHelper.d(TAG, "Received metadata change to media ",
+            Timber.d("Received metadata change to media %s",
                     metadata.getDescription().getMediaId());
             mBrowserAdapter.notifyDataSetChanged();
             mProgressBar.setVisibility(View.INVISIBLE);  //hide progress bar when we receive metadata
@@ -130,7 +128,7 @@ public class MediaBrowserFragment extends Fragment {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
-            LogHelper.d(TAG, "Received state change: ", state);
+            Timber.d("Received state change: %s", state);
             checkForUserVisibleErrors(false);
             mBrowserAdapter.notifyDataSetChanged();
         }
@@ -142,7 +140,7 @@ public class MediaBrowserFragment extends Fragment {
             public void onChildrenLoaded(@NonNull String parentId,
                                          @NonNull List<MediaBrowserCompat.MediaItem> children) {
                 try {
-                    LogHelper.d(TAG, "fragment onChildrenLoaded, parentId=" + parentId +
+                    Timber.d("fragment onChildrenLoaded, parentId=" + parentId +
                         "  count=" + children.size());
                     checkForUserVisibleErrors(children.isEmpty());
                     mProgressBar.setVisibility(View.INVISIBLE);
@@ -152,13 +150,13 @@ public class MediaBrowserFragment extends Fragment {
                     }
                     mBrowserAdapter.notifyDataSetChanged();
                 } catch (Throwable t) {
-                    LogHelper.e(TAG, "Error on childrenloaded", t);
+                    Timber.e(t, "Error on childrenloaded");
                 }
             }
 
             @Override
             public void onError(@NonNull String id) {
-                LogHelper.e(TAG, "browse fragment subscription onError, id=" + id);
+                Timber.e("browse fragment subscription onError, id=%s", id);
                 Toast.makeText(getActivity(), R.string.error_loading_media, Toast.LENGTH_LONG).show();
                 checkForUserVisibleErrors(true);
             }
@@ -195,7 +193,7 @@ public class MediaBrowserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LogHelper.d(TAG, "fragment.onCreateView");
+        Timber.d("fragment.onCreateView");
 
         View rootView;
 
@@ -368,8 +366,8 @@ public class MediaBrowserFragment extends Fragment {
         // fetch browsing information to fill the listview:
         MediaBrowserCompat mediaBrowser = mMediaFragmentListener.getMediaBrowser();
 
-        LogHelper.d(TAG, "fragment.onStart, mediaId=", mMediaId,
-                "  onConnected=" + mediaBrowser.isConnected());
+        Timber.d("fragment.onStart, mediaId=%s onConnected=%s", mMediaId,
+                mediaBrowser.isConnected());
 
         if (mediaBrowser.isConnected()) {
             onConnected();
@@ -492,9 +490,8 @@ public class MediaBrowserFragment extends Fragment {
         }
         mErrorView.setVisibility(showError ? View.VISIBLE : View.GONE);
         if (showError) mProgressBar.setVisibility(View.INVISIBLE);
-        LogHelper.d(TAG, "checkForUserVisibleErrors. forceError=", forceError,
-            " showError=", showError,
-            " isOnline=", NetworkHelper.isOnline(getActivity()));
+        Timber.d("checkForUserVisibleErrors. forceError=%s  showError=%s  isOnline=%s", forceError,
+            showError, NetworkHelper.isOnline(getActivity()));
     }
 
     private void updateTitle() {

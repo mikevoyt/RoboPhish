@@ -38,7 +38,6 @@ import androidx.leanback.widget.ControlButtonPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
-import androidx.leanback.widget.OnActionClickedListener;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.PlaybackControlsRowPresenter;
@@ -47,15 +46,15 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 
 import com.bayapps.android.robophish.AlbumArtCache;
-import com.bayapps.android.robophish.utils.LogHelper;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /*
  * Show details of the currently playing song, along with playback controls and the playing queue.
  */
 public class TvPlaybackFragment extends PlaybackSupportFragment {
-    private static final String TAG = LogHelper.makeLogTag(TvPlaybackFragment.class);
 
     private static final int BACKGROUND_TYPE = PlaybackSupportFragment.BG_DARK;
     private static final int DEFAULT_UPDATE_PERIOD = 1000;
@@ -84,7 +83,7 @@ public class TvPlaybackFragment extends PlaybackSupportFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.i(TAG, "onCreate");
+        Timber.i("onCreate");
 
         mBackgroundManager = BackgroundManager.getInstance(getActivity());
         mBackgroundManager.attach(getActivity().getWindow());
@@ -190,7 +189,7 @@ public class TvPlaybackFragment extends PlaybackSupportFragment {
             // if the playlist queue hasn't changed, we don't need to update it
             return;
         }
-        LogHelper.d(TAG, "Updating playlist queue ('now playing')");
+        Timber.d("Updating playlist queue ('now playing')");
         mPlaylistQueue = playlistQueue;
         if (playlistQueue == null || playlistQueue.isEmpty()) {
             // Remove the playlist row if no items are in the playlist
@@ -337,7 +336,7 @@ public class TvPlaybackFragment extends PlaybackSupportFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof MediaSessionCompat.QueueItem) {
-                LogHelper.d(TAG, "item: ", item.toString());
+                Timber.d("item: %s", item);
                 MediaControllerCompat controller = MediaControllerCompat.getMediaController(getActivity());
                 controller.getTransportControls().skipToQueueItem(
                         ((MediaSessionCompat.QueueItem) item).getQueueId());

@@ -34,11 +34,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.google.android.material.navigation.NavigationView;
+
+import timber.log.Timber;
 
 /**
  * Abstract activity with toolbar, navigation drawer and cast support. Needs to be extended by
@@ -51,8 +52,6 @@ import com.google.android.material.navigation.NavigationView;
  * a {@link android.widget.ListView} with id 'drawerList'.
  */
 public abstract class ActionBarCastActivity extends AppCompatActivity {
-
-    private static final String TAG = LogHelper.makeLogTag(ActionBarCastActivity.class);
 
     private static final int DELAY_MILLIS = 1000;
 
@@ -70,12 +69,12 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
 
         @Override
         public void onFailed(int resourceId, int statusCode) {
-            LogHelper.d(TAG, "onFailed ", resourceId, " status ", statusCode);
+            Timber.d("onFailed ", resourceId, " status ", statusCode);
         }
 
         @Override
         public void onConnectionSuspended(int cause) {
-            LogHelper.d(TAG, "onConnectionSuspended() was called with cause: ", cause);
+            Timber.d("onConnectionSuspended() was called with cause: ", cause);
         }
 
         @Override
@@ -90,7 +89,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (mMediaRouteMenuItem.isVisible()) {
-                            LogHelper.d(TAG, "Cast Icon is visible");
+                            Timber.d("Cast Icon is visible");
                             showFtu();
                         }
                     }
@@ -159,7 +158,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "Activity onCreate");
+        Timber.d("Activity onCreate");
 
         // Ensure that Google Play Service is available.
         VideoCastManager.checkGooglePlayServices(this);

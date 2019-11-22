@@ -23,6 +23,8 @@ import com.bayapps.android.robophish.ui.FullScreenPlayerActivity;
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 
+import timber.log.Timber;
+
 /**
  * The {@link Application} for the uAmp application.
  */
@@ -31,7 +33,13 @@ public class UAMPApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+
         String applicationId = getResources().getString(R.string.cast_application_id);
+
         VideoCastManager.initialize(
                 getApplicationContext(),
                 new CastConfiguration.Builder(applicationId)

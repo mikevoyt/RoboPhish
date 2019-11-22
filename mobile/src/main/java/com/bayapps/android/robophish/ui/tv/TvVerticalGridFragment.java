@@ -34,16 +34,14 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.text.TextUtils;
 
-import com.bayapps.android.robophish.utils.LogHelper;
-
 import java.util.List;
+
+import timber.log.Timber;
 
 /*
  * VerticalGridFragment shows a grid of music songs
  */
 public class TvVerticalGridFragment extends VerticalGridSupportFragment {
-    private static final String TAG = LogHelper.makeLogTag(TvVerticalGridFragment.class);
-
     private static final int NUM_COLUMNS = 5;
 
     private ArrayObjectAdapter mAdapter;
@@ -53,7 +51,7 @@ public class TvVerticalGridFragment extends VerticalGridSupportFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "onCreate");
+        Timber.d("onCreate");
 
         setupFragment();
     }
@@ -75,7 +73,7 @@ public class TvVerticalGridFragment extends VerticalGridSupportFragment {
     }
 
     protected void setMediaId(String mediaId) {
-        LogHelper.d(TAG, "setMediaId: ", mediaId);
+        Timber.d("setMediaId: %s", mediaId);
         if (TextUtils.equals(mMediaId, mediaId)) {
             return;
         }
@@ -142,7 +140,7 @@ public class TvVerticalGridFragment extends VerticalGridSupportFragment {
             for (int i = 0; i < children.size(); i++) {
                 MediaBrowserCompat.MediaItem item = children.get(i);
                 if (!item.isPlayable()) {
-                    LogHelper.e(TAG, "Cannot show non-playable items. Ignoring ", item.getMediaId());
+                    Timber.e("Cannot show non-playable items. Ignoring %s", item.getMediaId());
                 } else {
                     mAdapter.add(item);
                 }
@@ -152,7 +150,7 @@ public class TvVerticalGridFragment extends VerticalGridSupportFragment {
 
         @Override
         public void onError(@NonNull String id) {
-            LogHelper.e(TAG, "browse fragment subscription onError, id=", id);
+            Timber.e("browse fragment subscription onError, id=%s", id);
         }
     };
 }

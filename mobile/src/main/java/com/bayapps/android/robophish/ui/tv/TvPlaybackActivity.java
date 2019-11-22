@@ -28,14 +28,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+
+import timber.log.Timber;
 
 /**
  * Activity used to display details of the currently playing song, along with playback controls
  * and the playing queue.
  */
 public class TvPlaybackActivity extends FragmentActivity {
-    private static final String TAG = LogHelper.makeLogTag(TvPlaybackActivity.class);
 
     private MediaBrowserCompat mMediaBrowser;
     private TvPlaybackFragment mPlaybackFragment;
@@ -43,7 +43,7 @@ public class TvPlaybackActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "Activity onCreate");
+        Timber.d("Activity onCreate");
 
         mMediaBrowser = new MediaBrowserCompat(this,
                 new ComponentName(this, MusicService.class),
@@ -58,14 +58,14 @@ public class TvPlaybackActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        LogHelper.d(TAG, "Activity onStart");
+        Timber.d("Activity onStart");
         mMediaBrowser.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LogHelper.d(TAG, "Activity onStop");
+        Timber.d("Activity onStop");
         if (getSupportMediaController() != null) {
             getSupportMediaController().unregisterCallback(mMediaControllerCallback);
         }
@@ -77,7 +77,7 @@ public class TvPlaybackActivity extends FragmentActivity {
             new MediaBrowserCompat.ConnectionCallback() {
                 @Override
                 public void onConnected() {
-                    LogHelper.d(TAG, "onConnected");
+                    Timber.d("onConnected");
                     try {
                         MediaControllerCompat mediaController = new MediaControllerCompat(
                                 TvPlaybackActivity.this, mMediaBrowser.getSessionToken());
@@ -90,18 +90,18 @@ public class TvPlaybackActivity extends FragmentActivity {
                             mPlaybackFragment.updatePlaybackState(mediaController.getPlaybackState());
                         }
                     } catch (RemoteException e) {
-                        LogHelper.e(TAG, e, "could not connect media controller");
+                        Timber.e(e, "could not connect media controller");
                     }
                 }
 
                 @Override
                 public void onConnectionFailed() {
-                    LogHelper.d(TAG, "onConnectionFailed");
+                    Timber.d("onConnectionFailed");
                 }
 
                 @Override
                 public void onConnectionSuspended() {
-                    LogHelper.d(TAG, "onConnectionSuspended");
+                    Timber.d("onConnectionSuspended");
                     getSupportMediaController().unregisterCallback(mMediaControllerCallback);
                     setSupportMediaController(null);
                 }
@@ -115,7 +115,7 @@ public class TvPlaybackActivity extends FragmentActivity {
             new MediaControllerCompat.Callback() {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
-            LogHelper.d(TAG, "onPlaybackStateChanged, state=", state);
+            Timber.d("onPlaybackStateChanged, state=%s", state);
             if (mPlaybackFragment == null || state.getState() == PlaybackStateCompat.STATE_BUFFERING) {
                 return;
             }
@@ -124,7 +124,7 @@ public class TvPlaybackActivity extends FragmentActivity {
 
         @Override
         public void onMetadataChanged(MediaMetadataCompat metadata) {
-            LogHelper.d(TAG, "onMetadataChanged, title=", metadata.getDescription().getTitle());
+            Timber.d("onMetadataChanged, title=%s", metadata.getDescription().getTitle());
             if (mPlaybackFragment == null) {
                 return;
             }

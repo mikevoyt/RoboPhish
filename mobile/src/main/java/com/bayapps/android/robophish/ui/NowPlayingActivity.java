@@ -22,7 +22,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.bayapps.android.robophish.ui.tv.TvPlaybackActivity;
-import com.bayapps.android.robophish.utils.LogHelper;
+
+import timber.log.Timber;
 
 /**
  * The activity for the Now Playing Card PendingIntent.
@@ -32,19 +33,17 @@ import com.bayapps.android.robophish.utils.LogHelper;
  */
 public class NowPlayingActivity extends Activity {
 
-    private static final String TAG = LogHelper.makeLogTag(NowPlayingActivity.class);
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "onCreate");
+        Timber.d("onCreate");
         Intent newIntent;
         UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
         if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
-            LogHelper.d(TAG, "Running on a TV Device");
+            Timber.d("Running on a TV Device");
             newIntent = new Intent(this, TvPlaybackActivity.class);
         } else {
-            LogHelper.d(TAG, "Running on a non-TV Device");
+            Timber.d("Running on a non-TV Device");
             newIntent = new Intent(this, MusicPlayerActivity.class);
         }
         startActivity(newIntent);

@@ -25,8 +25,9 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.text.TextUtils;
 
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
+
+import timber.log.Timber;
 
 /**
  * Main activity for the music player.
@@ -37,7 +38,6 @@ import com.bayapps.android.robophish.utils.MediaIDHelper;
 public class MusicPlayerActivity extends BaseActivity
         implements MediaBrowserFragment.MediaFragmentListener {
 
-    private static final String TAG = LogHelper.makeLogTag(MusicPlayerActivity.class);
     private static final String SAVED_MEDIA_ID="com.example.android.uamp.MEDIA_ID";
     private static final String FRAGMENT_TAG = "uamp_list_container";
 
@@ -57,7 +57,7 @@ public class MusicPlayerActivity extends BaseActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "Activity onCreate");
+        Timber.d("Activity onCreate");
 
         setContentView(R.layout.activity_player);
 
@@ -81,7 +81,7 @@ public class MusicPlayerActivity extends BaseActivity
 
     @Override
     public void onMediaItemSelected(MediaBrowserCompat.MediaItem item) {
-        LogHelper.d(TAG, "onMediaItemSelected, mediaId=" + item.getMediaId());
+        Timber.d("onMediaItemSelected, mediaId=" + item.getMediaId());
         if (item.isPlayable()) {
             getSupportMediaController().getTransportControls()
                     .playFromMediaId(item.getMediaId(), null);
@@ -101,14 +101,14 @@ public class MusicPlayerActivity extends BaseActivity
             navigateToBrowser(title, subtitle, item.getMediaId());
 
         } else {
-            LogHelper.w(TAG, "Ignoring MediaItem that is neither browsable nor playable: ",
-                    "mediaId=", item.getMediaId());
+            Timber.w("Ignoring MediaItem that is neither browsable nor playable: mediaId=%s",
+                    item.getMediaId());
         }
     }
 
     @Override
     public void setToolbarTitle(CharSequence title) {
-        LogHelper.d(TAG, "Setting toolbar title to ", title);
+        Timber.d("Setting toolbar title to %s", title);
         if (title == null) {
             title = getString(R.string.app_name);
         }
@@ -117,7 +117,7 @@ public class MusicPlayerActivity extends BaseActivity
 
     @Override
     public void setToolbarSubTitle(CharSequence subTitlle) {
-        LogHelper.d(TAG, "Setting toolbar title to ", subTitlle);
+        Timber.d("Setting toolbar title to %s", subTitlle);
         if (subTitlle == null) {
             subTitlle = "";
         }
@@ -132,7 +132,7 @@ public class MusicPlayerActivity extends BaseActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        LogHelper.d(TAG, "onNewIntent, intent=" + intent);
+        Timber.d("onNewIntent, intent=%s", intent);
         initializeFromParams(null, intent);
         startFullScreenActivityIfNeeded(intent);
     }
@@ -155,7 +155,7 @@ public class MusicPlayerActivity extends BaseActivity
         if (intent.getAction() != null
             && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)) {
             mVoiceSearchParams = intent.getExtras();
-            LogHelper.d(TAG, "Starting from voice search query=",
+            Timber.d("Starting from voice search query=%s",
                 mVoiceSearchParams.getString(SearchManager.QUERY));
         } else if (intent.getAction() != null
                 && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_SEARCH)) {
@@ -186,7 +186,7 @@ public class MusicPlayerActivity extends BaseActivity
     }
 
     private void navigateToBrowser(String title, String subtitle, String mediaId) {
-        LogHelper.d(TAG, "navigateToBrowser, mediaId=" + mediaId);
+        Timber.d("navigateToBrowser, mediaId=%s", mediaId);
         MediaBrowserFragment fragment = getBrowseFragment();
 
         if (fragment == null || !TextUtils.equals(fragment.getMediaId(), mediaId)) {

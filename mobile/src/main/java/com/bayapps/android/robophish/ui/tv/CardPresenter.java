@@ -37,10 +37,11 @@ import androidx.leanback.widget.Presenter;
 
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+
+import timber.log.Timber;
 
 public class CardPresenter extends Presenter {
-    private static final String TAG = LogHelper.makeLogTag(CardPresenter.class);
+
     private static final int CARD_WIDTH = 300;
     private static final int CARD_HEIGHT = 250;
 
@@ -48,7 +49,7 @@ public class CardPresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        LogHelper.d(TAG, "onCreateViewHolder");
+        Timber.d("onCreateViewHolder");
         mContext = parent.getContext();
 
         ImageCardView cardView = new ImageCardView(mContext);
@@ -63,7 +64,7 @@ public class CardPresenter extends Presenter {
         MediaDescriptionCompat description;
         if (item instanceof  MediaBrowserCompat.MediaItem) {
             MediaBrowserCompat.MediaItem mediaItem = (MediaBrowserCompat.MediaItem) item;
-            LogHelper.d(TAG, "onBindViewHolder MediaItem: ", mediaItem.toString());
+            Timber.d("onBindViewHolder MediaItem: %s", mediaItem);
             description = mediaItem.getDescription();
         } else if (item instanceof MediaSessionCompat.QueueItem) {
             MediaSessionCompat.QueueItem queueItem = (MediaSessionCompat.QueueItem) item;
@@ -119,12 +120,12 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        LogHelper.d(TAG, "onUnbindViewHolder");
+        Timber.d("onUnbindViewHolder");
     }
 
     @Override
     public void onViewAttachedToWindow(Presenter.ViewHolder viewHolder) {
-        LogHelper.d(TAG, "onViewAttachedToWindow");
+        Timber.d("onViewAttachedToWindow");
     }
 
     private static class CardViewHolder extends Presenter.ViewHolder {

@@ -25,12 +25,12 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+
+import timber.log.Timber;
 
 public class TvVerticalGridActivity extends FragmentActivity
         implements TvVerticalGridFragment.MediaFragmentListener {
 
-    private static final String TAG = LogHelper.makeLogTag(TvVerticalGridActivity.class);
     public static final String SHARED_ELEMENT_NAME = "hero";
     private MediaBrowserCompat mMediaBrowser;
     private String mMediaId;
@@ -55,7 +55,7 @@ public class TvVerticalGridActivity extends FragmentActivity
     @Override
     protected void onStart() {
         super.onStart();
-        LogHelper.d(TAG, "Activity onStart: mMediaBrowser connect");
+        Timber.d("Activity onStart: mMediaBrowser connect");
         mMediaBrowser.connect();
     }
 
@@ -66,7 +66,7 @@ public class TvVerticalGridActivity extends FragmentActivity
     }
 
     protected void browse() {
-        LogHelper.d(TAG, "navigateToBrowser, mediaId=" + mMediaId);
+        Timber.d("navigateToBrowser, mediaId=%s",mMediaId);
         TvVerticalGridFragment fragment = (TvVerticalGridFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.vertical_grid_fragment);
         fragment.setMediaId(mMediaId);
@@ -82,7 +82,7 @@ public class TvVerticalGridActivity extends FragmentActivity
             new MediaBrowserCompat.ConnectionCallback() {
                 @Override
                 public void onConnected() {
-                    LogHelper.d(TAG, "onConnected: session token ",
+                    Timber.d("onConnected: session token %s",
                             mMediaBrowser.getSessionToken());
 
                     try {
@@ -91,18 +91,18 @@ public class TvVerticalGridActivity extends FragmentActivity
                         MediaControllerCompat.setMediaController(TvVerticalGridActivity.this, mediaController);
                         browse();
                     } catch (RemoteException e) {
-                        LogHelper.e(TAG, e, "could not connect media controller");
+                        Timber.e(e, "could not connect media controller");
                     }
                 }
 
                 @Override
                 public void onConnectionFailed() {
-                    LogHelper.d(TAG, "onConnectionFailed");
+                    Timber.d("onConnectionFailed");
                 }
 
                 @Override
                 public void onConnectionSuspended() {
-                    LogHelper.d(TAG, "onConnectionSuspended");
+                    Timber.d("onConnectionSuspended");
                     MediaControllerCompat.setMediaController(TvVerticalGridActivity.this, null);
                 }
             };

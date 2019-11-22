@@ -37,8 +37,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import com.bayapps.android.robophish.ui.MusicPlayerActivity;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.ResourceHelper;
+
+import timber.log.Timber;
 
 /**
  * Keeps track of a notification and updates it automatically for a given
@@ -46,7 +47,6 @@ import com.bayapps.android.robophish.utils.ResourceHelper;
  * won't be killed during playback.
  */
 public class MediaNotificationManager extends BroadcastReceiver {
-    private static final String TAG = LogHelper.makeLogTag(MediaNotificationManager.class);
 
     private static final int NOTIFICATION_ID = 412;
     private static final int REQUEST_CODE = 100;
@@ -154,7 +154,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        LogHelper.d(TAG, "Received intent with action " + action);
+        Timber.d("Received intent with action %s", action);
         switch (action) {
             case ACTION_PAUSE:
                 mTransportControls.pause();
@@ -175,7 +175,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 mService.startService(i);
                 break;
             default:
-                LogHelper.w(TAG, "Unknown intent ignored. Action=", action);
+                Timber.w("Unknown intent ignored. Action=%s", action);
         }
     }
 
@@ -217,7 +217,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
             mPlaybackState = state;
-            LogHelper.d(TAG, "Received new playback state", state);
+            Timber.d("Received new playback state %s", state);
             if (state.getState() == PlaybackStateCompat.STATE_STOPPED ||
                     state.getState() == PlaybackStateCompat.STATE_NONE) {
                 stopNotification();
@@ -232,7 +232,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
         @Override
         public void onMetadataChanged(MediaMetadataCompat metadata) {
             mMetadata = metadata;
-            LogHelper.d(TAG, "Received new metadata ", metadata);
+            Timber.d("Received new metadata %s", metadata);
             Notification notification = createNotification();
             if (notification != null) {
                 mNotificationManager.notify(NOTIFICATION_ID, notification);
@@ -242,17 +242,17 @@ public class MediaNotificationManager extends BroadcastReceiver {
         @Override
         public void onSessionDestroyed() {
             super.onSessionDestroyed();
-            LogHelper.d(TAG, "Session was destroyed, resetting to the new session token");
+            Timber.d("Session was destroyed, resetting to the new session token");
             try {
                 updateSessionToken();
             } catch (RemoteException e) {
-                LogHelper.e(TAG, e, "could not connect media controller");
+                Timber.e(e, "could not connect media controller");
             }
         }
     };
 
     private Notification createNotification() {
-        LogHelper.d(TAG, "updateNotificationMetadata. mMetadata=" + mMetadata);
+        Timber.d("updateNotificationMetadata. mMetadata=%s", mMetadata);
         if (mMetadata == null || mPlaybackState == null) {
             return null;
         }
@@ -332,7 +332,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
     }
 
     private void addPlayPauseAction(NotificationCompat.Builder builder) {
-        LogHelper.d(TAG, "updatePlayPauseAction");
+        Timber.d("updatePlayPauseAction");
         String label;
         int icon;
         PendingIntent intent;
@@ -349,22 +349,22 @@ public class MediaNotificationManager extends BroadcastReceiver {
     }
 
     private void setNotificationPlaybackState(NotificationCompat.Builder builder) {
-        LogHelper.d(TAG, "updateNotificationPlaybackState. mPlaybackState=" + mPlaybackState);
+        Timber.d("updateNotificationPlaybackState. mPlaybackState=%s", mPlaybackState);
         if (mPlaybackState == null || !mStarted) {
-            LogHelper.d(TAG, "updateNotificationPlaybackState. cancelling notification!");
+            Timber.d("updateNotificationPlaybackState. cancelling notification!");
             mService.stopForeground(true);
             return;
         }
         if (mPlaybackState.getState() == PlaybackStateCompat.STATE_PLAYING
                 && mPlaybackState.getPosition() >= 0) {
-            LogHelper.d(TAG, "updateNotificationPlaybackState. updating playback position to ",
-                    (System.currentTimeMillis() - mPlaybackState.getPosition()) / 1000, " seconds");
+            Timber.d("updateNotificationPlaybackState. updating playback position to %s seconds",
+                    (System.currentTimeMillis() - mPlaybackState.getPosition()) / 1000);
             builder
                 .setWhen(System.currentTimeMillis() - mPlaybackState.getPosition())
                 .setShowWhen(true)
                 .setUsesChronometer(true);
         } else {
-            LogHelper.d(TAG, "updateNotificationPlaybackState. hiding playback position");
+            Timber.d("updateNotificationPlaybackState. hiding playback position");
             builder
                 .setWhen(0)
                 .setShowWhen(false)
@@ -383,7 +383,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 if (mMetadata != null && mMetadata.getDescription().getIconUri() != null &&
                             mMetadata.getDescription().getIconUri().toString().equals(artUrl)) {
                     // If the media is still the same, update the notification:
-                    LogHelper.d(TAG, "fetchBitmapFromURLAsync: set bitmap to ", artUrl);
+                    Timber.d("fetchBitmapFromURLAsync: set bitmap to %s", artUrl);
                     builder.setLargeIcon(bitmap);
                     mNotificationManager.notify(NOTIFICATION_ID, builder.build());
                 }

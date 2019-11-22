@@ -27,7 +27,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+
+import timber.log.Timber;
 
 /**
  * Main activity for the Android TV user interface.
@@ -35,7 +36,6 @@ import com.bayapps.android.robophish.utils.LogHelper;
 public class TvBrowseActivity extends FragmentActivity
         implements TvBrowseFragment.MediaFragmentListener {
 
-    private static final String TAG = LogHelper.makeLogTag(TvBrowseActivity.class);
     public static final String SAVED_MEDIA_ID="com.example.android.uamp.MEDIA_ID";
     public static final String BROWSE_TITLE = "com.example.android.uamp.BROWSE_TITLE";
 
@@ -47,7 +47,7 @@ public class TvBrowseActivity extends FragmentActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "Activity onCreate");
+        Timber.d("Activity onCreate");
 
         setContentView(R.layout.tv_activity_player);
 
@@ -68,14 +68,14 @@ public class TvBrowseActivity extends FragmentActivity
     @Override
     protected void onStart() {
         super.onStart();
-        LogHelper.d(TAG, "Activity onStart");
+        Timber.d("Activity onStart");
         mMediaBrowser.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LogHelper.d(TAG, "Activity onStop");
+        Timber.d("Activity onStop");
         if (mMediaBrowser != null) {
             mMediaBrowser.disconnect();
         }
@@ -88,7 +88,7 @@ public class TvBrowseActivity extends FragmentActivity
     }
 
     protected void navigateToBrowser(String mediaId) {
-        LogHelper.d(TAG, "navigateToBrowser, mediaId=" + mediaId);
+        Timber.d("navigateToBrowser, mediaId=%s", mediaId);
         TvBrowseFragment fragment =
                 (TvBrowseFragment) getSupportFragmentManager().findFragmentById(R.id.main_browse_fragment);
         fragment.initializeWithMediaId(mediaId);
@@ -108,26 +108,25 @@ public class TvBrowseActivity extends FragmentActivity
             new MediaBrowserCompat.ConnectionCallback() {
                 @Override
                 public void onConnected() {
-                    LogHelper.d(TAG, "onConnected: session token ",
-                            mMediaBrowser.getSessionToken());
+                    Timber.d("onConnected: session token %s", mMediaBrowser.getSessionToken());
                     try {
                         MediaControllerCompat mediaController = new MediaControllerCompat(
                                 TvBrowseActivity.this, mMediaBrowser.getSessionToken());
                         MediaControllerCompat.setMediaController(TvBrowseActivity.this, mediaController);
                         navigateToBrowser(mMediaId);
                     } catch (RemoteException e) {
-                        LogHelper.e(TAG, e, "could not connect media controller");
+                        Timber.e(e, "could not connect media controller");
                     }
                 }
 
                 @Override
                 public void onConnectionFailed() {
-                    LogHelper.d(TAG, "onConnectionFailed");
+                    Timber.d("onConnectionFailed");
                 }
 
                 @Override
                 public void onConnectionSuspended() {
-                    LogHelper.d(TAG, "onConnectionSuspended");
+                    Timber.d("onConnectionSuspended");
                     MediaControllerCompat.setMediaController(TvBrowseActivity.this, null);
                 }
             };

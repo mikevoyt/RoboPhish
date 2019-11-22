@@ -44,7 +44,6 @@ import com.bayapps.android.robophish.playback.PlaybackManager;
 import com.bayapps.android.robophish.playback.QueueManager;
 import com.bayapps.android.robophish.ui.NowPlayingActivity;
 import com.bayapps.android.robophish.utils.CarHelper;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.WearHelper;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
@@ -52,6 +51,8 @@ import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCa
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+
+import timber.log.Timber;
 
 import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_ROOT;
 
@@ -114,8 +115,6 @@ import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_ROOT;
 public class MusicService extends MediaBrowserServiceCompat implements
         PlaybackManager.PlaybackServiceCallback {
 
-    private static final String TAG = LogHelper.makeLogTag(MusicService.class);
-
     // Extra on MediaSession that contains the Cast device name currently connected to
     public static final String EXTRA_CONNECTED_CAST = "com.example.android.uamp.CAST_NAME";
     // The action of the incoming Intent indicating that it contains a command
@@ -167,7 +166,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
         @Override
         public void onDisconnectionReason(int reason) {
-            LogHelper.d(TAG, "onDisconnectionReason");
+            Timber.d("onDisconnectionReason");
             // This is our final chance to update the underlying stream position
             // In onDisconnected(), the underlying CastPlayback#mVideoCastConsumer
             // is disconnected and hence we update our local value of stream position
@@ -177,7 +176,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
         @Override
         public void onDisconnected() {
-            LogHelper.d(TAG, "onDisconnected");
+            Timber.d("onDisconnected");
             mSessionExtras.remove(EXTRA_CONNECTED_CAST);
             mSession.setExtras(mSessionExtras);
             Playback playback = new LocalPlayback(MusicService.this, mMusicProvider);
@@ -193,7 +192,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
     @Override
     public void onCreate() {
         super.onCreate();
-        LogHelper.d(TAG, "onCreate");
+        Timber.d("onCreate");
 
         mMusicProvider = new MusicProvider();
 
@@ -299,7 +298,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
      */
     @Override
     public void onDestroy() {
-        LogHelper.d(TAG, "onDestroy");
+        Timber.d("onDestroy");
         unregisterCarConnectionReceiver();
         // Service is being killed, so make sure we release our resources
         mPlaybackManager.handleStopRequest(null);
@@ -312,15 +311,14 @@ public class MusicService extends MediaBrowserServiceCompat implements
     @Override
     public BrowserRoot onGetRoot(@NonNull String clientPackageName, int clientUid,
                                  Bundle rootHints) {
-        LogHelper.d(TAG, "OnGetRoot: clientPackageName=" + clientPackageName,
-                "; clientUid=" + clientUid + " ; rootHints=", rootHints);
+        Timber.d("OnGetRoot: clientPackageName=%s clientUid=%s rootHints=%s",
+                clientPackageName, clientUid, rootHints);
         // To ensure you are not allowing any arbitrary app to browse your app's contents, you
         // need to check the origin:
         if (!mPackageValidator.isCallerAllowed(this, clientPackageName, clientUid)) {
             // If the request comes from an untrusted package, return null. No further calls will
             // be made to other media browsing methods.
-            LogHelper.w(TAG, "OnGetRoot: IGNORING request from untrusted package "
-                    + clientPackageName);
+            Timber.w("OnGetRoot: IGNORING request from untrusted package %s", clientPackageName);
             return null;
         }
         //noinspection StatementWithEmptyBody
@@ -344,7 +342,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
     @Override
     public void onLoadChildren(@NonNull final String parentMediaId,
                                @NonNull final Result<List<MediaItem>> result) {
-        LogHelper.d(TAG, "OnLoadChildren: parentMediaId=", parentMediaId);
+        Timber.d("OnLoadChildren: parentMediaId=%s", parentMediaId);
         if (false) {
             // if music library is ready, return immediately
             //result.sendResult(mMusicProvider.getChildren(parentMediaId, getResources()));
@@ -407,8 +405,8 @@ public class MusicService extends MediaBrowserServiceCompat implements
             public void onReceive(Context context, Intent intent) {
                 String connectionEvent = intent.getStringExtra(CarHelper.MEDIA_CONNECTION_STATUS);
                 mIsConnectedToCar = CarHelper.MEDIA_CONNECTED.equals(connectionEvent);
-                LogHelper.i(TAG, "Connection event to Android Auto: ", connectionEvent,
-                        " isConnectedToCar=", mIsConnectedToCar);
+                Timber.i("Connection event to Android Auto: %s, isConnectedToCar=%s",
+                        connectionEvent, mIsConnectedToCar);
             }
         };
         registerReceiver(mCarConnectionReceiver, filter);
@@ -433,10 +431,10 @@ public class MusicService extends MediaBrowserServiceCompat implements
             MusicService service = mWeakReference.get();
             if (service != null && service.mPlaybackManager.getPlayback() != null) {
                 if (service.mPlaybackManager.getPlayback().isPlaying()) {
-                    LogHelper.d(TAG, "Ignoring delayed stop since the media player is in use.");
+                    Timber.d("Ignoring delayed stop since the media player is in use.");
                     return;
                 }
-                LogHelper.d(TAG, "Stopping service with delay handler.");
+                Timber.d("Stopping service with delay handler.");
                 service.stopSelf();
             }
         }

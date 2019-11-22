@@ -33,7 +33,6 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -43,12 +42,13 @@ import android.widget.TextView;
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import timber.log.Timber;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -58,7 +58,6 @@ import static android.view.View.VISIBLE;
  * depicting the album art. The activity also has controls to seek/pause/play the audio.
  */
 public class FullScreenPlayerActivity extends ActionBarCastActivity {
-    private static final String TAG = LogHelper.makeLogTag(FullScreenPlayerActivity.class);
     private static final long PROGRESS_UPDATE_INTERNAL = 1000;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 100;
 
@@ -99,7 +98,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
     private final MediaControllerCompat.Callback mCallback = new MediaControllerCompat.Callback() {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
-            LogHelper.d(TAG, "onPlaybackstate changed", state);
+            Timber.d("onPlaybackstate changed %s", state);
             updatePlaybackState(state);
         }
 
@@ -107,9 +106,9 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         public void onMetadataChanged(MediaMetadataCompat metadata) {
             if (metadata != null) {
                 String venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM);
-                Log.d(TAG, "venue: " + venue);
+                Timber.d("venue: %s", venue);
                 String location = metadata.getString(MediaMetadataCompat.METADATA_KEY_AUTHOR);
-                Log.d(TAG, "location: " + location);
+                Timber.d("location: %s", location);
 
                 updateMediaDescription(metadata.getDescription(), venue, location);
                 updateDuration(metadata);
@@ -121,11 +120,11 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             new MediaBrowserCompat.ConnectionCallback() {
         @Override
         public void onConnected() {
-            LogHelper.d(TAG, "onConnected");
+            Timber.d("onConnected");
             try {
                 connectToSession(mMediaBrowser.getSessionToken());
             } catch (RemoteException e) {
-                LogHelper.e(TAG, e, "could not connect media controller");
+                Timber.e(e, "could not connect media controller");
             }
         }
     };
@@ -194,7 +193,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
                             scheduleSeekbarUpdate();
                             break;
                         default:
-                            LogHelper.d(TAG, "onClick with state ", state.getState());
+                            Timber.d("onClick with state %s", state.getState());
                     }
                 }
             }
@@ -241,9 +240,9 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         MediaMetadataCompat metadata = mediaController.getMetadata();
         if (metadata != null) {
             String venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM);
-            Log.d(TAG, "venue: " + venue);
+            Timber.d("venue: %s", venue);
             String location = metadata.getString(MediaMetadataCompat.METADATA_KEY_AUTHOR);
-            Log.d(TAG, "location: " + location);
+            Timber.d("location: %s", location);
 
             updateMediaDescription(metadata.getDescription(), venue, location);
             updateDuration(metadata);
@@ -345,7 +344,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         if (description == null) {
             return;
         }
-        LogHelper.d(TAG, "updateMediaDescription called ");
+        Timber.d("updateMediaDescription called ");
         mLine1.setText(description.getTitle());
         mLine2.setText(description.getDescription());
         mLine3.setText(venue);
@@ -357,7 +356,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         if (metadata == null) {
             return;
         }
-        LogHelper.d(TAG, "updateDuration called ");
+        Timber.d("updateDuration called ");
         int duration = (int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION);
         mSeekbar.setMax(duration);
         mEnd.setText(DateUtils.formatElapsedTime(duration/1000));
@@ -406,7 +405,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
                 stopSeekbarUpdate();
                 break;
             default:
-                LogHelper.d(TAG, "Unhandled state ", state.getState());
+                Timber.d("Unhandled state %s", state.getState());
         }
 
         mSkipNext.setVisibility((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) == 0
