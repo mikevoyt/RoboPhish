@@ -77,8 +77,7 @@
                     android:id="@+id/list_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_below="@id/sliding_tabs">
+                    >
                 </ListView>
             </LinearLayout>
 
@@ -89,10 +88,10 @@
                 android:orientation="vertical" >
                 <WebView
                     android:id="@+id/setlist_webview"
-                    android:text="Setlist goes here"
+                    tools:text="Setlist goes here"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="24dp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -101,12 +100,11 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
                 <WebView
-                    android:text="Reviews go here"
+                    tools:text="Reviews go here"
                     android:id="@+id/reviews_webview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/sliding_tabs"
-                    android:textSize="24dp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -115,12 +113,11 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
                 <WebView
-                    android:text="Taper notes go here"
+                    tools:text="Taper notes go here"
                     android:id="@+id/tapernotes_webview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/sliding_tabs"
-                    android:textSize="24dp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
 
         </androidx.viewpager.widget.ViewPager>
