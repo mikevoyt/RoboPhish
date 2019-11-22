@@ -61,9 +61,9 @@ public class MediaItemViewHolder {
             convertView = LayoutInflater.from(activity)
                     .inflate(R.layout.media_list_item, parent, false);
             holder = new MediaItemViewHolder();
-            holder.mImageView = (ImageView) convertView.findViewById(R.id.play_eq);
-            holder.mTitleView = (TextView) convertView.findViewById(R.id.title);
-            holder.mDescriptionView = (TextView) convertView.findViewById(R.id.description);
+            holder.mImageView = convertView.findViewById(R.id.play_eq);
+            holder.mTitleView = convertView.findViewById(R.id.title);
+            holder.mDescriptionView = convertView.findViewById(R.id.description);
             convertView.setTag(holder);
         } else {
             holder = (MediaItemViewHolder) convertView.getTag();

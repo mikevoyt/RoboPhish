@@ -15,6 +15,7 @@
  */
 package com.bayapps.android.robophish.ui;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -85,7 +86,6 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
                         PreferenceManager.getDefaultSharedPreferences(context);
             }
         };
-
     }
 
     /**
@@ -192,8 +192,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         if (shouldShowControls()) {
             showPlaybackControls();
         } else {
-            Timber.d("connectionCallback.onConnected: " +
-                "hiding controls because metadata is null");
+            Timber.d("connectionCallback.onConnected: hiding controls because metadata is null");
             hidePlaybackControls();
         }
 
@@ -208,6 +207,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     private final MediaControllerCompat.Callback mMediaControllerCallback =
         new MediaControllerCompat.Callback() {
             @Override
+            @SuppressLint("BinaryOperationInTimber")
             public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
                 if (shouldShowControls()) {
                     showPlaybackControls();
@@ -219,6 +219,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
             }
 
             @Override
+            @SuppressLint("BinaryOperationInTimber")
             public void onMetadataChanged(MediaMetadataCompat metadata) {
                 if (shouldShowControls()) {
                     showPlaybackControls();

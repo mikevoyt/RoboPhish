@@ -35,7 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -43,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bayapps.android.robophish.R;
@@ -54,6 +54,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -140,8 +141,8 @@ public class MediaBrowserFragment extends Fragment {
             public void onChildrenLoaded(@NonNull String parentId,
                                          @NonNull List<MediaBrowserCompat.MediaItem> children) {
                 try {
-                    Timber.d("fragment onChildrenLoaded, parentId=" + parentId +
-                        "  count=" + children.size());
+                    Timber.d("fragment onChildrenLoaded, parentId=%s, count=%s",
+                            parentId, children.size());
                     checkForUserVisibleErrors(children.isEmpty());
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mBrowserAdapter.clear();
@@ -253,7 +254,7 @@ public class MediaBrowserFragment extends Fragment {
                     }
             );
 
-            final WebView reviews = (WebView)rootView.findViewById(R.id.reviews_webview);
+            final WebView reviews = rootView.findViewById(R.id.reviews_webview);
             reviews.getSettings().setJavaScriptEnabled(true);
 
             AsyncHttpClient reviewsClient = new AsyncHttpClient();
@@ -302,7 +303,7 @@ public class MediaBrowserFragment extends Fragment {
             );
 
 
-            final WebView tapernotesWebview = (WebView)rootView.findViewById(R.id.tapernotes_webview);
+            final WebView tapernotesWebview = rootView.findViewById(R.id.tapernotes_webview);
             tapernotesWebview.getSettings().setJavaScriptEnabled(true);
 
             String showId = extractShowFromMediaID(mediaId);
@@ -339,21 +340,18 @@ public class MediaBrowserFragment extends Fragment {
         }
 
         mErrorView = rootView.findViewById(R.id.playback_error);
-        mErrorMessage = (TextView) mErrorView.findViewById(R.id.error_message);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mErrorMessage = mErrorView.findViewById(R.id.error_message);
+        mProgressBar = rootView.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
 
         mBrowserAdapter = new BrowseAdapter(getActivity());
 
-        listView = (ListView) rootView.findViewById(R.id.list_view);
+        listView = rootView.findViewById(R.id.list_view);
         listView.setAdapter(mBrowserAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkForUserVisibleErrors(false);
-                MediaBrowserCompat.MediaItem item = mBrowserAdapter.getItem(position);
-                mMediaFragmentListener.onMediaItemSelected(item);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            checkForUserVisibleErrors(false);
+            MediaBrowserCompat.MediaItem item = mBrowserAdapter.getItem(position);
+            mMediaFragmentListener.onMediaItemSelected(item);
         });
 
         return rootView;
@@ -533,23 +531,22 @@ public class MediaBrowserFragment extends Fragment {
     // An adapter for showing the list of browsed MediaItem's
     private static class BrowseAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem> {
 
-        public BrowseAdapter(Activity context) {
-            super(context, R.layout.media_list_item, new ArrayList<MediaBrowserCompat.MediaItem>());
+        BrowseAdapter(Activity context) {
+            super(context, R.layout.media_list_item, new ArrayList<>());
         }
 
+        @NotNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @Nullable ViewGroup parent) {
 
             MediaBrowserCompat.MediaItem item = getItem(position);
             int itemState = MediaItemViewHolder.STATE_NONE;
             if (item.isPlayable()) {
                 itemState = MediaItemViewHolder.STATE_PLAYABLE;
-                MediaControllerCompat controller = ((BaseActivity) getContext())
-                        .getSupportMediaController();
+                MediaControllerCompat controller = ((BaseActivity) getContext()).getSupportMediaController();
                 if (controller != null && controller.getMetadata() != null) {
                     String currentPlaying = controller.getMetadata().getDescription().getMediaId();
-                    String musicId = MediaIDHelper.extractMusicIDFromMediaID(
-                            item.getDescription().getMediaId());
+                    String musicId = MediaIDHelper.extractMusicIDFromMediaID(item.getDescription().getMediaId());
                     if (currentPlaying != null && currentPlaying.equals(musicId)) {
                         PlaybackStateCompat pbState = controller.getPlaybackState();
                         if (pbState == null ||
