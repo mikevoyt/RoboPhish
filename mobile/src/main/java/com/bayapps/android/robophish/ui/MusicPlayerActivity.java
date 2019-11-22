@@ -81,7 +81,7 @@ public class MusicPlayerActivity extends BaseActivity
 
     @Override
     public void onMediaItemSelected(MediaBrowserCompat.MediaItem item) {
-        Timber.d("onMediaItemSelected, mediaId=" + item.getMediaId());
+        Timber.d("onMediaItemSelected, mediaId=%s", item.getMediaId());
         if (item.isPlayable()) {
             getSupportMediaController().getTransportControls()
                     .playFromMediaId(item.getMediaId(), null);
