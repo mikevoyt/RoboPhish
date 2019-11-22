@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'phishin-api-key-provider'
 
 android {
@@ -54,6 +56,9 @@ android {
 }
 
 dependencies {
+    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
     implementation 'com.google.android.gms:play-services-cast:17.1.0'
     compileOnly 'com.google.android.support:wearable:2.5.0'
     compileOnly 'com.google.android.wearable:wearable:2.5.0'
