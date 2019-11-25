@@ -81,7 +81,7 @@ public class QueueHelper {
 
         Timber.d("VoiceSearchParams: %s", params);
 
-        if (params.isAny) {
+        if (params.isAny()) {
             // If isAny is true, we will play anything. This is app-dependent, and can be,
             // for example, favorite playlists, "I'm feeling lucky", most recent, etc.
             return getRandomQueue(musicProvider);
