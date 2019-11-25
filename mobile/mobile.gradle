@@ -67,7 +67,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.mediarouter:mediarouter:1.1.0'
-    implementation 'androidx.leanback:leanback:1.0.0'
 
     // appears to be a bug in 1.4.10 where you can't use synchronous http anymore
     implementation 'com.loopj.android:android-async-http:1.4.9'
