@@ -102,12 +102,10 @@ public class PhishProviderSource implements MusicProviderSource  {
 
                 Collections.reverse(yearEntries);
 
-                if (yearEntries != null) {
-                    for (YearData year : yearEntries) {
+                for (YearData year : yearEntries) {
 
-                        Timber.d("year: " + year.getYear());
-                        years.add(year);
-                    }
+                    Timber.d("year: %s", year.getYear());
+                    years.add(year);
                 }
             }
         });
