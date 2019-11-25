@@ -51,6 +51,8 @@ import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCa
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_ROOT;
@@ -144,21 +146,27 @@ public class MusicService extends MediaBrowserServiceCompat implements
     private boolean mIsConnectedToCar;
     private BroadcastReceiver mCarConnectionReceiver;
 
+    @Inject VideoCastManager videoCastManager;
+    @Inject AlbumArtCache albumArtCache;
+
     /**
      * Consumer responsible for switching the Playback instances depending on whether
      * it is connected to a remote player.
+     *
+     * TODO move to it's own class
      */
     private final VideoCastConsumerImpl mCastConsumer = new VideoCastConsumerImpl() {
+
+        @Inject VideoCastManager videoCastManager;
 
         @Override
         public void onApplicationConnected(ApplicationMetadata appMetadata, String sessionId,
                                            boolean wasLaunched) {
             // In case we are casting, send the device name as an extra on MediaSession metadata.
-            mSessionExtras.putString(EXTRA_CONNECTED_CAST,
-                    VideoCastManager.getInstance().getDeviceName());
+            mSessionExtras.putString(EXTRA_CONNECTED_CAST, videoCastManager.getDeviceName());
             mSession.setExtras(mSessionExtras);
             // Now we can switch to CastPlayback
-            Playback playback = new CastPlayback(mMusicProvider);
+            Playback playback = new CastPlayback(mMusicProvider, videoCastManager);
             mMediaRouter.setMediaSessionCompat(mSession);
             mPlaybackManager.switchToPlayback(playback, true);
         }
@@ -193,6 +201,9 @@ public class MusicService extends MediaBrowserServiceCompat implements
         super.onCreate();
         Timber.d("onCreate");
 
+        RoboPhishApplicationKt.inject(this, this);
+        RoboPhishApplicationKt.inject(this, mCastConsumer);
+
         mMusicProvider = new MusicProvider();
 
         // To make the app more responsive, fetch and cache catalog information now.
@@ -203,6 +214,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
         mPackageValidator = new PackageValidator(this);
 
         QueueManager queueManager = new QueueManager(mMusicProvider, getResources(),
+                albumArtCache,
                 new QueueManager.MetadataUpdateListener() {
                     @Override
                     public void onMetadataChanged(MediaMetadataCompat metadata) {
@@ -250,11 +262,11 @@ public class MusicService extends MediaBrowserServiceCompat implements
         mPlaybackManager.updatePlaybackState(null);
 
         try {
-            mMediaNotificationManager = new MediaNotificationManager(this);
+            mMediaNotificationManager = new MediaNotificationManager(this, albumArtCache);
         } catch (RemoteException e) {
             throw new IllegalStateException("Could not create a MediaNotificationManager", e);
         }
-        VideoCastManager.getInstance().addVideoCastConsumer(mCastConsumer);
+        videoCastManager.addVideoCastConsumer(mCastConsumer);
         mMediaRouter = MediaRouter.getInstance(getApplicationContext());
 
         registerCarConnectionReceiver();
@@ -273,7 +285,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
                 if (CMD_PAUSE.equals(command)) {
                     mPlaybackManager.handlePauseRequest();
                 } else if (CMD_STOP_CASTING.equals(command)) {
-                    VideoCastManager.getInstance().disconnect();
+                    videoCastManager.disconnect();
                 }
             } else {
                 // Try to handle the intent as a media button event wrapped by MediaButtonReceiver
@@ -298,7 +310,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
         // Service is being killed, so make sure we release our resources
         mPlaybackManager.handleStopRequest(null);
         mMediaNotificationManager.stopNotification();
-        VideoCastManager.getInstance().removeVideoCastConsumer(mCastConsumer);
+        videoCastManager.removeVideoCastConsumer(mCastConsumer);
         mDelayedStopHandler.removeCallbacksAndMessages(null);
         mSession.release();
     }

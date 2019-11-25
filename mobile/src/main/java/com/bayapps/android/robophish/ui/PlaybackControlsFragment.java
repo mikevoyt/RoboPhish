@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -39,6 +40,9 @@ import android.widget.Toast;
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -52,6 +56,9 @@ public class PlaybackControlsFragment extends Fragment {
     private TextView mExtraInfo;
     private ImageView mAlbumArt;
     private String mArtUrl;
+
+    @Inject AlbumArtCache albumArtCache;
+
     // Receive callbacks from the MediaController. Here we update our state such as which queue
     // is being shown, the current title and description and the PlaybackState.
     private final MediaControllerCompat.Callback mCallback = new MediaControllerCompat.Callback() {
@@ -72,6 +79,12 @@ public class PlaybackControlsFragment extends Fragment {
             PlaybackControlsFragment.this.onMetadataChanged(metadata);
         }
     };
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        RoboPhishApplicationKt.inject(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,7 +168,7 @@ public class PlaybackControlsFragment extends Fragment {
         if (!TextUtils.equals(artUrl, mArtUrl)) {
             mArtUrl = artUrl;
             Bitmap art = metadata.getDescription().getIconBitmap();
-            AlbumArtCache cache = AlbumArtCache.getInstance();
+            AlbumArtCache cache = albumArtCache;
             if (art == null) {
                 art = cache.getIconImage(mArtUrl);
             }

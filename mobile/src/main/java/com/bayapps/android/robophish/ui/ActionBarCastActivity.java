@@ -34,10 +34,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.bayapps.android.robophish.R;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.google.android.material.navigation.NavigationView;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -55,7 +58,8 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
 
     private static final int DELAY_MILLIS = 1000;
 
-    private VideoCastManager mCastManager;
+    @Inject VideoCastManager mCastManager;
+
     private MenuItem mMediaRouteMenuItem;
     private Toolbar mToolbar;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -84,14 +88,10 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         @Override
         public void onCastAvailabilityChanged(boolean castPresent) {
             if (castPresent) {
-                new Handler().postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (mMediaRouteMenuItem.isVisible()) {
-                            Timber.d("Cast Icon is visible");
-                            showFtu();
-                        }
+                new Handler().postDelayed(() -> {
+                    if (mMediaRouteMenuItem.isVisible()) {
+                        Timber.d("Cast Icon is visible");
+                        showFtu();
                     }
                 }, DELAY_MILLIS);
             }
@@ -154,10 +154,11 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Timber.d("Activity onCreate");
 
+        RoboPhishApplicationKt.inject(this);
+
         // Ensure that Google Play Service is available.
         VideoCastManager.checkGooglePlayServices(this);
 
-        mCastManager = VideoCastManager.getInstance();
         mCastManager.reconnectSessionIfPossible();
     }
 
