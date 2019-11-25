@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.bayapps.android.robophish"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 24
         versionName "0.17-beta"
@@ -60,8 +60,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     implementation 'com.google.android.gms:play-services-cast:17.1.0'
-    compileOnly 'com.google.android.support:wearable:2.5.0'
-    compileOnly 'com.google.android.wearable:wearable:2.5.0'
     implementation 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
     implementation 'com.google.android.material:material:1.0.0'
 
@@ -79,10 +77,4 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:3.1.0'
-
-    androidTestImplementation 'org.mockito:mockito-android:3.1.0'
-    androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
 }

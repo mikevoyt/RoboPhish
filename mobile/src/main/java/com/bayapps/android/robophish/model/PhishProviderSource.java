@@ -105,7 +105,7 @@ public class PhishProviderSource implements MusicProviderSource  {
                 if (yearEntries != null) {
                     for (YearData year : yearEntries) {
 
-                        Timber.d("year: " + year.getYear());
+                        Timber.d("year: %s", year.getYear());
                         years.add(year);
                     }
                 }

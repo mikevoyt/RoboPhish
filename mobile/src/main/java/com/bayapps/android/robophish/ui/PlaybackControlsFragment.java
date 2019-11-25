@@ -15,13 +15,15 @@
  */
 package com.bayapps.android.robophish.ui;
 
-import android.app.Fragment;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -76,28 +78,25 @@ public class PlaybackControlsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_playback_controls, container, false);
 
-        mPlayPause = (ImageButton) rootView.findViewById(R.id.play_pause);
+        mPlayPause = rootView.findViewById(R.id.play_pause);
         mPlayPause.setEnabled(true);
         mPlayPause.setOnClickListener(mButtonListener);
 
-        mTitle = (TextView) rootView.findViewById(R.id.title);
-        mSubtitle = (TextView) rootView.findViewById(R.id.artist);
-        mExtraInfo = (TextView) rootView.findViewById(R.id.extra_info);
-        mAlbumArt = (ImageView) rootView.findViewById(R.id.album_art);
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                MediaControllerCompat controller = ((BaseActivity) getActivity())
-                        .getSupportMediaController();
-                MediaMetadataCompat metadata = controller.getMetadata();
-                if (metadata != null) {
-                    intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
-                        metadata.getDescription());
-                }
-                startActivity(intent);
+        mTitle = rootView.findViewById(R.id.title);
+        mSubtitle = rootView.findViewById(R.id.artist);
+        mExtraInfo = rootView.findViewById(R.id.extra_info);
+        mAlbumArt = rootView.findViewById(R.id.album_art);
+        rootView.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            MediaControllerCompat controller = ((BaseActivity) getActivity())
+                    .getSupportMediaController();
+            MediaMetadataCompat metadata = controller.getMetadata();
+            if (metadata != null) {
+                intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
+                    metadata.getDescription());
             }
+            startActivity(intent);
         });
         return rootView;
     }
@@ -135,6 +134,7 @@ public class PlaybackControlsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("BinaryOperationInTimber")
     private void onMetadataChanged(MediaMetadataCompat metadata) {
         Timber.d("onMetadataChanged %s", metadata);
         if (getActivity() == null) {
@@ -188,6 +188,7 @@ public class PlaybackControlsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("BinaryOperationInTimber")
     private void onPlaybackStateChanged(PlaybackStateCompat state) {
         Timber.d("onPlaybackStateChanged %s", state);
         if (getActivity() == null) {
@@ -238,10 +239,10 @@ public class PlaybackControlsFragment extends Fragment {
             PlaybackStateCompat stateObj = controller.getPlaybackState();
             final int state = stateObj == null ?
                     PlaybackStateCompat.STATE_NONE : stateObj.getState();
-            Timber.d("Button pressed, in state " + state);
+            Timber.d("Button pressed, in state %s", state);
             switch (v.getId()) {
                 case R.id.play_pause:
-                    Timber.d("Play button pressed, in state " + state);
+                    Timber.d("Play button pressed, in state %s", state);
                     if (state == PlaybackStateCompat.STATE_PAUSED ||
                             state == PlaybackStateCompat.STATE_STOPPED ||
                             state == PlaybackStateCompat.STATE_NONE) {

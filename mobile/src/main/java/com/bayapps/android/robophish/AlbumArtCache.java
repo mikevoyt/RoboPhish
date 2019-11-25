@@ -104,8 +104,7 @@ public final class AlbumArtCache {
                 } catch (IOException e) {
                     return null;
                 }
-                Timber.d("doInBackground: putting bitmap in cache. cache size=" +
-                    mCache.size());
+                Timber.d("doInBackground: putting bitmap in cache. cache size=%s", mCache.size());
                 return bitmaps;
             }
 
@@ -124,7 +123,7 @@ public final class AlbumArtCache {
     public static abstract class FetchListener {
         public abstract void onFetched(String artUrl, Bitmap bigImage, Bitmap iconImage);
         public void onError(String artUrl, Exception e) {
-            Timber.e(e, "AlbumArtFetchListener: error while downloading " + artUrl);
+            Timber.e(e, "AlbumArtFetchListener: error while downloading %s", artUrl);
         }
     }
 }
