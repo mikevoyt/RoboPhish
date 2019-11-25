@@ -521,11 +521,11 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         mMediaPlayerB = createMediaPlayer(mMediaPlayerB);
         if (mMediaPlayer == null) mMediaPlayer = mMediaPlayerA;
     }
-            /**
-             * Makes sure the media player exists and has been reset. This will create
-             * the media player if needed, or reset the existing media player if one
-             * already exists.
-             */
+    /**
+     * Makes sure the media player exists and has been reset. This will create
+     * the media player if needed, or reset the existing media player if one
+     * already exists.
+     */
     private MediaPlayer createMediaPlayer(MediaPlayer player) {
         Timber.d("createMediaPlayerIfNeeded. needed? %s", (player==null));
         if (player == null) {
