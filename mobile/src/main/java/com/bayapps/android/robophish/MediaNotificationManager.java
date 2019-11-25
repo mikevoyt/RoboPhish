@@ -257,7 +257,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
             return null;
         }
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mService, "RoboPhish"); //todo make constant
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mService, "RoboPhish");
         int playPauseButtonPosition = 0;
 
         // If skip to previous action is enabled
@@ -300,8 +300,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
 
         notificationBuilder
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                    .setShowActionsInCompactView(
-                            new int[]{playPauseButtonPosition})  // show only play/pause in compact view
+                    .setShowActionsInCompactView(playPauseButtonPosition)  // show only play/pause in compact view
                     .setMediaSession(mSessionToken))
                 .setColor(mNotificationColor)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -310,6 +309,9 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 .setContentIntent(createContentIntent(description))
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
+                .setChannelId(RoboPhishApplicationKt.MEDIA_PLAYER_NOTIFICATION)
+                .setSound(null)
+                .setVibrate(null)
                 .setLargeIcon(art);
 
         if (mController != null && mController.getExtras() != null) {

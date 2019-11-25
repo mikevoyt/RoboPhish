@@ -27,20 +27,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!-- sample looks like this instead:
-       <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    -->
-
-
-    <!-- Set android.software.leanback to false, so the APK will be available to both
-    TV and regular devices. -->
-    <uses-feature
-        android:name="android.software.leanback"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".RoboPhishApplication"
@@ -50,7 +37,8 @@
         android:theme="@style/UAmpAppTheme"
         android:banner="@drawable/banner_tv"
         android:fullBackupContent="true"
-        tools:targetApi="lollipop"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m"
         >
 
         <!-- Main activity for music browsing on phone -->
@@ -129,15 +117,6 @@
             android:name="com.google.android.gms.car.application.theme"
             android:resource="@style/CarTheme" />
 
-        <!--
-             (OPTIONAL) use this meta data to override the theme from which Android Wear will
-             look for colors. Currently, only background color of the media cards can be set, via
-             colorPrimaryDark. If you don't set this custom theme, Android Wear will look
-             for colorPrimaryDark attribute in your application theme.
-        -->
-        <meta-data
-            android:name="com.google.android.wearable.media.theme"
-            android:resource="@style/WearTheme" />
 
         <!-- Main music service, provides media browsing and media playback services to
          consumers through MediaBrowserService and MediaSession. Consumers connect to it through
