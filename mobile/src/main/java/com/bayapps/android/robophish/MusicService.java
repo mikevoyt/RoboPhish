@@ -42,15 +42,16 @@ import com.bayapps.android.robophish.playback.LocalPlayback;
 import com.bayapps.android.robophish.playback.Playback;
 import com.bayapps.android.robophish.playback.PlaybackManager;
 import com.bayapps.android.robophish.playback.QueueManager;
-import com.bayapps.android.robophish.ui.NowPlayingActivity;
+import com.bayapps.android.robophish.ui.MusicPlayerActivity;
 import com.bayapps.android.robophish.utils.CarHelper;
-import com.bayapps.android.robophish.utils.WearHelper;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -145,21 +146,27 @@ public class MusicService extends MediaBrowserServiceCompat implements
     private boolean mIsConnectedToCar;
     private BroadcastReceiver mCarConnectionReceiver;
 
+    @Inject VideoCastManager videoCastManager;
+    @Inject AlbumArtCache albumArtCache;
+
     /**
      * Consumer responsible for switching the Playback instances depending on whether
      * it is connected to a remote player.
+     *
+     * TODO move to it's own class
      */
     private final VideoCastConsumerImpl mCastConsumer = new VideoCastConsumerImpl() {
+
+        @Inject VideoCastManager videoCastManager;
 
         @Override
         public void onApplicationConnected(ApplicationMetadata appMetadata, String sessionId,
                                            boolean wasLaunched) {
             // In case we are casting, send the device name as an extra on MediaSession metadata.
-            mSessionExtras.putString(EXTRA_CONNECTED_CAST,
-                    VideoCastManager.getInstance().getDeviceName());
+            mSessionExtras.putString(EXTRA_CONNECTED_CAST, videoCastManager.getDeviceName());
             mSession.setExtras(mSessionExtras);
             // Now we can switch to CastPlayback
-            Playback playback = new CastPlayback(mMusicProvider);
+            Playback playback = new CastPlayback(mMusicProvider, videoCastManager);
             mMediaRouter.setMediaSessionCompat(mSession);
             mPlaybackManager.switchToPlayback(playback, true);
         }
@@ -194,6 +201,9 @@ public class MusicService extends MediaBrowserServiceCompat implements
         super.onCreate();
         Timber.d("onCreate");
 
+        RoboPhishApplicationKt.inject(this, this);
+        RoboPhishApplicationKt.inject(this, mCastConsumer);
+
         mMusicProvider = new MusicProvider();
 
         // To make the app more responsive, fetch and cache catalog information now.
@@ -204,6 +214,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
         mPackageValidator = new PackageValidator(this);
 
         QueueManager queueManager = new QueueManager(mMusicProvider, getResources(),
+                albumArtCache,
                 new QueueManager.MetadataUpdateListener() {
                     @Override
                     public void onMetadataChanged(MediaMetadataCompat metadata) {
@@ -237,29 +248,25 @@ public class MusicService extends MediaBrowserServiceCompat implements
         mSession = new MediaSessionCompat(this, "MusicService");
         setSessionToken(mSession.getSessionToken());
         mSession.setCallback(mPlaybackManager.getMediaSessionCallback());
-        mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
         Context context = getApplicationContext();
-        Intent intent = new Intent(context, NowPlayingActivity.class);
+        Intent intent = new Intent(context, MusicPlayerActivity.class);
         PendingIntent pi = PendingIntent.getActivity(context, 99 /*request code*/,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mSession.setSessionActivity(pi);
 
         mSessionExtras = new Bundle();
         CarHelper.setSlotReservationFlags(mSessionExtras, true, true, true);
-        WearHelper.setSlotReservationFlags(mSessionExtras, true, true);
-        WearHelper.setUseBackgroundFromTheme(mSessionExtras, true);
         mSession.setExtras(mSessionExtras);
 
         mPlaybackManager.updatePlaybackState(null);
 
         try {
-            mMediaNotificationManager = new MediaNotificationManager(this);
+            mMediaNotificationManager = new MediaNotificationManager(this, albumArtCache);
         } catch (RemoteException e) {
             throw new IllegalStateException("Could not create a MediaNotificationManager", e);
         }
-        VideoCastManager.getInstance().addVideoCastConsumer(mCastConsumer);
+        videoCastManager.addVideoCastConsumer(mCastConsumer);
         mMediaRouter = MediaRouter.getInstance(getApplicationContext());
 
         registerCarConnectionReceiver();
@@ -278,7 +285,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
                 if (CMD_PAUSE.equals(command)) {
                     mPlaybackManager.handlePauseRequest();
                 } else if (CMD_STOP_CASTING.equals(command)) {
-                    VideoCastManager.getInstance().disconnect();
+                    videoCastManager.disconnect();
                 }
             } else {
                 // Try to handle the intent as a media button event wrapped by MediaButtonReceiver
@@ -303,7 +310,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
         // Service is being killed, so make sure we release our resources
         mPlaybackManager.handleStopRequest(null);
         mMediaNotificationManager.stopNotification();
-        VideoCastManager.getInstance().removeVideoCastConsumer(mCastConsumer);
+        videoCastManager.removeVideoCastConsumer(mCastConsumer);
         mDelayedStopHandler.removeCallbacksAndMessages(null);
         mSession.release();
     }
@@ -328,12 +335,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
             // If you want to adapt other runtime behaviors, like tweak ads or change some behavior
             // that should be different on cars, you should instead use the boolean flag
             // set by the BroadcastReceiver mCarConnectionReceiver (mIsConnectedToCar).
-        }
-        //noinspection StatementWithEmptyBody
-        if (WearHelper.isValidWearCompanionPackage(clientPackageName)) {
-            // Optional: if your app needs to adapt the music library for when browsing from a
-            // Wear device, you should return a different MEDIA ROOT here, and then,
-            // on onLoadChildren, handle it accordingly.
         }
 
         return new BrowserRoot(MEDIA_ID_ROOT, null);

@@ -37,10 +37,13 @@ import androidx.annotation.NonNull;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
 import com.bayapps.android.robophish.utils.NetworkHelper;
 import com.bayapps.android.robophish.utils.ResourceHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -55,11 +58,15 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
 
+    @Inject GoogleApiAvailability googleApiAvailability;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Timber.d("Activity onCreate");
+
+        RoboPhishApplicationKt.inject(this);
+        checkPlayServices();
 
         if (Build.VERSION.SDK_INT >= 21) {
             // Since our app icon has the same color as colorPrimary, our entry in the Recent Apps
@@ -94,8 +101,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
      * the Google Play Store or enable it in the device's system settings.
      */
     private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode == ConnectionResult.SUCCESS) {
             return true;
         }
@@ -111,8 +117,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         super.onStart();
         Timber.d("Activity onStart");
 
-        mControlsFragment = (PlaybackControlsFragment) getFragmentManager()
-            .findFragmentById(R.id.fragment_playback_controls);
+        mControlsFragment = (PlaybackControlsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_playback_controls);
         if (mControlsFragment == null) {
             throw new IllegalStateException("Mising fragment with id 'controls'. Cannot continue.");
         }
@@ -145,7 +150,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     protected void showPlaybackControls() {
         Timber.d("showPlaybackControls");
         if (NetworkHelper.isOnline(this)) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                     R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
                     R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom)
@@ -156,7 +161,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
 
     protected void hidePlaybackControls() {
         Timber.d("hidePlaybackControls");
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
             .hide(mControlsFragment)
             .commit();
     }

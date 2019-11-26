@@ -113,7 +113,8 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         this.mMusicProvider = musicProvider;
         this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         // Create the Wifi lock (this does not acquire the lock, this just creates it)
-        this.mWifiLock = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE))
+        this.mWifiLock = ((WifiManager) context.getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE))
                 .createWifiLock(WifiManager.WIFI_MODE_FULL, "uAmp_lock");
         this.mState = PlaybackStateCompat.STATE_NONE;
     }
@@ -508,7 +509,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
      */
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Timber.e("Media player error: what=" + what + ", extra=" + extra);
+        Timber.e("Media player error: what=%s extra=%s", what, extra);
         if (mCallback != null) {
             mCallback.onError("MediaPlayer error " + what + " (" + extra + ")");
         }
@@ -520,11 +521,11 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         mMediaPlayerB = createMediaPlayer(mMediaPlayerB);
         if (mMediaPlayer == null) mMediaPlayer = mMediaPlayerA;
     }
-            /**
-             * Makes sure the media player exists and has been reset. This will create
-             * the media player if needed, or reset the existing media player if one
-             * already exists.
-             */
+    /**
+     * Makes sure the media player exists and has been reset. This will create
+     * the media player if needed, or reset the existing media player if one
+     * already exists.
+     */
     private MediaPlayer createMediaPlayer(MediaPlayer player) {
         Timber.d("createMediaPlayerIfNeeded. needed? %s", (player==null));
         if (player == null) {

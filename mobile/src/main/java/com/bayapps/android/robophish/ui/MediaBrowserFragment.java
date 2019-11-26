@@ -16,7 +16,6 @@
 package com.bayapps.android.robophish.ui;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +42,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bayapps.android.robophish.R;
@@ -164,11 +164,11 @@ public class MediaBrowserFragment extends Fragment {
         };
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         // If used on an activity that doesn't implement MediaFragmentListener, it
         // will throw an exception as expected:
-        mMediaFragmentListener = (MediaFragmentListener) activity;
+        mMediaFragmentListener = (MediaFragmentListener) getActivity();
     }
 
     @Override

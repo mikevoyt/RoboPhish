@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.model.MusicProvider;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
-import com.bayapps.android.robophish.utils.WearHelper;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -196,7 +195,7 @@ public class PlaybackManager implements Playback.Callback {
         if (error != null) {
             // Error states are really only supposed to be used for errors that cause playback to
             // stop unexpectedly and persist until the user takes action to fix it.
-            stateBuilder.setErrorMessage(error);
+            stateBuilder.setErrorMessage(PlaybackStateCompat.ERROR_CODE_UNKNOWN_ERROR, error);
             state = PlaybackStateCompat.STATE_ERROR;
         }
         //noinspection ResourceType
@@ -232,7 +231,6 @@ public class PlaybackManager implements Playback.Callback {
         Timber.d("updatePlaybackState, setting Favorite custom action of music %s current favorite=%s",
                 musicId, mMusicProvider.isFavorite(musicId));
         Bundle customActionExtras = new Bundle();
-        WearHelper.setShowCustomActionOnWear(customActionExtras, true);
         stateBuilder.addCustomAction(new PlaybackStateCompat.CustomAction.Builder(
                 CUSTOM_ACTION_THUMBS_UP, mResources.getString(R.string.favorite), favoriteIcon)
                 .setExtras(customActionExtras)

@@ -48,8 +48,4 @@
          -->
         <item name="colorPrimaryDark">#ffbf360c</item>
     </style>
-
-
-    <style name="Theme.UAmp.TVLeanback" parent="Theme.Leanback">
-    </style>
 </resources>

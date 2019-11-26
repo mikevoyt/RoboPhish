@@ -58,6 +58,8 @@ public class MediaNotificationManager extends BroadcastReceiver {
     public static final String ACTION_STOP_CASTING = "com.example.android.uamp.stop_cast";
 
     private final MusicService mService;
+    private final AlbumArtCache albumArtCache;
+
     private MediaSessionCompat.Token mSessionToken;
     private MediaControllerCompat mController;
     private MediaControllerCompat.TransportControls mTransportControls;
@@ -78,8 +80,10 @@ public class MediaNotificationManager extends BroadcastReceiver {
 
     private boolean mStarted = false;
 
-    public MediaNotificationManager(MusicService service) throws RemoteException {
+    public MediaNotificationManager(MusicService service, AlbumArtCache albumArtCache) throws RemoteException {
         mService = service;
+        this.albumArtCache = albumArtCache;
+
         updateSessionToken();
 
         mNotificationColor = ResourceHelper.getThemeColor(mService, R.attr.colorPrimary,
@@ -257,7 +261,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
             return null;
         }
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mService, "RoboPhish"); //todo make constant
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mService, "RoboPhish");
         int playPauseButtonPosition = 0;
 
         // If skip to previous action is enabled
@@ -289,7 +293,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
             // it can actually be any valid Android Uri formatted String.
             // async fetch the album art icon
             String artUrl = description.getIconUri().toString();
-            art = AlbumArtCache.getInstance().getBigImage(artUrl);
+            art = albumArtCache.getBigImage(artUrl);
             if (art == null) {
                 fetchArtUrl = artUrl;
                 // use a placeholder art while the remote art is being downloaded
@@ -300,8 +304,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
 
         notificationBuilder
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                    .setShowActionsInCompactView(
-                            new int[]{playPauseButtonPosition})  // show only play/pause in compact view
+                    .setShowActionsInCompactView(playPauseButtonPosition)  // show only play/pause in compact view
                     .setMediaSession(mSessionToken))
                 .setColor(mNotificationColor)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -310,6 +313,9 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 .setContentIntent(createContentIntent(description))
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
+                .setChannelId(RoboPhishApplicationKt.MEDIA_PLAYER_NOTIFICATION)
+                .setSound(null)
+                .setVibrate(null)
                 .setLargeIcon(art);
 
         if (mController != null && mController.getExtras() != null) {
@@ -377,7 +383,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
 
     private void fetchBitmapFromURLAsync(final String bitmapUrl,
                                          final NotificationCompat.Builder builder) {
-        AlbumArtCache.getInstance().fetch(bitmapUrl, new AlbumArtCache.FetchListener() {
+        albumArtCache.fetch(bitmapUrl, new AlbumArtCache.FetchListener() {
             @Override
             public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
                 if (mMetadata != null && mMetadata.getDescription().getIconUri() != null &&

@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.bayapps.android.robophish"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 24
         versionName "0.17-beta"
@@ -55,13 +55,15 @@ android {
     }
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
 dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     implementation 'com.google.android.gms:play-services-cast:17.1.0'
-    compileOnly 'com.google.android.support:wearable:2.5.0'
-    compileOnly 'com.google.android.wearable:wearable:2.5.0'
     implementation 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
     implementation 'com.google.android.material:material:1.0.0'
 
@@ -69,14 +71,19 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.mediarouter:mediarouter:1.1.0'
-    implementation 'androidx.leanback:leanback:1.0.0'
 
     // appears to be a bug in 1.4.10 where you can't use synchronous http anymore
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'com.google.guava:guava:28.1-android'
 
+    implementation 'org.kodein.di:kodein-di-generic-jvm:6.4.0'
+    implementation 'org.kodein.di:kodein-di-framework-android-x:6.4.0'
+    implementation 'org.kodein.di:kodein-di-jxinject-jvm:6.4.0'
+
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:1.0'
     testImplementation 'org.mockito:mockito-core:3.1.0'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 }
