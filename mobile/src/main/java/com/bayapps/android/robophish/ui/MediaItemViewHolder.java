@@ -20,8 +20,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,9 +61,9 @@ public class MediaItemViewHolder {
             convertView = LayoutInflater.from(activity)
                     .inflate(R.layout.media_list_item, parent, false);
             holder = new MediaItemViewHolder();
-            holder.mImageView = (ImageView) convertView.findViewById(R.id.play_eq);
-            holder.mTitleView = (TextView) convertView.findViewById(R.id.title);
-            holder.mDescriptionView = (TextView) convertView.findViewById(R.id.description);
+            holder.mImageView = convertView.findViewById(R.id.play_eq);
+            holder.mTitleView = convertView.findViewById(R.id.title);
+            holder.mDescriptionView = convertView.findViewById(R.id.description);
             convertView.setTag(holder);
         } else {
             holder = (MediaItemViewHolder) convertView.getTag();

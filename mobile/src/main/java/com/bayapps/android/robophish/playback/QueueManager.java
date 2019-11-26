@@ -19,14 +19,14 @@ package com.bayapps.android.robophish.playback;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+
+import androidx.annotation.NonNull;
 
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.model.MusicProvider;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.QueueHelper;
 
@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import timber.log.Timber;
 
 import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DURATION;
 
@@ -43,7 +45,6 @@ import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DURATION
  * given MusicProvider to provide the actual media metadata.
  */
 public class QueueManager {
-    private static final String TAG = LogHelper.makeLogTag(QueueManager.class);
 
     private MusicProvider mMusicProvider;
     private MetadataUpdateListener mListener;
@@ -107,8 +108,8 @@ public class QueueManager {
             index %= mPlayingQueue.size();
         }
         if (!QueueHelper.isIndexPlayable(index, mPlayingQueue)) {
-            LogHelper.e(TAG, "Cannot increment queue index by ", amount,
-                    ". Current=", mCurrentIndex, " queue length=", mPlayingQueue.size());
+            Timber.e("Cannot increment queue index by %s . Current=%s queue length=%s", amount,
+                    mCurrentIndex, mPlayingQueue.size());
             return false;
         }
         mCurrentIndex = index;
@@ -128,7 +129,7 @@ public class QueueManager {
     }
 
     public void setQueueFromMusic(String mediaId) {
-        LogHelper.d(TAG, "setQueueFromMusic", mediaId);
+        Timber.d("setQueueFromMusic %s", mediaId);
 
         // The mediaId used here is not the unique musicId. This one comes from the
         // MediaBrowser, and is actually a "hierarchy-aware mediaID": a concatenation of

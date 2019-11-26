@@ -22,14 +22,14 @@ import android.content.res.XmlResourceParser;
 import android.os.Process;
 import android.util.Base64;
 
-import com.bayapps.android.robophish.utils.LogHelper;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * Validates that the calling package is authorized to browse a
@@ -44,7 +44,6 @@ import java.util.Map;
  * paste into allowed_media_browser_callers.xml. Spaces and newlines are ignored.
  */
 public class PackageValidator {
-    private static final String TAG = LogHelper.makeLogTag(PackageValidator.class);
 
     /**
      * Map allowed callers' certificate keys to the expected caller information.
@@ -77,15 +76,14 @@ public class PackageValidator {
                         infos = new ArrayList<>();
                         validCertificates.put(certificate, infos);
                     }
-                    LogHelper.v(TAG, "Adding allowed caller: ", info.name,
-                        " package=", info.packageName, " release=", info.release,
-                        " certificate=", certificate);
+                    Timber.v("Adding allowed caller: %s, package=%s release=%s certificate=%s",
+                            info.name, info.packageName, info.release, certificate);
                     infos.add(info);
                 }
                 eventType = parser.next();
             }
         } catch (XmlPullParserException | IOException e) {
-            LogHelper.e(TAG, e, "Could not read allowed callers from XML.");
+            Timber.e(e, "Could not read allowed callers from XML.");
         }
         return validCertificates;
     }
@@ -105,11 +103,11 @@ public class PackageValidator {
             packageInfo = packageManager.getPackageInfo(
                     callingPackage, PackageManager.GET_SIGNATURES);
         } catch (PackageManager.NameNotFoundException e) {
-            LogHelper.w(TAG, e, "Package manager can't find package: ", callingPackage);
+            Timber.w(e, "Package manager can't find package: %s", callingPackage);
             return false;
         }
         if (packageInfo.signatures.length != 1) {
-            LogHelper.w(TAG, "Caller has more than one signature certificate!");
+            Timber.w("Caller has more than one signature certificate!");
             return false;
         }
         String signature = Base64.encodeToString(
@@ -118,11 +116,11 @@ public class PackageValidator {
         // Test for known signatures:
         ArrayList<CallerInfo> validCallers = mValidCertificates.get(signature);
         if (validCallers == null) {
-            LogHelper.v(TAG, "Signature for caller ", callingPackage, " is not valid: \n"
-                , signature);
+            Timber.v("Signature for caller %s is not valid: \n %s",
+                    callingPackage, signature);
             if (mValidCertificates.isEmpty()) {
-                LogHelper.w(TAG, "The list of valid certificates is empty. Either your file ",
-                        "res/xml/allowed_media_browser_callers.xml is empty or there was an error ",
+                Timber.w("The list of valid certificates is empty. Either your file " +
+                        "res/xml/allowed_media_browser_callers.xml is empty or there was an error " +
                         "while reading it. Check previous log messages.");
             }
             return false;
@@ -132,17 +130,18 @@ public class PackageValidator {
         StringBuffer expectedPackages = new StringBuffer();
         for (CallerInfo info: validCallers) {
             if (callingPackage.equals(info.packageName)) {
-                LogHelper.v(TAG, "Valid caller: ", info.name, "  package=", info.packageName,
-                    " release=", info.release);
+                Timber.v("Valid caller: %s package=%s release=%s",
+                        info.name, info.packageName, info.release);
                 return true;
             }
             expectedPackages.append(info.packageName).append(' ');
         }
 
-        LogHelper.i(TAG, "Caller has a valid certificate, but its package doesn't match any ",
-            "expected package for the given certificate. Caller's package is ", callingPackage,
-            ". Expected packages as defined in res/xml/allowed_media_browser_callers.xml are (",
-            expectedPackages, "). This caller's certificate is: \n", signature);
+        Timber.i("Caller has a valid certificate, but its package doesn't match any expected " +
+                        "package for the given certificate. Caller's package is %s . Expected " +
+                        "packages as defined in res/xml/allowed_media_browser_callers.xml are (%s). " +
+                        "This caller's certificate is: \n%s",
+                callingPackage, expectedPackages, signature);
 
         return false;
     }

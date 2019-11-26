@@ -1,7 +1,5 @@
 package com.bayapps.android.robophish.model;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,12 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import timber.log.Timber;
+
 /**
  * Created by mvoytovich on 1/13/15.
  */
 public class ParseUtils {
-
-    private static final String TAG = ParseUtils.class.getSimpleName();
 
     public static Show parseShow(String jsonString) {
         JSONObject json = null;
@@ -38,7 +36,7 @@ public class ParseUtils {
             show =  parseShowData(data);
 
         } catch (Exception e) {
-            Log.d(TAG, "failed to parse show!");
+            Timber.d("failed to parse show!");
             e.printStackTrace();
             return null;
         }
@@ -85,7 +83,7 @@ public class ParseUtils {
             if (tracks != null) {
                 for (int i = 0; i < tracks.length(); i++) {
                     JSONObject jsonTrack = tracks.getJSONObject(i);
-                    Log.d(TAG, jsonTrack.toString());
+                    Timber.d(jsonTrack.toString());
 
                     int id = jsonTrack.getInt("id");
                     String title = jsonTrack.getString("title");
@@ -109,7 +107,7 @@ public class ParseUtils {
             show.setSbd(sbd);
 
         } catch (Exception e) {
-            Log.d(TAG, "failed to parse show!");
+            Timber.d("failed to parse show!");
             e.printStackTrace();
             return null;
         }

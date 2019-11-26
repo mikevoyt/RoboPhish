@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.bayapps.android.robophish.model.ParseUtils;
 import com.bayapps.android.robophish.model.Show;
@@ -23,14 +22,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import timber.log.Timber;
 
 /**
  * Created by mikevoyt on 8/13/16.
  */
-
 public class Downloader {
 
-    private static final String TAG = LogHelper.makeLogTag(Downloader.class);
     private static ArrayList<Long> mDownloadIds = new ArrayList<>();
 
 
@@ -54,7 +52,7 @@ public class Downloader {
 
             request.setTitle(title);
             request.setDescription("Downloading " + title);
-            Log.d(TAG, "downloading " + url);
+            Timber.d("downloading " + url);
 
             request.setVisibleInDownloadsUi(true);
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -72,7 +70,7 @@ public class Downloader {
 
         request.setTitle(title);
         request.setDescription("Downloading " + title);
-        Log.d(TAG, "downloading " + url);
+        Timber.d("downloading %s", url);
 
         request.setVisibleInDownloadsUi(true);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -91,7 +89,7 @@ public class Downloader {
 
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0L);
             if (!mDownloadIds.contains(id)) {
-                Log.v(TAG, "Ingnoring unrelated download " + id);
+                Timber.v("Ingnoring unrelated download %s", id);
                 return;
             }
 
@@ -102,19 +100,19 @@ public class Downloader {
 
             // it shouldn't be empty, but just in case
             if (!cursor.moveToFirst()) {
-                Log.e(TAG, "Empty row");
+                Timber.e("Empty row");
                 return;
             }
 
             int statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
             if (DownloadManager.STATUS_SUCCESSFUL != cursor.getInt(statusIndex)) {
-                Log.w(TAG, "Download Failed");
+                Timber.w("Download Failed");
                 return;
             }
 
             int uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
             String downloadedPackageUriString = cursor.getString(uriIndex);
-            Log.d(TAG, "downloaded " + downloadedPackageUriString);
+            Timber.d("downloaded %s", downloadedPackageUriString);
         }
     };
 }

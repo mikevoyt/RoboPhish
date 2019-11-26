@@ -15,17 +15,20 @@
  */
 package com.bayapps.android.robophish.ui;
 
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaBrowserCompat;
 import android.text.TextUtils;
 
+import androidx.fragment.app.FragmentTransaction;
+
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
+
+import timber.log.Timber;
 
 /**
  * Main activity for the music player.
@@ -36,7 +39,6 @@ import com.bayapps.android.robophish.utils.MediaIDHelper;
 public class MusicPlayerActivity extends BaseActivity
         implements MediaBrowserFragment.MediaFragmentListener {
 
-    private static final String TAG = LogHelper.makeLogTag(MusicPlayerActivity.class);
     private static final String SAVED_MEDIA_ID="com.example.android.uamp.MEDIA_ID";
     private static final String FRAGMENT_TAG = "uamp_list_container";
 
@@ -56,7 +58,7 @@ public class MusicPlayerActivity extends BaseActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "Activity onCreate");
+        Timber.d("Activity onCreate");
 
         setContentView(R.layout.activity_player);
 
@@ -80,7 +82,7 @@ public class MusicPlayerActivity extends BaseActivity
 
     @Override
     public void onMediaItemSelected(MediaBrowserCompat.MediaItem item) {
-        LogHelper.d(TAG, "onMediaItemSelected, mediaId=" + item.getMediaId());
+        Timber.d("onMediaItemSelected, mediaId=%s", item.getMediaId());
         if (item.isPlayable()) {
             getSupportMediaController().getTransportControls()
                     .playFromMediaId(item.getMediaId(), null);
@@ -100,14 +102,14 @@ public class MusicPlayerActivity extends BaseActivity
             navigateToBrowser(title, subtitle, item.getMediaId());
 
         } else {
-            LogHelper.w(TAG, "Ignoring MediaItem that is neither browsable nor playable: ",
-                    "mediaId=", item.getMediaId());
+            Timber.w("Ignoring MediaItem that is neither browsable nor playable: mediaId=%s",
+                    item.getMediaId());
         }
     }
 
     @Override
     public void setToolbarTitle(CharSequence title) {
-        LogHelper.d(TAG, "Setting toolbar title to ", title);
+        Timber.d("Setting toolbar title to %s", title);
         if (title == null) {
             title = getString(R.string.app_name);
         }
@@ -116,7 +118,7 @@ public class MusicPlayerActivity extends BaseActivity
 
     @Override
     public void setToolbarSubTitle(CharSequence subTitlle) {
-        LogHelper.d(TAG, "Setting toolbar title to ", subTitlle);
+        Timber.d("Setting toolbar title to %s", subTitlle);
         if (subTitlle == null) {
             subTitlle = "";
         }
@@ -130,7 +132,8 @@ public class MusicPlayerActivity extends BaseActivity
 
     @Override
     protected void onNewIntent(Intent intent) {
-        LogHelper.d(TAG, "onNewIntent, intent=" + intent);
+        super.onNewIntent(intent);
+        Timber.d("onNewIntent, intent=%s", intent);
         initializeFromParams(null, intent);
         startFullScreenActivityIfNeeded(intent);
     }
@@ -140,8 +143,7 @@ public class MusicPlayerActivity extends BaseActivity
             Intent fullScreenIntent = new Intent(this, FullScreenPlayerActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP |
                     Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION,
-                    intent.getParcelableExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION));
+                .putExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION, (Parcelable) intent.getParcelableExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION));
             startActivity(fullScreenIntent);
         }
     }
@@ -154,7 +156,7 @@ public class MusicPlayerActivity extends BaseActivity
         if (intent.getAction() != null
             && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)) {
             mVoiceSearchParams = intent.getExtras();
-            LogHelper.d(TAG, "Starting from voice search query=",
+            Timber.d("Starting from voice search query=%s",
                 mVoiceSearchParams.getString(SearchManager.QUERY));
         } else if (intent.getAction() != null
                 && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_SEARCH)) {
@@ -185,13 +187,13 @@ public class MusicPlayerActivity extends BaseActivity
     }
 
     private void navigateToBrowser(String title, String subtitle, String mediaId) {
-        LogHelper.d(TAG, "navigateToBrowser, mediaId=" + mediaId);
+        Timber.d("navigateToBrowser, mediaId=%s", mediaId);
         MediaBrowserFragment fragment = getBrowseFragment();
 
         if (fragment == null || !TextUtils.equals(fragment.getMediaId(), mediaId)) {
             fragment = new MediaBrowserFragment();
             fragment.setMediaId(title, subtitle, mediaId);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(
                 R.animator.slide_in_from_right, R.animator.slide_out_to_left,
                 R.animator.slide_in_from_left, R.animator.slide_out_to_right);
@@ -214,7 +216,7 @@ public class MusicPlayerActivity extends BaseActivity
     }
 
     private MediaBrowserFragment getBrowseFragment() {
-        return (MediaBrowserFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        return (MediaBrowserFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
     }
 
     @Override

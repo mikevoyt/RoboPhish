@@ -24,7 +24,6 @@ import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 
 import java.util.ArrayList;
@@ -41,13 +40,13 @@ import static com.bayapps.android.robophish.utils.MediaIDHelper.createMediaID;
 
 import com.google.common.collect.Lists;
 
+import timber.log.Timber;
+
 /**
  * Simple data provider for music tracks. The actual metadata source is delegated to a
  * MusicProviderSource defined by a constructor argument of this class.
  */
 public class MusicProvider {
-
-    private static final String TAG = LogHelper.makeLogTag(MusicProvider.class);
 
     private MusicProviderSource mSource;
 
@@ -199,7 +198,7 @@ public class MusicProvider {
                 protected State doInBackground(Void... params) {
 
                     final String year = MediaIDHelper.getHierarchy(mediaId)[1];
-                    LogHelper.w(TAG, "year: ", year);
+                    Timber.w("year: %s", year);
 
                     List<MediaMetadataCompat> shows = mShowsInYearYear.get(year);
                     if (shows == null || shows.isEmpty()) {
@@ -230,7 +229,7 @@ public class MusicProvider {
                 protected State doInBackground(Void... params) {
 
                     final String showId = MediaIDHelper.getHierarchy(mediaId)[1];
-                    LogHelper.w(TAG, "showId: ", showId);
+                    Timber.w("showId: %s", showId);
 
                     List<MediaMetadataCompat> tracks = mTracksInShow.get(showId);
 
@@ -257,7 +256,7 @@ public class MusicProvider {
             }.execute();
 
         } else {
-            LogHelper.w(TAG, "Skipping unmatched mediaId: ", mediaId);
+            Timber.w("Skipping unmatched mediaId: %s", mediaId);
         }
     }
 

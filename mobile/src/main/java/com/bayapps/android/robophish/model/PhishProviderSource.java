@@ -1,10 +1,7 @@
 package com.bayapps.android.robophish.model;
 
 import android.support.v4.media.MediaMetadataCompat;
-import android.util.Log;
 
-import com.bayapps.android.robophish.utils.LogHelper;
-import com.google.common.collect.Lists;
 import com.loopj.android.http.*;
 import org.json.*;
 
@@ -13,16 +10,15 @@ import java.util.Collections;
 import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
+import timber.log.Timber;
 
 /**
  * Created by mikevoyt on 7/27/16.
  */
-
 public class PhishProviderSource implements MusicProviderSource  {
 
     private static ArrayList<String> mImages = new ArrayList<>();
     private Random mRandomGenerator;
-    private static final String TAG = LogHelper.makeLogTag(PhishProviderSource.class);
 
     PhishProviderSource() {
         mRandomGenerator = new Random();
@@ -100,7 +96,6 @@ public class PhishProviderSource implements MusicProviderSource  {
         RequestParams yearsParams = new RequestParams();
         yearsParams.put("include_show_counts", "true");
         HttpClient.get("years.json", yearsParams, new JsonHttpResponseHandler() {
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 ArrayList<YearData> yearEntries = ParseUtils.parseYears(response);
@@ -110,7 +105,7 @@ public class PhishProviderSource implements MusicProviderSource  {
                 if (yearEntries != null) {
                     for (YearData year : yearEntries) {
 
-                        Log.d(TAG, "year: " + year.getYear());
+                        Timber.d("year: %s", year.getYear());
                         years.add(year);
                     }
                 }
@@ -131,8 +126,8 @@ public class PhishProviderSource implements MusicProviderSource  {
 
                 if (showsArray != null) {
                     for (Show show: showsArray) {
-                        LogHelper.w(TAG, "date: ", show.getDateSimple());
-                        LogHelper.w(TAG, "venue: ", show.getVenueName());
+                        Timber.w("date: %s", show.getDateSimple());
+                        Timber.w("venue: %s", show.getVenueName());
 
                         String id = String.valueOf(show.getId());
 
@@ -173,9 +168,9 @@ public class PhishProviderSource implements MusicProviderSource  {
 
                 if (show != null) {
                     for (Track track: show.getTracks()) {
-                        Log.d(TAG, "name: " + track.getTitle());
+                        Timber.d("name: %s", track.getTitle());
                         String image = getRandomImage();
-                        Log.d(TAG, "image: " + image);
+                        Timber.d("image: %s", image);
 
                         String id = String.valueOf(track.getId());
 
