@@ -1,11 +1,9 @@
 package com.bayapps.android.robophish.model;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import timber.log.Timber;
@@ -15,19 +13,9 @@ import timber.log.Timber;
  */
 public class ParseUtils {
 
-    public static Show parseShow(String jsonString) {
-        JSONObject json = null;
-        try {
-            json = new JSONObject(jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return parseShow(json);
-    }
-
     public static Show parseShow(JSONObject json) {
 
-        Show show = null;
+        Show show;
 
         try {
 
@@ -46,7 +34,7 @@ public class ParseUtils {
 
     private static Show parseShowData(JSONObject data) {
 
-        JSONArray tracks = null;
+        JSONArray tracks;
 
         Show show = new Show();
 
@@ -113,55 +101,5 @@ public class ParseUtils {
         }
 
         return show;
-    }
-
-    public static ArrayList<YearData> parseYears(JSONObject json) {
-
-        ArrayList<YearData> yearList = new ArrayList<>();
-
-        try {
-            //parse 'data' which contains the array of years
-            JSONArray years = json.getJSONArray("data");
-            for (int i = 0; i < years.length(); i++) {
-                JSONObject entry = years.getJSONObject(i);
-                String year = entry.getString("date");
-                String showCount = entry.getString("show_count");
-                YearData data = new YearData(year, showCount);
-                yearList.add(data);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return yearList;
-    }
-
-    //parses basic data for array of shows, such as that obtained when retrieving all shows
-    //for a given year with http://phish.in/api/v1/years/NNNN.json.
-    //Returns an array of shows, with incomplete data (e.g., there are no tracks)
-    public static ArrayList<Show> parseShows(String jsonString) {
-        JSONObject json = null;
-        try {
-            json = new JSONObject(jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return parseShows(json);
-    }
-
-    public static ArrayList<Show> parseShows(JSONObject json) {
-
-        ArrayList<Show> showsList = new ArrayList<Show>();
-
-        try {
-            //parse 'data' which contains the array of shows
-            JSONArray shows = json.getJSONArray("data");
-            for (int i = 0; i < shows.length(); i++) {
-                Show show = parseShowData(shows.getJSONObject(i));
-                showsList.add(show);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return showsList;
     }
 }

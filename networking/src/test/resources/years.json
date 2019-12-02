@@ -1,0 +1,120 @@
+{
+  "success": true,
+  "total_entries": 1,
+  "total_pages": 1,
+  "page": 1,
+  "data": [
+    {
+      "date": "1983-1987",
+      "show_count": 34
+    },
+    {
+      "date": "1988",
+      "show_count": 44
+    },
+    {
+      "date": "1989",
+      "show_count": 63
+    },
+    {
+      "date": "1990",
+      "show_count": 92
+    },
+    {
+      "date": "1991",
+      "show_count": 116
+    },
+    {
+      "date": "1992",
+      "show_count": 108
+    },
+    {
+      "date": "1993",
+      "show_count": 109
+    },
+    {
+      "date": "1994",
+      "show_count": 124
+    },
+    {
+      "date": "1995",
+      "show_count": 82
+    },
+    {
+      "date": "1996",
+      "show_count": 71
+    },
+    {
+      "date": "1997",
+      "show_count": 81
+    },
+    {
+      "date": "1998",
+      "show_count": 70
+    },
+    {
+      "date": "1999",
+      "show_count": 64
+    },
+    {
+      "date": "2000",
+      "show_count": 56
+    },
+    {
+      "date": "2002",
+      "show_count": 3
+    },
+    {
+      "date": "2003",
+      "show_count": 45
+    },
+    {
+      "date": "2004",
+      "show_count": 19
+    },
+    {
+      "date": "2009",
+      "show_count": 51
+    },
+    {
+      "date": "2010",
+      "show_count": 50
+    },
+    {
+      "date": "2011",
+      "show_count": 41
+    },
+    {
+      "date": "2012",
+      "show_count": 37
+    },
+    {
+      "date": "2013",
+      "show_count": 41
+    },
+    {
+      "date": "2014",
+      "show_count": 41
+    },
+    {
+      "date": "2015",
+      "show_count": 31
+    },
+    {
+      "date": "2016",
+      "show_count": 45
+    },
+    {
+      "date": "2017",
+      "show_count": 28
+    },
+    {
+      "date": "2018",
+      "show_count": 39
+    },
+    {
+      "date": "2019",
+      "show_count": 27
+    }
+  ]
+}

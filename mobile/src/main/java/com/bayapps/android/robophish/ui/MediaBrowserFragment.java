@@ -270,7 +270,7 @@ public class MediaBrowserFragment extends Fragment {
                         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
-                                String display = "";
+                                StringBuilder display = new StringBuilder();
 
                                 int len = response.length();
                                 for (int i=0; i<len; i++) {
@@ -285,11 +285,11 @@ public class MediaBrowserFragment extends Fragment {
 
                                     String reviewSubs = review.replaceAll("\n", "<br/>");
 
-                                    display += "<h2>" + author + "</h2>" + "<h4>" + reviewDate + "</h4>";
-                                    display += reviewSubs + "<br/>";
+                                    display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
+                                    display.append(reviewSubs).append("<br/>");
                                 }
 
-                                reviews.loadData(display, "text/html", null);
+                                reviews.loadData(display.toString(), "text/html", null);
                             }  catch (JSONException e) {
                                 e.printStackTrace();
                             }

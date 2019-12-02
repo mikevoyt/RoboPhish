@@ -13,22 +13,17 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    ext.kotlinVersion = '1.3.60'
+subprojects {
     repositories {
         google()
         jcenter()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
-}
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
+    tasks.withType<KotlinCompile> {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+        kotlinOptions.jvmTarget = "1.8"
     }
 }

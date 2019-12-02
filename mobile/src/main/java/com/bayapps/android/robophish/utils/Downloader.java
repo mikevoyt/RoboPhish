@@ -11,17 +11,10 @@ import android.net.Uri;
 import com.bayapps.android.robophish.model.ParseUtils;
 import com.bayapps.android.robophish.model.Show;
 import com.bayapps.android.robophish.model.Track;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
 import timber.log.Timber;
 
 /**

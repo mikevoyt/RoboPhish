@@ -1,0 +1,373 @@
+{
+  "success": true,
+  "total_entries": 1,
+  "total_pages": 1,
+  "page": 1,
+  "data": {
+    "id": 1941,
+    "date": "2018-07-17",
+    "duration": 10461022,
+    "incomplete": false,
+    "sbd": false,
+    "remastered": false,
+    "tags": [],
+    "tour_id": 103,
+    "venue": {
+      "id": 370,
+      "slug": "lake-tahoe-outdoor-arena-at-harveys",
+      "name": "Lake Tahoe Outdoor Arena at Harveys",
+      "other_names": [],
+      "latitude": 38.962408,
+      "longitude": -119.939903,
+      "shows_count": 6,
+      "location": "Stateline, NV",
+      "updated_at": "2013-10-10T02:53:56Z"
+    },
+    "venue_name": "Lake Tahoe Outdoor Arena at Harveys",
+    "taper_notes": "Phish\nJuly 17th, 2018\nLake Tahoe Outdoor Arena at Harvey's \nStateline, NV\n\nSource: Schoeps mk41v's(DIN)>kc5>m222>nt222>788t + Neumann ak43's(NOS)>lc3>lemosax>788t\nLocation: OTS/LOC\nTransfer: 788t>Wavelab 6>CD Wave>Wavelab 6>Flac\nTaped and Transferred by: Derek Davis\n\nSet 1\n\n01 Intro\n02 Free ~>\n03 Possum\n04 The Moma Dance\n05 Ghost ~>\n06 Funky Bitch\n07 Stash \n08 Character Zero\n\nSet 2\n\n01 Intro\n02 No Men In No Man's Land ~>\n03 Carini ~>\n04 Slave To The Traffic Light\n05 Bouncing Around The Room\n06 Soul Planet ~>\n07 Steam\n08 Harry Hood\nEncore\n09 Contact\n10 Julius\n\n\n\n\n\n\n\n",
+    "likes_count": 6,
+    "tracks": [
+      {
+        "id": 32562,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Free",
+        "position": 1,
+        "duration": 526655,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 0,
+        "slug": "free",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/562/32562.mp3",
+        "song_ids": [
+          276
+        ],
+        "updated_at": "2018-07-20T08:07:29Z"
+      },
+      {
+        "id": 32563,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Possum",
+        "position": 2,
+        "duration": 710060,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 2,
+        "slug": "possum",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/563/32563.mp3",
+        "song_ids": [
+          595
+        ],
+        "updated_at": "2018-07-20T08:07:30Z"
+      },
+      {
+        "id": 32564,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "The Moma Dance",
+        "position": 3,
+        "duration": 837695,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 9,
+        "slug": "the-moma-dance",
+        "tags": [
+          {
+            "id": 4,
+            "name": "Jamcharts",
+            "priority": 4,
+            "group": "Curated Selections",
+            "color": "#888888",
+            "notes": "This cool version has an unusually improvisational outro which builds tension and peaks before flipping back to typical \"Moma\" to conclude.",
+            "transcript": null,
+            "starts_at_second": null,
+            "ends_at_second": null
+          }
+        ],
+        "mp3": "https://phish.in/audio/000/032/564/32564.mp3",
+        "song_ids": [
+          518
+        ],
+        "updated_at": "2018-07-20T08:07:30Z"
+      },
+      {
+        "id": 32565,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Ghost",
+        "position": 4,
+        "duration": 966374,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 10,
+        "slug": "ghost",
+        "tags": [
+          {
+            "id": 4,
+            "name": "Jamcharts",
+            "priority": 4,
+            "group": "Curated Selections",
+            "color": "#888888",
+            "notes": "Page-guided white water rafting trip through a buttressed cathedral of an ice cream sundae. [A spirited first-set version that dives into a lovely Page-driven dreamscape before moving at Fish's urging to a driving, hard rocking jam. The jam closes with an amusing take on the usual \"Ghost\" ending, as the band slows down the tempo while dropping chromatically with each note played, almost like a turntable being played at an increasingly slower speed.]",
+            "transcript": null,
+            "starts_at_second": null,
+            "ends_at_second": null
+          }
+        ],
+        "mp3": "https://phish.in/audio/000/032/565/32565.mp3",
+        "song_ids": [
+          292
+        ],
+        "updated_at": "2018-07-20T08:07:31Z"
+      },
+      {
+        "id": 32566,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Funky Bitch",
+        "position": 5,
+        "duration": 456333,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 3,
+        "slug": "funky-bitch",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/566/32566.mp3",
+        "song_ids": [
+          285
+        ],
+        "updated_at": "2018-07-20T08:07:31Z"
+      },
+      {
+        "id": 32567,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Stash",
+        "position": 6,
+        "duration": 680594,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 0,
+        "slug": "stash",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/567/32567.mp3",
+        "song_ids": [
+          728
+        ],
+        "updated_at": "2018-07-20T08:07:33Z"
+      },
+      {
+        "id": 32568,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Character Zero",
+        "position": 7,
+        "duration": 502491,
+        "jam_starts_at_second": null,
+        "set": "1",
+        "set_name": "Set 1",
+        "likes_count": 0,
+        "slug": "character-zero",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/568/32568.mp3",
+        "song_ids": [
+          147
+        ],
+        "updated_at": "2018-07-20T08:07:33Z"
+      },
+      {
+        "id": 32569,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "No Men In No Man's Land",
+        "position": 8,
+        "duration": 1003207,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 4,
+        "slug": "no-men-in-no-mans-land",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/569/32569.mp3",
+        "song_ids": [
+          940
+        ],
+        "updated_at": "2018-07-20T08:07:34Z"
+      },
+      {
+        "id": 32570,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Carini",
+        "position": 9,
+        "duration": 574015,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 3,
+        "slug": "carini",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/570/32570.mp3",
+        "song_ids": [
+          135
+        ],
+        "updated_at": "2018-07-20T08:07:36Z"
+      },
+      {
+        "id": 32571,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Slave to the Traffic Light",
+        "position": 10,
+        "duration": 520725,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 1,
+        "slug": "slave-to-the-traffic-light",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/571/32571.mp3",
+        "song_ids": [
+          693
+        ],
+        "updated_at": "2018-07-20T08:07:36Z"
+      },
+      {
+        "id": 32572,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Bouncing Around the Room",
+        "position": 11,
+        "duration": 229172,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 0,
+        "slug": "bouncing-around-the-room",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/572/32572.mp3",
+        "song_ids": [
+          111
+        ],
+        "updated_at": "2018-07-20T08:07:37Z"
+      },
+      {
+        "id": 32573,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Soul Planet",
+        "position": 12,
+        "duration": 824189,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 2,
+        "slug": "soul-planet",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/573/32573.mp3",
+        "song_ids": [
+          1010
+        ],
+        "updated_at": "2018-07-20T08:07:38Z"
+      },
+      {
+        "id": 32574,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Steam",
+        "position": 13,
+        "duration": 524016,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 0,
+        "slug": "steam",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/574/32574.mp3",
+        "song_ids": [
+          730
+        ],
+        "updated_at": "2018-07-20T08:07:39Z"
+      },
+      {
+        "id": 32575,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Harry Hood",
+        "position": 14,
+        "duration": 1104640,
+        "jam_starts_at_second": null,
+        "set": "2",
+        "set_name": "Set 2",
+        "likes_count": 6,
+        "slug": "harry-hood",
+        "tags": [
+          {
+            "id": 17,
+            "name": "Tease",
+            "priority": 15,
+            "group": "Song Content",
+            "color": "#888888",
+            "notes": "Spirits in the Material World by The Police",
+            "transcript": null,
+            "starts_at_second": 36,
+            "ends_at_second": null
+          }
+        ],
+        "mp3": "https://phish.in/audio/000/032/575/32575.mp3",
+        "song_ids": [
+          330
+        ],
+        "updated_at": "2018-07-20T08:07:40Z"
+      },
+      {
+        "id": 32576,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Contact",
+        "position": 15,
+        "duration": 397218,
+        "jam_starts_at_second": null,
+        "set": "E",
+        "set_name": "Encore",
+        "likes_count": 2,
+        "slug": "contact",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/576/32576.mp3",
+        "song_ids": [
+          168
+        ],
+        "updated_at": "2018-07-20T08:07:41Z"
+      },
+      {
+        "id": 32577,
+        "show_id": 1941,
+        "show_date": "2018-07-17",
+        "title": "Julius",
+        "position": 16,
+        "duration": 603638,
+        "jam_starts_at_second": null,
+        "set": "E",
+        "set_name": "Encore",
+        "likes_count": 2,
+        "slug": "julius",
+        "tags": [],
+        "mp3": "https://phish.in/audio/000/032/577/32577.mp3",
+        "song_ids": [
+          421
+        ],
+        "updated_at": "2018-07-20T08:07:43Z"
+      }
+    ],
+    "updated_at": "2018-12-21T08:10:32Z"
+  }
+}
