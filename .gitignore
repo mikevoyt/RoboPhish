@@ -18,7 +18,7 @@
 bin/
 gen/
 out/
-release/
+build/release/
 
 # Gradle files
 .gradle/
