@@ -24,11 +24,11 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.os.RemoteException
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
 import androidx.mediarouter.media.MediaRouter
@@ -42,10 +42,8 @@ import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.google.android.gms.cast.ApplicationMetadata
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -107,13 +105,12 @@ import java.lang.ref.WeakReference
  *
  * @see [README.md](README.md) for more details.
  */
-class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, KodeinAware {
+class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, KodeinAware, CoroutineScope by MainScope() {
 
     override val kodein by kodein()
 
     private var mPlaybackManager: PlaybackManager? = null
     private var mSession: MediaSessionCompat? = null
-    private var mMediaNotificationManager: MediaNotificationManager? = null
     private var mSessionExtras: Bundle? = null
     private val mDelayedStopHandler = DelayedStopHandler(this)
     private var mMediaRouter: MediaRouter? = null
@@ -122,8 +119,12 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     private var mCarConnectionReceiver: BroadcastReceiver? = null
 
     private val videoCastManager: VideoCastManager by instance()
-    private val albumArtCache: AlbumArtCache by instance()
     private val musicProvider: MusicProvider by instance()
+    private val picasso: Picasso by instance()
+    private val notificationManager: NotificationManagerCompat by instance()
+    private val mediaNotificationManager: MediaNotificationManager by lazy {
+        MediaNotificationManager(this, picasso, notificationManager)
+    }
 
     /**
      * Consumer responsible for switching the Playback instances depending on whether
@@ -175,7 +176,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         //musicProvider.retrieveMediaAsync(null /* Callback */);
         mPackageValidator = PackageValidator(this)
         val queueManager = QueueManager(musicProvider, resources,
-                albumArtCache,
+                picasso,
                 object : MetadataUpdateListener {
                     override fun onMetadataChanged(metadata: MediaMetadataCompat) {
                         mSession!!.setMetadata(metadata)
@@ -210,11 +211,6 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         CarHelper.setSlotReservationFlags(mSessionExtras, true, true, true)
         mSession!!.setExtras(mSessionExtras)
         mPlaybackManager!!.updatePlaybackState(null)
-        mMediaNotificationManager = try {
-            MediaNotificationManager(this, albumArtCache)
-        } catch (e: RemoteException) {
-            throw IllegalStateException("Could not create a MediaNotificationManager", e)
-        }
         videoCastManager.addVideoCastConsumer(mCastConsumer)
         mMediaRouter = MediaRouter.getInstance(applicationContext)
         registerCarConnectionReceiver()
@@ -245,10 +241,11 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         unregisterCarConnectionReceiver()
         // Service is being killed, so make sure we release our resources
         mPlaybackManager!!.handleStopRequest(null)
-        mMediaNotificationManager!!.stopNotification()
+        mediaNotificationManager.stopNotification()
         videoCastManager.removeVideoCastConsumer(mCastConsumer)
         mDelayedStopHandler.removeCallbacksAndMessages(null)
         mSession!!.release()
+        cancel()
     }
 
     override fun onGetRoot(clientPackageName: String, clientUid: Int,
@@ -274,12 +271,14 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     }
 
     override fun onLoadChildren(parentMediaId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) {
-        Timber.d("OnLoadChildren: parentMediaId=%s", parentMediaId)
-        CoroutineScope(Dispatchers.IO).launch {
-            val media = musicProvider.childeren(parentMediaId)
+        launch {
+            Timber.d("OnLoadChildren: parentMediaId=%s", parentMediaId)
+            withContext(Dispatchers.IO) {
+                val media = musicProvider.childeren(parentMediaId)
 
-            withContext(Dispatchers.Main) {
-                result.sendResult(media)
+                withContext(Dispatchers.Main) {
+                    result.sendResult(media)
+                }
             }
         }
         result.detach()
@@ -310,7 +309,9 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     }
 
     override fun onNotificationRequired() {
-        mMediaNotificationManager!!.startNotification()
+        launch {
+            mediaNotificationManager.startNotification()
+        }
     }
 
     override fun onPlaybackStateUpdated(newState: PlaybackStateCompat) {

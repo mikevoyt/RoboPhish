@@ -17,7 +17,6 @@ package com.bayapps.android.robophish.ui;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,10 +38,10 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.RoboPhishApplicationKt;
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -85,14 +84,9 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
     private final Handler mHandler = new Handler();
     private MediaBrowserCompat mMediaBrowser;
 
-    @Inject AlbumArtCache albumArtCache;
+    @Inject Picasso picasso;
 
-    private final Runnable mUpdateProgressTask = new Runnable() {
-        @Override
-        public void run() {
-            updateProgress();
-        }
-    };
+    private final Runnable mUpdateProgressTask = this::updateProgress;
 
     private final ScheduledExecutorService mExecutorService =
         Executors.newSingleThreadScheduledExecutor();
@@ -313,29 +307,14 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         if (description.getIconUri() == null) {
             return;
         }
+
         String artUrl = description.getIconUri().toString();
         mCurrentArtUrl = artUrl;
-        AlbumArtCache cache = albumArtCache;
-        Bitmap art = cache.getBigImage(artUrl);
-        if (art == null) {
-            art = description.getIconBitmap();
-        }
-        if (art != null) {
-            // if we have the art cached or from the MediaDescription, use it:
-            mBackgroundImage.setImageBitmap(art);
-        } else {
-            // otherwise, fetch a high res version and update:
-            cache.fetch(artUrl, new AlbumArtCache.FetchListener() {
-                @Override
-                public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
-                    // sanity check, in case a new fetch request has been done while
-                    // the previous hasn't yet returned:
-                    if (artUrl.equals(mCurrentArtUrl)) {
-                        mBackgroundImage.setImageBitmap(bitmap);
-                    }
-                }
-            });
-        }
+
+        picasso.load(artUrl)
+                .fit()
+                .centerInside()
+                .into(mBackgroundImage);
     }
 
 

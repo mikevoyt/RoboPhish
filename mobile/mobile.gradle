@@ -107,6 +107,7 @@ dependencies {
     implementation 'org.kodein.di:kodein-di-framework-android-x:6.4.0'
     implementation 'org.kodein.di:kodein-di-jxinject-jvm:6.4.0'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'

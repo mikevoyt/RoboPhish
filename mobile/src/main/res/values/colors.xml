@@ -31,4 +31,11 @@
     <color name="background_gradient_start">#000000</color>
     <color name="background_gradient_end">#DDDDDD</color>
     <color name="default_background">#0096a6</color>
+
+    <color name="primaryColor">#ffff5722</color>
+    <color name="primaryDarkColor">#ffbf360c</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="accentColor">#ffff5722</color>
+    <color name="secondaryTextColor">#89000000</color>
+    <color name="contentBackground">#fffafafa</color>
 </resources>
