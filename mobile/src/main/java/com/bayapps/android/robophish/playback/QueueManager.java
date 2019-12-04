@@ -49,19 +49,24 @@ public class QueueManager {
     private MusicProvider mMusicProvider;
     private MetadataUpdateListener mListener;
     private Resources mResources;
+    private AlbumArtCache albumArtCache;
 
     // "Now playing" queue:
     private List<MediaSessionCompat.QueueItem> mPlayingQueue;
     private int mCurrentIndex;
 
-    public QueueManager(@NonNull MusicProvider musicProvider,
-                        @NonNull Resources resources,
-                        @NonNull MetadataUpdateListener listener) {
+    public QueueManager(
+            @NonNull MusicProvider musicProvider,
+            @NonNull Resources resources,
+            @NonNull AlbumArtCache albumArtCache,
+            @NonNull MetadataUpdateListener listener
+    ) {
         this.mMusicProvider = musicProvider;
         this.mListener = listener;
         this.mResources = resources;
+        this.albumArtCache = albumArtCache;
 
-        mPlayingQueue = Collections.synchronizedList(new ArrayList<MediaSessionCompat.QueueItem>());
+        mPlayingQueue = Collections.synchronizedList(new ArrayList<>());
         mCurrentIndex = 0;
     }
 
@@ -218,7 +223,7 @@ public class QueueManager {
         if (metadata.getDescription().getIconBitmap() == null &&
                 metadata.getDescription().getIconUri() != null) {
             String albumUri = metadata.getDescription().getIconUri().toString();
-            AlbumArtCache.getInstance().fetch(albumUri, new AlbumArtCache.FetchListener() {
+            albumArtCache.fetch(albumUri, new AlbumArtCache.FetchListener() {
                 @Override
                 public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
                     mMusicProvider.updateMusicArt(musicId, bitmap, icon);

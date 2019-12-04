@@ -42,11 +42,14 @@ import android.widget.TextView;
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -81,6 +84,8 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
     private String mCurrentArtUrl;
     private final Handler mHandler = new Handler();
     private MediaBrowserCompat mMediaBrowser;
+
+    @Inject AlbumArtCache albumArtCache;
 
     private final Runnable mUpdateProgressTask = new Runnable() {
         @Override
@@ -133,68 +138,62 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_player);
+
+        RoboPhishApplicationKt.inject(this);
+
         initializeToolbar();
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("");
         }
 
-        mBackgroundImage = (ImageView) findViewById(R.id.background_image);
+        mBackgroundImage = findViewById(R.id.background_image);
         mPauseDrawable = ContextCompat.getDrawable(this, R.drawable.uamp_ic_pause_white_48dp);
         mPlayDrawable = ContextCompat.getDrawable(this, R.drawable.uamp_ic_play_arrow_white_48dp);
-        mPlayPause = (ImageView) findViewById(R.id.play_pause);
-        mSkipNext = (ImageView) findViewById(R.id.next);
-        mSkipPrev = (ImageView) findViewById(R.id.prev);
-        mStart = (TextView) findViewById(R.id.startText);
-        mEnd = (TextView) findViewById(R.id.endText);
-        mSeekbar = (SeekBar) findViewById(R.id.seekBar1);
-        mLine1 = (TextView) findViewById(R.id.line1);
-        mLine2 = (TextView) findViewById(R.id.line2);
-        mLine3 = (TextView) findViewById(R.id.line3);
-        mLine4 = (TextView) findViewById(R.id.line4);
-        mLine5 = (TextView) findViewById(R.id.line5);
-        mLoading = (ProgressBar) findViewById(R.id.progressBar1);
+        mPlayPause = findViewById(R.id.play_pause);
+        mSkipNext = findViewById(R.id.next);
+        mSkipPrev = findViewById(R.id.prev);
+        mStart = findViewById(R.id.startText);
+        mEnd = findViewById(R.id.endText);
+        mSeekbar = findViewById(R.id.seekBar1);
+        mLine1 = findViewById(R.id.line1);
+        mLine2 = findViewById(R.id.line2);
+        mLine3 = findViewById(R.id.line3);
+        mLine4 = findViewById(R.id.line4);
+        mLine5 = findViewById(R.id.line5);
+        mLoading = findViewById(R.id.progressBar1);
         mControllers = findViewById(R.id.controllers);
 
-        mSkipNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaControllerCompat.TransportControls controls =
-                    getSupportMediaController().getTransportControls();
-                controls.skipToNext();
-            }
+        mSkipNext.setOnClickListener(v -> {
+            MediaControllerCompat.TransportControls controls =
+                getSupportMediaController().getTransportControls();
+            controls.skipToNext();
         });
 
-        mSkipPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaControllerCompat.TransportControls controls =
-                    getSupportMediaController().getTransportControls();
-                controls.skipToPrevious();
-            }
+        mSkipPrev.setOnClickListener(v -> {
+            MediaControllerCompat.TransportControls controls =
+                getSupportMediaController().getTransportControls();
+            controls.skipToPrevious();
         });
 
-        mPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PlaybackStateCompat state = getSupportMediaController().getPlaybackState();
-                if (state != null) {
-                    MediaControllerCompat.TransportControls controls =
-                            getSupportMediaController().getTransportControls();
-                    switch (state.getState()) {
-                        case PlaybackStateCompat.STATE_PLAYING: // fall through
-                        case PlaybackStateCompat.STATE_BUFFERING:
-                            controls.pause();
-                            stopSeekbarUpdate();
-                            break;
-                        case PlaybackStateCompat.STATE_PAUSED:
-                        case PlaybackStateCompat.STATE_STOPPED:
-                            controls.play();
-                            scheduleSeekbarUpdate();
-                            break;
-                        default:
-                            Timber.d("onClick with state %s", state.getState());
-                    }
+        mPlayPause.setOnClickListener(v -> {
+            PlaybackStateCompat state = getSupportMediaController().getPlaybackState();
+            if (state != null) {
+                MediaControllerCompat.TransportControls controls =
+                        getSupportMediaController().getTransportControls();
+                switch (state.getState()) {
+                    case PlaybackStateCompat.STATE_PLAYING: // fall through
+                    case PlaybackStateCompat.STATE_BUFFERING:
+                        controls.pause();
+                        stopSeekbarUpdate();
+                        break;
+                    case PlaybackStateCompat.STATE_PAUSED:
+                    case PlaybackStateCompat.STATE_STOPPED:
+                        controls.play();
+                        scheduleSeekbarUpdate();
+                        break;
+                    default:
+                        Timber.d("onClick with state %s", state.getState());
                 }
             }
         });
@@ -316,7 +315,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         }
         String artUrl = description.getIconUri().toString();
         mCurrentArtUrl = artUrl;
-        AlbumArtCache cache = AlbumArtCache.getInstance();
+        AlbumArtCache cache = albumArtCache;
         Bitmap art = cache.getBigImage(artUrl);
         if (art == null) {
             art = description.getIconBitmap();

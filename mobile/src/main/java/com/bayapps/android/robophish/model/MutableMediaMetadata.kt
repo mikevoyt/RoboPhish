@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.bayapps.android.robophish.model
 
-package com.bayapps.android.robophish.model;
+import android.support.v4.media.MediaMetadataCompat
 
-import android.support.v4.media.MediaMetadataCompat;
-
-import java.util.ArrayList;
-
-public interface MusicProviderSource {
-    String CUSTOM_METADATA_TRACK_SOURCE = "__SOURCE__";
-    ArrayList<YearData> years();
-    Iterable<MediaMetadataCompat> showsInYear(String year);
-    Iterable<MediaMetadataCompat> tracksInShow(String showId);
-}
+/**
+ * Holder class that encapsulates a MediaMetadata and allows the actual metadata to be modified
+ * without requiring to rebuild the collections the metadata is in.
+ */
+data class MutableMediaMetadata(val trackId: String, var metadata: MediaMetadataCompat)
