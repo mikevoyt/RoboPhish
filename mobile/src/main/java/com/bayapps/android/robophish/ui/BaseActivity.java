@@ -34,12 +34,12 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.RoboPhishApplicationKt;
 import com.bayapps.android.robophish.utils.NetworkHelper;
-import com.bayapps.android.robophish.utils.ResourceHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -68,6 +68,8 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         RoboPhishApplicationKt.inject(this);
         checkPlayServices();
 
+        // Areitz: I think this can be removed since we don't have an icon that's the
+        // same color as our primary icon.
         if (Build.VERSION.SDK_INT >= 21) {
             // Since our app icon has the same color as colorPrimary, our entry in the Recent Apps
             // list gets weird. We need to change either the icon or the color
@@ -75,8 +77,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
             ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
                     getTitle().toString(),
                     BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_white),
-                    ResourceHelper.getThemeColor(this, R.attr.colorPrimary,
-                            android.R.color.darker_gray));
+                    ContextCompat.getColor(this, R.color.primaryColor));
             setTaskDescription(taskDesc);
         }
 
