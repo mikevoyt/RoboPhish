@@ -11,7 +11,8 @@ import java.util.*
 class DateKtTest {
     @Test
     fun shouldFormatDate() {
-        val result = Date.from(Instant.ofEpochSecond(0)).toSimpleFormat()
-        assertThat(result).isEqualTo("1969.12.31")
+        val data = GregorianCalendar(1999, 11, 31).time
+        val result = data.toSimpleFormat()
+        assertThat(result).isEqualTo("1999.12.31")
     }
 }

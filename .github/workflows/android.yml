@@ -14,4 +14,4 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Gradle
-      run: ./gradlew build --no-daemon -Dorg.gradle.jvmargs="-Xmx4G -Xms1G -XX:+AggressiveOpts -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" --no-build-cache 
+      run: ./gradlew build --no-daemon -DROBOPHISH_ACCEPT_BUILD_SCAN_AGREEMENT=yes -Dorg.gradle.jvmargs="-Xmx4G -Xms1G -XX:+AggressiveOpts -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" --no-build-cache
