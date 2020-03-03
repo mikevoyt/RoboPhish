@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "1004493090294",
+    "firebase_url": "https://robo-phish-693bc.firebaseio.com",
+    "project_id": "robo-phish-693bc",
+    "storage_bucket": "robo-phish-693bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004493090294:android:a87b468e1fc0b8c147abd7",
+        "android_client_info": {
+          "package_name": "com.bayapps.android.robophish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004493090294-8oh7mpmq8d2oajlkj6dtuae69g7bt6ck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bayapps.android.robophish",
+            "certificate_hash": "0e464cb76989895e7562ececf9056f99223692b0"
+          }
+        },
+        {
+          "client_id": "1004493090294-vhrtfr16v8hhenq1tgjbp7tk1ij1j097.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrkIj2uAnRbyq0PCkfummWFUsalOxqunU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004493090294-vhrtfr16v8hhenq1tgjbp7tk1ij1j097.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004493090294:android:fa175a328118fc9547abd7",
+        "android_client_info": {
+          "package_name": "com.bayapps.android.robophish.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004493090294-ubpe8500pfo9n24qfig55nkegqpci3td.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bayapps.android.robophish.debug",
+            "certificate_hash": "0e464cb76989895e7562ececf9056f99223692b0"
+          }
+        },
+        {
+          "client_id": "1004493090294-vhrtfr16v8hhenq1tgjbp7tk1ij1j097.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrkIj2uAnRbyq0PCkfummWFUsalOxqunU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004493090294-vhrtfr16v8hhenq1tgjbp7tk1ij1j097.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
