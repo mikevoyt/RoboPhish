@@ -19,7 +19,7 @@ public class Show {
     private ArrayList<Track> mTracks;
 
     public Show() {
-        this.mTracks = new ArrayList<Track>();
+        this.mTracks = new ArrayList<>();
     }
 
     public long getId() {

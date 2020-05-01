@@ -15,40 +15,58 @@
  */
 package com.bayapps.android.robophish.ui;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
+import androidx.annotation.NonNull;
+
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
 import com.bayapps.android.robophish.utils.NetworkHelper;
 import com.bayapps.android.robophish.utils.ResourceHelper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
+import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * Base activity for activities that need to show a playback control fragment when media is playing.
  */
 public abstract class BaseActivity extends ActionBarCastActivity implements MediaBrowserProvider {
 
-    private static final String TAG = LogHelper.makeLogTag(BaseActivity.class);
-
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private MediaBrowserCompat mMediaBrowser;
     private PlaybackControlsFragment mControlsFragment;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private boolean isReceiverRegistered;
+
+    @Inject GoogleApiAvailability googleApiAvailability;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.d("Activity onCreate");
 
-        LogHelper.d(TAG, "Activity onCreate");
+        RoboPhishApplicationKt.inject(this);
+        checkPlayServices();
 
         if (Build.VERSION.SDK_INT >= 21) {
             // Since our app icon has the same color as colorPrimary, our entry in the Recent Apps
@@ -65,16 +83,41 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         // Connect a media browser just to get the media session token. There are other ways
         // this can be done, for example by sharing the session token directly.
         mMediaBrowser = new MediaBrowserCompat(this,
-            new ComponentName(this, MusicService.class), mConnectionCallback, null);
+                new ComponentName(this, MusicService.class), mConnectionCallback, null);
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+            }
+        };
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode == ConnectionResult.SUCCESS) {
+            return true;
+        }
+        return false;  //just don't start RegistrationIntentService if not available
+    }
+
+    public MediaControllerCompat getSupportMediaController() {
+        return MediaControllerCompat.getMediaController(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        LogHelper.d(TAG, "Activity onStart");
+        Timber.d("Activity onStart");
 
-        mControlsFragment = (PlaybackControlsFragment) getFragmentManager()
-            .findFragmentById(R.id.fragment_playback_controls);
+        mControlsFragment = (PlaybackControlsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_playback_controls);
         if (mControlsFragment == null) {
             throw new IllegalStateException("Mising fragment with id 'controls'. Cannot continue.");
         }
@@ -87,9 +130,10 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     @Override
     protected void onStop() {
         super.onStop();
-        LogHelper.d(TAG, "Activity onStop");
-        if (getSupportMediaController() != null) {
-            getSupportMediaController().unregisterCallback(mMediaControllerCallback);
+        Timber.d("Activity onStop");
+        MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(this);
+        if (mediaController != null) {
+            mediaController.unregisterCallback(mMediaControllerCallback);
         }
         mMediaBrowser.disconnect();
     }
@@ -104,9 +148,9 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     }
 
     protected void showPlaybackControls() {
-        LogHelper.d(TAG, "showPlaybackControls");
+        Timber.d("showPlaybackControls");
         if (NetworkHelper.isOnline(this)) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                     R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
                     R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom)
@@ -116,8 +160,8 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     }
 
     protected void hidePlaybackControls() {
-        LogHelper.d(TAG, "hidePlaybackControls");
-        getFragmentManager().beginTransaction()
+        Timber.d("hidePlaybackControls");
+        getSupportFragmentManager().beginTransaction()
             .hide(mControlsFragment)
             .commit();
     }
@@ -129,7 +173,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
      * @return true if the MediaSession's state requires playback controls to be visible.
      */
     protected boolean shouldShowControls() {
-        MediaControllerCompat mediaController = getSupportMediaController();
+        MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(this);
         if (mediaController == null ||
             mediaController.getMetadata() == null ||
             mediaController.getPlaybackState() == null) {
@@ -147,14 +191,13 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
 
     private void connectToSession(MediaSessionCompat.Token token) throws RemoteException {
         MediaControllerCompat mediaController = new MediaControllerCompat(this, token);
-        setSupportMediaController(mediaController);
+        MediaControllerCompat.setMediaController(this, mediaController);
         mediaController.registerCallback(mMediaControllerCallback);
 
         if (shouldShowControls()) {
             showPlaybackControls();
         } else {
-            LogHelper.d(TAG, "connectionCallback.onConnected: " +
-                "hiding controls because metadata is null");
+            Timber.d("connectionCallback.onConnected: hiding controls because metadata is null");
             hidePlaybackControls();
         }
 
@@ -169,22 +212,24 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
     private final MediaControllerCompat.Callback mMediaControllerCallback =
         new MediaControllerCompat.Callback() {
             @Override
+            @SuppressLint("BinaryOperationInTimber")
             public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
                 if (shouldShowControls()) {
                     showPlaybackControls();
                 } else {
-                    LogHelper.d(TAG, "mediaControllerCallback.onPlaybackStateChanged: " +
-                            "hiding controls because state is ", state.getState());
+                    Timber.d("mediaControllerCallback.onPlaybackStateChanged: " +
+                            "hiding controls because state is %s", state.getState());
                     hidePlaybackControls();
                 }
             }
 
             @Override
+            @SuppressLint("BinaryOperationInTimber")
             public void onMetadataChanged(MediaMetadataCompat metadata) {
                 if (shouldShowControls()) {
                     showPlaybackControls();
                 } else {
-                    LogHelper.d(TAG, "mediaControllerCallback.onMetadataChanged: " +
+                    Timber.d("mediaControllerCallback.onMetadataChanged: " +
                         "hiding controls because metadata is null");
                     hidePlaybackControls();
                 }
@@ -195,11 +240,11 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         new MediaBrowserCompat.ConnectionCallback() {
             @Override
             public void onConnected() {
-                LogHelper.d(TAG, "onConnected");
+                Timber.d("onConnected");
                 try {
                     connectToSession(mMediaBrowser.getSessionToken());
                 } catch (RemoteException e) {
-                    LogHelper.e(TAG, e, "could not connect media controller");
+                    Timber.e(e, "could not connect media controller");
                     hidePlaybackControls();
                 }
             }

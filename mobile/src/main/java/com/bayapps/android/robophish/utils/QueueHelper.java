@@ -26,6 +26,8 @@ import com.bayapps.android.robophish.model.MusicProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_MUSICS_BY_SEARCH;
 import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_TRACKS_BY_SHOW;
 
@@ -33,8 +35,6 @@ import static com.bayapps.android.robophish.utils.MediaIDHelper.MEDIA_ID_TRACKS_
  * Utility class to help on queue related tasks.
  */
 public class QueueHelper {
-
-    private static final String TAG = LogHelper.makeLogTag(QueueHelper.class);
 
     private static final int RANDOM_QUEUE_SIZE = 10;
 
@@ -45,13 +45,13 @@ public class QueueHelper {
         String[] hierarchy = MediaIDHelper.getHierarchy(mediaId);
 
         if (hierarchy.length != 2) {
-            LogHelper.e(TAG, "Could not build a playing queue for this mediaId: ", mediaId);
+            Timber.e("Could not build a playing queue for this mediaId: %s", mediaId);
             return null;
         }
 
         String categoryType = hierarchy[0];
         String categoryValue = hierarchy[1];
-        LogHelper.d(TAG, "Creating playing queue for ", categoryType, ",  ", categoryValue);
+        Timber.d("Creating playing queue for %s, %s", categoryType, categoryValue);
 
         Iterable<MediaMetadataCompat> tracks = null;
         // This sample only supports genre and by_search category types.
@@ -64,7 +64,7 @@ public class QueueHelper {
         }
 */
         if (tracks == null) {
-            LogHelper.e(TAG, "Unrecognized category type: ", categoryType, " for media ", mediaId);
+            Timber.e("Unrecognized category type: %s for media %s", categoryType, mediaId);
             return null;
         }
 
@@ -74,14 +74,14 @@ public class QueueHelper {
     public static List<MediaSessionCompat.QueueItem> getPlayingQueueFromSearch(String query,
             Bundle queryParams, MusicProvider musicProvider) {
 
-        LogHelper.d(TAG, "Creating playing queue for musics from search: ", query,
-            " params=", queryParams);
+        Timber.d("Creating playing queue for musics from search: %s params=%s", query,
+            queryParams);
 
         VoiceSearchParams params = new VoiceSearchParams(query, queryParams);
 
-        LogHelper.d(TAG, "VoiceSearchParams: ", params);
+        Timber.d("VoiceSearchParams: %s", params);
 
-        if (params.isAny) {
+        if (params.isAny()) {
             // If isAny is true, we will play anything. This is app-dependent, and can be,
             // for example, favorite playlists, "I'm feeling lucky", most recent, etc.
             return getRandomQueue(musicProvider);
@@ -118,6 +118,7 @@ public class QueueHelper {
     public static int getMusicIndexOnQueue(Iterable<MediaSessionCompat.QueueItem> queue,
              String mediaId) {
         int index = 0;
+        if (queue == null) return -1;
         for (MediaSessionCompat.QueueItem item : queue) {
             if (mediaId.equals(item.getDescription().getMediaId())) {
                 return index;
@@ -181,7 +182,7 @@ public class QueueHelper {
             }
             result.add(metadata);
         }
-        LogHelper.d(TAG, "getRandomQueue: result.size=", result.size());
+        Timber.d("getRandomQueue: result.size=", result.size());
 */
         return convertToQueue(result, MEDIA_ID_MUSICS_BY_SEARCH, "random");
     }

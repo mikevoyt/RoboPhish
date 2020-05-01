@@ -45,6 +45,7 @@
     <string name="open_content_drawer">Open the main menu</string>
     <string name="close_content_drawer">Close the main menu</string>
     <string name="placeholder_message">Coming Soon</string>
+    <string name="downloads_message">Select a show and use the Menu to download</string>
     <string name="drawer_allmusic_title">Years</string>
     <string name="drawer_playlists_title">Playlists</string>
     <string name="now_playing">Now Playing</string>
@@ -53,4 +54,6 @@
     <string name="no_search_results">No search results.</string>
     <string name="loading">Loading…</string>
     <string name="media_route_menu_title">Play on…</string>
+    <string name="about">About</string>
+    <string name="downloads">Downloads</string>
 </resources>

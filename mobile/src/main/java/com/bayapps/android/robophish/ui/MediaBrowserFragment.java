@@ -16,38 +16,58 @@
 package com.bayapps.android.robophish.ui;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
+
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.model.MusicProvider;
-import com.bayapps.android.robophish.model.MusicProviderSource;
-import com.bayapps.android.robophish.utils.LogHelper;
+import com.bayapps.android.robophish.utils.Downloader;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
 import com.bayapps.android.robophish.utils.NetworkHelper;
+import com.google.android.material.tabs.TabLayout;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import timber.log.Timber;
+
+import static com.bayapps.android.robophish.utils.MediaIDHelper.extractShowFromMediaID;
 
 /**
  * A Fragment that lists all the various browsable queues available
@@ -59,8 +79,6 @@ import java.util.List;
  */
 public class MediaBrowserFragment extends Fragment {
 
-    private static final String TAG = LogHelper.makeLogTag(MediaBrowserFragment.class);
-
     private static final String ARG_MEDIA_ID = "media_id";
     private static final String ARG_TITLE = "title";
     private static final String ARG_SUBTITLE = "subtitle";
@@ -70,6 +88,9 @@ public class MediaBrowserFragment extends Fragment {
     private MediaFragmentListener mMediaFragmentListener;
     private View mErrorView;
     private TextView mErrorMessage;
+    private ProgressBar mProgressBar;
+    private JSONObject mShowData;
+
     private final BroadcastReceiver mConnectivityChangeReceiver = new BroadcastReceiver() {
         private boolean oldOnline = false;
         @Override
@@ -99,15 +120,16 @@ public class MediaBrowserFragment extends Fragment {
             if (metadata == null) {
                 return;
             }
-            LogHelper.d(TAG, "Received metadata change to media ",
+            Timber.d("Received metadata change to media %s",
                     metadata.getDescription().getMediaId());
             mBrowserAdapter.notifyDataSetChanged();
+            mProgressBar.setVisibility(View.INVISIBLE);  //hide progress bar when we receive metadata
         }
 
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
-            LogHelper.d(TAG, "Received state change: ", state);
+            Timber.d("Received state change: %s", state);
             checkForUserVisibleErrors(false);
             mBrowserAdapter.notifyDataSetChanged();
         }
@@ -119,55 +141,217 @@ public class MediaBrowserFragment extends Fragment {
             public void onChildrenLoaded(@NonNull String parentId,
                                          @NonNull List<MediaBrowserCompat.MediaItem> children) {
                 try {
-                    LogHelper.d(TAG, "fragment onChildrenLoaded, parentId=" + parentId +
-                        "  count=" + children.size());
+                    Timber.d("fragment onChildrenLoaded, parentId=%s, count=%s",
+                            parentId, children.size());
                     checkForUserVisibleErrors(children.isEmpty());
+                    mProgressBar.setVisibility(View.INVISIBLE);
                     mBrowserAdapter.clear();
                     for (MediaBrowserCompat.MediaItem item : children) {
                         mBrowserAdapter.add(item);
                     }
                     mBrowserAdapter.notifyDataSetChanged();
                 } catch (Throwable t) {
-                    LogHelper.e(TAG, "Error on childrenloaded", t);
+                    Timber.e(t, "Error on childrenloaded");
                 }
             }
 
             @Override
             public void onError(@NonNull String id) {
-                LogHelper.e(TAG, "browse fragment subscription onError, id=" + id);
+                Timber.e("browse fragment subscription onError, id=%s", id);
                 Toast.makeText(getActivity(), R.string.error_loading_media, Toast.LENGTH_LONG).show();
                 checkForUserVisibleErrors(true);
             }
         };
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         // If used on an activity that doesn't implement MediaFragmentListener, it
         // will throw an exception as expected:
-        mMediaFragmentListener = (MediaFragmentListener) activity;
+        mMediaFragmentListener = (MediaFragmentListener) getActivity();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case 0:
+                // start DownloadManager
+                String showId = extractShowFromMediaID(getMediaId());
+                Downloader dl = new Downloader(getActivity(), showId, mShowData);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item); // important line
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //menu.add("Download Show");  //TODO: enable once downloads are working
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LogHelper.d(TAG, "fragment.onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+        Timber.d("fragment.onCreateView");
+
+        View rootView;
+
+        String mediaId = getMediaId();
+        ListView listView;
+
+        if (mediaId != null && MediaIDHelper.isShow(mediaId)) {
+
+            setHasOptionsMenu(true);  //show option to download
+
+            rootView = inflater.inflate(R.layout.fragment_list_show, container, false);
+
+            ViewPager viewPager = rootView.findViewById(R.id.viewpager);
+            viewPager.setAdapter(new ShowPagerAdapter(inflater, rootView));
+            viewPager.setOffscreenPageLimit(3);
+
+            TabLayout tabLayout = rootView.findViewById(R.id.sliding_tabs);
+            tabLayout.setupWithViewPager(viewPager);
+
+            final WebView setlist = rootView.findViewById(R.id.setlist_webview);
+            setlist.getSettings().setJavaScriptEnabled(true);
+
+            AsyncHttpClient setlistClient = new AsyncHttpClient();
+            RequestParams setlistParams = new RequestParams();
+            setlistParams.put("api", "2.0");
+            setlistParams.put("method", "pnet.shows.setlists.get");
+            setlistParams.put("showdate", getSubTitle());
+            setlistParams.put("apikey", "C01AEE2002E80723E9E7");
+            setlistParams.put("format", "json");
+            setlistClient.get("http://api.phish.net/api.js", setlistParams, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+                    try {
+                        JSONObject result = response.getJSONObject(0);
+                        String city = result.getString("city");
+                        String state = result.getString("state");
+                        String country = result.getString("country");
+                        String venue = result.getString("venue");
+
+                        String header = "<h1>" + venue + "</h1>" + "<h2>" + city +
+                                 ", " + state + "<br/>" + country + "</h2>";
+
+                        String setlistdata = result.getString("setlistdata");
+                        String setlistnotes = result.getString("setlistnotes");
+                        setlist.loadData(header + setlistdata + setlistnotes, "text/html", null);
+                    }  catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    }
+            );
+
+            final WebView reviews = rootView.findViewById(R.id.reviews_webview);
+            reviews.getSettings().setJavaScriptEnabled(true);
+
+            AsyncHttpClient reviewsClient = new AsyncHttpClient();
+            RequestParams reviewsParams = new RequestParams();
+            reviewsParams.put("api", "2.0");
+            reviewsParams.put("method", "pnet.reviews.query");
+            reviewsParams.put("showdate", getSubTitle());
+            reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
+            reviewsParams.put("format", "json");
+            reviewsClient.get("http://api.phish.net/api.js", reviewsParams, new JsonHttpResponseHandler() {
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                StringBuilder display = new StringBuilder();
+
+                                int len = response.length();
+                                for (int i=0; i<len; i++) {
+                                    JSONObject entry = response.getJSONObject(i);
+                                    String author = entry.getString("author");
+                                    String review = entry.getString("review");
+                                    String tstamp = entry.getString("tstamp");
+
+                                    Date reviewTime = new Date(Long.parseLong(tstamp)*1000);
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String reviewDate = dateFormat.format(reviewTime);
+
+                                    String reviewSubs = review.replaceAll("\n", "<br/>");
+
+                                    display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
+                                    display.append(reviewSubs).append("<br/>");
+                                }
+
+                                reviews.loadData(display.toString(), "text/html", null);
+                            }  catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    }
+            );
+
+
+            final WebView tapernotesWebview = rootView.findViewById(R.id.tapernotes_webview);
+            tapernotesWebview.getSettings().setJavaScriptEnabled(true);
+
+            String showId = extractShowFromMediaID(mediaId);
+            final AsyncHttpClient tapernotesClient = new AsyncHttpClient();
+            tapernotesClient.get("http://phish.in/api/v1/shows/" + showId + ".json",
+                    null, new JsonHttpResponseHandler() {
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                mShowData = response;
+                                JSONObject data = response.getJSONObject("data");
+                                String tapernotes = data.getString("taper_notes");
+                                if (tapernotes.equals("null")) tapernotes = "Not available";
+                                String notesSubs = tapernotes.replaceAll("\n", "<br/>");
+
+                                tapernotesWebview.loadData(notesSubs, "text/html", null);
+                            }  catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    }
+            );
+
+
+        } else {
+            rootView = inflater.inflate(R.layout.fragment_list, container, false);
+        }
 
         mErrorView = rootView.findViewById(R.id.playback_error);
-        mErrorMessage = (TextView) mErrorView.findViewById(R.id.error_message);
+        mErrorMessage = mErrorView.findViewById(R.id.error_message);
+        mProgressBar = rootView.findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         mBrowserAdapter = new BrowseAdapter(getActivity());
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view);
+        listView = rootView.findViewById(R.id.list_view);
         listView.setAdapter(mBrowserAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkForUserVisibleErrors(false);
-                MediaBrowserCompat.MediaItem item = mBrowserAdapter.getItem(position);
-                mMediaFragmentListener.onMediaItemSelected(item);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            checkForUserVisibleErrors(false);
+            MediaBrowserCompat.MediaItem item = mBrowserAdapter.getItem(position);
+            mMediaFragmentListener.onMediaItemSelected(item);
         });
 
         return rootView;
@@ -180,8 +364,8 @@ public class MediaBrowserFragment extends Fragment {
         // fetch browsing information to fill the listview:
         MediaBrowserCompat mediaBrowser = mMediaFragmentListener.getMediaBrowser();
 
-        LogHelper.d(TAG, "fragment.onStart, mediaId=", mMediaId,
-                "  onConnected=" + mediaBrowser.isConnected());
+        Timber.d("fragment.onStart, mediaId=%s onConnected=%s", mMediaId,
+                mediaBrowser.isConnected());
 
         if (mediaBrowser.isConnected()) {
             onConnected();
@@ -199,7 +383,7 @@ public class MediaBrowserFragment extends Fragment {
         if (mediaBrowser != null && mediaBrowser.isConnected() && mMediaId != null) {
             mediaBrowser.unsubscribe(mMediaId);
         }
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.unregisterCallback(mMediaControllerCallback);
@@ -272,7 +456,7 @@ public class MediaBrowserFragment extends Fragment {
         mMediaFragmentListener.getMediaBrowser().subscribe(mMediaId, mSubscriptionCallback);
 
         // Add MediaController callback so we can redraw the list when metadata changes:
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.registerCallback(mMediaControllerCallback);
@@ -287,7 +471,7 @@ public class MediaBrowserFragment extends Fragment {
             showError = true;
         } else {
             // otherwise, if state is ERROR and metadata!=null, use playback state error message:
-            MediaControllerCompat controller = ((FragmentActivity) getActivity())
+            MediaControllerCompat controller = ((BaseActivity) getActivity())
                     .getSupportMediaController();
             if (controller != null
                 && controller.getMetadata() != null
@@ -303,12 +487,15 @@ public class MediaBrowserFragment extends Fragment {
             }
         }
         mErrorView.setVisibility(showError ? View.VISIBLE : View.GONE);
-        LogHelper.d(TAG, "checkForUserVisibleErrors. forceError=", forceError,
-            " showError=", showError,
-            " isOnline=", NetworkHelper.isOnline(getActivity()));
+        if (showError) mProgressBar.setVisibility(View.INVISIBLE);
+        Timber.d("checkForUserVisibleErrors. forceError=%s  showError=%s  isOnline=%s", forceError,
+            showError, NetworkHelper.isOnline(getActivity()));
     }
 
     private void updateTitle() {
+
+        mMediaFragmentListener.updateDrawerToggle();
+
 
         if (mMediaId.startsWith(MediaIDHelper.MEDIA_ID_SHOWS_BY_YEAR)) {
 
@@ -344,23 +531,22 @@ public class MediaBrowserFragment extends Fragment {
     // An adapter for showing the list of browsed MediaItem's
     private static class BrowseAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem> {
 
-        public BrowseAdapter(Activity context) {
-            super(context, R.layout.media_list_item, new ArrayList<MediaBrowserCompat.MediaItem>());
+        BrowseAdapter(Activity context) {
+            super(context, R.layout.media_list_item, new ArrayList<>());
         }
 
+        @NotNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @Nullable ViewGroup parent) {
 
             MediaBrowserCompat.MediaItem item = getItem(position);
             int itemState = MediaItemViewHolder.STATE_NONE;
             if (item.isPlayable()) {
                 itemState = MediaItemViewHolder.STATE_PLAYABLE;
-                MediaControllerCompat controller = ((FragmentActivity) getContext())
-                        .getSupportMediaController();
+                MediaControllerCompat controller = ((BaseActivity) getContext()).getSupportMediaController();
                 if (controller != null && controller.getMetadata() != null) {
                     String currentPlaying = controller.getMetadata().getDescription().getMediaId();
-                    String musicId = MediaIDHelper.extractMusicIDFromMediaID(
-                            item.getDescription().getMediaId());
+                    String musicId = MediaIDHelper.extractMusicIDFromMediaID(item.getDescription().getMediaId());
                     if (currentPlaying != null && currentPlaying.equals(musicId)) {
                         PlaybackStateCompat pbState = controller.getPlaybackState();
                         if (pbState == null ||
@@ -385,6 +571,7 @@ public class MediaBrowserFragment extends Fragment {
         void onMediaItemSelected(MediaBrowserCompat.MediaItem item);
         void setToolbarTitle(CharSequence title);
         void setToolbarSubTitle(CharSequence title);
+        void updateDrawerToggle();
     }
 
 }

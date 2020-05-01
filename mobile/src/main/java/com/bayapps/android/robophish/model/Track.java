@@ -18,7 +18,8 @@ public class Track {
     public Track(long trackId, String trackTitle, String trackUrl) {
         this.mId = trackId;
         this.mTitle = trackTitle;
-        this.mUrl = trackUrl;
+        String[] parts = trackUrl.split("https://");
+        this.mUrl = "http://" + parts[1];
     }
 
     public void setId(long id) {

@@ -16,27 +16,33 @@
 package com.bayapps.android.robophish.ui;
 
 import android.app.ActivityOptions;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.MediaRouteButton;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.mediarouter.app.MediaRouteButton;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
+import com.google.android.material.navigation.NavigationView;
+
+import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * Abstract activity with toolbar, navigation drawer and cast support. Needs to be extended by
@@ -44,17 +50,16 @@ import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOv
  *
  * The requirements for a subclass is to call {@link #initializeToolbar()} on onCreate, after
  * setContentView() is called and have three mandatory layout elements:
- * a {@link android.support.v7.widget.Toolbar} with id 'toolbar',
- * a {@link android.support.v4.widget.DrawerLayout} with id 'drawerLayout' and
+ * a {@link androidx.appcompat.widget.Toolbar} with id 'toolbar',
+ * a {@link androidx.drawerlayout.widget.DrawerLayout} with id 'drawerLayout' and
  * a {@link android.widget.ListView} with id 'drawerList'.
  */
 public abstract class ActionBarCastActivity extends AppCompatActivity {
 
-    private static final String TAG = LogHelper.makeLogTag(ActionBarCastActivity.class);
-
     private static final int DELAY_MILLIS = 1000;
 
-    private VideoCastManager mCastManager;
+    @Inject VideoCastManager mCastManager;
+
     private MenuItem mMediaRouteMenuItem;
     private Toolbar mToolbar;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -68,12 +73,12 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
 
         @Override
         public void onFailed(int resourceId, int statusCode) {
-            LogHelper.d(TAG, "onFailed ", resourceId, " status ", statusCode);
+            Timber.d("onFailed %s status %s", resourceId,  statusCode);
         }
 
         @Override
         public void onConnectionSuspended(int cause) {
-            LogHelper.d(TAG, "onConnectionSuspended() was called with cause: ", cause);
+            Timber.d("onConnectionSuspended() was called with cause: %s", cause);
         }
 
         @Override
@@ -83,14 +88,10 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         @Override
         public void onCastAvailabilityChanged(boolean castPresent) {
             if (castPresent) {
-                new Handler().postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (mMediaRouteMenuItem.isVisible()) {
-                            LogHelper.d(TAG, "Cast Icon is visible");
-                            showFtu();
-                        }
+                new Handler().postDelayed(() -> {
+                    if (mMediaRouteMenuItem.isVisible()) {
+                        Timber.d("Cast Icon is visible");
+                        showFtu();
                     }
                 }, DELAY_MILLIS);
             }
@@ -113,6 +114,12 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
                         break;
                     case R.id.navigation_playlists:
                         activityClass = PlaceholderActivity.class;
+                        break;
+                    case R.id.navigation_downloads:
+                        activityClass = PlaceholderActivity.class;
+                        break;
+                    case R.id.navigation_about:
+                        activityClass = AboutActivity.class;
                         break;
                 }
                 if (activityClass != null) {
@@ -140,23 +147,18 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         }
     };
 
-    private final FragmentManager.OnBackStackChangedListener mBackStackChangedListener =
-        new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                updateDrawerToggle();
-            }
-        };
+    private final FragmentManager.OnBackStackChangedListener mBackStackChangedListener = this::updateDrawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogHelper.d(TAG, "Activity onCreate");
+        Timber.d("Activity onCreate");
+
+        RoboPhishApplicationKt.inject(this);
 
         // Ensure that Google Play Service is available.
         VideoCastManager.checkGooglePlayServices(this);
 
-        mCastManager = VideoCastManager.getInstance();
         mCastManager.reconnectSessionIfPossible();
     }
 
@@ -186,7 +188,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         // Whenever the fragment back stack changes, we may need to update the
         // action bar toggle: only top level screens show the hamburger-like icon, inner
         // screens - either Activities or fragments - show the "Up" icon instead.
-        getFragmentManager().addOnBackStackChangedListener(mBackStackChangedListener);
+        getSupportFragmentManager().addOnBackStackChangedListener(mBackStackChangedListener);
     }
 
     @Override
@@ -202,7 +204,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         super.onPause();
         mCastManager.removeVideoCastConsumer(mCastConsumer);
         mCastManager.decrementUiCounter();
-        getFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
+        getSupportFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
     }
 
     @Override
@@ -234,7 +236,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
             return;
         }
         // Otherwise, it may return to the previous fragment stack
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
         } else {
@@ -278,7 +280,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
             // Create an ActionBarDrawerToggle that will handle opening/closing of the drawer:
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 mToolbar, R.string.open_content_drawer, R.string.close_content_drawer);
-            mDrawerLayout.setDrawerListener(mDrawerListener);
+            mDrawerLayout.addDrawerListener(mDrawerListener);
             populateDrawerItems(navigationView);
             setSupportActionBar(mToolbar);
             updateDrawerToggle();
@@ -291,14 +293,11 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
 
     private void populateDrawerItems(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        mItemToOpenWhenDrawerCloses = menuItem.getItemId();
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
+                menuItem -> {
+                    menuItem.setChecked(true);
+                    mItemToOpenWhenDrawerCloses = menuItem.getItemId();
+                    mDrawerLayout.closeDrawers();
+                    return true;
                 });
         if (MusicPlayerActivity.class.isAssignableFrom(getClass())) {
             navigationView.setCheckedItem(R.id.navigation_allmusic);
@@ -311,7 +310,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         if (mDrawerToggle == null) {
             return;
         }
-        boolean isRoot = getFragmentManager().getBackStackEntryCount() == 0;
+        boolean isRoot = getSupportFragmentManager().getBackStackEntryCount() == 0;
         mDrawerToggle.setDrawerIndicatorEnabled(isRoot);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(!isRoot);
@@ -330,7 +329,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
     private void showFtu() {
         Menu menu = mToolbar.getMenu();
         View view = menu.findItem(R.id.media_route_menu_item).getActionView();
-        if (view != null && view instanceof MediaRouteButton) {
+        if (view instanceof MediaRouteButton) {
             IntroductoryOverlay overlay = new IntroductoryOverlay.Builder(this)
                     .setMenuItem(mMediaRouteMenuItem)
                     .setTitleText(R.string.touch_to_cast)

@@ -42,7 +42,7 @@ limitations under the License.
             android:layout_above="@+id/line2"
             android:ellipsize="end"
             android:gravity="center_horizontal"
-            android:maxLines="1"
+            android:maxLines="2"
             android:shadowColor="@android:color/black"
             android:shadowRadius="20"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -64,6 +64,34 @@ limitations under the License.
 
         <TextView
             android:id="@+id/line3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line4"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="20"
+            android:textColor="@color/fullscreen_secondary_line_color" />
+
+        <TextView
+            android:id="@+id/line4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line5"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="20"
+            android:textColor="@color/fullscreen_secondary_line_color" />
+
+        <TextView
+            android:id="@+id/line5"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/controllers"
@@ -167,7 +195,7 @@ limitations under the License.
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

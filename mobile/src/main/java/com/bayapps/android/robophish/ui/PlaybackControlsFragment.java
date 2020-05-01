@@ -15,13 +15,16 @@
  */
 package com.bayapps.android.robophish.ui;
 
-import android.app.Fragment;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -37,27 +40,31 @@ import android.widget.Toast;
 import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
-import com.bayapps.android.robophish.utils.LogHelper;
+import com.bayapps.android.robophish.RoboPhishApplicationKt;
+
+import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * A class that shows the Media Queue to the user.
  */
 public class PlaybackControlsFragment extends Fragment {
-
-    private static final String TAG = LogHelper.makeLogTag(PlaybackControlsFragment.class);
-
     private ImageButton mPlayPause;
     private TextView mTitle;
     private TextView mSubtitle;
     private TextView mExtraInfo;
     private ImageView mAlbumArt;
     private String mArtUrl;
+
+    @Inject AlbumArtCache albumArtCache;
+
     // Receive callbacks from the MediaController. Here we update our state such as which queue
     // is being shown, the current title and description and the PlaybackState.
     private final MediaControllerCompat.Callback mCallback = new MediaControllerCompat.Callback() {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
-            LogHelper.d(TAG, "Received playback state change to state ", state.getState());
+            Timber.d("Received playback state change to state %s", state.getState());
             PlaybackControlsFragment.this.onPlaybackStateChanged(state);
         }
 
@@ -66,40 +73,43 @@ public class PlaybackControlsFragment extends Fragment {
             if (metadata == null) {
                 return;
             }
-            LogHelper.d(TAG, "Received metadata state change to mediaId=",
+            Timber.d("Received metadata state change to mediaId=%s song=%s",
                     metadata.getDescription().getMediaId(),
-                    " song=", metadata.getDescription().getTitle());
+                    metadata.getDescription().getTitle());
             PlaybackControlsFragment.this.onMetadataChanged(metadata);
         }
     };
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        RoboPhishApplicationKt.inject(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_playback_controls, container, false);
 
-        mPlayPause = (ImageButton) rootView.findViewById(R.id.play_pause);
+        mPlayPause = rootView.findViewById(R.id.play_pause);
         mPlayPause.setEnabled(true);
         mPlayPause.setOnClickListener(mButtonListener);
 
-        mTitle = (TextView) rootView.findViewById(R.id.title);
-        mSubtitle = (TextView) rootView.findViewById(R.id.artist);
-        mExtraInfo = (TextView) rootView.findViewById(R.id.extra_info);
-        mAlbumArt = (ImageView) rootView.findViewById(R.id.album_art);
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                MediaControllerCompat controller = ((FragmentActivity) getActivity())
-                        .getSupportMediaController();
-                MediaMetadataCompat metadata = controller.getMetadata();
-                if (metadata != null) {
-                    intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
-                        metadata.getDescription());
-                }
-                startActivity(intent);
+        mTitle = rootView.findViewById(R.id.title);
+        mSubtitle = rootView.findViewById(R.id.artist);
+        mExtraInfo = rootView.findViewById(R.id.extra_info);
+        mAlbumArt = rootView.findViewById(R.id.album_art);
+        rootView.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            MediaControllerCompat controller = ((BaseActivity) getActivity())
+                    .getSupportMediaController();
+            MediaMetadataCompat metadata = controller.getMetadata();
+            if (metadata != null) {
+                intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
+                    metadata.getDescription());
             }
+            startActivity(intent);
         });
         return rootView;
     }
@@ -107,8 +117,8 @@ public class PlaybackControlsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        LogHelper.d(TAG, "fragment.onStart");
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        Timber.d("fragment.onStart");
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             onConnected();
@@ -118,8 +128,8 @@ public class PlaybackControlsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        LogHelper.d(TAG, "fragment.onStop");
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        Timber.d("fragment.onStop");
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.unregisterCallback(mCallback);
@@ -127,9 +137,9 @@ public class PlaybackControlsFragment extends Fragment {
     }
 
     public void onConnected() {
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
-        LogHelper.d(TAG, "onConnected, mediaController==null? ", controller == null);
+        Timber.d("onConnected, mediaController==null? %s", controller == null);
         if (controller != null) {
             onMetadataChanged(controller.getMetadata());
             onPlaybackStateChanged(controller.getPlaybackState());
@@ -137,10 +147,11 @@ public class PlaybackControlsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("BinaryOperationInTimber")
     private void onMetadataChanged(MediaMetadataCompat metadata) {
-        LogHelper.d(TAG, "onMetadataChanged ", metadata);
+        Timber.d("onMetadataChanged %s", metadata);
         if (getActivity() == null) {
-            LogHelper.w(TAG, "onMetadataChanged called when getActivity null," +
+            Timber.w("onMetadataChanged called when getActivity null," +
                     "this should not happen if the callback was properly unregistered. Ignoring.");
             return;
         }
@@ -157,7 +168,7 @@ public class PlaybackControlsFragment extends Fragment {
         if (!TextUtils.equals(artUrl, mArtUrl)) {
             mArtUrl = artUrl;
             Bitmap art = metadata.getDescription().getIconBitmap();
-            AlbumArtCache cache = AlbumArtCache.getInstance();
+            AlbumArtCache cache = albumArtCache;
             if (art == null) {
                 art = cache.getIconImage(mArtUrl);
             }
@@ -168,8 +179,8 @@ public class PlaybackControlsFragment extends Fragment {
                             @Override
                             public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
                                 if (icon != null) {
-                                    LogHelper.d(TAG, "album art icon of w=", icon.getWidth(),
-                                            " h=", icon.getHeight());
+                                    Timber.d("album art icon of w=%s h=%ss",
+                                            icon.getWidth(), icon.getHeight());
                                     if (isAdded()) {
                                         mAlbumArt.setImageBitmap(icon);
                                     }
@@ -190,10 +201,11 @@ public class PlaybackControlsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("BinaryOperationInTimber")
     private void onPlaybackStateChanged(PlaybackStateCompat state) {
-        LogHelper.d(TAG, "onPlaybackStateChanged ", state);
+        Timber.d("onPlaybackStateChanged %s", state);
         if (getActivity() == null) {
-            LogHelper.w(TAG, "onPlaybackStateChanged called when getActivity null," +
+            Timber.w("onPlaybackStateChanged called when getActivity null," +
                     "this should not happen if the callback was properly unregistered. Ignoring.");
             return;
         }
@@ -207,7 +219,7 @@ public class PlaybackControlsFragment extends Fragment {
                 enablePlay = true;
                 break;
             case PlaybackStateCompat.STATE_ERROR:
-                LogHelper.e(TAG, "error playbackstate: ", state.getErrorMessage());
+                Timber.e("error playbackstate: %s", state.getErrorMessage());
                 Toast.makeText(getActivity(), state.getErrorMessage(), Toast.LENGTH_LONG).show();
                 break;
         }
@@ -220,7 +232,7 @@ public class PlaybackControlsFragment extends Fragment {
                     ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_36dp));
         }
 
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         String extraInfo = null;
         if (controller != null && controller.getExtras() != null) {
@@ -235,15 +247,15 @@ public class PlaybackControlsFragment extends Fragment {
     private final View.OnClickListener mButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            MediaControllerCompat controller = ((FragmentActivity) getActivity())
+            MediaControllerCompat controller = ((BaseActivity) getActivity())
                     .getSupportMediaController();
             PlaybackStateCompat stateObj = controller.getPlaybackState();
             final int state = stateObj == null ?
                     PlaybackStateCompat.STATE_NONE : stateObj.getState();
-            LogHelper.d(TAG, "Button pressed, in state " + state);
+            Timber.d("Button pressed, in state %s", state);
             switch (v.getId()) {
                 case R.id.play_pause:
-                    LogHelper.d(TAG, "Play button pressed, in state " + state);
+                    Timber.d("Play button pressed, in state %s", state);
                     if (state == PlaybackStateCompat.STATE_PAUSED ||
                             state == PlaybackStateCompat.STATE_STOPPED ||
                             state == PlaybackStateCompat.STATE_NONE) {
@@ -259,7 +271,7 @@ public class PlaybackControlsFragment extends Fragment {
     };
 
     private void playMedia() {
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.getTransportControls().play();
@@ -267,7 +279,7 @@ public class PlaybackControlsFragment extends Fragment {
     }
 
     private void pauseMedia() {
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+        MediaControllerCompat controller = ((BaseActivity) getActivity())
                 .getSupportMediaController();
         if (controller != null) {
             controller.getTransportControls().pause();

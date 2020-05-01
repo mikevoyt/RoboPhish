@@ -22,8 +22,9 @@ import android.os.Bundle;
 
 import com.bayapps.android.robophish.MusicService;
 
+import timber.log.Timber;
+
 public class CarHelper {
-    private static final String TAG = LogHelper.makeLogTag(CarHelper.class);
 
     private static final String AUTO_APP_PACKAGE_NAME = "com.google.android.projection.gearhead";
 
@@ -106,10 +107,10 @@ public class CarHelper {
     public static boolean isCarUiMode(Context c) {
         UiModeManager uiModeManager = (UiModeManager) c.getSystemService(Context.UI_MODE_SERVICE);
         if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_CAR) {
-            LogHelper.d(TAG, "Running in Car mode");
+            Timber.d("Running in Car mode");
             return true;
         } else {
-            LogHelper.d(TAG, "Running on a non-Car mode");
+            Timber.d("Running on a non-Car mode");
             return false;
         }
     }

@@ -140,4 +140,6 @@ public interface Playback {
      * @param callback to be called
      */
     void setCallback(Callback callback);
+
+    boolean supportsGapless();
 }

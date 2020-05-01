@@ -17,40 +17,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bayapps.android.robophish"
-    android:versionCode="3"
-    android:versionName="0.2"
     >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Set android.software.leanback to false, so the APK will be available to both
-    TV and regular devices. -->
-    <uses-feature
-        android:name="android.software.leanback"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".UAMPApplication"
+        android:name=".RoboPhishApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/UAmpAppTheme"
-        android:banner="@drawable/banner_tv">
-
-<!--
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
--->
+        android:banner="@drawable/banner_tv"
+        android:fullBackupContent="true"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m"
+        >
 
         <!-- Main activity for music browsing on phone -->
         <activity
@@ -59,6 +48,32 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- App links for http -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="android.bayapps.com"
+                    android:pathPattern="/robophish"
+                    android:scheme="http" />
+            </intent-filter>
+
+            <!-- App links for https -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="android.bayapps.com"
+                    android:pathPattern="/robophish"
+                    android:scheme="https" />
             </intent-filter>
 
             <!-- Use this intent filter to get voice searches, like "Play The Beatles" -->
@@ -74,34 +89,15 @@
             android:label="@string/app_name">
         </activity>
 
-        <!-- Proxy activity that opens either the NowPlaying TV or the mobile UI, depending on
-        the current environment -->
         <activity
-            android:name=".ui.NowPlayingActivity"
-            android:icon="@drawable/ic_launcher">
-        </activity>
-
-        <!-- Main activity for Android TV user interface -->
-        <activity
-            android:name=".ui.tv.TvBrowseActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.UAmp.TVLeanback" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
+            android:name=".ui.DownloadsActivity"
+            android:label="@string/app_name">
         </activity>
 
         <activity
-            android:name=".ui.tv.TvVerticalGridActivity"
-            android:theme="@style/Theme.UAmp.TVLeanback"
-            android:parentActivityName=".ui.tv.TvBrowseActivity" />
-
-        <!-- Android TV UI when playing a song -->
-        <activity
-            android:name=".ui.tv.TvPlaybackActivity"
-            android:theme="@style/Theme.UAmp.TVLeanback"
-            android:parentActivityName=".ui.tv.TvBrowseActivity" />
+            android:name=".ui.AboutActivity"
+            android:label="@string/app_name">
+        </activity>
 
         <!--
              (OPTIONAL) use this meta data to indicate which icon should be
@@ -121,15 +117,6 @@
             android:name="com.google.android.gms.car.application.theme"
             android:resource="@style/CarTheme" />
 
-        <!--
-             (OPTIONAL) use this meta data to override the theme from which Android Wear will
-             look for colors. Currently, only background color of the media cards can be set, via
-             colorPrimaryDark. If you don't set this custom theme, Android Wear will look
-             for colorPrimaryDark attribute in your application theme.
-        -->
-        <meta-data
-            android:name="com.google.android.wearable.media.theme"
-            android:resource="@style/WearTheme" />
 
         <!-- Main music service, provides media browsing and media playback services to
          consumers through MediaBrowserService and MediaSession. Consumers connect to it through
@@ -162,8 +149,8 @@
         <!-- A receiver that will receive media buttons and send as
             intents to your MediaBrowserServiceCompat implementation.
             Required on pre-Lollipop. More information at
-            http://developer.android.com/reference/android/support/v4/media/session/MediaButtonReceiver.html -->
-        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver" >
+           https://developer.android.com/reference/androidx/media/session/MediaButtonReceiver -->
+        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>

@@ -16,9 +16,11 @@
 
 package com.bayapps.android.robophish.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
+
+import timber.log.Timber;
 
 /**
  * Utility class to help on queue related tasks.
@@ -96,6 +98,14 @@ public class MediaIDHelper {
         return null;
     }
 
+    public static String extractShowFromMediaID(@NonNull String mediaID) {
+        int pos = mediaID.indexOf(CATEGORY_SEPARATOR);
+        if (pos >= 0) {
+            return mediaID.substring(pos+1);
+        }
+        return null;
+    }
+
     /**
      * Extracts category and categoryValue from the mediaID. mediaID is, by this sample's
      * convention, a concatenation of category (eg "by_genre"), categoryValue (eg "Classical") and
@@ -122,6 +132,13 @@ public class MediaIDHelper {
 
     public static boolean isBrowseable(@NonNull String mediaID) {
         return mediaID.indexOf(LEAF_SEPARATOR) < 0;
+    }
+
+    public static boolean isShow(@NonNull String mediaID) {
+        Timber.d(mediaID);
+        String[] hierarchy = getHierarchy(mediaID);
+        if (hierarchy[0].matches(MEDIA_ID_TRACKS_BY_SHOW)) return true;
+        return false;
     }
 
     public static String getParentMediaID(@NonNull String mediaID) {
