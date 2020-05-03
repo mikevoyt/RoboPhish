@@ -223,7 +223,7 @@ public class MediaBrowserFragment extends Fragment {
             AsyncHttpClient httpClient = new AsyncHttpClient();
 
             /* GET setlist data/notes. If successful, we use the showId
-               to make the subsequent reviews request*/
+               to make the subsequent reviews request. */
             RequestParams setlistParams = new RequestParams();
             /* Looks like dates are formatted to YYYY.MM.DD somewhere for display,
                phish.in API returns YYYY-MM-DD. Not sure why this wasn't needed before,
