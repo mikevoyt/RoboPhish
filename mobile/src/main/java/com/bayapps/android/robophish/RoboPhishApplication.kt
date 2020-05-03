@@ -15,6 +15,9 @@ import com.bayapps.android.robophish.ui.FullScreenPlayerActivity
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager
+import com.squareup.picasso.OkHttp3Downloader
+import com.squareup.picasso.Picasso
+import okhttp3.OkHttpClient
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.androidCoreModule
@@ -52,7 +55,6 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
 
         bind<NotificationManagerCompat>() with singleton { NotificationManagerCompat.from(instance()) }
         bind<VideoCastManager>() with singleton { VideoCastManager.getInstance() }
-        bind<AlbumArtCache>() with singleton { AlbumArtCache.getInstance() }
 
         bind<GoogleApiAvailability>() with singleton { GoogleApiAvailability.getInstance() }
 
@@ -60,7 +62,16 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
         bind<File>(tag = CACHE_DIR_TAG) with singleton { instance<Context>().cacheDir }
 
         bind<MusicProvider>() with singleton { MusicProvider(instance(), instance()) }
-        bind<MusicProviderSource>() with singleton { PhishProviderSource(instance()) }
+        bind<MusicProviderSource>() with singleton { PhishProviderSource(instance(), instance()) }
+
+        bind<Picasso>() with singleton {
+            Picasso.Builder(instance())
+                    .downloader(OkHttp3Downloader(instance<OkHttpClient>()))
+                    .listener { _, uri, exception ->
+                        Timber.e(exception, "Error while loading image %s", uri)
+                    }
+                    .build()
+        }
     }
 
     private val appInitializer: AppInitializer by instance()
