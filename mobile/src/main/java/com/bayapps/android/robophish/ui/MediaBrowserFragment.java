@@ -309,11 +309,13 @@ public class MediaBrowserFragment extends Fragment {
                 }
             });
 
-            final WebView tapernotesWebView = rootView.findViewById(R.id.tapernotes_webview);
-            tapernotesWebView.getSettings().setJavaScriptEnabled(true);
+
+            final WebView tapernotesWebview = rootView.findViewById(R.id.tapernotes_webview);
+            tapernotesWebview.getSettings().setJavaScriptEnabled(true);
 
             String showId = extractShowFromMediaID(mediaId);
-            httpClient.get("http://phish.in/api/v1/shows/" + showId + ".json",
+            final AsyncHttpClient tapernotesClient = new AsyncHttpClient();
+            tapernotesClient.get("http://phish.in/api/v1/shows/" + showId + ".json",
                     null, new JsonHttpResponseHandler() {
 
                         @Override
@@ -326,17 +328,15 @@ public class MediaBrowserFragment extends Fragment {
                                 if (tapernotes.equals("null")) tapernotes = "Not available";
                                 String notesSubs = tapernotes.replaceAll("\n", "<br/>");
 
-                                tapernotesWebView.loadData(notesSubs, "text/html", null);
+                                tapernotesWebview.loadData(notesSubs, "text/html", null);
                             }  catch (JSONException e) {
                                 e.printStackTrace();
-                                tapernotesWebView.loadData("<div>Error loading Taper Notes</div>", "text/html", null);
                             }
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            tapernotesWebView.loadData("<div>Error loading Taper Notes</div>", "text/html", null);
                         }
                     }
             );
