@@ -32,7 +32,7 @@
     <application
         android:name=".RoboPhishApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/UAmpAppTheme"
         android:banner="@drawable/banner_tv"
