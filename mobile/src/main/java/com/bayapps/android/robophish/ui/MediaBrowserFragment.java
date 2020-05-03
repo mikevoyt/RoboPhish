@@ -219,7 +219,7 @@ public class MediaBrowserFragment extends Fragment {
 
             final WebView reviewsWebView = rootView.findViewById(R.id.reviews_webview);
             reviewsWebView.getSettings().setJavaScriptEnabled(true);
-            
+
             /* GET setlist data/notes. If successful, we use the showId
                to make the subsequent reviews request. */
             RequestParams setlistParams = new RequestParams();
@@ -252,10 +252,10 @@ public class MediaBrowserFragment extends Fragment {
                         setlistWebView.loadData(header + setlistdata + setlistnotes, "text/html", null);
 
                         // GET reviews
-                        AsyncHttpClient reviewsClient = new AsyncHttpClient();
                         RequestParams reviewsParams = new RequestParams();
                         reviewsParams.put("showid", showId);
                         reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
+                        AsyncHttpClient reviewsClient = new AsyncHttpClient();
                         reviewsClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
 
                                 @Override
