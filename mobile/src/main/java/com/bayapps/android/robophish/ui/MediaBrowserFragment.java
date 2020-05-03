@@ -331,12 +331,14 @@ public class MediaBrowserFragment extends Fragment {
                                 tapernotesWebview.loadData(notesSubs, "text/html", null);
                             }  catch (JSONException e) {
                                 e.printStackTrace();
+                                tapernotesWebview.loadData("<div>Error loading Taper Notes</div>", "text/html", null);
                             }
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
+                            tapernotesWebview.loadData("<div>Error loading Taper Notes</div>", "text/html", null);
                         }
                     }
             );
