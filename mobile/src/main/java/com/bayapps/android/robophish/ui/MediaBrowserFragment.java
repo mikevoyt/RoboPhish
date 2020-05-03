@@ -219,8 +219,7 @@ public class MediaBrowserFragment extends Fragment {
 
             final WebView reviewsWebView = rootView.findViewById(R.id.reviews_webview);
             reviewsWebView.getSettings().setJavaScriptEnabled(true);
-
-
+            
             /* GET setlist data/notes. If successful, we use the showId
                to make the subsequent reviews request. */
             RequestParams setlistParams = new RequestParams();
