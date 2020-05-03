@@ -258,41 +258,41 @@ public class MediaBrowserFragment extends Fragment {
                         AsyncHttpClient reviewsClient = new AsyncHttpClient();
                         reviewsClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
 
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    super.onSuccess(statusCode, headers, response);
-                                    try {
-                                        JSONArray result = response
-                                                .getJSONObject("response")
-                                                .getJSONArray("data");
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                try {
+                                    JSONArray result = response
+                                            .getJSONObject("response")
+                                            .getJSONArray("data");
 
-                                        StringBuilder display = new StringBuilder();
-                                        int len = result.length();
-                                        for (int i=0; i<len; i++) {
-                                            JSONObject entry = result.getJSONObject(i);
-                                            // I dislike the lack of camel casing and random snake casing in their schema
-                                            String author = entry.getString("username");
-                                            String review = entry.getString("reviewtext");
-                                            String reviewDate = entry.getString("posted_date");
+                                    StringBuilder display = new StringBuilder();
+                                    int len = result.length();
+                                    for (int i=0; i<len; i++) {
+                                        JSONObject entry = result.getJSONObject(i);
+                                        // I dislike the lack of camel casing and random snake casing in their schema
+                                        String author = entry.getString("username");
+                                        String review = entry.getString("reviewtext");
+                                        String reviewDate = entry.getString("posted_date");
 
-                                            String reviewSubs = review.replaceAll("\n", "<br/>");
+                                        String reviewSubs = review.replaceAll("\n", "<br/>");
 
-                                            display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
-                                            display.append(reviewSubs).append("<br/>");
-                                        }
-
-                                        reviewsWebView.loadData(display.toString(), "text/html", null);
-                                    }  catch (JSONException e) {
-                                        e.printStackTrace();
-                                        reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
+                                        display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
+                                        display.append(reviewSubs).append("<br/>");
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                                    reviewsWebView.loadData(display.toString(), "text/html", null);
+                                }  catch (JSONException e) {
+                                    e.printStackTrace();
                                     reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
                                 }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
+                            }
                         });
                     }  catch (JSONException e) {
                         e.printStackTrace();
