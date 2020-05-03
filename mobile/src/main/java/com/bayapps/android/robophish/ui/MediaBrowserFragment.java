@@ -220,7 +220,6 @@ public class MediaBrowserFragment extends Fragment {
             final WebView reviewsWebView = rootView.findViewById(R.id.reviews_webview);
             reviewsWebView.getSettings().setJavaScriptEnabled(true);
 
-            AsyncHttpClient httpClient = new AsyncHttpClient();
 
             /* GET setlist data/notes. If successful, we use the showId
                to make the subsequent reviews request. */
@@ -231,7 +230,8 @@ public class MediaBrowserFragment extends Fragment {
             setlistParams.put("showdate", getSubTitle().replace(".", "-"));
             //TODO: Move to gradle/buildConfig
             setlistParams.put("apikey", "C01AEE2002E80723E9E7");
-            httpClient.get("https://api.phish.net/v3/setlists/get", setlistParams, new JsonHttpResponseHandler() {
+            AsyncHttpClient setlistClient = new AsyncHttpClient();
+            setlistClient.get("https://api.phish.net/v3/setlists/get", setlistParams, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -253,10 +253,11 @@ public class MediaBrowserFragment extends Fragment {
                         setlistWebView.loadData(header + setlistdata + setlistnotes, "text/html", null);
 
                         // GET reviews
+                        AsyncHttpClient reviewsClient = new AsyncHttpClient();
                         RequestParams reviewsParams = new RequestParams();
                         reviewsParams.put("showid", showId);
                         reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
-                        httpClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
+                        reviewsClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
 
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
