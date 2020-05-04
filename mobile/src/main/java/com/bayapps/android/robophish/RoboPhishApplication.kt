@@ -15,8 +15,9 @@ import com.bayapps.android.robophish.ui.FullScreenPlayerActivity
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager
-import okhttp3.Interceptor
-import okhttp3.logging.HttpLoggingInterceptor
+import com.squareup.picasso.OkHttp3Downloader
+import com.squareup.picasso.Picasso
+import okhttp3.OkHttpClient
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.androidCoreModule
@@ -30,7 +31,6 @@ import robophish.CACHE_DIR_TAG
 import robophish.networkingModule
 import robophish.phishin.PhishinApiKey
 import timber.log.Timber
-import timber.log.Timber.DebugTree
 import java.io.File
 
 const val MEDIA_PLAYER_NOTIFICATION = "MediaPlayer"
@@ -43,8 +43,18 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
         import(jxInjectorModule)
         import(networkingModule)
 
+        /**
+         * Each build variant should provide a list of modules it would like to provide, this
+         * allows for these variants to provide different functionality, based on the the
+         * build type. For example, [Timber] logging w/ the [Timber.DebugTree] should only
+         * be done in the debug module.
+         */
+        buildSpecificModules.forEach {
+            import(it)
+        }
+
+        bind<NotificationManagerCompat>() with singleton { NotificationManagerCompat.from(instance()) }
         bind<VideoCastManager>() with singleton { VideoCastManager.getInstance() }
-        bind<AlbumArtCache>() with singleton { AlbumArtCache.getInstance() }
 
         bind<GoogleApiAvailability>() with singleton { GoogleApiAvailability.getInstance() }
 
@@ -52,18 +62,25 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
         bind<File>(tag = CACHE_DIR_TAG) with singleton { instance<Context>().cacheDir }
 
         bind<MusicProvider>() with singleton { MusicProvider(instance(), instance()) }
-        bind<MusicProviderSource>() with singleton { PhishProviderSource(instance()) }
+        bind<MusicProviderSource>() with singleton { PhishProviderSource(instance(), instance()) }
+
+        bind<Picasso>() with singleton {
+            Picasso.Builder(instance())
+                    .downloader(OkHttp3Downloader(instance<OkHttpClient>()))
+                    .listener { _, uri, exception ->
+                        Timber.e(exception, "Error while loading image %s", uri)
+                    }
+                    .build()
+        }
     }
 
-    private val interceptors: MutableList<Interceptor> by instance()
+    private val appInitializer: AppInitializer by instance()
+    private val notificationManagerCompat: NotificationManagerCompat by instance()
 
     override fun onCreate() {
         super.onCreate()
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
-            interceptors.add(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
-        }
+        appInitializer()
 
         val applicationId = resources.getString(R.string.cast_application_id)
         VideoCastManager.initialize(
@@ -77,7 +94,7 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManagerCompat.from(this).createNotificationChannel(
+            notificationManagerCompat.createNotificationChannel(
                     NotificationChannel(
                             MEDIA_PLAYER_NOTIFICATION,
                             MEDIA_PLAYER_NOTIFICATION,

@@ -17,10 +17,26 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'phishin-api-key-provider'
+apply plugin: 'signing-config'
 
 android {
     compileSdkVersion 29
     buildToolsVersion '28.0.3'
+
+    signingConfigs {
+        debug {
+            storeFile = file("$rootDir/keystore/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+        release {
+            storeFile = file("$project.keystoreLocation")
+            storePassword = project.keystorePassword
+            keyAlias = project.storeKeyAlias
+            keyPassword = project.aliasKeyPassword
+        }
+    }
 
     defaultConfig {
         applicationId "com.bayapps.android.robophish"
@@ -33,19 +49,30 @@ android {
 
         buildConfigField("String", "PHISHIN_API_KEY", "\"$phishinApiKey\"")
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
     }
+
     buildTypes {
-        release {
+        debug {
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
             minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            signingConfig signingConfigs.release
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -80,6 +107,7 @@ dependencies {
     implementation 'org.kodein.di:kodein-di-framework-android-x:6.4.0'
     implementation 'org.kodein.di:kodein-di-jxinject-jvm:6.4.0'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'

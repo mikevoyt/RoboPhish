@@ -37,10 +37,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.MusicService;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.RoboPhishApplicationKt;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -57,7 +57,7 @@ public class PlaybackControlsFragment extends Fragment {
     private ImageView mAlbumArt;
     private String mArtUrl;
 
-    @Inject AlbumArtCache albumArtCache;
+    @Inject Picasso picasso;
 
     // Receive callbacks from the MediaController. Here we update our state such as which queue
     // is being shown, the current title and description and the PlaybackState.
@@ -168,27 +168,11 @@ public class PlaybackControlsFragment extends Fragment {
         if (!TextUtils.equals(artUrl, mArtUrl)) {
             mArtUrl = artUrl;
             Bitmap art = metadata.getDescription().getIconBitmap();
-            AlbumArtCache cache = albumArtCache;
-            if (art == null) {
-                art = cache.getIconImage(mArtUrl);
-            }
-            if (art != null) {
-                mAlbumArt.setImageBitmap(art);
-            } else {
-                cache.fetch(artUrl, new AlbumArtCache.FetchListener() {
-                            @Override
-                            public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
-                                if (icon != null) {
-                                    Timber.d("album art icon of w=%s h=%ss",
-                                            icon.getWidth(), icon.getHeight());
-                                    if (isAdded()) {
-                                        mAlbumArt.setImageBitmap(icon);
-                                    }
-                                }
-                            }
-                        }
-                );
-            }
+
+            picasso.load(mArtUrl)
+                    .fit()
+                    .centerInside()
+                    .into(mAlbumArt);
         }
     }
 

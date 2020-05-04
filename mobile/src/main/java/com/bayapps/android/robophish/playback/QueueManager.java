@@ -17,24 +17,25 @@
 package com.bayapps.android.robophish.playback;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 
 import androidx.annotation.NonNull;
 
-import com.bayapps.android.robophish.AlbumArtCache;
 import com.bayapps.android.robophish.R;
 import com.bayapps.android.robophish.model.MusicProvider;
 import com.bayapps.android.robophish.utils.MediaIDHelper;
+import com.bayapps.android.robophish.utils.PicassoKt;
 import com.bayapps.android.robophish.utils.QueueHelper;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import kotlin.Unit;
 import timber.log.Timber;
 
 import static android.support.v4.media.MediaMetadataCompat.METADATA_KEY_DURATION;
@@ -49,7 +50,7 @@ public class QueueManager {
     private MusicProvider mMusicProvider;
     private MetadataUpdateListener mListener;
     private Resources mResources;
-    private AlbumArtCache albumArtCache;
+    private Picasso picasso;
 
     // "Now playing" queue:
     private List<MediaSessionCompat.QueueItem> mPlayingQueue;
@@ -58,13 +59,13 @@ public class QueueManager {
     public QueueManager(
             @NonNull MusicProvider musicProvider,
             @NonNull Resources resources,
-            @NonNull AlbumArtCache albumArtCache,
+            @NonNull Picasso picasso,
             @NonNull MetadataUpdateListener listener
     ) {
         this.mMusicProvider = musicProvider;
         this.mListener = listener;
         this.mResources = resources;
-        this.albumArtCache = albumArtCache;
+        this.picasso = picasso;
 
         mPlayingQueue = Collections.synchronizedList(new ArrayList<>());
         mCurrentIndex = 0;
@@ -223,22 +224,22 @@ public class QueueManager {
         if (metadata.getDescription().getIconBitmap() == null &&
                 metadata.getDescription().getIconUri() != null) {
             String albumUri = metadata.getDescription().getIconUri().toString();
-            albumArtCache.fetch(albumUri, new AlbumArtCache.FetchListener() {
-                @Override
-                public void onFetched(String artUrl, Bitmap bitmap, Bitmap icon) {
-                    mMusicProvider.updateMusicArt(musicId, bitmap, icon);
 
-                    // If we are still playing the same music, notify the listeners:
-                    MediaSessionCompat.QueueItem currentMusic = getCurrentMusic();
-                    if (currentMusic == null) {
-                        return;
-                    }
-                    String currentPlayingId = MediaIDHelper.extractMusicIDFromMediaID(
-                            currentMusic.getDescription().getMediaId());
-                    if (musicId.equals(currentPlayingId)) {
-                        mListener.onMetadataChanged(mMusicProvider.getMusic(currentPlayingId));
-                    }
+
+            PicassoKt.loadLargeAndSmallImage(picasso, albumUri, result -> {
+                mMusicProvider.updateMusicArt(musicId, result.getImage(), result.getIcon());
+
+                // If we are still playing the same music, notify the listeners:
+                MediaSessionCompat.QueueItem music = getCurrentMusic();
+                if (music == null) {
+                    return Unit.INSTANCE;
                 }
+                String currentPlayingId = MediaIDHelper.extractMusicIDFromMediaID(music.getDescription().getMediaId());
+                if (musicId.equals(currentPlayingId)) {
+                    mListener.onMetadataChanged(mMusicProvider.getMusic(currentPlayingId));
+                }
+
+                return Unit.INSTANCE;
             });
         }
     }
