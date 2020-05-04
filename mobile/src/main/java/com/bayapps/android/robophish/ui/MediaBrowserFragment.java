@@ -214,93 +214,100 @@ public class MediaBrowserFragment extends Fragment {
             TabLayout tabLayout = rootView.findViewById(R.id.sliding_tabs);
             tabLayout.setupWithViewPager(viewPager);
 
-            final WebView setlist = rootView.findViewById(R.id.setlist_webview);
-            setlist.getSettings().setJavaScriptEnabled(true);
+            final WebView setlistWebView = rootView.findViewById(R.id.setlist_webview);
+            setlistWebView.getSettings().setJavaScriptEnabled(true);
 
-            AsyncHttpClient setlistClient = new AsyncHttpClient();
+            final WebView reviewsWebView = rootView.findViewById(R.id.reviews_webview);
+            reviewsWebView.getSettings().setJavaScriptEnabled(true);
+
+            /* GET setlist data/notes. If successful, we use the showId
+               to make the subsequent reviews request. */
             RequestParams setlistParams = new RequestParams();
-            setlistParams.put("api", "2.0");
-            setlistParams.put("method", "pnet.shows.setlists.get");
-            setlistParams.put("showdate", getSubTitle());
+            /* Looks like dates are formatted to YYYY.MM.DD somewhere for display,
+               phish.in API returns YYYY-MM-DD. Not sure why this wasn't needed before,
+               as both APIs seem to use YYYY-MM-DD. */
+            setlistParams.put("showdate", getSubTitle().replace(".", "-"));
+            //TODO: Move to gradle/buildConfig
             setlistParams.put("apikey", "C01AEE2002E80723E9E7");
-            setlistParams.put("format", "json");
-            setlistClient.get("http://api.phish.net/api.js", setlistParams, new JsonHttpResponseHandler() {
+            AsyncHttpClient setlistClient = new AsyncHttpClient();
+            setlistClient.get("https://api.phish.net/v3/setlists/get", setlistParams, new JsonHttpResponseHandler() {
 
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     super.onSuccess(statusCode, headers, response);
                     try {
-                        JSONObject result = response.getJSONObject(0);
-                        String city = result.getString("city");
-                        String state = result.getString("state");
-                        String country = result.getString("country");
+                        JSONObject result = response
+                                .getJSONObject("response")
+                                .getJSONArray("data")
+                                .getJSONObject(0);
+                        Integer showId = result.getInt("showid");
+                        String location = result.getString("location");
                         String venue = result.getString("venue");
-
-                        String header = "<h1>" + venue + "</h1>" + "<h2>" + city +
-                                 ", " + state + "<br/>" + country + "</h2>";
+                        String header =
+                                "<h1>" + venue + "</h1>" +
+                                "<h2>" + location + "</h2>";
 
                         String setlistdata = result.getString("setlistdata");
                         String setlistnotes = result.getString("setlistnotes");
-                        setlist.loadData(header + setlistdata + setlistnotes, "text/html", null);
+                        setlistWebView.loadData(header + setlistdata + setlistnotes, "text/html", null);
+
+                        // GET reviews
+                        RequestParams reviewsParams = new RequestParams();
+                        reviewsParams.put("showid", showId);
+                        reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
+                        AsyncHttpClient reviewsClient = new AsyncHttpClient();
+                        reviewsClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                try {
+                                    JSONArray result = response
+                                            .getJSONObject("response")
+                                            .getJSONArray("data");
+
+                                    StringBuilder display = new StringBuilder();
+                                    int len = result.length();
+                                    for (int i=0; i<len; i++) {
+                                        JSONObject entry = result.getJSONObject(i);
+                                        // I dislike the lack of camel casing and random snake casing in their schema
+                                        String author = entry.getString("username");
+                                        String review = entry.getString("reviewtext");
+                                        String reviewDate = entry.getString("posted_date");
+
+                                        String reviewSubs = review.replaceAll("\n", "<br/>");
+
+                                        display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
+                                        display.append(reviewSubs).append("<br/>");
+                                    }
+
+                                    reviewsWebView.loadData(display.toString(), "text/html", null);
+                                }  catch (JSONException e) {
+                                    e.printStackTrace();
+                                    reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
+                            }
+                        });
                     }  catch (JSONException e) {
                         e.printStackTrace();
+                        setlistWebView.loadData("<div>Error loading Setlist</div>", "text/html", null);
+                        reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
                     }
                 }
 
                 @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                        }
-                    }
-            );
-
-            final WebView reviews = rootView.findViewById(R.id.reviews_webview);
-            reviews.getSettings().setJavaScriptEnabled(true);
-
-            AsyncHttpClient reviewsClient = new AsyncHttpClient();
-            RequestParams reviewsParams = new RequestParams();
-            reviewsParams.put("api", "2.0");
-            reviewsParams.put("method", "pnet.reviews.query");
-            reviewsParams.put("showdate", getSubTitle());
-            reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
-            reviewsParams.put("format", "json");
-            reviewsClient.get("http://api.phish.net/api.js", reviewsParams, new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            try {
-                                StringBuilder display = new StringBuilder();
-
-                                int len = response.length();
-                                for (int i=0; i<len; i++) {
-                                    JSONObject entry = response.getJSONObject(i);
-                                    String author = entry.getString("author");
-                                    String review = entry.getString("review");
-                                    String tstamp = entry.getString("tstamp");
-
-                                    Date reviewTime = new Date(Long.parseLong(tstamp)*1000);
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    String reviewDate = dateFormat.format(reviewTime);
-
-                                    String reviewSubs = review.replaceAll("\n", "<br/>");
-
-                                    display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
-                                    display.append(reviewSubs).append("<br/>");
-                                }
-
-                                reviews.loadData(display.toString(), "text/html", null);
-                            }  catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                        }
-                    }
-            );
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                            setlistWebView.loadData("<div>Error loading Setlist</div>", "text/html", null);
+                            reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
+                }
+            });
 
 
             final WebView tapernotesWebview = rootView.findViewById(R.id.tapernotes_webview);
@@ -324,12 +331,14 @@ public class MediaBrowserFragment extends Fragment {
                                 tapernotesWebview.loadData(notesSubs, "text/html", null);
                             }  catch (JSONException e) {
                                 e.printStackTrace();
+                                tapernotesWebview.loadData("<div>Error loading Taper Notes</div>", "text/html", null);
                             }
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
+                            tapernotesWebview.loadData("<div>Error loading Taper Notes</div>", "text/html", null);
                         }
                     }
             );
