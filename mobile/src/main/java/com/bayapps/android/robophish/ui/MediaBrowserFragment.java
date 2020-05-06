@@ -220,6 +220,8 @@ public class MediaBrowserFragment extends Fragment {
             final WebView reviewsWebView = rootView.findViewById(R.id.reviews_webview);
             reviewsWebView.getSettings().setJavaScriptEnabled(true);
 
+            final AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+
             /* GET setlist data/notes. If successful, we use the showId
                to make the subsequent reviews request. */
             RequestParams setlistParams = new RequestParams();
@@ -229,8 +231,7 @@ public class MediaBrowserFragment extends Fragment {
             setlistParams.put("showdate", getSubTitle().replace(".", "-"));
             //TODO: Move to gradle/buildConfig
             setlistParams.put("apikey", "C01AEE2002E80723E9E7");
-            AsyncHttpClient setlistClient = new AsyncHttpClient();
-            setlistClient.get("https://api.phish.net/v3/setlists/get", setlistParams, new JsonHttpResponseHandler() {
+            asyncHttpClient.get("https://api.phish.net/v3/setlists/get", setlistParams, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -255,8 +256,7 @@ public class MediaBrowserFragment extends Fragment {
                         RequestParams reviewsParams = new RequestParams();
                         reviewsParams.put("showid", showId);
                         reviewsParams.put("apikey", "C01AEE2002E80723E9E7");
-                        AsyncHttpClient reviewsClient = new AsyncHttpClient();
-                        reviewsClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
+                        asyncHttpClient.get("https://api.phish.net/v3/reviews/query", reviewsParams, new JsonHttpResponseHandler() {
 
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -314,8 +314,7 @@ public class MediaBrowserFragment extends Fragment {
             tapernotesWebview.getSettings().setJavaScriptEnabled(true);
 
             String showId = extractShowFromMediaID(mediaId);
-            final AsyncHttpClient tapernotesClient = new AsyncHttpClient();
-            tapernotesClient.get("http://phish.in/api/v1/shows/" + showId + ".json",
+            asyncHttpClient.get("http://phish.in/api/v1/shows/" + showId + ".json",
                     null, new JsonHttpResponseHandler() {
 
                         @Override
