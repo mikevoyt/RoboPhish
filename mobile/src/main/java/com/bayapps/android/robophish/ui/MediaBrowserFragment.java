@@ -247,9 +247,27 @@ public class MediaBrowserFragment extends Fragment {
                                 "<h1>" + venue + "</h1>" +
                                 "<h2>" + location + "</h2>";
 
-                        String setlistdata = result.getString("setlistdata");
-                        String setlistnotes = result.getString("setlistnotes");
-                        setlistWebView.loadData(header + setlistdata + setlistnotes, "text/html", null);
+                        /* If there is an encore element but no setlist footer, 'setlistdata' will end
+                        with an </a> tag, putting the 'setlistnotes' on the same line. Wrapping in a </div>
+                        to just make them block level will prevent this and other weird errors from the API-end
+                        in regards to the document structure. */
+                        String setlistdata =
+                                "<div>" + result.getString("setlistdata") + "</div>";
+                        String setlistnotes =
+                                "<div>" + result.getString("setlistnotes") + "</div>";
+
+                        /* .loadData() fails to render anything past '#' character. This can be seen in setlist notes
+                        and reviews. Noticed when apostrophe (&#39;) would stop rendering at '&' character. Would just do
+                        .replace(), but not sure if this occurs with other characters.
+                        Old related issues?: https://issuetracker.google.com/issues/36906575#c23
+                        https://issuetracker.google.com/issues/36908740 */
+                        setlistWebView.loadDataWithBaseURL(
+                                null,
+                                header + setlistdata + setlistnotes,
+                                "text/html",
+                                "utf-8",
+                                null
+                        );
 
                         // GET reviews
                         RequestParams reviewsParams = new RequestParams();
@@ -275,13 +293,30 @@ public class MediaBrowserFragment extends Fragment {
                                         String review = entry.getString("reviewtext");
                                         String reviewDate = entry.getString("posted_date");
 
-                                        String reviewSubs = review.replaceAll("\n", "<br/>");
+                                        /* Handle some of their formatting. If we want to handle links,
+                                        we'd need to parse out the [url=http://...]text[/url] and create an anchor. */
+                                        // Regex to get URL markup: \[url.*/url]
+                                        String reviewSubs = review
+                                                .replaceAll("\n", "<br/>")
+                                                .replaceAll("\\[i]", "<i>")
+                                                .replaceAll("\\[/i]", "</i>")
+                                                .replaceAll("\\[b]", "<b>")
+                                                .replaceAll("\\[/b]", "</b>")
+                                                .replaceAll("\\[u]", "<u>")
+                                                .replaceAll("\\[/u]", "</u>");
 
                                         display.append("<h2>").append(author).append("</h2>").append("<h4>").append(reviewDate).append("</h4>");
                                         display.append(reviewSubs).append("<br/>");
                                     }
 
                                     reviewsWebView.loadData(display.toString(), "text/html", null);
+                                    reviewsWebView.loadDataWithBaseURL(
+                                            null,
+                                            display.toString(),
+                                            "text/html",
+                                            "utf-8",
+                                            null
+                                    );
                                 }  catch (JSONException e) {
                                     e.printStackTrace();
                                     reviewsWebView.loadData("<div>Error loading Reviews</div>", "text/html", null);
