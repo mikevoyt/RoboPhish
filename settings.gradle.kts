@@ -4,7 +4,7 @@ plugins {
 
 include(":mobile", "networking")
 
-rootProject.name = "RoboPhish"
+rootProject.name = "Never-Ending-Splendor"
 
 rootProject.children.forEach {
     if(file("${it.projectDir}/${it.name}.gradle.kts").exists()) {
