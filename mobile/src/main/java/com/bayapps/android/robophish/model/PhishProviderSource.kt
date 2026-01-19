@@ -46,11 +46,22 @@ class PhishProviderSource(
         return when (val result = phishinRepository.show(showId)) {
             is PhishinSuccess -> {
                 result.data.let { show ->
-                    result.data.tracks.map { track ->
+                    val playableTracks = show.tracks.filter { it.mp3 != null }
+                    if (playableTracks.size != show.tracks.size) {
+                        Timber.w(
+                            "Skipping %d track(s) with missing mp3 in show %s",
+                            show.tracks.size - playableTracks.size,
+                            show.id
+                        )
+                    }
+                    playableTracks.map { track ->
                         val durationMs = if (track.duration < 10_000) {
                             track.duration * 1000
                         } else {
                             track.duration
+                        }
+                        val mp3Url = requireNotNull(track.mp3) {
+                            "Missing mp3 url for track ${track.id} in show ${show.id}"
                         }
                         val artUrl = images.random()
                         // Adding the music source to the MediaMetadata (and consequently using it in the
@@ -60,7 +71,10 @@ class PhishProviderSource(
                         val subtitle = "${show.venue_name} - ${show.date.toSimpleFormat()}"
                         MediaMetadataCompat.Builder()
                                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, track.id)
-                                .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.mp3.toString())
+                                .putString(
+                                    MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE,
+                                    mp3Url.toString()
+                                )
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs)
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.title)
                                 //pretty hokey, but we're overloading these fields so we can save venue and location, and showId

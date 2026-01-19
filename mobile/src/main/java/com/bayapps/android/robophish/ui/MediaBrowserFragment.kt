@@ -6,7 +6,9 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -55,6 +57,8 @@ class MediaBrowserFragment : Fragment() {
     private var errorMessage: TextView? = null
     private var progressBar: ProgressBar? = null
     private var showData: JSONObject? = null
+    private var listView: ListView? = null
+    private var pendingListState: Parcelable? = null
 
     private var oldOnline = false
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -94,6 +98,7 @@ class MediaBrowserFragment : Fragment() {
                 browserAdapter?.clear()
                 children.forEach { item -> browserAdapter?.add(item) }
                 browserAdapter?.notifyDataSetChanged()
+                restoreListStateIfNeeded()
             } catch (t: Throwable) {
                 Timber.e(t, "Error on childrenloaded")
             }
@@ -325,15 +330,16 @@ class MediaBrowserFragment : Fragment() {
 
         browserAdapter = BrowseAdapter(requireActivity())
 
-        val listView = rootView.findViewById<ListView>(R.id.list_view)
-        listView.adapter = browserAdapter
-        listView.setOnItemClickListener { _, _, position, _ ->
+        listView = rootView.findViewById(R.id.list_view)
+        listView?.adapter = browserAdapter
+        listView?.setOnItemClickListener { _, _, position, _ ->
             checkForUserVisibleErrors(false)
             val item = browserAdapter?.getItem(position)
             if (item != null) {
                 mediaFragmentListener?.onMediaItemSelected(item)
             }
         }
+        pendingListState = savedInstanceState?.getParcelableCompat(LIST_STATE_KEY) ?: pendingListState
 
         return rootView
     }
@@ -350,6 +356,20 @@ class MediaBrowserFragment : Fragment() {
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val request = NetworkRequest.Builder().build()
         connectivityManager.registerNetworkCallback(request, networkCallback)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val state = listView?.onSaveInstanceState()
+        if (state != null) {
+            outState.putParcelable(LIST_STATE_KEY, state)
+            pendingListState = state
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pendingListState = listView?.onSaveInstanceState()
     }
 
     override fun onStop() {
@@ -437,6 +457,21 @@ class MediaBrowserFragment : Fragment() {
         checkForUserVisibleErrors(false)
         if (isOnline) {
             browserAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun restoreListStateIfNeeded() {
+        val state = pendingListState ?: return
+        listView?.onRestoreInstanceState(state)
+        pendingListState = null
+    }
+
+    private inline fun <reified T : Parcelable> Bundle.getParcelableCompat(key: String): T? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getParcelable(key, T::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            getParcelable(key)
         }
     }
 
@@ -547,5 +582,6 @@ class MediaBrowserFragment : Fragment() {
         private const val ARG_MEDIA_ID = "media_id"
         private const val ARG_TITLE = "title"
         private const val ARG_SUBTITLE = "subtitle"
+        private const val LIST_STATE_KEY = "list_state"
     }
 }

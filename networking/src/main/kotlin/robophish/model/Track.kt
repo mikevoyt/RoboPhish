@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 data class Track(
         val id: String,
         val title: String,
-        val mp3: HttpUrl,
+        val mp3: HttpUrl?,
         val duration: Long
 ) {
     val formatedDuration: String get() {
