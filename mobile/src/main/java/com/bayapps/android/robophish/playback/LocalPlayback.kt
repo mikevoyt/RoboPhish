@@ -37,11 +37,18 @@ class LocalPlayback(
 
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
+            logPlayerState("onPlaybackStateChanged", playbackState)
             updatePlaybackState(playbackState)
         }
 
         override fun onIsPlayingChanged(isPlaying: Boolean) {
+            logPlayerState("onIsPlayingChanged", player?.playbackState ?: Player.STATE_IDLE)
             updatePlaybackState(player?.playbackState ?: Player.STATE_IDLE)
+        }
+
+        override fun onPlaybackSuppressionReasonChanged(playbackSuppressionReason: Int) {
+            val state = player?.playbackState ?: Player.STATE_IDLE
+            logPlayerState("onPlaybackSuppressionReasonChanged", state)
         }
 
         override fun onPlayerError(error: PlaybackException) {
@@ -242,6 +249,31 @@ class LocalPlayback(
         if (state == android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED) {
             callback?.onCompletion()
         }
+    }
+
+    private fun logPlayerState(event: String, playbackState: Int) {
+        val exoPlayer = player
+        val stateName = when (playbackState) {
+            Player.STATE_IDLE -> "IDLE"
+            Player.STATE_BUFFERING -> "BUFFERING"
+            Player.STATE_READY -> "READY"
+            Player.STATE_ENDED -> "ENDED"
+            else -> "UNKNOWN"
+        }
+        val suppression = when (exoPlayer?.playbackSuppressionReason) {
+            Player.PLAYBACK_SUPPRESSION_REASON_NONE -> "NONE"
+            Player.PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS -> "AUDIO_FOCUS_LOSS"
+            Player.PLAYBACK_SUPPRESSION_REASON_UNSUITABLE_AUDIO_OUTPUT -> "UNSUITABLE_OUTPUT"
+            else -> "UNKNOWN"
+        }
+        Timber.d(
+            "ExoPlayer %s state=%s playWhenReady=%s isPlaying=%s suppression=%s",
+            event,
+            stateName,
+            exoPlayer?.playWhenReady,
+            exoPlayer?.isPlaying,
+            suppression
+        )
     }
 
     private fun releasePlayer() {
