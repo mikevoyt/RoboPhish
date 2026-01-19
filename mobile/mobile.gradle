@@ -20,7 +20,7 @@ apply plugin: 'signing-config'
 
 android {
     namespace "com.bayapps.android.robophish"
-    compileSdk 34
+    compileSdk 35
 
     signingConfigs {
         debug {
@@ -40,8 +40,8 @@ android {
     defaultConfig {
         applicationId "com.bayapps.android.robophish"
         minSdkVersion 21
-        targetSdk 34
-        versionCode 32
+        targetSdk 35
+        versionCode 34
         versionName "2.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

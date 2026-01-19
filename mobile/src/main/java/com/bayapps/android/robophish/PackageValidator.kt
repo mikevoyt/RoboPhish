@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.XmlResourceParser
+import android.os.Build
 import android.os.Process
 import android.util.Base64
 import org.xmlpull.v1.XmlPullParserException
@@ -60,17 +61,28 @@ class PackageValidator(ctx: Context) {
         }
         val packageManager = context.packageManager
         val packageInfo: PackageInfo = try {
-            packageManager.getPackageInfo(callingPackage, PackageManager.GET_SIGNATURES)
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                PackageManager.GET_SIGNING_CERTIFICATES
+            } else {
+                PackageManager.GET_SIGNATURES
+            }
+            packageManager.getPackageInfo(callingPackage, flags)
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.w(e, "Package manager can't find package: %s", callingPackage)
             return false
         }
-        if (packageInfo.signatures.size != 1) {
+        val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            packageInfo.signingInfo?.apkContentsSigners
+        } else {
+            @Suppress("DEPRECATION")
+            packageInfo.signatures
+        }
+        if (signatures == null || signatures.size != 1) {
             Timber.w("Caller has more than one signature certificate!")
             return false
         }
         val signature = Base64.encodeToString(
-            packageInfo.signatures[0].toByteArray(),
+            signatures[0].toByteArray(),
             Base64.NO_WRAP
         )
 
