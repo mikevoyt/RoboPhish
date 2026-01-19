@@ -60,6 +60,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
     private lateinit var mediaBrowser: MediaBrowserCompat
     private var scheduleFuture: ScheduledFuture<*>? = null
     private var lastPlaybackState: PlaybackStateCompat? = null
+    private var userSeeking = false
 
     @Inject lateinit var picasso: Picasso
 
@@ -131,9 +132,12 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
+                userSeeking = true
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
+                userSeeking = false
+                updatePlaybackState(lastPlaybackState)
             }
         })
 
@@ -239,7 +243,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
 
         val buffering = state.state == PlaybackStateCompat.STATE_BUFFERING
         loading.visibility = if (buffering) View.VISIBLE else View.GONE
-        controllers.visibility = if (buffering) View.INVISIBLE else View.VISIBLE
+        controllers.visibility = if (buffering && !userSeeking) View.INVISIBLE else View.VISIBLE
     }
 
     private fun updateProgress() {
