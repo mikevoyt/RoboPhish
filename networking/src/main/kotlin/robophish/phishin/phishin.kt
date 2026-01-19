@@ -6,6 +6,7 @@ suspend fun <T> retry(
     repeat(2) {
         when (val result = block()) {
             is PhishinSuccess -> return result
+            is PhishinError -> Unit
         }
     }
     return block() // last attempt

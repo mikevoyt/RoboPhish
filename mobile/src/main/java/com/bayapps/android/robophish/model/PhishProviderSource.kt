@@ -6,9 +6,7 @@ import com.squareup.picasso.Picasso
 import robophish.model.YearData
 import robophish.phishin.*
 import timber.log.Timber
-import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
-import kotlin.time.toDuration
+import java.util.concurrent.TimeUnit
 
 class PhishProviderSource(
         private val phishinRepository: PhishinRepository,
@@ -49,6 +47,12 @@ class PhishProviderSource(
             is PhishinSuccess -> {
                 result.data.let { show ->
                     result.data.tracks.map { track ->
+                        val durationMs = if (track.duration < 10_000) {
+                            track.duration * 1000
+                        } else {
+                            track.duration
+                        }
+                        val artUrl = images.random()
                         // Adding the music source to the MediaMetadata (and consequently using it in the
                         // mediaSession.setMetadata) is not a good idea for a real world music app, because
                         // the session metadata can be accessed by notification listeners. This is done in this
@@ -56,17 +60,19 @@ class PhishProviderSource(
                         MediaMetadataCompat.Builder()
                                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, track.id)
                                 .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.mp3.toString())
-                                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, track.duration)
+                                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs)
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.title)
                                 //pretty hokey, but we're overloading these fields so we can save venue and location, and showId
                                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, show.venue_name)
                                 .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, show.taper_notes)
                                 .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, show.id)
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, track.title)
-                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, track.formatedDuration)
+                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, formatDuration(durationMs))
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, show.date.toSimpleFormat())
                                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.duration.toString())
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, images.random())
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, artUrl)
+                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI, artUrl)
+                                .putString(MediaMetadataCompat.METADATA_KEY_ART_URI, artUrl)
                                 .build()
                     }
                 }
@@ -86,6 +92,13 @@ class PhishProviderSource(
     }
 
     companion object {
+        private fun formatDuration(durationMs: Long): String {
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(durationMs)
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(durationMs) -
+                TimeUnit.MINUTES.toSeconds(minutes)
+            return String.format("%d:%02d", minutes, seconds)
+        }
+
         private val images = listOf(
                 //add some random images to display
                 //Images used with permission (c) Jason Guss, James Bryan, Mike Rambo, Evan Krohn

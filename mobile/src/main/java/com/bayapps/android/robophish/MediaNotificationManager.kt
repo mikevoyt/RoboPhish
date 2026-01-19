@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.RemoteException
@@ -63,34 +64,34 @@ class MediaNotificationManager(
             musicService,
             REQUEST_CODE,
             Intent(ACTION_PAUSE).setPackage(musicService.packageName),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     private val playIntent = PendingIntent.getBroadcast(
             musicService,
             REQUEST_CODE,
             Intent(ACTION_PLAY).setPackage(musicService.packageName),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     private val previousIntent = PendingIntent.getBroadcast(
             musicService,
             REQUEST_CODE,
             Intent(ACTION_PREV).setPackage(musicService.packageName),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     private val nextIntent = PendingIntent.getBroadcast(
             musicService,
             REQUEST_CODE,
             Intent(ACTION_NEXT).setPackage(musicService.packageName),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     private val stopCastIntent = PendingIntent.getBroadcast(
             musicService,
             REQUEST_CODE,
             Intent(ACTION_STOP_CASTING).setPackage(musicService.packageName),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     private val notificationColor: Int = ContextCompat.getColor(musicService, R.color.primaryColor)
@@ -124,7 +125,15 @@ class MediaNotificationManager(
                 filter.addAction(ACTION_PLAY)
                 filter.addAction(ACTION_PREV)
                 filter.addAction(ACTION_STOP_CASTING)
-                musicService.registerReceiver(this@MediaNotificationManager, filter)
+                if (Build.VERSION.SDK_INT >= 33) {
+                    musicService.registerReceiver(
+                        this@MediaNotificationManager,
+                        filter,
+                        Context.RECEIVER_NOT_EXPORTED
+                    )
+                } else {
+                    musicService.registerReceiver(this@MediaNotificationManager, filter)
+                }
                 musicService.startForeground(NOTIFICATION_ID, notification)
                 mStarted = true
             }
@@ -196,8 +205,12 @@ class MediaNotificationManager(
         if (description != null) {
             openUI.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION, description)
         }
-        return PendingIntent.getActivity(musicService, REQUEST_CODE, openUI,
-                PendingIntent.FLAG_CANCEL_CURRENT)
+        return PendingIntent.getActivity(
+            musicService,
+            REQUEST_CODE,
+            openUI,
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     private val mCb: MediaControllerCompat.Callback = object : MediaControllerCompat.Callback(), CoroutineScope by MainScope() {

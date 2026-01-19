@@ -7,6 +7,38 @@ Pre-requisites
 --------------
 
 - Android SDK v17
+- JDK 17 (for Android Gradle Plugin 8.x)
+
+Run In Android Studio
+---------------------
+
+1) Open `/Users/mikevoyt/Development/Rokk/RoboPhish` in Android Studio.
+2) Set Gradle JDK to 17:
+   Android Studio > Settings/Preferences > Build, Execution, Deployment > Gradle > Gradle JDK.
+3) Sync Gradle when prompted.
+4) Select a run configuration for the `mobile` module.
+5) Start an emulator (Device Manager) or connect a USB device.
+6) Run the app (Run ▶ or Cmd+R/Ctrl+R).
+
+Command Line Build/Run
+----------------------
+
+Build:
+- `./gradlew :mobile:assembleDebug`
+
+Install (with a device/emulator connected):
+- `./gradlew :mobile:installDebug`
+
+Launch:
+- `adb shell am start -n com.bayapps.android.robophish/.ui.MusicPlayerActivity`
+
+Troubleshooting
+---------------
+
+- Gradle requires JDK 17. If you see Java 11 errors, set `org.gradle.java.home` to a JDK 17 install
+  or pick JDK 17 in Android Studio Gradle settings.
+- If `adb devices` is empty, start an emulator or connect a USB device with debugging enabled.
+- If the emulator fails to start, use Android Studio's Device Manager to create/launch an AVD.
 
 Contributors
 ------------
