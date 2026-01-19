@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.bayapps.android.robophish.R
+import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
@@ -291,8 +292,9 @@ class MediaBrowserFragment : Fragment() {
 
             val showId = MediaIDHelper.extractShowFromMediaID(mediaId)
             val tapernotesClient = AsyncHttpClient()
+            tapernotesClient.addHeader("Authorization", "Bearer ${BuildConfig.PHISHIN_API_KEY}")
             tapernotesClient.get(
-                "http://phish.in/api/v1/shows/$showId.json",
+                "https://phish.in/api/v1/shows/$showId",
                 null,
                 object : JsonHttpResponseHandler() {
                     override fun onSuccess(
