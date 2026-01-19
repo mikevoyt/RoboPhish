@@ -59,6 +59,7 @@ class MediaBrowserFragment : Fragment() {
     private var showData: JSONObject? = null
     private var listView: ListView? = null
     private var pendingListState: Parcelable? = null
+    private var pendingSelectedTrackId: String? = null
 
     private var oldOnline = false
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -98,7 +99,10 @@ class MediaBrowserFragment : Fragment() {
                 browserAdapter?.clear()
                 children.forEach { item -> browserAdapter?.add(item) }
                 browserAdapter?.notifyDataSetChanged()
-                restoreListStateIfNeeded()
+                val restored = restoreListStateIfNeeded()
+                if (!restored) {
+                    restoreSelectionIfNeeded()
+                }
             } catch (t: Throwable) {
                 Timber.e(t, "Error on childrenloaded")
             }
@@ -199,7 +203,7 @@ class MediaBrowserFragment : Fragment() {
                                                 val author = entry.getString("username")
                                                 val review = entry.getString("reviewtext")
                                                 val reviewDate = entry.getString("posted_date")
-                                                val reviewSubs = review.replace("\n", "<br/>")
+                                                val reviewSubs = formatReviewText(review)
                                                 display.append("<h2>")
                                                     .append(author)
                                                     .append("</h2><h4>")
@@ -340,8 +344,31 @@ class MediaBrowserFragment : Fragment() {
             }
         }
         pendingListState = savedInstanceState?.getParcelableCompat(LIST_STATE_KEY) ?: pendingListState
+        pendingSelectedTrackId = savedInstanceState?.getString(SELECTED_TRACK_ID_KEY)
+            ?: arguments?.getString(ARG_SELECTED_TRACK_ID)
 
         return rootView
+    }
+
+    private fun formatReviewText(raw: String): String {
+        var text = raw
+        text = text.replace("[b]", "<b>").replace("[/b]", "</b>")
+        text = text.replace("[i]", "<i>").replace("[/i]", "</i>")
+        text = text.replace("[u]", "<u>").replace("[/u]", "</u>")
+        text = text.replace("[quote]", "<blockquote>").replace("[/quote]", "</blockquote>")
+        text = text.replace(
+            Regex("(?i)\\[url=(.+?)](.*?)\\[/url]"),
+            "<a href=\"$1\">$2</a>"
+        )
+        text = text.replace(
+            Regex("(?i)\\[url](.+?)\\[/url]"),
+            "<a href=\"$1\">$1</a>"
+        )
+        text = text.replace(
+            Regex("(?i)\\[img](.+?)\\[/img]"),
+            "<img src=\"$1\" />"
+        )
+        return text.replace("\n", "<br/>")
     }
 
     override fun onStart() {
@@ -365,6 +392,7 @@ class MediaBrowserFragment : Fragment() {
             outState.putParcelable(LIST_STATE_KEY, state)
             pendingListState = state
         }
+        pendingSelectedTrackId?.let { outState.putString(SELECTED_TRACK_ID_KEY, it) }
     }
 
     override fun onPause() {
@@ -399,11 +427,20 @@ class MediaBrowserFragment : Fragment() {
 
     private fun getSubTitle(): String? = arguments?.getString(ARG_SUBTITLE)
 
-    fun setMediaId(title: String?, subtitle: String?, mediaId: String?) {
-        val args = Bundle(3)
+    fun setMediaId(
+        title: String?,
+        subtitle: String?,
+        mediaId: String?,
+        selectedTrackId: String? = null
+    ) {
+        val args = Bundle(4)
         args.putString(ARG_MEDIA_ID, mediaId)
         args.putString(ARG_TITLE, title)
         args.putString(ARG_SUBTITLE, subtitle)
+        if (!selectedTrackId.isNullOrEmpty()) {
+            args.putString(ARG_SELECTED_TRACK_ID, selectedTrackId)
+            pendingSelectedTrackId = selectedTrackId
+        }
         arguments = args
     }
 
@@ -460,10 +497,31 @@ class MediaBrowserFragment : Fragment() {
         }
     }
 
-    private fun restoreListStateIfNeeded() {
-        val state = pendingListState ?: return
+    private fun restoreListStateIfNeeded(): Boolean {
+        val state = pendingListState ?: return false
         listView?.onRestoreInstanceState(state)
         pendingListState = null
+        return true
+    }
+
+    private fun restoreSelectionIfNeeded() {
+        val selectedTrackId = pendingSelectedTrackId ?: return
+        val adapter = browserAdapter ?: return
+        val count = adapter.count
+        if (count == 0) return
+        var targetPosition: Int? = null
+        for (i in 0 until count) {
+            val item = adapter.getItem(i) ?: continue
+            val mediaId = item.mediaId ?: continue
+            val trackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
+            if (trackId == selectedTrackId) {
+                targetPosition = i
+                break
+            }
+        }
+        val position = targetPosition ?: return
+        listView?.post { listView?.setSelection(position) }
+        pendingSelectedTrackId = null
     }
 
     private inline fun <reified T : Parcelable> Bundle.getParcelableCompat(key: String): T? {
@@ -583,5 +641,7 @@ class MediaBrowserFragment : Fragment() {
         private const val ARG_TITLE = "title"
         private const val ARG_SUBTITLE = "subtitle"
         private const val LIST_STATE_KEY = "list_state"
+        private const val ARG_SELECTED_TRACK_ID = "selected_track_id"
+        private const val SELECTED_TRACK_ID_KEY = "selected_track_id_state"
     }
 }

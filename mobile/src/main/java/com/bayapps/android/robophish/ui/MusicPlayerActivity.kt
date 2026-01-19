@@ -89,6 +89,12 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     private fun initializeFromParams(savedInstanceState: Bundle?, intent: Intent) {
         var mediaId: String? = null
+        val showMediaId = intent.getStringExtra(EXTRA_SHOW_MEDIA_ID)
+        if (!showMediaId.isNullOrEmpty()) {
+            val selectedTrackId = intent.getStringExtra(EXTRA_SELECTED_TRACK_ID)
+            navigateToBrowser(null, null, showMediaId, selectedTrackId)
+            return
+        }
         when (intent.action) {
             MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH -> {
                 voiceSearchParams = intent.extras
@@ -121,12 +127,17 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         }
     }
 
-    private fun navigateToBrowser(title: String?, subtitle: String?, mediaId: String?) {
+    private fun navigateToBrowser(
+        title: String?,
+        subtitle: String?,
+        mediaId: String?,
+        selectedTrackId: String? = null
+    ) {
         Timber.d("navigateToBrowser, mediaId=%s", mediaId)
         var fragment = browseFragment
         if (fragment == null || !TextUtils.equals(fragment.getMediaId(), mediaId)) {
             fragment = MediaBrowserFragment().apply {
-                setMediaId(title, subtitle, mediaId)
+                setMediaId(title, subtitle, mediaId, selectedTrackId)
             }
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             transaction.setCustomAnimations(
@@ -164,6 +175,8 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         const val EXTRA_START_FULLSCREEN = "com.example.android.uamp.EXTRA_START_FULLSCREEN"
         const val EXTRA_CURRENT_MEDIA_DESCRIPTION =
             "com.example.android.uamp.CURRENT_MEDIA_DESCRIPTION"
+        const val EXTRA_SHOW_MEDIA_ID = "com.example.android.uamp.EXTRA_SHOW_MEDIA_ID"
+        const val EXTRA_SELECTED_TRACK_ID = "com.example.android.uamp.EXTRA_SELECTED_TRACK_ID"
     }
 
     private inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(name: String): T? {

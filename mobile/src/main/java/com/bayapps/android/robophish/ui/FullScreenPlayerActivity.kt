@@ -17,6 +17,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.text.format.DateUtils
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -27,6 +28,7 @@ import androidx.core.content.ContextCompat
 import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.inject
+import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.squareup.picasso.Picasso
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -62,6 +64,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
     private lateinit var mediaBrowser: MediaBrowserCompat
     private var scheduleFuture: ScheduledFuture<*>? = null
     private var lastPlaybackState: PlaybackStateCompat? = null
+    private var currentMetadata: MediaMetadataCompat? = null
     private var userSeeking = false
 
     @Inject lateinit var picasso: Picasso
@@ -78,6 +81,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
 
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
             if (metadata == null) return
+            currentMetadata = metadata
             val venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
             val location = metadata.getString(MediaMetadataCompat.METADATA_KEY_AUTHOR)
             updateMediaDescription(metadata.description, venue, location, resolveArtUri(metadata))
@@ -101,6 +105,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         setContentView(R.layout.activity_full_player)
         initializeToolbar()
         inject()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         pauseDrawable = ContextCompat.getDrawable(this, R.drawable.uamp_ic_pause_white_48dp)!!
         playDrawable = ContextCompat.getDrawable(this, R.drawable.uamp_ic_play_arrow_white_48dp)!!
@@ -184,6 +189,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
             MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION
         )
         if (metadata != null) {
+            currentMetadata = metadata
             val venue = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
             val location = metadata.getString(MediaMetadataCompat.METADATA_KEY_AUTHOR)
             updateMediaDescription(metadata.description, venue, location, resolveArtUri(metadata))
@@ -282,6 +288,42 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         ) {
             controller.transportControls.pause()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            navigateBackToShow()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        navigateBackToShow()
+    }
+
+    private fun navigateBackToShow() {
+        val metadata = currentMetadata ?: MediaControllerCompat.getMediaController(this)?.metadata
+        val showId = metadata?.getString(MediaMetadataCompat.METADATA_KEY_COMPILATION)
+        if (showId.isNullOrEmpty()) {
+            finish()
+            return
+        }
+        val trackMediaId = metadata.description?.mediaId
+        val trackId = trackMediaId?.let { MediaIDHelper.extractMusicIDFromMediaID(it) } ?: trackMediaId
+        val showMediaId = MediaIDHelper.createMediaID(
+            null,
+            MediaIDHelper.MEDIA_ID_TRACKS_BY_SHOW,
+            showId
+        )
+        val intent = Intent(this, MusicPlayerActivity::class.java)
+            .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(MusicPlayerActivity.EXTRA_SHOW_MEDIA_ID, showMediaId)
+        if (!trackId.isNullOrEmpty()) {
+            intent.putExtra(MusicPlayerActivity.EXTRA_SELECTED_TRACK_ID, trackId)
+        }
+        startActivity(intent)
+        finish()
     }
 
     companion object {
