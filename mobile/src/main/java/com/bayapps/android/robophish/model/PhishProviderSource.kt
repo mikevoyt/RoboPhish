@@ -57,6 +57,7 @@ class PhishProviderSource(
                         // mediaSession.setMetadata) is not a good idea for a real world music app, because
                         // the session metadata can be accessed by notification listeners. This is done in this
                         // sample for convenience only.
+                        val subtitle = "${show.venue_name} - ${show.date.toSimpleFormat()}"
                         MediaMetadataCompat.Builder()
                                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, track.id)
                                 .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, track.mp3.toString())
@@ -69,7 +70,8 @@ class PhishProviderSource(
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, track.title)
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, formatDuration(durationMs))
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, show.date.toSimpleFormat())
-                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.duration.toString())
+                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, subtitle)
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, "Phish")
                                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, artUrl)
                                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI, artUrl)
                                 .putString(MediaMetadataCompat.METADATA_KEY_ART_URI, artUrl)
