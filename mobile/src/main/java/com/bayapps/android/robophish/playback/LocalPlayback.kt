@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.MediaPlayer
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -35,8 +37,9 @@ class LocalPlayback(
 
     private val wifiLock: WifiManager.WifiLock = (context.applicationContext
         .getSystemService(Context.WIFI_SERVICE) as WifiManager)
-        .createWifiLock(WifiManager.WIFI_MODE_FULL, "uAmp_lock")
+        .createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "uAmp_lock")
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private var audioFocusRequest: AudioFocusRequest? = null
 
     private var state = PlaybackStateCompat.STATE_NONE
     private var playOnFocusGain = false
@@ -129,7 +132,7 @@ class LocalPlayback(
             return false
         }
 
-        nextPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        setAudioAttributes(nextPlayer)
 
         try {
             nextPlayer?.setDataSource(source)
@@ -180,7 +183,7 @@ class LocalPlayback(
         try {
             createMediaPlayerIfNeeded()
             state = PlaybackStateCompat.STATE_BUFFERING
-            mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            setAudioAttributes(mediaPlayer)
             mediaPlayer?.setDataSource(source)
             mediaPlayer?.prepareAsync()
             wifiLock.acquire()
@@ -235,11 +238,26 @@ class LocalPlayback(
     private fun tryToGetAudioFocus() {
         Timber.d("tryToGetAudioFocus")
         if (audioFocus != AUDIO_FOCUSED) {
-            val result = audioManager.requestAudioFocus(
-                this,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN
-            )
+            val result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (audioFocusRequest == null) {
+                    val attributes = AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                    audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                        .setAudioAttributes(attributes)
+                        .setOnAudioFocusChangeListener(this)
+                        .setWillPauseWhenDucked(false)
+                        .build()
+                }
+                audioManager.requestAudioFocus(audioFocusRequest!!)
+            } else {
+                audioManager.requestAudioFocus(
+                    this,
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN
+                )
+            }
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 audioFocus = AUDIO_FOCUSED
             }
@@ -249,9 +267,17 @@ class LocalPlayback(
     private fun giveUpAudioFocus() {
         Timber.d("giveUpAudioFocus")
         if (audioFocus == AUDIO_FOCUSED) {
-            if (audioManager.abandonAudioFocus(this) ==
-                AudioManager.AUDIOFOCUS_REQUEST_GRANTED
-            ) {
+            val result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val request = audioFocusRequest
+                if (request != null) {
+                    audioManager.abandonAudioFocusRequest(request)
+                } else {
+                    AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+                }
+            } else {
+                audioManager.abandonAudioFocus(this)
+            }
+            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 audioFocus = AUDIO_NO_FOCUS_NO_DUCK
             }
         }
@@ -298,7 +324,8 @@ class LocalPlayback(
             focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
             focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
         ) {
-            val canDuck = focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
+            val canDuck = focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ||
+                focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
             audioFocus = if (canDuck) AUDIO_NO_FOCUS_CAN_DUCK else AUDIO_NO_FOCUS_NO_DUCK
             if (state == PlaybackStateCompat.STATE_PLAYING && !canDuck) {
                 playOnFocusGain = true
@@ -307,6 +334,20 @@ class LocalPlayback(
             Timber.e("onAudioFocusChange: Ignoring unsupported focusChange: %s", focusChange)
         }
         configMediaPlayerState()
+    }
+
+    private fun setAudioAttributes(player: MediaPlayer?) {
+        player ?: return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            player.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+        } else {
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        }
     }
 
     override fun onSeekComplete(mp: MediaPlayer) {
