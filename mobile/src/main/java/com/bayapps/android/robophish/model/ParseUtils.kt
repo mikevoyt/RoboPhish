@@ -53,7 +53,8 @@ object ParseUtils {
                 }
             }
 
-            val taperNotes = data.optString("taper_notes", null)
+            val taperNotes = data.optString("taper_notes")
+                .takeIf { it.isNotBlank() && it != "null" }
             show.taperNotes = taperNotes
 
             show.isSbd = data.getBoolean("sbd")

@@ -21,6 +21,7 @@ import timber.log.Timber
 /**
  * An implementation of Playback that talks to Cast.
  */
+@Suppress("DEPRECATION")
 class CastPlayback(
     private val musicProvider: MusicProvider,
     private val castSession: CastSession

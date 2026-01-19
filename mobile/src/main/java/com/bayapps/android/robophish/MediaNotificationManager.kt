@@ -17,6 +17,7 @@ package com.bayapps.android.robophish
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -153,7 +154,7 @@ class MediaNotificationManager(
                 musicService.unregisterReceiver(this)
             } catch (ex: IllegalArgumentException) { // ignore if the receiver is not registered.
             }
-            musicService.stopForeground(true)
+            stopForegroundCompat()
         }
     }
 
@@ -355,7 +356,7 @@ class MediaNotificationManager(
         Timber.d("updateNotificationPlaybackState. mPlaybackState=%s", mPlaybackState)
         if (mPlaybackState == null || !mStarted) {
             Timber.d("updateNotificationPlaybackState. cancelling notification!")
-            musicService.stopForeground(true)
+            stopForegroundCompat()
             return
         }
         if (mPlaybackState!!.state == PlaybackStateCompat.STATE_PLAYING
@@ -383,5 +384,14 @@ class MediaNotificationManager(
         const val ACTION_PREV = "com.example.android.uamp.prev"
         const val ACTION_NEXT = "com.example.android.uamp.next"
         const val ACTION_STOP_CASTING = "com.example.android.uamp.stop_cast"
+    }
+
+    private fun stopForegroundCompat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            musicService.stopForeground(Service.STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            musicService.stopForeground(true)
+        }
     }
 }

@@ -5,9 +5,11 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -37,6 +39,24 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
     private var drawerLayout: DrawerLayout? = null
     private var toolbarInitialized = false
     private var itemToOpenWhenDrawerCloses = -1
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    private val backPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+                drawerLayout?.closeDrawers()
+                return
+            }
+            val fragmentManager = supportFragmentManager
+            if (fragmentManager.backStackEntryCount > 0) {
+                fragmentManager.popBackStack()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+                isEnabled = true
+            }
+        }
+    }
 
     private val backStackChangedListener = FragmentManager.OnBackStackChangedListener {
         updateDrawerToggle()
@@ -44,7 +64,7 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
 
     private val castStateListener = CastStateListener { newState ->
         if (newState == CastState.NO_DEVICES_AVAILABLE) return@CastStateListener
-        Handler().postDelayed({
+        mainHandler.postDelayed({
             if (mediaRouteMenuItem?.isVisible == true) {
                 Timber.d("Cast Icon is visible")
                 showFtu()
@@ -95,6 +115,7 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
         Timber.d("Activity onCreate")
         inject()
         CastContext.getSharedInstance(this)
+        onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
     override fun onStart() {
@@ -145,23 +166,10 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
             return true
         }
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if (drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
-            drawerLayout?.closeDrawers()
-            return
-        }
-        val fragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun setTitle(title: CharSequence?) {

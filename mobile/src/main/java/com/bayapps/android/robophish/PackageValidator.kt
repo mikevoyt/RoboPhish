@@ -64,6 +64,7 @@ class PackageValidator(ctx: Context) {
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 PackageManager.GET_SIGNING_CERTIFICATES
             } else {
+                @Suppress("DEPRECATION")
                 PackageManager.GET_SIGNATURES
             }
             packageManager.getPackageInfo(callingPackage, flags)

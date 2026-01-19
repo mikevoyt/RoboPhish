@@ -24,6 +24,7 @@ class LocalPlayback(
     private val musicProvider: MusicProvider
 ) : Playback {
 
+    @Suppress("DEPRECATION")
     private val wifiLock: WifiManager.WifiLock = (context.applicationContext
         .getSystemService(Context.WIFI_SERVICE) as WifiManager)
         .createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "uAmp_lock")

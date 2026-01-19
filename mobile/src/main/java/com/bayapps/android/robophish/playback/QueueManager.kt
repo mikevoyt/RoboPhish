@@ -74,7 +74,7 @@ class QueueManager(
     }
 
     fun setQueueFromSearch(query: String, extras: Bundle): Boolean {
-        val queue = QueueHelper.getPlayingQueueFromSearch(query, extras, musicProvider)
+        val queue = QueueHelper.getPlayingQueueFromSearch(query, extras)
         setCurrentQueue(resources.getString(R.string.search_queue_title), queue)
         return !queue.isNullOrEmpty()
     }
@@ -82,7 +82,7 @@ class QueueManager(
     fun setRandomQueue() {
         setCurrentQueue(
             resources.getString(R.string.random_queue_title),
-            QueueHelper.getRandomQueue(musicProvider)
+            QueueHelper.getRandomQueue()
         )
     }
 
@@ -157,9 +157,8 @@ class QueueManager(
             val albumUri = description.iconUri.toString()
             picasso.loadLargeAndSmallImage(albumUri) { result ->
                 musicProvider.updateMusicArt(musicId, result.image, result.icon)
-                val music = currentMusic ?: return@loadLargeAndSmallImage
                 val currentPlayingId = MediaIDHelper.extractMusicIDFromMediaID(
-                    music.description.mediaId ?: return@loadLargeAndSmallImage
+                    currentMusic.description.mediaId ?: return@loadLargeAndSmallImage
                 )
                 val updated = musicProvider.getMusic(currentPlayingId)
                 if (musicId == currentPlayingId && updated != null) {

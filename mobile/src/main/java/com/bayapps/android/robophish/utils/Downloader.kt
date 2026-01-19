@@ -19,8 +19,6 @@ class Downloader(
     private val downloadCompleteIntentName = DownloadManager.ACTION_DOWNLOAD_COMPLETE
     private val downloadCompleteIntentFilter = IntentFilter(downloadCompleteIntentName)
 
-    constructor(context: Context, showId: String, showData: JSONObject) : this(context, showData)
-
     private val downloadCompleteReceiver: BroadcastReceiver by lazy {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
@@ -77,7 +75,6 @@ class Downloader(
                 request.setDescription("Downloading $title")
                 Timber.d("downloading %s", url)
 
-                request.setVisibleInDownloadsUi(true)
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 request.setDestinationInExternalFilesDir(context, null, url)
 

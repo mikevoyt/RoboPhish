@@ -2,10 +2,12 @@ package com.bayapps.android.robophish.ui
 
 import android.app.SearchManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.text.TextUtils
 import androidx.fragment.app.FragmentTransaction
 import com.bayapps.android.robophish.R
@@ -76,12 +78,11 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     private fun startFullScreenActivityIfNeeded(intent: Intent?) {
         if (intent != null && intent.getBooleanExtra(EXTRA_START_FULLSCREEN, false)) {
+            val description =
+                intent.getParcelableExtraCompat<MediaDescriptionCompat>(EXTRA_CURRENT_MEDIA_DESCRIPTION)
             val fullScreenIntent = Intent(this, FullScreenPlayerActivity::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(
-                    EXTRA_CURRENT_MEDIA_DESCRIPTION,
-                    intent.getParcelableExtra<Parcelable>(EXTRA_CURRENT_MEDIA_DESCRIPTION)
-                )
+                .putExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION, description)
             startActivity(fullScreenIntent)
         }
     }
@@ -163,5 +164,14 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         const val EXTRA_START_FULLSCREEN = "com.example.android.uamp.EXTRA_START_FULLSCREEN"
         const val EXTRA_CURRENT_MEDIA_DESCRIPTION =
             "com.example.android.uamp.CURRENT_MEDIA_DESCRIPTION"
+    }
+
+    private inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(name: String): T? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getParcelableExtra(name, T::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            getParcelableExtra(name)
+        }
     }
 }

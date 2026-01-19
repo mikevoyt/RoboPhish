@@ -43,15 +43,14 @@ object QueueHelper {
     @JvmStatic
     fun getPlayingQueueFromSearch(
         query: String,
-        queryParams: Bundle,
-        musicProvider: MusicProvider
+        queryParams: Bundle
     ): List<MediaSessionCompat.QueueItem>? {
         Timber.d("Creating playing queue for musics from search: %s params=%s", query, queryParams)
         val params = VoiceSearchParams(query, queryParams)
         Timber.d("VoiceSearchParams: %s", params)
 
         if (params.isAny) {
-            return getRandomQueue(musicProvider)
+            return getRandomQueue()
         }
 
         return convertToQueue(null, MediaIDHelper.MEDIA_ID_MUSICS_BY_SEARCH, query)
@@ -113,7 +112,7 @@ object QueueHelper {
      * Create a random queue with at most [RANDOM_QUEUE_SIZE] elements.
      */
     @JvmStatic
-    fun getRandomQueue(musicProvider: MusicProvider): List<MediaSessionCompat.QueueItem> {
+    fun getRandomQueue(): List<MediaSessionCompat.QueueItem> {
         val result = ArrayList<MediaMetadataCompat>(RANDOM_QUEUE_SIZE)
         return convertToQueue(result, MediaIDHelper.MEDIA_ID_MUSICS_BY_SEARCH, "random") ?: emptyList()
     }

@@ -4,8 +4,10 @@ import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.os.RemoteException
 import android.os.SystemClock
 import android.support.v4.media.MediaBrowserCompat
@@ -178,7 +180,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         mediaController.registerCallback(callback)
 
         val metadata = mediaController.metadata
-        val description = intent.getParcelableExtra<MediaDescriptionCompat>(
+        val description = intent.getParcelableExtraCompat<MediaDescriptionCompat>(
             MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION
         )
         if (metadata != null) {
@@ -285,5 +287,14 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
     companion object {
         private const val PROGRESS_UPDATE_INTERNAL = 1000L
         private const val PROGRESS_UPDATE_INITIAL_INTERVAL = 100L
+    }
+
+    private inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(name: String): T? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getParcelableExtra(name, T::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            getParcelableExtra(name)
+        }
     }
 }

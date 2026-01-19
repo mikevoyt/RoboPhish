@@ -1,12 +1,11 @@
 package com.bayapps.android.robophish.ui
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.ConnectivityManager
-import android.os.Build
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -24,7 +23,10 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager.widget.ViewPager
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.BuildConfig
@@ -54,19 +56,14 @@ class MediaBrowserFragment : Fragment() {
     private var progressBar: ProgressBar? = null
     private var showData: JSONObject? = null
 
-    private val connectivityChangeReceiver = object : BroadcastReceiver() {
-        private var oldOnline = false
-        override fun onReceive(context: Context, intent: Intent) {
-            if (mediaId != null) {
-                val isOnline = NetworkHelper.isOnline(context)
-                if (isOnline != oldOnline) {
-                    oldOnline = isOnline
-                    checkForUserVisibleErrors(false)
-                    if (isOnline) {
-                        browserAdapter?.notifyDataSetChanged()
-                    }
-                }
-            }
+    private var oldOnline = false
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            handleNetworkChange(true)
+        }
+
+        override fun onLost(network: Network) {
+            handleNetworkChange(false)
         }
     }
 
@@ -114,24 +111,6 @@ class MediaBrowserFragment : Fragment() {
         mediaFragmentListener = activity as? MediaFragmentListener
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            0 -> {
-                val showId = MediaIDHelper.extractShowFromMediaID(getMediaId() ?: "")
-                val data = showData
-                if (showId != null && data != null && activity != null) {
-                    Downloader(requireActivity(), showId, data)
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -141,8 +120,8 @@ class MediaBrowserFragment : Fragment() {
 
         val mediaId = getMediaId()
         val rootView: View = if (mediaId != null && MediaIDHelper.isShow(mediaId)) {
-            setHasOptionsMenu(true)
             val view = inflater.inflate(R.layout.fragment_list_show, container, false)
+            registerMenuProvider()
 
             val viewPager = view.findViewById<ViewPager>(R.id.viewpager)
             viewPager.adapter = ShowPagerAdapter(view)
@@ -206,12 +185,12 @@ class MediaBrowserFragment : Fragment() {
                                     ) {
                                         super.onSuccess(statusCode, headers, response)
                                         try {
-                                            val result = response
+                                            val reviewsData = response
                                                 .getJSONObject("response")
                                                 .getJSONArray("data")
                                             val display = StringBuilder()
-                                            for (i in 0 until result.length()) {
-                                                val entry = result.getJSONObject(i)
+                                            for (i in 0 until reviewsData.length()) {
+                                                val entry = reviewsData.getJSONObject(i)
                                                 val author = entry.getString("username")
                                                 val review = entry.getString("reviewtext")
                                                 val reviewDate = entry.getString("posted_date")
@@ -366,19 +345,11 @@ class MediaBrowserFragment : Fragment() {
         if (mediaBrowser?.isConnected == true) {
             onConnected()
         }
-
-        if (Build.VERSION.SDK_INT >= 33) {
-            requireActivity().registerReceiver(
-                connectivityChangeReceiver,
-                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION),
-                Context.RECEIVER_NOT_EXPORTED
-            )
-        } else {
-            requireActivity().registerReceiver(
-                connectivityChangeReceiver,
-                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-            )
-        }
+        oldOnline = NetworkHelper.isOnline(requireContext())
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val request = NetworkRequest.Builder().build()
+        connectivityManager.registerNetworkCallback(request, networkCallback)
     }
 
     override fun onStop() {
@@ -389,7 +360,12 @@ class MediaBrowserFragment : Fragment() {
         }
         val controller = (activity as? BaseActivity)?.getSupportMediaController()
         controller?.unregisterCallback(mediaControllerCallback)
-        requireActivity().unregisterReceiver(connectivityChangeReceiver)
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        try {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
+        } catch (_: IllegalArgumentException) {
+        }
     }
 
     override fun onDetach() {
@@ -427,6 +403,41 @@ class MediaBrowserFragment : Fragment() {
 
         val controller = (activity as? BaseActivity)?.getSupportMediaController()
         controller?.registerCallback(mediaControllerCallback)
+    }
+
+    private fun registerMenuProvider() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        0 -> {
+                            val showId = MediaIDHelper.extractShowFromMediaID(getMediaId() ?: "")
+                            val data = showData
+                            if (showId != null && data != null && activity != null) {
+                                Downloader(requireActivity(), data)
+                            }
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
+    }
+
+    private fun handleNetworkChange(isOnline: Boolean) {
+        if (mediaId == null || isOnline == oldOnline) return
+        oldOnline = isOnline
+        checkForUserVisibleErrors(false)
+        if (isOnline) {
+            browserAdapter?.notifyDataSetChanged()
+        }
     }
 
     private fun checkForUserVisibleErrors(forceError: Boolean) {

@@ -38,7 +38,15 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
         inject()
         checkPlayServices()
 
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val taskDesc = ActivityManager.TaskDescription.Builder()
+                .setLabel(title.toString())
+                .setIcon(R.drawable.ic_launcher_white)
+                .setPrimaryColor(ContextCompat.getColor(this, R.color.primaryColor))
+                .build()
+            setTaskDescription(taskDesc)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            @Suppress("DEPRECATION")
             val taskDesc = ActivityManager.TaskDescription(
                 title.toString(),
                 BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_white),

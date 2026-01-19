@@ -3,6 +3,7 @@ package com.bayapps.android.robophish.playback
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -26,7 +27,7 @@ class PlaybackManager(
 ) : Playback.Callback {
 
     val mediaSessionCallback: MediaSessionCompat.Callback = MediaSessionCallback()
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private val executorService = Executors.newSingleThreadScheduledExecutor()
     private var scheduleFuture: ScheduledFuture<*>? = null
     private var gaplessQueued = false

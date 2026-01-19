@@ -24,6 +24,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -316,7 +317,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         // potentially stopping the service.
         mDelayedStopHandler.removeCallbacksAndMessages(null)
         mDelayedStopHandler.sendEmptyMessageDelayed(0, STOP_DELAY.toLong())
-        stopForeground(true)
+        stopForegroundCompat()
     }
 
     override fun onNotificationRequired() {
@@ -353,7 +354,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     /**
      * A simple handler that stops the service if playback is not active (playing)
      */
-    private class DelayedStopHandler(service: MusicService) : Handler() {
+    private class DelayedStopHandler(service: MusicService) : Handler(Looper.getMainLooper()) {
         private val mWeakReference: WeakReference<MusicService> = WeakReference(service)
 
         override fun handleMessage(msg: Message) {
@@ -412,5 +413,14 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         mMediaRouter!!.setMediaSessionCompat(null)
         mPlaybackManager!!.switchToPlayback(playback, false)
         castSession = null
+    }
+
+    private fun stopForegroundCompat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(Service.STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
     }
 }
