@@ -77,8 +77,9 @@ android {
         }
         release {
             signingConfig signingConfigs.release
-            shrinkResources true
-            minifyEnabled true
+            // Kodein TypeToken crashes with R8 in release; keep it stable for Play.
+            shrinkResources false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
