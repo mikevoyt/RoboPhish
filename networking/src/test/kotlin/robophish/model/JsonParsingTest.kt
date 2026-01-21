@@ -4,23 +4,20 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import org.junit.jupiter.api.Test
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
-import org.kodein.di.generic.instance
-import robophish.networkingModule
+import robophish.moshi.HttpUrlAdapter
+import java.util.Date
 
 /**
  * Test to ensure the models match what we expect from the [robophish.PhishinService], and
  * that the adapters are generated and setup correctly in [Moshi].
  */
-class JsonParsingTest: KodeinAware{
-
-    override val kodein = Kodein.lazy {
-        import(networkingModule)
-    }
-
-    private val moshi: Moshi by instance()
+class JsonParsingTest {
+    private val moshi: Moshi = Moshi.Builder()
+        .add(Date::class.java, Rfc3339DateJsonAdapter())
+        .add(HttpUrlAdapter)
+        .build()
 
     @Test
     fun `should parse years`() {
