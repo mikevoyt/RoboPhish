@@ -63,64 +63,10 @@
         android:orientation="vertical"
         android:layout_below="@id/sliding_tabs">
 
-        <androidx.viewpager.widget.ViewPager
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/tracks"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-                <ListView
-                    android:id="@+id/list_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
-                </ListView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/setlist"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-                <WebView
-                    android:id="@+id/setlist_webview"
-                    tools:text="Setlist goes here"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/reviews"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-                <WebView
-                    tools:text="Reviews go here"
-                    android:id="@+id/reviews_webview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tapernotes"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-                <WebView
-                    tools:text="Taper notes go here"
-                    android:id="@+id/tapernotes_webview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-
-        </androidx.viewpager.widget.ViewPager>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

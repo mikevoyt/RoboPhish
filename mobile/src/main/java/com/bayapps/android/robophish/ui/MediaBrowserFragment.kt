@@ -27,7 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
@@ -35,6 +35,7 @@ import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -56,6 +57,9 @@ class MediaBrowserFragment : Fragment() {
     private var errorMessage: View? = null
     private var progressBar: View? = null
     private var showData: JSONObject? = null
+    private var setlistWebView: WebView? = null
+    private var reviewsWebView: WebView? = null
+    private var tapernotesWebView: WebView? = null
 
     private var listView: ListView? = null
     private var pendingListState: Parcelable? = null
@@ -104,18 +108,32 @@ class MediaBrowserFragment : Fragment() {
             val view = inflater.inflate(R.layout.fragment_list_show, container, false)
             registerMenuProvider()
 
-            val viewPager = view.findViewById<ViewPager>(R.id.viewpager)
-            viewPager.adapter = ShowPagerAdapter(view)
+            val viewPager = view.findViewById<ViewPager2>(R.id.viewpager)
+            val pagerAdapter = ShowPagerAdapter(
+                onTracksViewCreated = { pageView ->
+                    val list = pageView.findViewById<ListView>(R.id.list_view)
+                    setupListView(list)
+                },
+                onSetlistViewCreated = { pageView ->
+                    setlistWebView = pageView.findViewById(R.id.setlist_webview)
+                    setlistWebView?.settings?.javaScriptEnabled = true
+                },
+                onReviewsViewCreated = { pageView ->
+                    reviewsWebView = pageView.findViewById(R.id.reviews_webview)
+                    reviewsWebView?.settings?.javaScriptEnabled = true
+                },
+                onTaperNotesViewCreated = { pageView ->
+                    tapernotesWebView = pageView.findViewById(R.id.tapernotes_webview)
+                    tapernotesWebView?.settings?.javaScriptEnabled = true
+                }
+            )
+            viewPager.adapter = pagerAdapter
             viewPager.offscreenPageLimit = 3
 
             val tabLayout = view.findViewById<TabLayout>(R.id.sliding_tabs)
-            tabLayout.setupWithViewPager(viewPager)
-
-            val setlistWebView = view.findViewById<WebView>(R.id.setlist_webview)
-            setlistWebView.settings.javaScriptEnabled = true
-
-            val reviewsWebView = view.findViewById<WebView>(R.id.reviews_webview)
-            reviewsWebView.settings.javaScriptEnabled = true
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = pagerAdapter.getPageTitle(position)
+            }.attach()
 
             val setlistDate = getSubTitle()?.replace(".", "-")
             if (!setlistDate.isNullOrBlank()) {
@@ -130,12 +148,12 @@ class MediaBrowserFragment : Fragment() {
                     )
                     if (!isAdded) return@launch
                     if (setlistResponse == null) {
-                        setlistWebView.loadData(
+                        setlistWebView?.loadData(
                             "<div>Error loading Setlist</div>",
                             "text/html",
                             null
                         )
-                        reviewsWebView.loadData(
+                        reviewsWebView?.loadData(
                             "<div>Error loading Reviews</div>",
                             "text/html",
                             null
@@ -153,7 +171,7 @@ class MediaBrowserFragment : Fragment() {
                         val header = "<h1>$venue</h1><h2>$location</h2>"
                         val setlistdata = result.getString("setlistdata")
                         val setlistnotes = result.getString("setlistnotes")
-                        setlistWebView.loadData(
+                        setlistWebView?.loadData(
                             header + setlistdata + setlistnotes,
                             "text/html",
                             null
@@ -169,7 +187,7 @@ class MediaBrowserFragment : Fragment() {
                         )
                         if (!isAdded) return@launch
                         if (reviewsResponse == null) {
-                            reviewsWebView.loadData(
+                            reviewsWebView?.loadData(
                                 "<div>Error loading Reviews</div>",
                                 "text/html",
                                 null
@@ -193,19 +211,19 @@ class MediaBrowserFragment : Fragment() {
                                 .append("</h4>")
                             display.append(reviewSubs).append("<br/>")
                         }
-                        reviewsWebView.loadData(
+                        reviewsWebView?.loadData(
                             display.toString(),
                             "text/html",
                             null
                         )
                     } catch (e: JSONException) {
                         Timber.e(e, "Error parsing setlist/reviews response")
-                        setlistWebView.loadData(
+                        setlistWebView?.loadData(
                             "<div>Error loading Setlist</div>",
                             "text/html",
                             null
                         )
-                        reviewsWebView.loadData(
+                        reviewsWebView?.loadData(
                             "<div>Error loading Reviews</div>",
                             "text/html",
                             null
@@ -213,9 +231,6 @@ class MediaBrowserFragment : Fragment() {
                     }
                 }
             }
-
-            val tapernotesWebview = view.findViewById<WebView>(R.id.tapernotes_webview)
-            tapernotesWebview.settings.javaScriptEnabled = true
 
             val showId = MediaIDHelper.extractShowFromMediaID(mediaId)
             if (!showId.isNullOrBlank()) {
@@ -226,7 +241,7 @@ class MediaBrowserFragment : Fragment() {
                     )
                     if (!isAdded) return@launch
                     if (response == null) {
-                        tapernotesWebview.loadData(
+                        tapernotesWebView?.loadData(
                             "<div>Error loading Taper Notes</div>",
                             "text/html",
                             null
@@ -239,10 +254,10 @@ class MediaBrowserFragment : Fragment() {
                         var tapernotes = data.getString("taper_notes")
                         if (tapernotes == "null") tapernotes = "Not available"
                         val notesSubs = tapernotes.replace("\n", "<br/>")
-                        tapernotesWebview.loadData(notesSubs, "text/html", null)
+                        tapernotesWebView?.loadData(notesSubs, "text/html", null)
                     } catch (e: JSONException) {
                         Timber.e(e, "Error parsing taper notes response")
-                        tapernotesWebview.loadData(
+                        tapernotesWebView?.loadData(
                             "<div>Error loading Taper Notes</div>",
                             "text/html",
                             null
@@ -262,15 +277,9 @@ class MediaBrowserFragment : Fragment() {
 
         browserAdapter = BrowseAdapter(requireActivity())
 
-        listView = rootView.findViewById(R.id.list_view)
-        listView?.adapter = browserAdapter
-        listView?.setOnItemClickListener { _, _, position, _ ->
-            checkForUserVisibleErrors(false)
-            val item = browserAdapter?.getItem(position)
-            if (item != null) {
-                val siblings = browserAdapter?.items ?: emptyList()
-                mediaFragmentListener?.onMediaItemSelected(item, siblings)
-            }
+        if (mediaId == null || !MediaIDHelper.isShow(mediaId)) {
+            val list = rootView.findViewById<ListView>(R.id.list_view)
+            setupListView(list)
         }
         pendingListState = savedInstanceState?.getParcelableCompat(LIST_STATE_KEY) ?: pendingListState
         pendingSelectedTrackId = savedInstanceState?.getString(SELECTED_TRACK_ID_KEY)
@@ -494,6 +503,19 @@ class MediaBrowserFragment : Fragment() {
         listView?.onRestoreInstanceState(state)
         pendingListState = null
         return true
+    }
+
+    private fun setupListView(list: ListView) {
+        listView = list
+        listView?.adapter = browserAdapter
+        listView?.setOnItemClickListener { _, _, position, _ ->
+            checkForUserVisibleErrors(false)
+            val item = browserAdapter?.getItem(position)
+            if (item != null) {
+                val siblings = browserAdapter?.items ?: emptyList()
+                mediaFragmentListener?.onMediaItemSelected(item, siblings)
+            }
+        }
     }
 
     private fun restoreSelectionIfNeeded() {

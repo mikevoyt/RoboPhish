@@ -1,41 +1,47 @@
 package com.bayapps.android.robophish.ui
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager.widget.PagerAdapter
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import com.bayapps.android.robophish.R
 
 class ShowPagerAdapter(
-    private val rootView: View
-) : PagerAdapter() {
+    private val onTracksViewCreated: (View) -> Unit,
+    private val onSetlistViewCreated: (View) -> Unit,
+    private val onReviewsViewCreated: (View) -> Unit,
+    private val onTaperNotesViewCreated: (View) -> Unit
+) : RecyclerView.Adapter<ShowPagerAdapter.PageViewHolder>() {
 
-    override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val view = when (position) {
-            0 -> rootView.findViewById<View>(R.id.tracks)
-            1 -> rootView.findViewById(R.id.setlist)
-            2 -> rootView.findViewById(R.id.reviews)
-            3 -> rootView.findViewById(R.id.tapernotes)
-            else -> null
-        } ?: error("Missing view for position $position")
-        collection.addView(view)
-        return view
+    private val pages = listOf(
+        Page("Tracks", R.layout.fragment_show_tracks),
+        Page("Setlist", R.layout.fragment_show_setlist),
+        Page("Reviews", R.layout.fragment_show_reviews),
+        Page("Taper Notes", R.layout.fragment_show_tapernotes)
+    )
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        return PageViewHolder(view)
     }
 
-    override fun destroyItem(collection: ViewGroup, position: Int, view: Any) {
-        collection.removeView(view as View)
-    }
-
-    override fun getCount(): Int = 4
-
-    override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object`
-
-    override fun getPageTitle(position: Int): CharSequence {
-        return when (position) {
-            0 -> "Tracks"
-            1 -> "Setlist"
-            2 -> "Reviews"
-            3 -> "Taper Notes"
-            else -> ""
+    override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
+        when (position) {
+            0 -> onTracksViewCreated(holder.itemView)
+            1 -> onSetlistViewCreated(holder.itemView)
+            2 -> onReviewsViewCreated(holder.itemView)
+            3 -> onTaperNotesViewCreated(holder.itemView)
         }
     }
+
+    override fun getItemViewType(position: Int): Int = pages[position].layoutId
+
+    override fun getItemCount(): Int = pages.size
+
+    fun getPageTitle(position: Int): CharSequence = pages[position].title
+
+    class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    data class Page(val title: String, @LayoutRes val layoutId: Int)
 }
