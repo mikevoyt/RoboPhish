@@ -16,6 +16,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'phishin-api-key-provider'
+apply plugin: 'phishnet-api-key-provider'
 apply plugin: 'signing-config'
 
 android {
@@ -46,6 +47,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "PHISHIN_API_KEY", "\"$phishinApiKey\"")
+        buildConfigField("String", "PHISHNET_API_KEY", "\"$phishnetApiKey\"")
     }
 
     compileOptions {
@@ -104,8 +106,6 @@ dependencies {
     implementation 'androidx.media3:media3-session:1.3.1'
     implementation 'androidx.media3:media3-ui:1.3.1'
 
-    // appears to be a bug in 1.4.10 where you can't use synchronous http anymore
-    implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'com.google.guava:guava:33.2.1-android'
 
 
