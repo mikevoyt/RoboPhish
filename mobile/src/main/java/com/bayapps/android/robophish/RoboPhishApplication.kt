@@ -4,20 +4,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
-import androidx.multidex.MultiDexApplication
-import com.google.android.gms.cast.framework.CastContext
+import android.app.Application
 
 const val MEDIA_PLAYER_NOTIFICATION = "MediaPlayer"
 
-class RoboPhishApplication : MultiDexApplication() {
+class RoboPhishApplication : Application() {
     private val deps by lazy { ServiceLocator.get(this) }
 
     override fun onCreate() {
         super.onCreate()
 
         deps.initializeApp()
-
-        CastContext.getSharedInstance(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             deps.notificationManager.createNotificationChannel(

@@ -4,12 +4,11 @@ import android.app.SearchManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.MediaStore
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaDescriptionCompat
 import android.text.TextUtils
 import androidx.fragment.app.FragmentTransaction
+import androidx.media3.common.MediaItem
+import androidx.media3.session.MediaLibraryService
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import timber.log.Timber
@@ -38,24 +37,25 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         super.onSaveInstanceState(outState)
     }
 
-    override fun onMediaItemSelected(item: MediaBrowserCompat.MediaItem) {
+    override fun onMediaItemSelected(item: MediaItem, siblings: List<MediaItem>) {
         Timber.d("onMediaItemSelected, mediaId=%s", item.mediaId)
+        val browser = mediaBrowser
         when {
-            item.isPlayable -> {
-                getSupportMediaController()?.transportControls
-                    ?.playFromMediaId(item.mediaId, null)
+            item.mediaMetadata.isPlayable == true && browser != null -> {
+                val index = siblings.indexOfFirst { it.mediaId == item.mediaId }.coerceAtLeast(0)
+                browser.setMediaItems(siblings, index, 0)
+                browser.prepare()
+                browser.play()
             }
-            item.isBrowsable -> {
-                val title = item.description.title?.toString() ?: ""
-                val subtitle = item.description.subtitle?.toString() ?: ""
+            item.mediaMetadata.isBrowsable == true -> {
+                val title = item.mediaMetadata.title?.toString() ?: ""
+                val subtitle = item.mediaMetadata.subtitle?.toString() ?: ""
                 navigateToBrowser(title, subtitle, item.mediaId)
             }
-            else -> {
-                Timber.w(
-                    "Ignoring MediaItem that is neither browsable nor playable: mediaId=%s",
-                    item.mediaId
-                )
-            }
+            else -> Timber.w(
+                "Ignoring MediaItem that is neither browsable nor playable: mediaId=%s",
+                item.mediaId
+            )
         }
     }
 
@@ -78,11 +78,8 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     private fun startFullScreenActivityIfNeeded(intent: Intent?) {
         if (intent != null && intent.getBooleanExtra(EXTRA_START_FULLSCREEN, false)) {
-            val description =
-                intent.getParcelableExtraCompat<MediaDescriptionCompat>(EXTRA_CURRENT_MEDIA_DESCRIPTION)
             val fullScreenIntent = Intent(this, FullScreenPlayerActivity::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION, description)
             startActivity(fullScreenIntent)
         }
     }
@@ -162,7 +159,13 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
     override fun onMediaControllerConnected() {
         voiceSearchParams?.let { params ->
             val query = params.getString(SearchManager.QUERY)
-            getSupportMediaController()?.transportControls?.playFromSearch(query, params)
+            val browser = mediaBrowser
+            if (browser != null) {
+                val libraryParams = MediaLibraryService.LibraryParams.Builder()
+                    .setExtras(params)
+                    .build()
+                browser.search(query ?: "", libraryParams)
+            }
             voiceSearchParams = null
         }
         browseFragment?.onConnected()
@@ -173,18 +176,9 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         private const val FRAGMENT_TAG = "uamp_list_container"
 
         const val EXTRA_START_FULLSCREEN = "com.example.android.uamp.EXTRA_START_FULLSCREEN"
-        const val EXTRA_CURRENT_MEDIA_DESCRIPTION =
-            "com.example.android.uamp.CURRENT_MEDIA_DESCRIPTION"
         const val EXTRA_SHOW_MEDIA_ID = "com.example.android.uamp.EXTRA_SHOW_MEDIA_ID"
         const val EXTRA_SELECTED_TRACK_ID = "com.example.android.uamp.EXTRA_SELECTED_TRACK_ID"
     }
 
-    private inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(name: String): T? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getParcelableExtra(name, T::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            getParcelableExtra(name)
-        }
-    }
+    
 }
