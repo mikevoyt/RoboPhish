@@ -1,16 +1,19 @@
 package com.bayapps.android.robophish.model
 
+import android.content.Context
 import android.support.v4.media.MediaMetadataCompat
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.bayapps.android.robophish.utils.toSimpleFormat
-import com.squareup.picasso.Picasso
 import robophish.model.YearData
 import robophish.phishin.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class PhishProviderSource(
+        private val appContext: Context,
         private val phishinRepository: PhishinRepository,
-        private val picasso: Picasso
+        private val imageLoader: ImageLoader
 ) : MusicProviderSource {
 
     override suspend fun years(): List<YearData> {
@@ -102,8 +105,11 @@ class PhishProviderSource(
 
     init {
         // prefetch all images
-        images.forEach {
-            picasso.load(it).fetch()
+        images.forEach { url ->
+            val request = ImageRequest.Builder(appContext)
+                .data(url)
+                .build()
+            imageLoader.enqueue(request)
         }
     }
 

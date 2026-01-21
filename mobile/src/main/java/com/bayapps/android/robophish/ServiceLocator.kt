@@ -7,8 +7,8 @@ import com.bayapps.android.robophish.model.MusicProviderSource
 import com.bayapps.android.robophish.model.PhishProviderSource
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
-import com.squareup.picasso.OkHttp3Downloader
-import com.squareup.picasso.Picasso
+import coil.ImageLoader
+import coil.util.DebugLogger
 import okhttp3.Cache
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -76,17 +76,19 @@ class ServiceLocator private constructor(private val appContext: Context) {
         PhishinRepository(phishinService)
     }
 
-    val picasso: Picasso by lazy {
-        Picasso.Builder(appContext)
-            .downloader(OkHttp3Downloader(okHttpClient))
-            .listener { _, uri, exception ->
-                Timber.e(exception, "Error while loading image %s", uri)
+    val imageLoader: ImageLoader by lazy {
+        ImageLoader.Builder(appContext)
+            .okHttpClient(okHttpClient)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    logger(DebugLogger())
+                }
             }
             .build()
     }
 
     val musicProviderSource: MusicProviderSource by lazy {
-        PhishProviderSource(phishinRepository, picasso)
+        PhishProviderSource(appContext, phishinRepository, imageLoader)
     }
 
     val musicProvider: MusicProvider by lazy {
