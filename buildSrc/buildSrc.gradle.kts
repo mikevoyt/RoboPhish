@@ -3,16 +3,12 @@ plugins {
 }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
     google()
-    jcenter()
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:3.5.2")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.60")
-}
-
-kotlinDslPluginOptions {
-    experimentalWarning.set(false)
+    implementation("com.android.tools.build:gradle:8.2.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
 }

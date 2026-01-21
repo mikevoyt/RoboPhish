@@ -11,10 +11,8 @@ import androidx.multidex.MultiDexApplication
 import com.bayapps.android.robophish.model.MusicProvider
 import com.bayapps.android.robophish.model.MusicProviderSource
 import com.bayapps.android.robophish.model.PhishProviderSource
-import com.bayapps.android.robophish.ui.FullScreenPlayerActivity
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager
+import com.google.android.gms.cast.framework.CastContext
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
@@ -54,7 +52,7 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
         }
 
         bind<NotificationManagerCompat>() with singleton { NotificationManagerCompat.from(instance()) }
-        bind<VideoCastManager>() with singleton { VideoCastManager.getInstance() }
+        bind<CastContext>() with singleton { CastContext.getSharedInstance(instance()) }
 
         bind<GoogleApiAvailability>() with singleton { GoogleApiAvailability.getInstance() }
 
@@ -82,16 +80,7 @@ class RoboPhishApplication : MultiDexApplication(), KodeinAware {
 
         appInitializer()
 
-        val applicationId = resources.getString(R.string.cast_application_id)
-        VideoCastManager.initialize(
-                applicationContext,
-                CastConfiguration.Builder(applicationId)
-                        .enableWifiReconnection()
-                        .enableAutoReconnect()
-                        .enableDebug()
-                        .setTargetActivity(FullScreenPlayerActivity::class.java)
-                        .build())
-
+        CastContext.getSharedInstance(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManagerCompat.createNotificationChannel(

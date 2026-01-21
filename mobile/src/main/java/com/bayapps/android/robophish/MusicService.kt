@@ -22,13 +22,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastSession
+import com.google.android.gms.cast.framework.SessionManager
+import com.google.android.gms.cast.framework.SessionManagerListener
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
 import androidx.mediarouter.media.MediaRouter
@@ -39,9 +45,6 @@ import com.bayapps.android.robophish.playback.QueueManager.MetadataUpdateListene
 import com.bayapps.android.robophish.ui.MusicPlayerActivity
 import com.bayapps.android.robophish.utils.CarHelper
 import com.bayapps.android.robophish.utils.MediaIDHelper
-import com.google.android.gms.cast.ApplicationMetadata
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager
-import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import org.kodein.di.KodeinAware
@@ -118,7 +121,9 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     private var mIsConnectedToCar = false
     private var mCarConnectionReceiver: BroadcastReceiver? = null
 
-    private val videoCastManager: VideoCastManager by instance()
+    private val castContext: CastContext by instance()
+    private val sessionManager: SessionManager by lazy { castContext.sessionManager }
+    private var castSession: CastSession? = null
     private val musicProvider: MusicProvider by instance()
     private val picasso: Picasso by instance()
     private val notificationManager: NotificationManagerCompat by instance()
@@ -132,33 +137,35 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
      *
      * TODO move to it's own class
      */
-    private val mCastConsumer: VideoCastConsumerImpl = object : VideoCastConsumerImpl() {
-        override fun onApplicationConnected(appMetadata: ApplicationMetadata, sessionId: String,
-                                            wasLaunched: Boolean) { // In case we are casting, send the device name as an extra on MediaSession metadata.
-            mSessionExtras!!.putString(EXTRA_CONNECTED_CAST, videoCastManager.deviceName)
-            mSession!!.setExtras(mSessionExtras)
-            // Now we can switch to CastPlayback
-            val playback: Playback = CastPlayback(musicProvider, videoCastManager)
-            mMediaRouter!!.setMediaSessionCompat(mSession)
-            mPlaybackManager!!.switchToPlayback(playback, true)
+    private val sessionManagerListener = object : SessionManagerListener<CastSession> {
+        override fun onSessionStarted(session: CastSession, sessionId: String) {
+            onCastSessionConnected(session)
         }
 
-        override fun onDisconnectionReason(reason: Int) {
-            Timber.d("onDisconnectionReason")
-            // This is our final chance to update the underlying stream position
-            // In onDisconnected(), the underlying CastPlayback#mVideoCastConsumer
-            // is disconnected and hence we update our local value of stream position
-            // to the latest position.
-            mPlaybackManager!!.playback.updateLastKnownStreamPosition()
+        override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
+            onCastSessionConnected(session)
         }
 
-        override fun onDisconnected() {
-            Timber.d("onDisconnected")
-            mSessionExtras!!.remove(EXTRA_CONNECTED_CAST)
-            mSession!!.setExtras(mSessionExtras)
-            val playback: Playback = LocalPlayback(this@MusicService, musicProvider)
-            mMediaRouter!!.setMediaSessionCompat(null)
-            mPlaybackManager!!.switchToPlayback(playback, false)
+        override fun onSessionEnded(session: CastSession, error: Int) {
+            onCastSessionDisconnected()
+        }
+
+        override fun onSessionSuspended(session: CastSession, reason: Int) {
+        }
+
+        override fun onSessionStarting(session: CastSession) {
+        }
+
+        override fun onSessionResuming(session: CastSession, sessionId: String) {
+        }
+
+        override fun onSessionEnding(session: CastSession) {
+        }
+
+        override fun onSessionStartFailed(session: CastSession, error: Int) {
+        }
+
+        override fun onSessionResumeFailed(session: CastSession, error: Int) {
         }
     }
 
@@ -190,7 +197,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
                         mPlaybackManager!!.handlePlayRequest()
                     }
 
-                    override fun onQueueUpdated(title: String, newQueue: List<MediaSessionCompat.QueueItem>?) {
+                    override fun onQueueUpdated(title: String, newQueue: List<MediaSessionCompat.QueueItem>) {
                         mSession!!.setQueue(newQueue)
                         mSession!!.setQueueTitle(title)
                     }
@@ -204,15 +211,20 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         mSession!!.setCallback(mPlaybackManager!!.mediaSessionCallback)
         val context = applicationContext
         val intent = Intent(context, MusicPlayerActivity::class.java)
-        val pi = PendingIntent.getActivity(context, 99 /*request code*/,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pi = PendingIntent.getActivity(
+            context,
+            99 /*request code*/,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         mSession!!.setSessionActivity(pi)
-        mSessionExtras = Bundle()
-        CarHelper.setSlotReservationFlags(mSessionExtras, true, true, true)
-        mSession!!.setExtras(mSessionExtras)
+        val sessionExtras = Bundle()
+        mSessionExtras = sessionExtras
+        CarHelper.setSlotReservationFlags(sessionExtras, true, true, true)
+        mSession!!.setExtras(sessionExtras)
         mPlaybackManager!!.updatePlaybackState(null)
-        videoCastManager.addVideoCastConsumer(mCastConsumer)
         mMediaRouter = MediaRouter.getInstance(applicationContext)
+        sessionManager.addSessionManagerListener(sessionManagerListener, CastSession::class.java)
         registerCarConnectionReceiver()
     }
 
@@ -223,7 +235,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
             if (CMD_PAUSE == command) {
                 mPlaybackManager!!.handlePauseRequest()
             } else if (CMD_STOP_CASTING == command) {
-                videoCastManager.disconnect()
+                sessionManager.endCurrentSession(true)
             }
         } else { // Try to handle the intent as a media button event wrapped by MediaButtonReceiver
             MediaButtonReceiver.handleIntent(mSession, startIntent)
@@ -242,7 +254,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         // Service is being killed, so make sure we release our resources
         mPlaybackManager!!.handleStopRequest(null)
         mediaNotificationManager.stopNotification()
-        videoCastManager.removeVideoCastConsumer(mCastConsumer)
+        sessionManager.removeSessionManagerListener(sessionManagerListener, CastSession::class.java)
         mDelayedStopHandler.removeCallbacksAndMessages(null)
         mSession!!.release()
         cancel()
@@ -305,7 +317,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
         // potentially stopping the service.
         mDelayedStopHandler.removeCallbacksAndMessages(null)
         mDelayedStopHandler.sendEmptyMessageDelayed(0, STOP_DELAY.toLong())
-        stopForeground(true)
+        stopForegroundCompat()
     }
 
     override fun onNotificationRequired() {
@@ -328,7 +340,11 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
                         connectionEvent, mIsConnectedToCar)
             }
         }
-        registerReceiver(mCarConnectionReceiver, filter)
+        if (Build.VERSION.SDK_INT >= 33) {
+            registerReceiver(mCarConnectionReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(mCarConnectionReceiver, filter)
+        }
     }
 
     private fun unregisterCarConnectionReceiver() {
@@ -338,13 +354,13 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     /**
      * A simple handler that stops the service if playback is not active (playing)
      */
-    private class DelayedStopHandler(service: MusicService) : Handler() {
+    private class DelayedStopHandler(service: MusicService) : Handler(Looper.getMainLooper()) {
         private val mWeakReference: WeakReference<MusicService> = WeakReference(service)
 
         override fun handleMessage(msg: Message) {
             val service = mWeakReference.get()
             if (service != null && service.mPlaybackManager!!.playback != null) {
-                if (service.mPlaybackManager!!.playback.isPlaying) {
+                if (service.mPlaybackManager!!.playback.isPlaying()) {
                     Timber.d("Ignoring delayed stop since the media player is in use.")
                     return
                 }
@@ -376,5 +392,35 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
 
         // Delay stopSelf by using a handler.
         private const val STOP_DELAY = 30000
+    }
+
+    private fun onCastSessionConnected(session: CastSession) {
+        castSession = session
+        val sessionExtras = mSessionExtras ?: Bundle().also { mSessionExtras = it }
+        sessionExtras.putString(EXTRA_CONNECTED_CAST, session.castDevice?.friendlyName)
+        mSession!!.setExtras(sessionExtras)
+        val playback: Playback = CastPlayback(musicProvider, session)
+        mMediaRouter!!.setMediaSessionCompat(mSession)
+        mPlaybackManager!!.switchToPlayback(playback, true)
+    }
+
+    private fun onCastSessionDisconnected() {
+        mPlaybackManager!!.playback.updateLastKnownStreamPosition()
+        val sessionExtras = mSessionExtras ?: Bundle().also { mSessionExtras = it }
+        sessionExtras.remove(EXTRA_CONNECTED_CAST)
+        mSession!!.setExtras(sessionExtras)
+        val playback: Playback = LocalPlayback(this@MusicService, musicProvider)
+        mMediaRouter!!.setMediaSessionCompat(null)
+        mPlaybackManager!!.switchToPlayback(playback, false)
+        castSession = null
+    }
+
+    private fun stopForegroundCompat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(Service.STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
     }
 }
