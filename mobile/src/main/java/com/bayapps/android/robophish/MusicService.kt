@@ -1,422 +1,305 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.bayapps.android.robophish
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.os.Bundle
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationManagerCompat
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.framework.CastSession
-import com.google.android.gms.cast.framework.SessionManager
-import com.google.android.gms.cast.framework.SessionManagerListener
-import androidx.media.MediaBrowserServiceCompat
-import androidx.media.session.MediaButtonReceiver
-import androidx.mediarouter.media.MediaRouter
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.LibraryResult
+import androidx.media3.session.MediaLibraryService
+import androidx.media3.session.MediaLibraryService.LibraryParams
+import androidx.media3.session.MediaSession
+import androidx.media3.ui.PlayerNotificationManager
 import com.bayapps.android.robophish.model.MusicProvider
-import com.bayapps.android.robophish.playback.*
-import com.bayapps.android.robophish.playback.PlaybackManager.PlaybackServiceCallback
-import com.bayapps.android.robophish.playback.QueueManager.MetadataUpdateListener
-import com.bayapps.android.robophish.ui.MusicPlayerActivity
-import com.bayapps.android.robophish.utils.CarHelper
 import com.bayapps.android.robophish.utils.MediaIDHelper
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.*
+import com.google.common.collect.ImmutableList
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.SettableFuture
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
-/**
- * This class provides a MediaBrowser through a service. It exposes the media library to a browsing
- * client, through the onGetRoot and onLoadChildren methods. It also creates a MediaSession and
- * exposes it through its MediaSession.Token, which allows the client to create a MediaController
- * that connects to and send control commands to the MediaSession remotely. This is useful for
- * user interfaces that need to interact with your media session, like Android Auto. You can
- * (should) also use the same service from your app's UI, which gives a seamless playback
- * experience to the user.
- *
- * To implement a MediaBrowserService, you need to:
- *
- *
- *
- *  *  Extend [android.service.media.MediaBrowserService], implementing the media browsing
- * related methods [android.service.media.MediaBrowserService.onGetRoot] and
- * [android.service.media.MediaBrowserService.onLoadChildren];
- *  *  In onCreate, start a new [android.media.session.MediaSession] and notify its parent
- * with the session's token [android.service.media.MediaBrowserService.setSessionToken];
- *
- *  *  Set a callback on the
- * [android.media.session.MediaSession.setCallback].
- * The callback will receive all the user's actions, like play, pause, etc;
- *
- *  *  Handle all the actual music playing using any method your app prefers (for example,
- * [android.media.MediaPlayer])
- *
- *  *  Update playbackState, "now playing" metadata and queue, using MediaSession proper methods
- * [android.media.session.MediaSession.setPlaybackState]
- * [android.media.session.MediaSession.setMetadata] and
- * [android.media.session.MediaSession.setQueue])
- *
- *  *  Declare and export the service in AndroidManifest with an intent receiver for the action
- * android.media.browse.MediaBrowserService
- *
- *
- *
- * To make your app compatible with Android Auto, you also need to:
- *
- *
- *
- *  *  Declare a meta-data tag in AndroidManifest.xml linking to a xml resource
- * with a &lt;automotiveApp&gt; root element. For a media app, this must include
- * an &lt;uses name="media"/&gt; element as a child.
- * For example, in AndroidManifest.xml:
- * &lt;meta-data android:name="com.google.android.gms.car.application"
- * android:resource="@xml/automotive_app_desc"/&gt;
- * And in res/values/automotive_app_desc.xml:
- * &lt;automotiveApp&gt;
- * &lt;uses name="media"/&gt;
- * &lt;/automotiveApp&gt;
- *
- *
- *
- * @see [README.md](README.md) for more details.
- */
-class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, CoroutineScope by MainScope() {
+class MusicService : MediaLibraryService() {
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    private var mPlaybackManager: PlaybackManager? = null
-    private var mSession: MediaSessionCompat? = null
-    private var mSessionExtras: Bundle? = null
-    private val mDelayedStopHandler = DelayedStopHandler(this)
-    private var mMediaRouter: MediaRouter? = null
-    private var mPackageValidator: PackageValidator? = null
-    private var mIsConnectedToCar = false
-    private var mCarConnectionReceiver: BroadcastReceiver? = null
+    private lateinit var player: ExoPlayer
+    private lateinit var mediaLibrarySession: MediaLibraryService.MediaLibrarySession
+    private lateinit var notificationManager: PlayerNotificationManager
 
     private val deps by lazy { ServiceLocator.get(this) }
-    private val castContext: CastContext by lazy { deps.castContext }
-    private val sessionManager: SessionManager by lazy { castContext.sessionManager }
-    private var castSession: CastSession? = null
     private val musicProvider: MusicProvider by lazy { deps.musicProvider }
-    private val picasso: Picasso by lazy { deps.picasso }
-    private val notificationManager: NotificationManagerCompat by lazy { deps.notificationManager }
-    private val mediaNotificationManager: MediaNotificationManager by lazy {
-        MediaNotificationManager(this, picasso, notificationManager)
-    }
+    private val notificationManagerCompat: NotificationManagerCompat by lazy { deps.notificationManager }
 
-    /**
-     * Consumer responsible for switching the Playback instances depending on whether
-     * it is connected to a remote player.
-     *
-     * TODO move to it's own class
-     */
-    private val sessionManagerListener = object : SessionManagerListener<CastSession> {
-        override fun onSessionStarted(session: CastSession, sessionId: String) {
-            onCastSessionConnected(session)
-        }
-
-        override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
-            onCastSessionConnected(session)
-        }
-
-        override fun onSessionEnded(session: CastSession, error: Int) {
-            onCastSessionDisconnected()
-        }
-
-        override fun onSessionSuspended(session: CastSession, reason: Int) {
-        }
-
-        override fun onSessionStarting(session: CastSession) {
-        }
-
-        override fun onSessionResuming(session: CastSession, sessionId: String) {
-        }
-
-        override fun onSessionEnding(session: CastSession) {
-        }
-
-        override fun onSessionStartFailed(session: CastSession, error: Int) {
-        }
-
-        override fun onSessionResumeFailed(session: CastSession, error: Int) {
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Service#onCreate()
-     */
     override fun onCreate() {
         super.onCreate()
-        Timber.d("onCreate")
 
-        // To make the app more responsive, fetch and cache catalog information now.
-        // This can help improve the response time in the method
-        // {@link #onLoadChildren(String, Result<List<MediaItem>>) onLoadChildren()}.
-        //musicProvider.retrieveMediaAsync(null /* Callback */);
-        mPackageValidator = PackageValidator(this)
-        val queueManager = QueueManager(musicProvider, resources,
-                picasso,
-                object : MetadataUpdateListener {
-                    override fun onMetadataChanged(metadata: MediaMetadataCompat) {
-                        mSession!!.setMetadata(metadata)
-                    }
+        player = ExoPlayer.Builder(this)
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                    .build(),
+                true
+            )
+            .build()
+            .apply { setHandleAudioBecomingNoisy(true) }
 
-                    override fun onMetadataRetrieveError() {
-                        mPlaybackManager!!.updatePlaybackState(getString(R.string.error_no_metadata))
-                    }
+        mediaLibrarySession = MediaLibraryService.MediaLibrarySession.Builder(
+            this,
+            player,
+            LibraryCallback()
+        ).build()
 
-                    override fun onCurrentQueueIndexUpdated(queueIndex: Int) {
-                        mPlaybackManager!!.handlePlayRequest()
-                    }
-
-                    override fun onQueueUpdated(title: String, newQueue: List<MediaSessionCompat.QueueItem>) {
-                        mSession!!.setQueue(newQueue)
-                        mSession!!.setQueueTitle(title)
-                    }
-                })
-        val playback = LocalPlayback(this, musicProvider)
-        mPlaybackManager = PlaybackManager(this, resources, musicProvider, queueManager,
-                playback)
-        // Start a new MediaSession
-        mSession = MediaSessionCompat(this, "MusicService")
-        setSessionToken(mSession!!.sessionToken)
-        mSession!!.setCallback(mPlaybackManager!!.mediaSessionCallback)
-        val context = applicationContext
-        val intent = Intent(context, MusicPlayerActivity::class.java)
-        val pi = PendingIntent.getActivity(
-            context,
-            99 /*request code*/,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        createNotificationChannel()
+        notificationManager = PlayerNotificationManager.Builder(
+            this,
+            NOTIFICATION_ID,
+            MEDIA_PLAYER_NOTIFICATION
         )
-        mSession!!.setSessionActivity(pi)
-        val sessionExtras = Bundle()
-        mSessionExtras = sessionExtras
-        CarHelper.setSlotReservationFlags(sessionExtras, true, true, true)
-        mSession!!.setExtras(sessionExtras)
-        mPlaybackManager!!.updatePlaybackState(null)
-        mMediaRouter = MediaRouter.getInstance(applicationContext)
-        sessionManager.addSessionManagerListener(sessionManagerListener, CastSession::class.java)
-        registerCarConnectionReceiver()
+            .setMediaDescriptionAdapter(DescriptionAdapter())
+            .setNotificationListener(NotificationListener())
+            .build()
+        notificationManager.setPlayer(player)
     }
 
-    override fun onStartCommand(startIntent: Intent, flags: Int, startId: Int): Int {
-        val action = startIntent.action
-        val command = startIntent.getStringExtra(CMD_NAME)
-        if (ACTION_CMD == action) {
-            if (CMD_PAUSE == command) {
-                mPlaybackManager!!.handlePauseRequest()
-            } else if (CMD_STOP_CASTING == command) {
-                sessionManager.endCurrentSession(true)
-            }
-        } else { // Try to handle the intent as a media button event wrapped by MediaButtonReceiver
-            MediaButtonReceiver.handleIntent(mSession, startIntent)
-        }
-
-        // Reset the delay handler to enqueue a message to stop the service if
-        // nothing is playing.
-        mDelayedStopHandler.removeCallbacksAndMessages(null)
-        mDelayedStopHandler.sendEmptyMessageDelayed(0, STOP_DELAY.toLong())
-        return Service.START_STICKY
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibraryService.MediaLibrarySession {
+        return mediaLibrarySession
     }
 
     override fun onDestroy() {
-        Timber.d("onDestroy")
-        unregisterCarConnectionReceiver()
-        // Service is being killed, so make sure we release our resources
-        mPlaybackManager!!.handleStopRequest(null)
-        mediaNotificationManager.stopNotification()
-        sessionManager.removeSessionManagerListener(sessionManagerListener, CastSession::class.java)
-        mDelayedStopHandler.removeCallbacksAndMessages(null)
-        mSession!!.release()
-        cancel()
+        notificationManager.setPlayer(null)
+        mediaLibrarySession.release()
+        player.release()
+        serviceScope.cancel()
+        super.onDestroy()
     }
 
-    override fun onGetRoot(clientPackageName: String, clientUid: Int,
-                           rootHints: Bundle?): BrowserRoot? {
-        Timber.d("OnGetRoot: clientPackageName=%s clientUid=%s rootHints=%s",
-                clientPackageName, clientUid, rootHints)
-        // To ensure you are not allowing any arbitrary app to browse your app's contents, you
-        // need to check the origin:
-        if (!mPackageValidator!!.isCallerAllowed(this, clientPackageName, clientUid)) {
-            // If the request comes from an untrusted package, return null. No further calls will
-            // be made to other media browsing methods.
-            Timber.w("OnGetRoot: IGNORING request from untrusted package %s", clientPackageName)
-            return null
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                MEDIA_PLAYER_NOTIFICATION,
+                MEDIA_PLAYER_NOTIFICATION,
+                NotificationManager.IMPORTANCE_LOW
+            )
+            notificationManagerCompat.createNotificationChannel(channel)
         }
-        if (CarHelper.isValidCarPackage(clientPackageName)) {
-            // Optional: if your app needs to adapt the music library to show a different subset
-            // when connected to the car, this is where you should handle it.
-            // If you want to adapt other runtime behaviors, like tweak ads or change some behavior
-            // that should be different on cars, you should instead use the boolean flag
-            // set by the BroadcastReceiver mCarConnectionReceiver (mIsConnectedToCar).
-        }
-        return BrowserRoot(MediaIDHelper.MEDIA_ID_ROOT, null)
     }
 
-    override fun onLoadChildren(parentMediaId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) {
-        launch {
-            Timber.d("OnLoadChildren: parentMediaId=%s", parentMediaId)
-            withContext(Dispatchers.IO) {
-                val media = musicProvider.childeren(parentMediaId)
+    private inner class LibraryCallback : MediaLibraryService.MediaLibrarySession.Callback {
+        override fun onAddMediaItems(
+            session: MediaSession,
+            controller: MediaSession.ControllerInfo,
+            mediaItems: MutableList<MediaItem>
+        ): com.google.common.util.concurrent.ListenableFuture<MutableList<MediaItem>> {
+            val resolved = mediaItems.map { item ->
+                if (item.localConfiguration?.uri != null) {
+                    item
+                } else {
+                    val trackId = MediaIDHelper.extractMusicIDFromMediaID(item.mediaId)
+                    musicProvider.getTrackItem(trackId) ?: item
+                }
+            }.toMutableList()
+            return Futures.immediateFuture(resolved)
+        }
 
-                withContext(Dispatchers.Main) {
-                    result.sendResult(media)
+        override fun onSetMediaItems(
+            session: MediaSession,
+            controller: MediaSession.ControllerInfo,
+            mediaItems: MutableList<MediaItem>,
+            startIndex: Int,
+            startPositionMs: Long
+        ): com.google.common.util.concurrent.ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+            val resolved = mediaItems.map { item ->
+                if (item.localConfiguration?.uri != null) {
+                    item
+                } else {
+                    val trackId = MediaIDHelper.extractMusicIDFromMediaID(item.mediaId)
+                    musicProvider.getTrackItem(trackId) ?: item
                 }
             }
+            val safeIndex = startIndex.coerceIn(0, (resolved.size - 1).coerceAtLeast(0))
+            return Futures.immediateFuture(
+                MediaSession.MediaItemsWithStartPosition(resolved, safeIndex, startPositionMs)
+            )
         }
-        result.detach()
-    }
 
-    /**
-     * Callback method called from PlaybackManager whenever the music is about to play.
-     */
-    override fun onPlaybackStart() {
-        if (!mSession!!.isActive) {
-            mSession!!.isActive = true
+        override fun onPlaybackResumption(
+            session: MediaSession,
+            controller: MediaSession.ControllerInfo
+        ): com.google.common.util.concurrent.ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+            if (player.mediaItemCount == 0) {
+                return Futures.immediateFuture(MediaSession.MediaItemsWithStartPosition(emptyList(), 0, 0L))
+            }
+            val items = (0 until player.mediaItemCount).map { player.getMediaItemAt(it) }
+            return Futures.immediateFuture(
+                MediaSession.MediaItemsWithStartPosition(items, player.currentMediaItemIndex, player.currentPosition)
+            )
         }
-        mDelayedStopHandler.removeCallbacksAndMessages(null)
-        // The service needs to continue running even after the bound client (usually a
-        // MediaController) disconnects, otherwise the music playback will stop.
-        // Calling startService(Intent) will keep the service running until it is explicitly killed.
-        startService(Intent(applicationContext, MusicService::class.java))
-    }
 
-    /**
-     * Callback method called from PlaybackManager whenever the music stops playing.
-     */
-    override fun onPlaybackStop() { // Reset the delayed stop handler, so after STOP_DELAY it will be executed again,
-        // potentially stopping the service.
-        mDelayedStopHandler.removeCallbacksAndMessages(null)
-        mDelayedStopHandler.sendEmptyMessageDelayed(0, STOP_DELAY.toLong())
-        stopForegroundCompat()
-    }
+        override fun onGetLibraryRoot(
+            session: MediaLibraryService.MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            params: LibraryParams?
+        ) = immediateResult(rootItem())
 
-    override fun onNotificationRequired() {
-        launch {
-            mediaNotificationManager.startNotification()
+        override fun onGetChildren(
+            session: MediaLibraryService.MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            parentId: String,
+            page: Int,
+            pageSize: Int,
+            params: LibraryParams?
+        ) = futureResultList {
+            musicProvider.children(parentId)
         }
+
+        override fun onGetItem(
+            session: MediaLibraryService.MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            mediaId: String
+        ) = futureResult {
+            val trackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
+            musicProvider.getTrackItem(trackId) ?: rootItem()
+        }
+
+        override fun onSearch(
+            session: MediaLibraryService.MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            query: String,
+            params: LibraryParams?
+        ) = immediateVoidResult()
+
+        override fun onGetSearchResult(
+            session: MediaLibraryService.MediaLibrarySession,
+            browser: MediaSession.ControllerInfo,
+            query: String,
+            page: Int,
+            pageSize: Int,
+            params: LibraryParams?
+        ) = immediateResultList(emptyList())
     }
 
-    override fun onPlaybackStateUpdated(newState: PlaybackStateCompat) {
-        mSession!!.setPlaybackState(newState)
+    private fun rootItem(): MediaItem {
+        return MediaItem.Builder()
+            .setMediaId(MediaIDHelper.MEDIA_ID_ROOT)
+            .setMediaMetadata(
+                androidx.media3.common.MediaMetadata.Builder()
+                    .setTitle(getString(R.string.app_name))
+                    .setIsBrowsable(true)
+                    .setIsPlayable(false)
+                    .build()
+            )
+            .build()
     }
 
-    private fun registerCarConnectionReceiver() {
-        val filter = IntentFilter(CarHelper.ACTION_MEDIA_STATUS)
-        mCarConnectionReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                val connectionEvent = intent.getStringExtra(CarHelper.MEDIA_CONNECTION_STATUS)
-                mIsConnectedToCar = CarHelper.MEDIA_CONNECTED == connectionEvent
-                Timber.i("Connection event to Android Auto: %s, isConnectedToCar=%s",
-                        connectionEvent, mIsConnectedToCar)
+    private fun immediateResult(item: MediaItem): com.google.common.util.concurrent.ListenableFuture<LibraryResult<MediaItem>> {
+        return com.google.common.util.concurrent.Futures.immediateFuture(LibraryResult.ofItem(item, null))
+    }
+
+    private fun immediateResultList(
+        items: List<MediaItem>
+    ): com.google.common.util.concurrent.ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        return com.google.common.util.concurrent.Futures.immediateFuture(LibraryResult.ofItemList(items, null))
+    }
+
+    private fun immediateVoidResult(): com.google.common.util.concurrent.ListenableFuture<LibraryResult<Void>> {
+        return com.google.common.util.concurrent.Futures.immediateFuture(LibraryResult.ofVoid())
+    }
+
+    private fun futureResult(
+        block: suspend () -> MediaItem
+    ): com.google.common.util.concurrent.ListenableFuture<LibraryResult<MediaItem>> {
+        val future = SettableFuture.create<LibraryResult<MediaItem>>()
+        serviceScope.launch(Dispatchers.IO) {
+            try {
+                val item = block()
+                future.set(LibraryResult.ofItem(item, null))
+            } catch (e: Exception) {
+                Timber.e(e, "Error loading item")
+                future.setException(e)
             }
         }
-        if (Build.VERSION.SDK_INT >= 33) {
-            registerReceiver(mCarConnectionReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        return future
+    }
+
+    private fun futureResultList(
+        block: suspend () -> List<MediaItem>
+    ): com.google.common.util.concurrent.ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        val future = SettableFuture.create<LibraryResult<ImmutableList<MediaItem>>>()
+        serviceScope.launch(Dispatchers.IO) {
+            try {
+                val items = block()
+                future.set(LibraryResult.ofItemList(items, null))
+            } catch (e: Exception) {
+                Timber.e(e, "Error loading children")
+                future.setException(e)
+            }
+        }
+        return future
+    }
+
+    private inner class DescriptionAdapter : PlayerNotificationManager.MediaDescriptionAdapter {
+        override fun getCurrentContentTitle(player: Player): CharSequence {
+            return player.mediaMetadata.title ?: getString(R.string.app_name)
+        }
+
+        override fun createCurrentContentIntent(player: Player): PendingIntent? {
+            val intent = Intent(this@MusicService, com.bayapps.android.robophish.ui.MusicPlayerActivity::class.java)
+                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            return PendingIntent.getActivity(
+                this@MusicService,
+                REQUEST_CODE,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        override fun getCurrentContentText(player: Player): CharSequence? {
+            return player.mediaMetadata.subtitle
+        }
+
+        override fun getCurrentLargeIcon(
+            player: Player,
+            callback: PlayerNotificationManager.BitmapCallback
+        ) = null
+    }
+
+    private inner class NotificationListener : PlayerNotificationManager.NotificationListener {
+        override fun onNotificationPosted(notificationId: Int, notification: android.app.Notification, ongoing: Boolean) {
+            if (ongoing) {
+                startForeground(notificationId, notification)
+            } else {
+                stopForegroundCompat(remove = false)
+                notificationManagerCompat.notify(notificationId, notification)
+            }
+        }
+
+        override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+            stopForegroundCompat(remove = true)
+            stopSelf()
+        }
+    }
+
+    private fun stopForegroundCompat(remove: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(if (remove) STOP_FOREGROUND_REMOVE else STOP_FOREGROUND_DETACH)
         } else {
-            registerReceiver(mCarConnectionReceiver, filter)
-        }
-    }
-
-    private fun unregisterCarConnectionReceiver() {
-        unregisterReceiver(mCarConnectionReceiver)
-    }
-
-    /**
-     * A simple handler that stops the service if playback is not active (playing)
-     */
-    private class DelayedStopHandler(service: MusicService) : Handler(Looper.getMainLooper()) {
-        private val mWeakReference: WeakReference<MusicService> = WeakReference(service)
-
-        override fun handleMessage(msg: Message) {
-            val service = mWeakReference.get()
-            if (service != null && service.mPlaybackManager!!.playback != null) {
-                if (service.mPlaybackManager!!.playback.isPlaying()) {
-                    Timber.d("Ignoring delayed stop since the media player is in use.")
-                    return
-                }
-                Timber.d("Stopping service with delay handler.")
-                service.stopSelf()
-            }
+            @Suppress("DEPRECATION")
+            stopForeground(remove)
         }
     }
 
     companion object {
-        // Extra on MediaSession that contains the Cast device name currently connected to
-        const val EXTRA_CONNECTED_CAST = "com.example.android.uamp.CAST_NAME"
-
-        // The action of the incoming Intent indicating that it contains a command
-        // to be executed (see {@link #onStartCommand})
-        const val ACTION_CMD = "com.example.android.uamp.ACTION_CMD"
-
-        // The key in the extras of the incoming Intent indicating the command that
-        // should be executed (see {@link #onStartCommand})
-        const val CMD_NAME = "CMD_NAME"
-
-        // A value of a CMD_NAME key in the extras of the incoming Intent that
-        // indicates that the music playback should be paused (see {@link #onStartCommand})
-        const val CMD_PAUSE = "CMD_PAUSE"
-
-        // A value of a CMD_NAME key that indicates that the music playback should switch
-        // to local playback from cast playback.
-        const val CMD_STOP_CASTING = "CMD_STOP_CASTING"
-
-        // Delay stopSelf by using a handler.
-        private const val STOP_DELAY = 30000
-    }
-
-    private fun onCastSessionConnected(session: CastSession) {
-        castSession = session
-        val sessionExtras = mSessionExtras ?: Bundle().also { mSessionExtras = it }
-        sessionExtras.putString(EXTRA_CONNECTED_CAST, session.castDevice?.friendlyName)
-        mSession!!.setExtras(sessionExtras)
-        val playback: Playback = CastPlayback(musicProvider, session)
-        mMediaRouter!!.setMediaSessionCompat(mSession)
-        mPlaybackManager!!.switchToPlayback(playback, true)
-    }
-
-    private fun onCastSessionDisconnected() {
-        mPlaybackManager!!.playback.updateLastKnownStreamPosition()
-        val sessionExtras = mSessionExtras ?: Bundle().also { mSessionExtras = it }
-        sessionExtras.remove(EXTRA_CONNECTED_CAST)
-        mSession!!.setExtras(sessionExtras)
-        val playback: Playback = LocalPlayback(this@MusicService, musicProvider)
-        mMediaRouter!!.setMediaSessionCompat(null)
-        mPlaybackManager!!.switchToPlayback(playback, false)
-        castSession = null
-    }
-
-    private fun stopForegroundCompat() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(Service.STOP_FOREGROUND_REMOVE)
-        } else {
-            @Suppress("DEPRECATION")
-            stopForeground(true)
-        }
+        private const val NOTIFICATION_ID = 1001
+        private const val REQUEST_CODE = 100
     }
 }

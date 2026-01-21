@@ -1,13 +1,8 @@
 package com.bayapps.android.robophish.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +13,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.bayapps.android.robophish.MusicService
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.Player
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
 import com.squareup.picasso.Picasso
@@ -36,26 +33,24 @@ class PlaybackControlsFragment : Fragment() {
     private var artUrl: String? = null
 
     private val picasso: Picasso by lazy { ServiceLocator.get(requireContext()).picasso }
+    private var controller: Player? = null
 
-    private val callback = object : MediaControllerCompat.Callback() {
-        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            Timber.d("Received playback state change to state %s", state?.state)
-            onPlaybackStateChangedInternal(state)
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(state: Int) {
+            updatePlaybackState()
         }
 
-        override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-            if (metadata == null) return
-            Timber.d(
-                "Received metadata state change to mediaId=%s song=%s",
-                metadata.description.mediaId,
-                metadata.description.title
-            )
-            onMetadataChangedInternal(metadata)
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            updatePlaybackState()
         }
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+            updateMetadata(mediaItem?.mediaMetadata)
+        }
+
+        override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+            updateMetadata(mediaMetadata)
+        }
     }
 
     override fun onCreateView(
@@ -77,14 +72,6 @@ class PlaybackControlsFragment : Fragment() {
             val context = activity ?: return@setOnClickListener
             val intent = Intent(context, FullScreenPlayerActivity::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            val controller = (context as BaseActivity).getSupportMediaController()
-            val metadata = controller?.metadata
-            if (metadata != null) {
-                intent.putExtra(
-                    MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
-                    metadata.description
-                )
-            }
             startActivity(intent)
         }
         return rootView
@@ -93,136 +80,73 @@ class PlaybackControlsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Timber.d("fragment.onStart")
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        if (controller != null) {
-            onConnected()
-        }
+        onConnected()
     }
 
     override fun onStop() {
         super.onStop()
         Timber.d("fragment.onStop")
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        controller?.unregisterCallback(callback)
+        controller?.removeListener(playerListener)
+        controller = null
     }
 
     fun onConnected() {
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        Timber.d("onConnected, mediaController==null? %s", controller == null)
-        if (controller != null) {
-            onMetadataChangedInternal(controller.metadata)
-            onPlaybackStateChangedInternal(controller.playbackState)
-            controller.registerCallback(callback)
-        }
+        val browser = (activity as? MediaBrowserProvider)?.mediaBrowser ?: return
+        controller?.removeListener(playerListener)
+        controller = browser
+        browser.addListener(playerListener)
+        updateMetadata(browser.currentMediaItem?.mediaMetadata)
+        updatePlaybackState()
     }
 
     @SuppressLint("BinaryOperationInTimber")
-    private fun onMetadataChangedInternal(metadata: MediaMetadataCompat?) {
+    private fun updateMetadata(metadata: MediaMetadata?) {
         Timber.d("onMetadataChanged %s", metadata)
-        if (activity == null) {
-            Timber.w(
-                "onMetadataChanged called when getActivity null, ignoring."
-            )
-            return
-        }
         if (metadata == null) return
 
-        title.text = metadata.description.title
-        subtitle.text = metadata.description.subtitle
-        val newArtUrl = metadata.description.iconUri?.toString()
+        title.text = metadata.title
+        subtitle.text = metadata.subtitle
+        extraInfo.text = metadata.description
+
+        val newArtUrl = metadata.artworkUri?.toString()
         if (!TextUtils.equals(newArtUrl, artUrl)) {
             artUrl = newArtUrl
-            val art: Bitmap? = metadata.description.iconBitmap
-            if (art != null) {
-                albumArt.setImageBitmap(art)
-            } else if (!artUrl.isNullOrBlank()) {
-                picasso.load(artUrl).fit().centerInside().into(albumArt)
+            if (!artUrl.isNullOrBlank()) {
+                picasso.load(artUrl).into(albumArt)
+            } else {
+                albumArt.setImageDrawable(null)
             }
         }
     }
 
-    fun setExtraInfo(extraInfoValue: String?) {
-        if (extraInfoValue == null) {
-            extraInfo.visibility = View.GONE
+    private fun updatePlaybackState() {
+        val player = controller ?: return
+        val isPlaying = player.isPlaying
+        val state = player.playbackState
+        val isEnabled = state != Player.STATE_IDLE && state != Player.STATE_ENDED
+        playPause.isEnabled = isEnabled
+
+        val drawable = if (isPlaying) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.uamp_ic_pause_white_48dp)
         } else {
-            extraInfo.text = extraInfoValue
-            extraInfo.visibility = View.VISIBLE
+            ContextCompat.getDrawable(requireContext(), R.drawable.uamp_ic_play_arrow_white_48dp)
         }
+        playPause.setImageDrawable(drawable)
     }
 
-    @SuppressLint("BinaryOperationInTimber")
-    private fun onPlaybackStateChangedInternal(state: PlaybackStateCompat?) {
-        Timber.d("onPlaybackStateChanged %s", state)
-        if (activity == null) {
-            Timber.w(
-                "onPlaybackStateChanged called when getActivity null, ignoring."
-            )
-            return
-        }
-        if (state == null) return
-
-        val enablePlay = when (state.state) {
-            PlaybackStateCompat.STATE_PAUSED,
-            PlaybackStateCompat.STATE_STOPPED -> true
-            PlaybackStateCompat.STATE_ERROR -> {
-                Timber.e("error playbackstate: %s", state.errorMessage)
-                Toast.makeText(activity, state.errorMessage, Toast.LENGTH_LONG).show()
-                false
-            }
-            else -> false
-        }
-
-        val drawableId = if (enablePlay) {
-            R.drawable.ic_play_arrow_black_36dp
-        } else {
-            R.drawable.ic_pause_black_36dp
-        }
-        playPause.setImageDrawable(
-            ContextCompat.getDrawable(requireActivity(), drawableId)
-        )
-
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        val castName = controller?.extras?.getString(MusicService.EXTRA_CONNECTED_CAST)
-        val extraInfoValue = if (castName != null) {
-            resources.getString(R.string.casting_to_device, castName)
-        } else {
-            null
-        }
-        setExtraInfo(extraInfoValue)
-    }
-
-    private val buttonListener = View.OnClickListener { view ->
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        val stateObj = controller?.playbackState
-        val state = stateObj?.state ?: PlaybackStateCompat.STATE_NONE
-        Timber.d("Button pressed, in state %s", state)
-        when (view.id) {
+    private val buttonListener = View.OnClickListener { v ->
+        val player = controller ?: return@OnClickListener
+        when (v?.id) {
             R.id.play_pause -> {
-                Timber.d("Play button pressed, in state %s", state)
-                if (state == PlaybackStateCompat.STATE_PAUSED ||
-                    state == PlaybackStateCompat.STATE_STOPPED ||
-                    state == PlaybackStateCompat.STATE_NONE
-                ) {
-                    playMedia()
-                } else if (state == PlaybackStateCompat.STATE_PLAYING ||
-                    state == PlaybackStateCompat.STATE_BUFFERING ||
-                    state == PlaybackStateCompat.STATE_CONNECTING
-                ) {
-                    pauseMedia()
+                if (player.isPlaying) {
+                    player.pause()
+                } else {
+                    player.play()
                 }
             }
+            else -> {
+                Timber.w("Unknown button event")
+            }
         }
-    }
-
-    private fun playMedia() {
-        (activity as? BaseActivity)?.getSupportMediaController()
-            ?.transportControls
-            ?.play()
-    }
-
-    private fun pauseMedia() {
-        (activity as? BaseActivity)?.getSupportMediaController()
-            ?.transportControls
-            ?.pause()
     }
 }

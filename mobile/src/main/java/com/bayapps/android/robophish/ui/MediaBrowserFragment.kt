@@ -1,18 +1,14 @@
 package com.bayapps.android.robophish.ui
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,41 +18,42 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.session.LibraryResult
 import androidx.viewpager.widget.ViewPager
-import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.BuildConfig
+import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
+import com.google.android.material.tabs.TabLayout
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.JsonHttpResponseHandler
 import com.loopj.android.http.RequestParams
-import com.google.android.material.tabs.TabLayout
 import cz.msebera.android.httpclient.Header
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 
 /**
- * A Fragment that lists all the various browsable queues available
- * from a MediaBrowserService.
+ * A Fragment that lists music catalog items from a MediaBrowser and
+ * sends selected media items to the attached listener to play.
  */
 class MediaBrowserFragment : Fragment() {
-    private var browserAdapter: BrowseAdapter? = null
     private var mediaId: String? = null
     private var mediaFragmentListener: MediaFragmentListener? = null
+    private var browserAdapter: BrowseAdapter? = null
     private var errorView: View? = null
-    private var errorMessage: TextView? = null
-    private var progressBar: ProgressBar? = null
+    private var errorMessage: View? = null
+    private var progressBar: View? = null
     private var showData: JSONObject? = null
+
     private var listView: ListView? = null
     private var pendingListState: Parcelable? = null
     private var pendingSelectedTrackId: String? = null
@@ -72,46 +69,15 @@ class MediaBrowserFragment : Fragment() {
         }
     }
 
-    private val mediaControllerCallback = object : MediaControllerCompat.Callback() {
-        override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-            if (metadata == null) return
-            Timber.d("Received metadata change to media %s", metadata.description.mediaId)
-            browserAdapter?.notifyDataSetChanged()
-            progressBar?.visibility = View.INVISIBLE
-        }
-
-        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            Timber.d("Received state change: %s", state)
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(state: Int) {
             checkForUserVisibleErrors(false)
             browserAdapter?.notifyDataSetChanged()
         }
-    }
 
-    private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
-        override fun onChildrenLoaded(
-            parentId: String,
-            children: List<MediaBrowserCompat.MediaItem>
-        ) {
-            try {
-                Timber.d("fragment onChildrenLoaded, parentId=%s, count=%s", parentId, children.size)
-                checkForUserVisibleErrors(children.isEmpty())
-                progressBar?.visibility = View.INVISIBLE
-                browserAdapter?.clear()
-                children.forEach { item -> browserAdapter?.add(item) }
-                browserAdapter?.notifyDataSetChanged()
-                val restored = restoreListStateIfNeeded()
-                if (!restored) {
-                    restoreSelectionIfNeeded()
-                }
-            } catch (t: Throwable) {
-                Timber.e(t, "Error on childrenloaded")
-            }
-        }
-
-        override fun onError(id: String) {
-            Timber.e("browse fragment subscription onError, id=%s", id)
-            Toast.makeText(activity, R.string.error_loading_media, Toast.LENGTH_LONG).show()
-            checkForUserVisibleErrors(true)
+        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+            browserAdapter?.notifyDataSetChanged()
+            progressBar?.visibility = View.INVISIBLE
         }
     }
 
@@ -340,7 +306,8 @@ class MediaBrowserFragment : Fragment() {
             checkForUserVisibleErrors(false)
             val item = browserAdapter?.getItem(position)
             if (item != null) {
-                mediaFragmentListener?.onMediaItemSelected(item)
+                val siblings = browserAdapter?.items ?: emptyList()
+                mediaFragmentListener?.onMediaItemSelected(item, siblings)
             }
         }
         pendingListState = savedInstanceState?.getParcelableCompat(LIST_STATE_KEY) ?: pendingListState
@@ -374,8 +341,8 @@ class MediaBrowserFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         val mediaBrowser = mediaFragmentListener?.mediaBrowser
-        Timber.d("fragment.onStart, mediaId=%s onConnected=%s", mediaId, mediaBrowser?.isConnected)
-        if (mediaBrowser?.isConnected == true) {
+        Timber.d("fragment.onStart, mediaId=%s onConnected=%s", mediaId, mediaBrowser != null)
+        if (mediaBrowser != null) {
             onConnected()
         }
         oldOnline = NetworkHelper.isOnline(requireContext())
@@ -402,12 +369,7 @@ class MediaBrowserFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        val mediaBrowser = mediaFragmentListener?.mediaBrowser
-        if (mediaBrowser != null && mediaBrowser.isConnected && mediaId != null) {
-            mediaBrowser.unsubscribe(mediaId!!)
-        }
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        controller?.unregisterCallback(mediaControllerCallback)
+        mediaFragmentListener?.mediaBrowser?.removeListener(playerListener)
         val connectivityManager =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         try {
@@ -445,21 +407,50 @@ class MediaBrowserFragment : Fragment() {
     }
 
     fun onConnected() {
-        if (isDetached) {
-            return
-        }
+        if (isDetached) return
         mediaId = getMediaId()
         if (mediaId == null) {
-            mediaId = mediaFragmentListener?.mediaBrowser?.root
+            mediaId = MediaIDHelper.MEDIA_ID_ROOT
         }
         updateTitle()
 
         val resolvedMediaId = mediaId ?: return
-        mediaFragmentListener?.mediaBrowser?.unsubscribe(resolvedMediaId)
-        mediaFragmentListener?.mediaBrowser?.subscribe(resolvedMediaId, subscriptionCallback)
+        loadChildren(resolvedMediaId)
 
-        val controller = (activity as? BaseActivity)?.getSupportMediaController()
-        controller?.registerCallback(mediaControllerCallback)
+        mediaFragmentListener?.mediaBrowser?.addListener(playerListener)
+    }
+
+    private fun loadChildren(parentId: String) {
+        val browser = mediaFragmentListener?.mediaBrowser ?: return
+        val future = browser.getChildren(parentId, 0, Int.MAX_VALUE, null)
+        val mainHandler = Handler(Looper.getMainLooper())
+        future.addListener(
+            {
+                mainHandler.post {
+                    try {
+                        val result = future.get()
+                        if (result.resultCode == LibraryResult.RESULT_SUCCESS) {
+                            val items = result.value ?: emptyList()
+                            checkForUserVisibleErrors(items.isEmpty())
+                            progressBar?.visibility = View.INVISIBLE
+                            browserAdapter?.setItems(items)
+                            browserAdapter?.notifyDataSetChanged()
+                            val restored = restoreListStateIfNeeded()
+                            if (!restored) {
+                                restoreSelectionIfNeeded()
+                            }
+                        } else {
+                            Timber.e("browse fragment error resultCode=%s", result.resultCode)
+                            checkForUserVisibleErrors(true)
+                        }
+                    } catch (t: Throwable) {
+                        Timber.e(t, "Error loading children")
+                        checkForUserVisibleErrors(true)
+                    }
+                }
+            },
+            com.google.common.util.concurrent.MoreExecutors.directExecutor()
+        )
     }
 
     private fun registerMenuProvider() {
@@ -512,7 +503,7 @@ class MediaBrowserFragment : Fragment() {
         var targetPosition: Int? = null
         for (i in 0 until count) {
             val item = adapter.getItem(i) ?: continue
-            val mediaId = item.mediaId ?: continue
+            val mediaId = item.mediaId
             val trackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
             if (trackId == selectedTrackId) {
                 targetPosition = i
@@ -537,21 +528,11 @@ class MediaBrowserFragment : Fragment() {
         var showError = forceError
         val activity = activity ?: return
         if (!NetworkHelper.isOnline(activity)) {
-            errorMessage?.setText(R.string.error_no_connection)
+            (errorMessage as? android.widget.TextView)?.setText(R.string.error_no_connection)
             showError = true
-        } else {
-            val controller = (activity as? BaseActivity)?.getSupportMediaController()
-            if (controller?.metadata != null &&
-                controller.playbackState != null &&
-                controller.playbackState.state == PlaybackStateCompat.STATE_ERROR &&
-                controller.playbackState.errorMessage != null
-            ) {
-                errorMessage?.text = controller.playbackState.errorMessage
-                showError = true
-            } else if (forceError) {
-                errorMessage?.setText(R.string.error_loading_media)
-                showError = true
-            }
+        } else if (forceError) {
+            (errorMessage as? android.widget.TextView)?.setText(R.string.error_loading_media)
+            showError = true
         }
         errorView?.visibility = if (showError) View.VISIBLE else View.GONE
         if (showError) progressBar?.visibility = View.INVISIBLE
@@ -585,52 +566,61 @@ class MediaBrowserFragment : Fragment() {
             return
         }
 
-        mediaFragmentListener?.mediaBrowser?.getItem(
-            currentMediaId,
-            object : MediaBrowserCompat.ItemCallback() {
-                override fun onItemLoaded(item: MediaBrowserCompat.MediaItem) {
-                    mediaFragmentListener?.setToolbarTitle(item.description.title)
+        val browser = mediaFragmentListener?.mediaBrowser ?: return
+        val future = browser.getItem(currentMediaId)
+        future.addListener(
+            {
+                try {
+                    val result = future.get()
+                    val item = result.value
+                    if (item != null) {
+                        mediaFragmentListener?.setToolbarTitle(item.mediaMetadata.title)
+                    }
+                } catch (_: Exception) {
                 }
-            }
+            },
+            com.google.common.util.concurrent.MoreExecutors.directExecutor()
         )
     }
 
-    private class BrowseAdapter(context: Activity) :
-        ArrayAdapter<MediaBrowserCompat.MediaItem>(context, R.layout.media_list_item, mutableListOf()) {
+    private class BrowseAdapter(context: android.app.Activity) :
+        ArrayAdapter<MediaItem>(context, R.layout.media_list_item, mutableListOf()) {
+        val items: MutableList<MediaItem> get() = (0 until count).mapNotNull { getItem(it) }.toMutableList()
+
+        fun setItems(newItems: List<MediaItem>) {
+            clear()
+            addAll(newItems)
+        }
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val item = getItem(position)
             var itemState = MediaItemViewHolder.STATE_NONE
-            if (item?.isPlayable == true) {
+            if (item?.mediaMetadata?.isPlayable == true) {
                 itemState = MediaItemViewHolder.STATE_PLAYABLE
-                val controller = (context as BaseActivity).getSupportMediaController()
-                if (controller?.metadata != null) {
-                    val currentPlaying = controller.metadata.description.mediaId
-                    val musicId = item.description.mediaId?.let {
-                        MediaIDHelper.extractMusicIDFromMediaID(it)
-                    }
-                    if (currentPlaying != null && currentPlaying == musicId) {
-                        val pbState = controller.playbackState
-                        itemState = when (pbState?.state) {
-                            null, PlaybackStateCompat.STATE_ERROR -> MediaItemViewHolder.STATE_NONE
-                            PlaybackStateCompat.STATE_PLAYING -> MediaItemViewHolder.STATE_PLAYING
-                            else -> MediaItemViewHolder.STATE_PAUSED
-                        }
+                val provider = (context as? MediaBrowserProvider)
+                val controller = provider?.mediaBrowser
+                val currentPlayingId = controller?.currentMediaItem?.mediaId
+                if (currentPlayingId != null && currentPlayingId == item.mediaId) {
+                    itemState = if (controller.isPlaying) {
+                        MediaItemViewHolder.STATE_PLAYING
+                    } else {
+                        MediaItemViewHolder.STATE_PAUSED
                     }
                 }
             }
 
             return MediaItemViewHolder.setupView(
-                context as Activity,
+                context as android.app.Activity,
                 convertView,
                 parent,
-                item!!.description,
+                item ?: throw IllegalStateException("Missing item"),
                 itemState
             )
         }
     }
 
     interface MediaFragmentListener : MediaBrowserProvider {
-        fun onMediaItemSelected(item: MediaBrowserCompat.MediaItem)
+        fun onMediaItemSelected(item: MediaItem, siblings: List<MediaItem>)
         fun setToolbarTitle(title: CharSequence?)
         fun setToolbarSubTitle(title: CharSequence?)
         fun updateDrawerToggle()
@@ -640,8 +630,8 @@ class MediaBrowserFragment : Fragment() {
         private const val ARG_MEDIA_ID = "media_id"
         private const val ARG_TITLE = "title"
         private const val ARG_SUBTITLE = "subtitle"
-        private const val LIST_STATE_KEY = "list_state"
         private const val ARG_SELECTED_TRACK_ID = "selected_track_id"
+        private const val LIST_STATE_KEY = "list_state"
         private const val SELECTED_TRACK_ID_KEY = "selected_track_id_state"
     }
 }
