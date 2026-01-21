@@ -45,7 +45,8 @@ object MediaItemViewHolder {
             holder = Holder(
                 imageView = view.findViewById(R.id.play_eq),
                 titleView = view.findViewById(R.id.title),
-                descriptionView = view.findViewById(R.id.description)
+                descriptionView = view.findViewById(R.id.description),
+                locationView = view.findViewById(R.id.location)
             )
             view.tag = holder
         } else {
@@ -55,6 +56,10 @@ object MediaItemViewHolder {
 
         holder.titleView.text = item.mediaMetadata.title
         holder.descriptionView.text = item.mediaMetadata.subtitle
+        val location = item.mediaMetadata.description
+        val showLocation = item.mediaMetadata.isBrowsable == true && !location.isNullOrBlank()
+        holder.locationView.visibility = if (showLocation) View.VISIBLE else View.GONE
+        holder.locationView.text = if (showLocation) location else ""
 
         val resultView = view ?: throw IllegalStateException("Missing view")
         if (cachedState != state) {
@@ -104,6 +109,7 @@ object MediaItemViewHolder {
     private data class Holder(
         val imageView: ImageView,
         val titleView: TextView,
-        val descriptionView: TextView
+        val descriptionView: TextView,
+        val locationView: TextView
     )
 }
