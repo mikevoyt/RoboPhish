@@ -23,7 +23,8 @@ import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.utils.MediaIDHelper
-import com.squareup.picasso.Picasso
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import timber.log.Timber
@@ -56,7 +57,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
     private var controllerFuture: ListenableFuture<MediaController>? = null
     private var userSeeking = false
 
-    private val picasso: Picasso by lazy { ServiceLocator.get(this).picasso }
+    private val imageLoader: ImageLoader by lazy { ServiceLocator.get(this).imageLoader }
 
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(state: Int) {
@@ -172,7 +173,11 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         val iconUri = metadata.artworkUri?.toString()
         if (!iconUri.isNullOrEmpty() && iconUri != currentArtUrl) {
             currentArtUrl = iconUri
-            picasso.load(iconUri).into(backgroundImage)
+            val request = ImageRequest.Builder(this)
+                .data(iconUri)
+                .target(backgroundImage)
+                .build()
+            imageLoader.enqueue(request)
         }
     }
 

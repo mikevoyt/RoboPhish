@@ -18,7 +18,8 @@ import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
-import com.squareup.picasso.Picasso
+import coil.ImageLoader
+import coil.request.ImageRequest
 import timber.log.Timber
 
 /**
@@ -32,7 +33,7 @@ class PlaybackControlsFragment : Fragment() {
     private lateinit var albumArt: ImageView
     private var artUrl: String? = null
 
-    private val picasso: Picasso by lazy { ServiceLocator.get(requireContext()).picasso }
+    private val imageLoader: ImageLoader by lazy { ServiceLocator.get(requireContext()).imageLoader }
     private var controller: Player? = null
 
     private val playerListener = object : Player.Listener {
@@ -112,7 +113,11 @@ class PlaybackControlsFragment : Fragment() {
         if (!TextUtils.equals(newArtUrl, artUrl)) {
             artUrl = newArtUrl
             if (!artUrl.isNullOrBlank()) {
-                picasso.load(artUrl).into(albumArt)
+                val request = ImageRequest.Builder(requireContext())
+                    .data(artUrl)
+                    .target(albumArt)
+                    .build()
+                imageLoader.enqueue(request)
             } else {
                 albumArt.setImageDrawable(null)
             }
