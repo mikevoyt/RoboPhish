@@ -23,20 +23,23 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
 import androidx.viewpager.widget.ViewPager
 import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
+import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
 import com.google.android.material.tabs.TabLayout
-import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.JsonHttpResponseHandler
-import com.loopj.android.http.RequestParams
-import cz.msebera.android.httpclient.Header
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -57,6 +60,9 @@ class MediaBrowserFragment : Fragment() {
     private var listView: ListView? = null
     private var pendingListState: Parcelable? = null
     private var pendingSelectedTrackId: String? = null
+
+    private val okHttpClient by lazy { ServiceLocator.get(requireContext()).okHttpClient }
+    private val okHttpNoAuthClient by lazy { ServiceLocator.get(requireContext()).okHttpNoAuthClient }
 
     private var oldOnline = false
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -111,122 +117,89 @@ class MediaBrowserFragment : Fragment() {
             val reviewsWebView = view.findViewById<WebView>(R.id.reviews_webview)
             reviewsWebView.settings.javaScriptEnabled = true
 
-            val setlistParams = RequestParams().apply {
-                put("showdate", getSubTitle()?.replace(".", "-"))
-                put("apikey", "C01AEE2002E80723E9E7")
-            }
-            val setlistClient = AsyncHttpClient()
-            setlistClient.get(
-                "https://api.phish.net/v3/setlists/get",
-                setlistParams,
-                object : JsonHttpResponseHandler() {
-                    override fun onSuccess(
-                        statusCode: Int,
-                        headers: Array<Header>,
-                        response: JSONObject
-                    ) {
-                        super.onSuccess(statusCode, headers, response)
-                        try {
-                            val result = response
-                                .getJSONObject("response")
-                                .getJSONArray("data")
-                                .getJSONObject(0)
-                            val showId = result.getInt("showid")
-                            val location = result.getString("location")
-                            val venue = result.getString("venue")
-                            val header =
-                                "<h1>$venue</h1><h2>$location</h2>"
-                            val setlistdata = result.getString("setlistdata")
-                            val setlistnotes = result.getString("setlistnotes")
-                            setlistWebView.loadData(
-                                header + setlistdata + setlistnotes,
-                                "text/html",
-                                null
-                            )
+            val setlistDate = getSubTitle()?.replace(".", "-")
+            if (!setlistDate.isNullOrBlank()) {
+                lifecycleScope.launch {
+                    val setlistResponse = fetchJson(
+                        "https://api.phish.net/v3/setlists/get",
+                        mapOf(
+                            "showdate" to setlistDate,
+                            "apikey" to BuildConfig.PHISHNET_API_KEY
+                        ),
+                        client = okHttpNoAuthClient
+                    )
+                    if (!isAdded) return@launch
+                    if (setlistResponse == null) {
+                        setlistWebView.loadData(
+                            "<div>Error loading Setlist</div>",
+                            "text/html",
+                            null
+                        )
+                        reviewsWebView.loadData(
+                            "<div>Error loading Reviews</div>",
+                            "text/html",
+                            null
+                        )
+                        return@launch
+                    }
+                    try {
+                        val result = setlistResponse
+                            .getJSONObject("response")
+                            .getJSONArray("data")
+                            .getJSONObject(0)
+                        val showId = result.getInt("showid")
+                        val location = result.getString("location")
+                        val venue = result.getString("venue")
+                        val header = "<h1>$venue</h1><h2>$location</h2>"
+                        val setlistdata = result.getString("setlistdata")
+                        val setlistnotes = result.getString("setlistnotes")
+                        setlistWebView.loadData(
+                            header + setlistdata + setlistnotes,
+                            "text/html",
+                            null
+                        )
 
-                            val reviewsParams = RequestParams().apply {
-                                put("showid", showId)
-                                put("apikey", "C01AEE2002E80723E9E7")
-                            }
-                            val reviewsClient = AsyncHttpClient()
-                            reviewsClient.get(
-                                "https://api.phish.net/v3/reviews/query",
-                                reviewsParams,
-                                object : JsonHttpResponseHandler() {
-                                    override fun onSuccess(
-                                        statusCode: Int,
-                                        headers: Array<Header>,
-                                        response: JSONObject
-                                    ) {
-                                        super.onSuccess(statusCode, headers, response)
-                                        try {
-                                            val reviewsData = response
-                                                .getJSONObject("response")
-                                                .getJSONArray("data")
-                                            val display = StringBuilder()
-                                            for (i in 0 until reviewsData.length()) {
-                                                val entry = reviewsData.getJSONObject(i)
-                                                val author = entry.getString("username")
-                                                val review = entry.getString("reviewtext")
-                                                val reviewDate = entry.getString("posted_date")
-                                                val reviewSubs = formatReviewText(review)
-                                                display.append("<h2>")
-                                                    .append(author)
-                                                    .append("</h2><h4>")
-                                                    .append(reviewDate)
-                                                    .append("</h4>")
-                                                display.append(reviewSubs).append("<br/>")
-                                            }
-                                            reviewsWebView.loadData(
-                                                display.toString(),
-                                                "text/html",
-                                                null
-                                            )
-                                        } catch (e: JSONException) {
-                                            reviewsWebView.loadData(
-                                                "<div>Error loading Reviews</div>",
-                                                "text/html",
-                                                null
-                                            )
-                                        }
-                                    }
-
-                                    override fun onFailure(
-                                        statusCode: Int,
-                                        headers: Array<Header>,
-                                        throwable: Throwable,
-                                        errorResponse: JSONObject?
-                                    ) {
-                                        super.onFailure(statusCode, headers, throwable, errorResponse)
-                                        reviewsWebView.loadData(
-                                            "<div>Error loading Reviews</div>",
-                                            "text/html",
-                                            null
-                                        )
-                                    }
-                                }
-                            )
-                        } catch (e: JSONException) {
-                            setlistWebView.loadData(
-                                "<div>Error loading Setlist</div>",
-                                "text/html",
-                                null
-                            )
+                        val reviewsResponse = fetchJson(
+                            "https://api.phish.net/v3/reviews/query",
+                            mapOf(
+                                "showid" to showId.toString(),
+                                "apikey" to BuildConfig.PHISHNET_API_KEY
+                            ),
+                            client = okHttpNoAuthClient
+                        )
+                        if (!isAdded) return@launch
+                        if (reviewsResponse == null) {
                             reviewsWebView.loadData(
                                 "<div>Error loading Reviews</div>",
                                 "text/html",
                                 null
                             )
+                            return@launch
                         }
-                    }
-
-                    override fun onFailure(
-                        statusCode: Int,
-                        headers: Array<Header>,
-                        throwable: Throwable,
-                        errorResponse: JSONObject?
-                    ) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse)
+                        val reviewsData = reviewsResponse
+                            .getJSONObject("response")
+                            .getJSONArray("data")
+                        val display = StringBuilder()
+                        for (i in 0 until reviewsData.length()) {
+                            val entry = reviewsData.getJSONObject(i)
+                            val author = entry.getString("username")
+                            val review = entry.getString("reviewtext")
+                            val reviewDate = entry.getString("posted_date")
+                            val reviewSubs = formatReviewText(review)
+                            display.append("<h2>")
+                                .append(author)
+                                .append("</h2><h4>")
+                                .append(reviewDate)
+                                .append("</h4>")
+                            display.append(reviewSubs).append("<br/>")
+                        }
+                        reviewsWebView.loadData(
+                            display.toString(),
+                            "text/html",
+                            null
+                        )
+                    } catch (e: JSONException) {
+                        Timber.e(e, "Error parsing setlist/reviews response")
                         setlistWebView.loadData(
                             "<div>Error loading Setlist</div>",
                             "text/html",
@@ -239,47 +212,36 @@ class MediaBrowserFragment : Fragment() {
                         )
                     }
                 }
-            )
+            }
 
             val tapernotesWebview = view.findViewById<WebView>(R.id.tapernotes_webview)
             tapernotesWebview.settings.javaScriptEnabled = true
 
             val showId = MediaIDHelper.extractShowFromMediaID(mediaId)
-            val tapernotesClient = AsyncHttpClient()
-            tapernotesClient.addHeader("Authorization", "Bearer ${BuildConfig.PHISHIN_API_KEY}")
-            tapernotesClient.get(
-                "https://phish.in/api/v1/shows/$showId",
-                null,
-                object : JsonHttpResponseHandler() {
-                    override fun onSuccess(
-                        statusCode: Int,
-                        headers: Array<Header>,
-                        response: JSONObject
-                    ) {
-                        super.onSuccess(statusCode, headers, response)
-                        try {
-                            showData = response
-                            val data = response.getJSONObject("data")
-                            var tapernotes = data.getString("taper_notes")
-                            if (tapernotes == "null") tapernotes = "Not available"
-                            val notesSubs = tapernotes.replace("\n", "<br/>")
-                            tapernotesWebview.loadData(notesSubs, "text/html", null)
-                        } catch (e: JSONException) {
-                            tapernotesWebview.loadData(
-                                "<div>Error loading Taper Notes</div>",
-                                "text/html",
-                                null
-                            )
-                        }
+            if (!showId.isNullOrBlank()) {
+                lifecycleScope.launch {
+                    val response = fetchJson(
+                        "https://phish.in/api/v1/shows/$showId",
+                        headers = mapOf("Authorization" to "Bearer ${BuildConfig.PHISHIN_API_KEY}")
+                    )
+                    if (!isAdded) return@launch
+                    if (response == null) {
+                        tapernotesWebview.loadData(
+                            "<div>Error loading Taper Notes</div>",
+                            "text/html",
+                            null
+                        )
+                        return@launch
                     }
-
-                    override fun onFailure(
-                        statusCode: Int,
-                        headers: Array<Header>,
-                        throwable: Throwable,
-                        errorResponse: JSONObject?
-                    ) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse)
+                    try {
+                        showData = response
+                        val data = response.getJSONObject("data")
+                        var tapernotes = data.getString("taper_notes")
+                        if (tapernotes == "null") tapernotes = "Not available"
+                        val notesSubs = tapernotes.replace("\n", "<br/>")
+                        tapernotesWebview.loadData(notesSubs, "text/html", null)
+                    } catch (e: JSONException) {
+                        Timber.e(e, "Error parsing taper notes response")
                         tapernotesWebview.loadData(
                             "<div>Error loading Taper Notes</div>",
                             "text/html",
@@ -287,7 +249,7 @@ class MediaBrowserFragment : Fragment() {
                         )
                     }
                 }
-            )
+            }
             view
         } else {
             inflater.inflate(R.layout.fragment_list, container, false)
@@ -336,6 +298,45 @@ class MediaBrowserFragment : Fragment() {
             "<img src=\"$1\" />"
         )
         return text.replace("\n", "<br/>")
+    }
+
+    private suspend fun fetchJson(
+        url: String,
+        queryParams: Map<String, String> = emptyMap(),
+        headers: Map<String, String> = emptyMap(),
+        client: okhttp3.OkHttpClient = okHttpClient
+    ): JSONObject? = withContext(Dispatchers.IO) {
+        val httpUrl = url.toHttpUrl().newBuilder().apply {
+            queryParams.forEach { (key, value) ->
+                addQueryParameter(key, value)
+            }
+        }.build()
+        val request = Request.Builder()
+            .url(httpUrl)
+            .apply {
+                headers.forEach { (key, value) ->
+                    addHeader(key, value)
+                }
+            }
+            .build()
+        try {
+            Timber.d("Requesting %s", httpUrl)
+            client.newCall(request).execute().use { response ->
+                val body = response.body?.string()
+                if (!response.isSuccessful) {
+                    Timber.w("Request failed: %s body=%s", response.code, body)
+                    return@withContext null
+                }
+                if (body.isNullOrBlank()) {
+                    Timber.w("Request empty body for %s", httpUrl)
+                    return@withContext null
+                }
+                JSONObject(body)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Request failed for %s", url)
+            null
+        }
     }
 
     override fun onStart() {
