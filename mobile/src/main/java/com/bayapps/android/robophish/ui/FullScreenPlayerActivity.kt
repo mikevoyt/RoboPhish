@@ -27,7 +27,7 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.inject
+import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.squareup.picasso.Picasso
 import timber.log.Timber
@@ -35,7 +35,6 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * A full screen player that shows the current playing music with a background image
@@ -67,7 +66,8 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
     private var currentMetadata: MediaMetadataCompat? = null
     private var userSeeking = false
 
-    @Inject lateinit var picasso: Picasso
+    private val deps by lazy { ServiceLocator.get(this) }
+    private val picasso: Picasso by lazy { deps.picasso }
 
     private val updateProgressTask = Runnable { handler.post { updateProgress() } }
     private val executorService: ScheduledExecutorService =
@@ -104,7 +104,6 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_player)
         initializeToolbar()
-        inject()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         pauseDrawable = ContextCompat.getDrawable(this, R.drawable.uamp_ic_pause_white_48dp)!!

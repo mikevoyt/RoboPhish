@@ -15,12 +15,11 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
 import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.inject
+import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.utils.NetworkHelper
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Base activity for activities that need to show a playback control fragment.
@@ -29,13 +28,13 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
     private lateinit var controlsFragment: PlaybackControlsFragment
     override lateinit var mediaBrowser: MediaBrowserCompat
 
-    @Inject lateinit var googleApiAvailability: GoogleApiAvailability
+    private val deps by lazy { ServiceLocator.get(this) }
+    private val googleApiAvailability: GoogleApiAvailability by lazy { deps.googleApiAvailability }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("Activity onCreate")
 
-        inject()
         checkPlayServices()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

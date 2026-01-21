@@ -8,7 +8,7 @@ sealed class PhishinResponse<T>
 data class PhishinSuccess<T>(val data: T): PhishinResponse<T>()
 data class PhishinError<T>(val exception: Exception): PhishinResponse<T>()
 
-class PhishinRepository internal constructor(
+class PhishinRepository(
         private val phishinService: PhishinService
 ) {
     suspend fun years() : PhishinResponse<List<YearData>> {

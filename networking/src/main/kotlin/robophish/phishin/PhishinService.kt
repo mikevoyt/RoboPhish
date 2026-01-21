@@ -6,7 +6,7 @@ import robophish.model.Show
 import robophish.model.SuccessfulResponse
 import robophish.model.YearData
 
-internal interface PhishinService {
+interface PhishinService {
     @GET("api/v1/years?include_show_counts=true")
     suspend fun years(): SuccessfulResponse<List<YearData>>
 

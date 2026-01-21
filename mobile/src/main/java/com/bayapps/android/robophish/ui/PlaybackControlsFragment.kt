@@ -20,10 +20,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.inject
+import com.bayapps.android.robophish.ServiceLocator
 import com.squareup.picasso.Picasso
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * A class that shows the Media Queue to the user.
@@ -36,7 +35,7 @@ class PlaybackControlsFragment : Fragment() {
     private lateinit var albumArt: ImageView
     private var artUrl: String? = null
 
-    @Inject lateinit var picasso: Picasso
+    private val picasso: Picasso by lazy { ServiceLocator.get(requireContext()).picasso }
 
     private val callback = object : MediaControllerCompat.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
@@ -57,7 +56,6 @@ class PlaybackControlsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        inject()
     }
 
     override fun onCreateView(

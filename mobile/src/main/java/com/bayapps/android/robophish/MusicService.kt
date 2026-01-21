@@ -47,9 +47,6 @@ import com.bayapps.android.robophish.utils.CarHelper
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.kodein
-import org.kodein.di.generic.instance
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
@@ -108,9 +105,7 @@ import java.lang.ref.WeakReference
  *
  * @see [README.md](README.md) for more details.
  */
-class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, KodeinAware, CoroutineScope by MainScope() {
-
-    override val kodein by kodein()
+class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, CoroutineScope by MainScope() {
 
     private var mPlaybackManager: PlaybackManager? = null
     private var mSession: MediaSessionCompat? = null
@@ -121,12 +116,13 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackServiceCallback, Kodei
     private var mIsConnectedToCar = false
     private var mCarConnectionReceiver: BroadcastReceiver? = null
 
-    private val castContext: CastContext by instance()
+    private val deps by lazy { ServiceLocator.get(this) }
+    private val castContext: CastContext by lazy { deps.castContext }
     private val sessionManager: SessionManager by lazy { castContext.sessionManager }
     private var castSession: CastSession? = null
-    private val musicProvider: MusicProvider by instance()
-    private val picasso: Picasso by instance()
-    private val notificationManager: NotificationManagerCompat by instance()
+    private val musicProvider: MusicProvider by lazy { deps.musicProvider }
+    private val picasso: Picasso by lazy { deps.picasso }
+    private val notificationManager: NotificationManagerCompat by lazy { deps.notificationManager }
     private val mediaNotificationManager: MediaNotificationManager by lazy {
         MediaNotificationManager(this, picasso, notificationManager)
     }

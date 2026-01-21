@@ -17,7 +17,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.inject
+import com.bayapps.android.robophish.ServiceLocator
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
@@ -25,13 +25,13 @@ import com.google.android.gms.cast.framework.CastStateListener
 import com.google.android.gms.cast.framework.IntroductoryOverlay
 import com.google.android.material.navigation.NavigationView
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Abstract activity with toolbar, navigation drawer and cast support.
  */
 abstract class ActionBarCastActivity : AppCompatActivity() {
-    @Inject lateinit var castContext: CastContext
+    private val deps by lazy { ServiceLocator.get(this) }
+    private val castContext: CastContext by lazy { deps.castContext }
 
     private var mediaRouteMenuItem: MenuItem? = null
     private lateinit var toolbar: Toolbar
@@ -113,7 +113,6 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("Activity onCreate")
-        inject()
         CastContext.getSharedInstance(this)
         onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
