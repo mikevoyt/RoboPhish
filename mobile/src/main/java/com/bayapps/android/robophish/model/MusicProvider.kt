@@ -1,7 +1,6 @@
 package com.bayapps.android.robophish.model
 
 import android.content.Context
-import android.support.v4.media.MediaMetadataCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.bayapps.android.robophish.R
@@ -57,7 +56,7 @@ class MusicProvider(
 
     private suspend fun buildTrackItems(showId: String): List<MediaItem> {
         val tracks = source.tracksInShow(showId)
-        val items = tracks.map { track -> track.toTrackMediaItem(showId) }
+        val items = tracks.map { track -> track.toTrackMediaItem() }
         cachedTracks[showId] = items
         items.forEach { item ->
             mediaItemsById[item.mediaId] = item
@@ -87,11 +86,11 @@ class MusicProvider(
             .build()
     }
 
-    private fun List<MediaMetadataCompat>.toMediaItemListOfShows(): List<MediaItem> = map { show ->
-        val showId = show.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)
-        val venue = show.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE)
-        val location = show.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE)
-        val date = show.getString(MediaMetadataCompat.METADATA_KEY_DATE)
+    private fun List<ShowData>.toMediaItemListOfShows(): List<MediaItem> = map { show ->
+        val showId = show.id
+        val venue = show.venue
+        val location = show.location
+        val date = show.date
 
         val mediaId = MediaIDHelper.createMediaID(
             null,
@@ -112,38 +111,29 @@ class MusicProvider(
             .build()
     }
 
-    private fun MediaMetadataCompat.toTrackMediaItem(showId: String): MediaItem {
-        val trackId = getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)
-        val title = getString(MediaMetadataCompat.METADATA_KEY_TITLE)
-        val durationMs = getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
-        val artist = getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
-        val album = getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
-        val description = getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION)
-        val artUri = getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI)
-            ?: getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)
-            ?: getString(MediaMetadataCompat.METADATA_KEY_ART_URI)
-        val source = getString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE)
+    private fun TrackData.toTrackMediaItem(): MediaItem {
+        val durationText = formatDuration(durationMs)
 
         val hierarchyAwareMediaId = MediaIDHelper.createMediaID(
-            trackId,
+            id,
             MediaIDHelper.MEDIA_ID_TRACKS_BY_SHOW,
             showId
         )
 
         val metadata = MediaMetadata.Builder()
             .setTitle(title)
-            .setSubtitle(formatDuration(durationMs))
+            .setSubtitle(durationText)
             .setArtist(artist)
             .setAlbumTitle(album)
-            .setDescription(description)
-            .setArtworkUri(artUri?.let { android.net.Uri.parse(it) })
+            .setDescription(showDate)
+            .setArtworkUri(artUrl.let { android.net.Uri.parse(it) })
             .setIsBrowsable(false)
             .setIsPlayable(true)
             .build()
 
         return MediaItem.Builder()
             .setMediaId(hierarchyAwareMediaId)
-            .setUri(source)
+            .setUri(sourceUrl)
             .setMediaMetadata(metadata)
             .build()
     }
