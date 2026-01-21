@@ -15,15 +15,31 @@
  */
 package com.bayapps.android.robophish.model
 
-import android.support.v4.media.MediaMetadataCompat
 import robophish.model.YearData
 
 interface MusicProviderSource {
     suspend fun years(): List<YearData>
-    suspend fun showsInYear(year: String): List<MediaMetadataCompat>
-    suspend fun tracksInShow(showId: String): List<MediaMetadataCompat>
-
-    companion object {
-        const val CUSTOM_METADATA_TRACK_SOURCE = "__SOURCE__"
-    }
+    suspend fun showsInYear(year: String): List<ShowData>
+    suspend fun tracksInShow(showId: String): List<TrackData>
 }
+
+data class ShowData(
+    val id: String,
+    val date: String,
+    val venue: String,
+    val location: String,
+    val taperNotes: String?
+)
+
+data class TrackData(
+    val id: String,
+    val title: String,
+    val durationMs: Long,
+    val artist: String,
+    val album: String,
+    val showId: String,
+    val showDate: String,
+    val artUrl: String,
+    val sourceUrl: String,
+    val taperNotes: String?
+)
