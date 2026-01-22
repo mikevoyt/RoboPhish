@@ -275,7 +275,9 @@ class MusicService : MediaLibraryService() {
 
     private inner class NotificationListener : PlayerNotificationManager.NotificationListener {
         override fun onNotificationPosted(notificationId: Int, notification: android.app.Notification, ongoing: Boolean) {
-            if (ongoing) {
+            val shouldBeForeground = player.playbackState != Player.STATE_IDLE &&
+                player.playbackState != Player.STATE_ENDED
+            if (shouldBeForeground) {
                 startForeground(notificationId, notification)
             } else {
                 stopForegroundCompat(remove = false)

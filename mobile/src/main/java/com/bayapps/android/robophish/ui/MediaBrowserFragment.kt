@@ -34,6 +34,7 @@ import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
+import com.bayapps.android.robophish.utils.ShowDetailsCache
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -60,6 +61,9 @@ class MediaBrowserFragment : Fragment() {
     private var setlistWebView: WebView? = null
     private var reviewsWebView: WebView? = null
     private var tapernotesWebView: WebView? = null
+    private var setlistHtml: String? = null
+    private var reviewsHtml: String? = null
+    private var taperNotesHtml: String? = null
 
     private var listView: ListView? = null
     private var pendingListState: Parcelable? = null
@@ -109,6 +113,11 @@ class MediaBrowserFragment : Fragment() {
             registerMenuProvider()
 
             val viewPager = view.findViewById<ViewPager2>(R.id.viewpager)
+            val cachedShowId = MediaIDHelper.extractShowFromMediaID(mediaId)
+            val cachedHtml = cachedShowId?.let { ShowDetailsCache.get(it) }
+            setlistHtml = cachedHtml?.setlist
+            reviewsHtml = cachedHtml?.reviews
+            taperNotesHtml = cachedHtml?.taperNotes
             val pagerAdapter = ShowPagerAdapter(
                 onTracksViewCreated = { pageView ->
                     val list = pageView.findViewById<ListView>(R.id.list_view)
@@ -117,14 +126,17 @@ class MediaBrowserFragment : Fragment() {
                 onSetlistViewCreated = { pageView ->
                     setlistWebView = pageView.findViewById(R.id.setlist_webview)
                     setlistWebView?.settings?.javaScriptEnabled = true
+                    setlistHtml?.let { html -> setlistWebView?.loadData(html, "text/html", null) }
                 },
                 onReviewsViewCreated = { pageView ->
                     reviewsWebView = pageView.findViewById(R.id.reviews_webview)
                     reviewsWebView?.settings?.javaScriptEnabled = true
+                    reviewsHtml?.let { html -> reviewsWebView?.loadData(html, "text/html", null) }
                 },
                 onTaperNotesViewCreated = { pageView ->
                     tapernotesWebView = pageView.findViewById(R.id.tapernotes_webview)
                     tapernotesWebView?.settings?.javaScriptEnabled = true
+                    taperNotesHtml?.let { html -> tapernotesWebView?.loadData(html, "text/html", null) }
                 }
             )
             viewPager.adapter = pagerAdapter
@@ -136,132 +148,46 @@ class MediaBrowserFragment : Fragment() {
             }.attach()
 
             val setlistDate = getSubTitle()?.replace(".", "-")
+                ?: cachedHtml?.showDate
             if (!setlistDate.isNullOrBlank()) {
-                lifecycleScope.launch {
-                    val setlistResponse = fetchJson(
-                        "https://api.phish.net/v3/setlists/get",
-                        mapOf(
-                            "showdate" to setlistDate,
-                            "apikey" to BuildConfig.PHISHNET_API_KEY
-                        ),
-                        client = okHttpNoAuthClient
-                    )
-                    if (!isAdded) return@launch
-                    if (setlistResponse == null) {
-                        setlistWebView?.loadData(
-                            "<div>Error loading Setlist</div>",
-                            "text/html",
-                            null
-                        )
-                        reviewsWebView?.loadData(
-                            "<div>Error loading Reviews</div>",
-                            "text/html",
-                            null
-                        )
-                        return@launch
-                    }
-                    try {
-                        val result = setlistResponse
-                            .getJSONObject("response")
-                            .getJSONArray("data")
-                            .getJSONObject(0)
-                        val showId = result.getInt("showid")
-                        val location = result.getString("location")
-                        val venue = result.getString("venue")
-                        val header = "<h1>$venue</h1><h2>$location</h2>"
-                        val setlistdata = result.getString("setlistdata")
-                        val setlistnotes = result.getString("setlistnotes")
-                        setlistWebView?.loadData(
-                            header + setlistdata + setlistnotes,
-                            "text/html",
-                            null
-                        )
-
-                        val reviewsResponse = fetchJson(
-                            "https://api.phish.net/v3/reviews/query",
-                            mapOf(
-                                "showid" to showId.toString(),
-                                "apikey" to BuildConfig.PHISHNET_API_KEY
-                            ),
-                            client = okHttpNoAuthClient
-                        )
-                        if (!isAdded) return@launch
-                        if (reviewsResponse == null) {
-                            reviewsWebView?.loadData(
-                                "<div>Error loading Reviews</div>",
-                                "text/html",
-                                null
-                            )
-                            return@launch
-                        }
-                        val reviewsData = reviewsResponse
-                            .getJSONObject("response")
-                            .getJSONArray("data")
-                        val display = StringBuilder()
-                        for (i in 0 until reviewsData.length()) {
-                            val entry = reviewsData.getJSONObject(i)
-                            val author = entry.getString("username")
-                            val review = entry.getString("reviewtext")
-                            val reviewDate = entry.getString("posted_date")
-                            val reviewSubs = formatReviewText(review)
-                            display.append("<h2>")
-                                .append(author)
-                                .append("</h2><h4>")
-                                .append(reviewDate)
-                                .append("</h4>")
-                            display.append(reviewSubs).append("<br/>")
-                        }
-                        reviewsWebView?.loadData(
-                            display.toString(),
-                            "text/html",
-                            null
-                        )
-                    } catch (e: JSONException) {
-                        Timber.e(e, "Error parsing setlist/reviews response")
-                        setlistWebView?.loadData(
-                            "<div>Error loading Setlist</div>",
-                            "text/html",
-                            null
-                        )
-                        reviewsWebView?.loadData(
-                            "<div>Error loading Reviews</div>",
-                            "text/html",
-                            null
-                        )
-                    }
-                }
+                loadSetlistAndReviews(setlistDate, cachedShowId)
             }
 
             val showId = MediaIDHelper.extractShowFromMediaID(mediaId)
             if (!showId.isNullOrBlank()) {
                 lifecycleScope.launch {
+                    if (!taperNotesHtml.isNullOrBlank()) {
+                        return@launch
+                    }
                     val response = fetchJson(
                         "https://phish.in/api/v1/shows/$showId",
                         headers = mapOf("Authorization" to "Bearer ${BuildConfig.PHISHIN_API_KEY}")
                     )
                     if (!isAdded) return@launch
                     if (response == null) {
-                        tapernotesWebView?.loadData(
-                            "<div>Error loading Taper Notes</div>",
-                            "text/html",
-                            null
-                        )
+                        taperNotesHtml = "<div>Error loading Taper Notes</div>"
+                        tapernotesWebView?.loadData(taperNotesHtml!!, "text/html", null)
+                        updateCache(showId, null, null, taperNotesHtml)
                         return@launch
                     }
                     try {
                         showData = response
                         val data = response.getJSONObject("data")
+                        val responseDate = data.optString("date", "").ifBlank { null }
                         var tapernotes = data.getString("taper_notes")
                         if (tapernotes == "null") tapernotes = "Not available"
                         val notesSubs = tapernotes.replace("\n", "<br/>")
-                        tapernotesWebView?.loadData(notesSubs, "text/html", null)
+                        taperNotesHtml = notesSubs
+                        tapernotesWebView?.loadData(taperNotesHtml!!, "text/html", null)
+                        updateCache(showId, null, null, taperNotesHtml, responseDate)
+                        if (!responseDate.isNullOrBlank()) {
+                            loadSetlistAndReviews(responseDate, showId)
+                        }
                     } catch (e: JSONException) {
                         Timber.e(e, "Error parsing taper notes response")
-                        tapernotesWebView?.loadData(
-                            "<div>Error loading Taper Notes</div>",
-                            "text/html",
-                            null
-                        )
+                        taperNotesHtml = "<div>Error loading Taper Notes</div>"
+                        tapernotesWebView?.loadData(taperNotesHtml!!, "text/html", null)
+                        updateCache(showId, null, null, taperNotesHtml)
                     }
                 }
             }
@@ -514,6 +440,108 @@ class MediaBrowserFragment : Fragment() {
             if (item != null) {
                 val siblings = browserAdapter?.items ?: emptyList()
                 mediaFragmentListener?.onMediaItemSelected(item, siblings)
+            }
+        }
+    }
+
+    private fun updateCache(
+        showId: String?,
+        setlist: String? = null,
+        reviews: String? = null,
+        taperNotes: String? = null,
+        showDate: String? = null
+    ) {
+        if (showId.isNullOrBlank()) return
+        val existing = ShowDetailsCache.get(showId)
+        ShowDetailsCache.put(
+            showId,
+            ShowDetailsCache.Html(
+                setlist = setlist ?: existing?.setlist,
+                reviews = reviews ?: existing?.reviews,
+                taperNotes = taperNotes ?: existing?.taperNotes,
+                showDate = showDate ?: existing?.showDate
+            )
+        )
+    }
+
+    private fun loadSetlistAndReviews(showDate: String, showId: String?) {
+        lifecycleScope.launch {
+            if (!setlistHtml.isNullOrBlank() && !reviewsHtml.isNullOrBlank()) {
+                return@launch
+            }
+            val setlistResponse = fetchJson(
+                "https://api.phish.net/v3/setlists/get",
+                mapOf(
+                    "showdate" to showDate,
+                    "apikey" to BuildConfig.PHISHNET_API_KEY
+                ),
+                client = okHttpNoAuthClient
+            )
+            if (!isAdded) return@launch
+            if (setlistResponse == null) {
+                setlistHtml = "<div>Error loading Setlist</div>"
+                reviewsHtml = "<div>Error loading Reviews</div>"
+                setlistWebView?.loadData(setlistHtml!!, "text/html", null)
+                reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
+                return@launch
+            }
+            try {
+                val result = setlistResponse
+                    .getJSONObject("response")
+                    .getJSONArray("data")
+                    .getJSONObject(0)
+                val phishNetShowId = result.getInt("showid")
+                val location = result.getString("location")
+                val venue = result.getString("venue")
+                val header = "<h1>$venue</h1><h2>$location</h2>"
+                val setlistdata = result.getString("setlistdata")
+                val setlistnotes = result.getString("setlistnotes")
+                setlistHtml = header + setlistdata + setlistnotes
+                setlistWebView?.loadData(setlistHtml!!, "text/html", null)
+
+                val reviewsResponse = fetchJson(
+                    "https://api.phish.net/v3/reviews/query",
+                    mapOf(
+                        "showid" to phishNetShowId.toString(),
+                        "apikey" to BuildConfig.PHISHNET_API_KEY
+                    ),
+                    client = okHttpNoAuthClient
+                )
+                if (!isAdded) return@launch
+                if (reviewsResponse == null) {
+                    reviewsHtml = "<div>Error loading Reviews</div>"
+                    reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                    updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
+                    return@launch
+                }
+                val reviewsData = reviewsResponse
+                    .getJSONObject("response")
+                    .getJSONArray("data")
+                val display = StringBuilder()
+                for (i in 0 until reviewsData.length()) {
+                    val entry = reviewsData.getJSONObject(i)
+                    val author = entry.getString("username")
+                    val review = entry.getString("reviewtext")
+                    val reviewDate = entry.getString("posted_date")
+                    val reviewSubs = formatReviewText(review)
+                    display.append("<h2>")
+                        .append(author)
+                        .append("</h2><h4>")
+                        .append(reviewDate)
+                        .append("</h4>")
+                    display.append(reviewSubs).append("<br/>")
+                }
+                reviewsHtml = display.toString()
+                reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
+            } catch (e: JSONException) {
+                Timber.e(e, "Error parsing setlist/reviews response")
+                setlistHtml = "<div>Error loading Setlist</div>"
+                reviewsHtml = "<div>Error loading Reviews</div>"
+                setlistWebView?.loadData(setlistHtml!!, "text/html", null)
+                reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
             }
         }
     }
