@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.TextUtils
 import androidx.fragment.app.FragmentTransaction
@@ -178,15 +179,6 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         const val EXTRA_START_FULLSCREEN = "com.example.android.uamp.EXTRA_START_FULLSCREEN"
         const val EXTRA_SHOW_MEDIA_ID = "com.example.android.uamp.EXTRA_SHOW_MEDIA_ID"
         const val EXTRA_SELECTED_TRACK_ID = "com.example.android.uamp.EXTRA_SELECTED_TRACK_ID"
-    }
-
-    private inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(name: String): T? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getParcelableExtra(name, T::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            getParcelableExtra(name)
-        }
     }
 
     private inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(name: String): T? {
