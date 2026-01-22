@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
+import androidx.media3.common.C
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.bayapps.android.robophish.MusicService
@@ -183,6 +184,11 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
 
     private fun updateDuration() {
         val duration = controller?.duration ?: 0L
+        if (duration <= 0L || duration == C.TIME_UNSET) {
+            seekbar.max = 0
+            end.text = "--:--"
+            return
+        }
         seekbar.max = duration.toInt().coerceAtLeast(0)
         end.text = DateUtils.formatElapsedTime(duration / 1000)
     }
@@ -190,8 +196,13 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
     private fun updatePlaybackState() {
         val player = controller ?: return
         val position = player.currentPosition
-        seekbar.progress = position.toInt()
-        start.text = DateUtils.formatElapsedTime(position / 1000)
+        if (position <= 0L || position == C.TIME_UNSET) {
+            seekbar.progress = 0
+            start.text = "0:00"
+        } else {
+            seekbar.progress = position.toInt()
+            start.text = DateUtils.formatElapsedTime(position / 1000)
+        }
 
         val isPlaying = player.isPlaying
         playPause.setImageDrawable(if (isPlaying) pauseDrawable else playDrawable)
