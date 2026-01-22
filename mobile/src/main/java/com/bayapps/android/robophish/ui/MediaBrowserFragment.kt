@@ -17,7 +17,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -31,6 +33,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
+import com.bayapps.android.robophish.model.MusicProvider
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
@@ -45,6 +48,7 @@ import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.Locale
 
 /**
  * A Fragment that lists music catalog items from a MediaBrowser and
@@ -54,6 +58,7 @@ class MediaBrowserFragment : Fragment() {
     private var mediaId: String? = null
     private var mediaFragmentListener: MediaFragmentListener? = null
     private var browserAdapter: BrowseAdapter? = null
+    private var showTrackAdapter: SectionedTracksAdapter? = null
     private var errorView: View? = null
     private var errorMessage: View? = null
     private var progressBar: View? = null
@@ -68,6 +73,7 @@ class MediaBrowserFragment : Fragment() {
     private var listView: ListView? = null
     private var pendingListState: Parcelable? = null
     private var pendingSelectedTrackId: String? = null
+    private var isShowView: Boolean = false
 
     private val okHttpClient by lazy { ServiceLocator.get(requireContext()).okHttpClient }
     private val okHttpNoAuthClient by lazy { ServiceLocator.get(requireContext()).okHttpNoAuthClient }
@@ -87,10 +93,12 @@ class MediaBrowserFragment : Fragment() {
         override fun onPlaybackStateChanged(state: Int) {
             checkForUserVisibleErrors(false)
             browserAdapter?.notifyDataSetChanged()
+            showTrackAdapter?.notifyDataSetChanged()
         }
 
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
             browserAdapter?.notifyDataSetChanged()
+            showTrackAdapter?.notifyDataSetChanged()
             progressBar?.visibility = View.INVISIBLE
         }
     }
@@ -109,6 +117,7 @@ class MediaBrowserFragment : Fragment() {
 
         val mediaId = getMediaId()
         val rootView: View = if (mediaId != null && MediaIDHelper.isShow(mediaId)) {
+            isShowView = true
             val view = inflater.inflate(R.layout.fragment_list_show, container, false)
             registerMenuProvider()
 
@@ -121,7 +130,7 @@ class MediaBrowserFragment : Fragment() {
             val pagerAdapter = ShowPagerAdapter(
                 onTracksViewCreated = { pageView ->
                     val list = pageView.findViewById<ListView>(R.id.list_view)
-                    setupListView(list)
+                    setupListView(list, isShowTracks = true)
                 },
                 onSetlistViewCreated = { pageView ->
                     setlistWebView = pageView.findViewById(R.id.setlist_webview)
@@ -193,6 +202,7 @@ class MediaBrowserFragment : Fragment() {
             }
             view
         } else {
+            isShowView = false
             inflater.inflate(R.layout.fragment_list, container, false)
         }
 
@@ -369,8 +379,12 @@ class MediaBrowserFragment : Fragment() {
                             val items = result.value ?: emptyList()
                             checkForUserVisibleErrors(items.isEmpty())
                             progressBar?.visibility = View.INVISIBLE
-                            browserAdapter?.setItems(items)
-                            browserAdapter?.notifyDataSetChanged()
+                            if (isShowView) {
+                                showTrackAdapter?.setItems(items)
+                            } else {
+                                browserAdapter?.setItems(items)
+                                browserAdapter?.notifyDataSetChanged()
+                            }
                             val restored = restoreListStateIfNeeded()
                             if (!restored) {
                                 restoreSelectionIfNeeded()
@@ -421,6 +435,7 @@ class MediaBrowserFragment : Fragment() {
         checkForUserVisibleErrors(false)
         if (isOnline) {
             browserAdapter?.notifyDataSetChanged()
+            showTrackAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -431,14 +446,29 @@ class MediaBrowserFragment : Fragment() {
         return true
     }
 
-    private fun setupListView(list: ListView) {
+    private fun setupListView(list: ListView, isShowTracks: Boolean = false) {
         listView = list
-        listView?.adapter = browserAdapter
+        if (isShowTracks) {
+            listView?.divider = null
+            listView?.dividerHeight = 0
+            showTrackAdapter = SectionedTracksAdapter(requireActivity())
+            listView?.adapter = showTrackAdapter
+        } else {
+            listView?.adapter = browserAdapter
+        }
         listView?.setOnItemClickListener { _, _, position, _ ->
             checkForUserVisibleErrors(false)
-            val item = browserAdapter?.getItem(position)
+            val item = if (isShowTracks) {
+                showTrackAdapter?.getTrackItem(position)
+            } else {
+                browserAdapter?.getItem(position)
+            }
             if (item != null) {
-                val siblings = browserAdapter?.items ?: emptyList()
+                val siblings = if (isShowTracks) {
+                    showTrackAdapter?.getTrackItems() ?: emptyList()
+                } else {
+                    browserAdapter?.items ?: emptyList()
+                }
                 mediaFragmentListener?.onMediaItemSelected(item, siblings)
             }
         }
@@ -548,21 +578,26 @@ class MediaBrowserFragment : Fragment() {
 
     private fun restoreSelectionIfNeeded() {
         val selectedTrackId = pendingSelectedTrackId ?: return
-        val adapter = browserAdapter ?: return
-        val count = adapter.count
-        if (count == 0) return
-        var targetPosition: Int? = null
-        for (i in 0 until count) {
-            val item = adapter.getItem(i) ?: continue
-            val mediaId = item.mediaId
-            val trackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
-            if (trackId == selectedTrackId) {
-                targetPosition = i
-                break
+        val position = if (isShowView) {
+            showTrackAdapter?.findPositionByTrackId(selectedTrackId)
+        } else {
+            val adapter = browserAdapter ?: return
+            val count = adapter.count
+            if (count == 0) return
+            var targetPosition: Int? = null
+            for (i in 0 until count) {
+                val item = adapter.getItem(i) ?: continue
+                val mediaId = item.mediaId
+                val trackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
+                if (trackId == selectedTrackId) {
+                    targetPosition = i
+                    break
+                }
             }
+            targetPosition
         }
-        val position = targetPosition ?: return
-        listView?.post { listView?.setSelection(position) }
+        val resolvedPosition = position ?: return
+        listView?.post { listView?.setSelection(resolvedPosition) }
         pendingSelectedTrackId = null
     }
 
@@ -668,6 +703,137 @@ class MediaBrowserFragment : Fragment() {
                 itemState
             )
         }
+    }
+
+    private class SectionedTracksAdapter(private val activity: android.app.Activity) : BaseAdapter() {
+        private val rows: MutableList<TrackRow> = mutableListOf()
+        private var trackItems: List<MediaItem> = emptyList()
+
+        fun setItems(items: List<MediaItem>) {
+            trackItems = items
+            rows.clear()
+            rows.addAll(buildTrackRows(items))
+            notifyDataSetChanged()
+        }
+
+        fun getTrackItem(position: Int): MediaItem? {
+            return (getItem(position) as? TrackRow.Track)?.item
+        }
+
+        fun getTrackItems(): List<MediaItem> = trackItems
+
+        fun findPositionByTrackId(trackId: String): Int? {
+            for (i in rows.indices) {
+                val row = rows[i]
+                if (row is TrackRow.Track) {
+                    val mediaId = row.item.mediaId
+                    val rowTrackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
+                    if (rowTrackId == trackId) {
+                        return i
+                    }
+                }
+            }
+            return null
+        }
+
+        override fun getCount(): Int = rows.size
+
+        override fun getItem(position: Int): TrackRow = rows[position]
+
+        override fun getItemId(position: Int): Long = position.toLong()
+
+        override fun getItemViewType(position: Int): Int {
+            return when (rows[position]) {
+                is TrackRow.Header -> VIEW_TYPE_HEADER
+                is TrackRow.Track -> VIEW_TYPE_TRACK
+            }
+        }
+
+        override fun getViewTypeCount(): Int = 2
+
+        override fun areAllItemsEnabled(): Boolean = false
+
+        override fun isEnabled(position: Int): Boolean = rows[position] is TrackRow.Track
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val row = rows[position]
+            return when (row) {
+                is TrackRow.Header -> {
+                    val view = convertView ?: LayoutInflater.from(activity)
+                        .inflate(R.layout.show_track_header_item, parent, false)
+                    view.findViewById<TextView>(R.id.set_header_title).text = row.title
+                    view
+                }
+                is TrackRow.Track -> {
+                    val item = row.item
+                    var itemState = MediaItemViewHolder.STATE_NONE
+                    if (item.mediaMetadata.isPlayable == true) {
+                        itemState = MediaItemViewHolder.STATE_PLAYABLE
+                        val provider = activity as? MediaBrowserProvider
+                        val controller = provider?.mediaBrowser
+                        val currentPlayingId = controller?.currentMediaItem?.mediaId
+                        if (currentPlayingId != null && currentPlayingId == item.mediaId) {
+                            itemState = if (controller.isPlaying) {
+                                MediaItemViewHolder.STATE_PLAYING
+                            } else {
+                                MediaItemViewHolder.STATE_PAUSED
+                            }
+                        }
+                    }
+                    MediaItemViewHolder.setupView(
+                        activity,
+                        convertView,
+                        parent,
+                        item,
+                        itemState
+                    )
+                }
+            }
+        }
+
+        private fun buildTrackRows(items: List<MediaItem>): List<TrackRow> {
+            val rows = mutableListOf<TrackRow>()
+            var currentSet: String? = null
+            items.forEach { item ->
+                val setLabel = resolveSetLabel(item) ?: DEFAULT_SET_LABEL
+                if (setLabel != currentSet) {
+                    rows.add(TrackRow.Header(setLabel))
+                    currentSet = setLabel
+                }
+                rows.add(TrackRow.Track(item))
+            }
+            return rows
+        }
+
+        private fun resolveSetLabel(item: MediaItem): String? {
+            val extras = item.mediaMetadata.extras ?: return null
+            val setName = extras.getString(MusicProvider.EXTRA_TRACK_SET_NAME)
+            if (!setName.isNullOrBlank()) {
+                return setName.trim()
+            }
+            val rawSet = extras.getString(MusicProvider.EXTRA_TRACK_SET)?.trim()
+            if (rawSet.isNullOrBlank()) {
+                return null
+            }
+            return when (rawSet.uppercase(Locale.US)) {
+                "1", "SET 1", "SET1" -> "Set 1"
+                "2", "SET 2", "SET2" -> "Set 2"
+                "3", "SET 3", "SET3" -> "Set 3"
+                "E", "ENCORE" -> "Encore"
+                else -> rawSet.replaceFirstChar { it.uppercase(Locale.US) }
+            }
+        }
+
+        companion object {
+            private const val VIEW_TYPE_HEADER = 0
+            private const val VIEW_TYPE_TRACK = 1
+            private const val DEFAULT_SET_LABEL = "Tracks"
+        }
+    }
+
+    private sealed class TrackRow {
+        data class Header(val title: String) : TrackRow()
+        data class Track(val item: MediaItem) : TrackRow()
     }
 
     interface MediaFragmentListener : MediaBrowserProvider {

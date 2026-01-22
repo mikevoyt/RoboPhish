@@ -33,6 +33,16 @@
     <dimen name="media_item_height">72dp</dimen>
     <dimen name="media_item_icon_margin_start">12dp</dimen>
     <dimen name="media_item_text_margin_start">60dp</dimen>
+
+    <!-- show set headers -->
+    <dimen name="show_set_header_horizontal_margin">12dp</dimen>
+    <dimen name="show_set_header_vertical_margin">8dp</dimen>
+    <dimen name="show_set_header_corner_radius">12dp</dimen>
+    <dimen name="show_set_header_elevation">2dp</dimen>
+    <dimen name="show_set_header_stroke_width">1dp</dimen>
+    <dimen name="show_set_header_padding">12dp</dimen>
+    <dimen name="show_set_header_accent_width">4dp</dimen>
+    <dimen name="show_set_header_title_margin_start">12dp</dimen>
     <!-- Margins for the ShowcaseView button -->
     <dimen name="button_margin">50dp</dimen>
 
