@@ -1,7 +1,7 @@
 package com.bayapps.android.robophish.ui
 
-import android.support.v4.media.MediaBrowserCompat
+import androidx.media3.session.MediaBrowser
 
 interface MediaBrowserProvider {
-    val mediaBrowser: MediaBrowserCompat
+    val mediaBrowser: MediaBrowser?
 }

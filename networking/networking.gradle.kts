@@ -14,9 +14,6 @@ kotlin {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    // api to expose networkingModule.kt to consumers
-    api("org.kodein.di:kodein-di-generic-jvm:6.4.0")
-
     // api to expose Interceptors and HttpUrl to consumers
     api("com.squareup.okhttp3:okhttp:4.12.0")
 

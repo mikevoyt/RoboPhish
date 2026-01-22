@@ -1,16 +1,17 @@
 package com.bayapps.android.robophish.model
 
-import android.support.v4.media.MediaMetadataCompat
+import android.content.Context
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.bayapps.android.robophish.utils.toSimpleFormat
-import com.squareup.picasso.Picasso
 import robophish.model.YearData
 import robophish.phishin.*
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class PhishProviderSource(
+        private val appContext: Context,
         private val phishinRepository: PhishinRepository,
-        private val picasso: Picasso
+        private val imageLoader: ImageLoader
 ) : MusicProviderSource {
 
     override suspend fun years(): List<YearData> {
@@ -23,17 +24,16 @@ class PhishProviderSource(
         }
     }
 
-    override suspend fun showsInYear(year: String): List<MediaMetadataCompat> {
+    override suspend fun showsInYear(year: String): List<ShowData> {
         return when (val result = retry { phishinRepository.shows(year) }) {
             is PhishinSuccess -> result.data.map { show ->
-                MediaMetadataCompat.Builder()
-                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, show.id)
-                        .putString(MediaMetadataCompat.METADATA_KEY_DATE, show.date.toSimpleFormat())
-                        .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, show.venue_name)
-                        //we're using 'Author' here for taper notes
-                        .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, show.venue.location)
-                        .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, show.taper_notes)
-                        .build()
+                ShowData(
+                    id = show.id,
+                    date = show.date.toSimpleFormat(),
+                    venue = show.venue_name,
+                    location = show.venue.location,
+                    taperNotes = show.taper_notes
+                )
             }.asReversed()
             is PhishinError -> {
                 Timber.e(result.exception, "There was an error loading shows in %s from phishin api", year)
@@ -42,7 +42,7 @@ class PhishProviderSource(
         }
     }
 
-    override suspend fun tracksInShow(showId: String): List<MediaMetadataCompat> {
+    override suspend fun tracksInShow(showId: String): List<TrackData> {
         return when (val result = phishinRepository.show(showId)) {
             is PhishinSuccess -> {
                 result.data.let { show ->
@@ -64,32 +64,18 @@ class PhishProviderSource(
                             "Missing mp3 url for track ${track.id} in show ${show.id}"
                         }
                         val artUrl = images.random()
-                        // Adding the music source to the MediaMetadata (and consequently using it in the
-                        // mediaSession.setMetadata) is not a good idea for a real world music app, because
-                        // the session metadata can be accessed by notification listeners. This is done in this
-                        // sample for convenience only.
-                        val subtitle = "${show.venue_name} - ${show.date.toSimpleFormat()}"
-                        MediaMetadataCompat.Builder()
-                                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, track.id)
-                                .putString(
-                                    MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE,
-                                    mp3Url.toString()
-                                )
-                                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs)
-                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.title)
-                                //pretty hokey, but we're overloading these fields so we can save venue and location, and showId
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, show.venue_name)
-                                .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, show.taper_notes)
-                                .putString(MediaMetadataCompat.METADATA_KEY_COMPILATION, show.id)
-                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, track.title)
-                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, formatDuration(durationMs))
-                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, show.date.toSimpleFormat())
-                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, subtitle)
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, "Phish")
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, artUrl)
-                                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI, artUrl)
-                                .putString(MediaMetadataCompat.METADATA_KEY_ART_URI, artUrl)
-                                .build()
+                        TrackData(
+                            id = track.id,
+                            title = track.title,
+                            durationMs = durationMs,
+                            artist = "Phish",
+                            album = show.venue_name,
+                            showId = show.id,
+                            showDate = show.date.toSimpleFormat(),
+                            artUrl = artUrl,
+                            sourceUrl = mp3Url.toString(),
+                            taperNotes = show.taper_notes
+                        )
                     }
                 }
             }
@@ -102,19 +88,15 @@ class PhishProviderSource(
 
     init {
         // prefetch all images
-        images.forEach {
-            picasso.load(it).fetch()
+        images.forEach { url ->
+            val request = ImageRequest.Builder(appContext)
+                .data(url)
+                .build()
+            imageLoader.enqueue(request)
         }
     }
 
     companion object {
-        private fun formatDuration(durationMs: Long): String {
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(durationMs)
-            val seconds = TimeUnit.MILLISECONDS.toSeconds(durationMs) -
-                TimeUnit.MINUTES.toSeconds(minutes)
-            return String.format("%d:%02d", minutes, seconds)
-        }
-
         private val images = listOf(
                 //add some random images to display
                 //Images used with permission (c) Jason Guss, James Bryan, Mike Rambo, Evan Krohn

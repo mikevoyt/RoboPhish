@@ -1,42 +1,42 @@
 package com.bayapps.android.robophish.ui
 
-import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.ComponentName
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.os.RemoteException
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
+import androidx.media3.common.Player
+import androidx.media3.session.MediaBrowser
+import androidx.media3.session.SessionToken
 import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.inject
 import com.bayapps.android.robophish.utils.NetworkHelper
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Base activity for activities that need to show a playback control fragment.
  */
 abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
     private lateinit var controlsFragment: PlaybackControlsFragment
-    override lateinit var mediaBrowser: MediaBrowserCompat
+    override var mediaBrowser: MediaBrowser? = null
+    private var mediaBrowserFuture: ListenableFuture<MediaBrowser>? = null
 
-    @Inject lateinit var googleApiAvailability: GoogleApiAvailability
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(state: Int) {
+            updateControlsVisibility()
+        }
+
+        override fun onMediaItemTransition(mediaItem: androidx.media3.common.MediaItem?, reason: Int) {
+            updateControlsVisibility()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("Activity onCreate")
-
-        inject()
-        checkPlayServices()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val taskDesc = ActivityManager.TaskDescription.Builder()
@@ -54,22 +54,6 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
             )
             setTaskDescription(taskDesc)
         }
-
-        mediaBrowser = MediaBrowserCompat(
-            this,
-            ComponentName(this, MusicService::class.java),
-            connectionCallback,
-            null
-        )
-    }
-
-    private fun checkPlayServices(): Boolean {
-        val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this)
-        return resultCode == ConnectionResult.SUCCESS
-    }
-
-    fun getSupportMediaController(): MediaControllerCompat? {
-        return MediaControllerCompat.getMediaController(this)
     }
 
     override fun onStart() {
@@ -83,14 +67,15 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
             )
 
         hidePlaybackControls()
-        mediaBrowser.connect()
+        connectBrowserIfNeeded()
     }
 
     override fun onStop() {
         super.onStop()
         Timber.d("Activity onStop")
-        MediaControllerCompat.getMediaController(this)?.unregisterCallback(mediaControllerCallback)
-        mediaBrowser.disconnect()
+        mediaBrowser?.removeListener(playerListener)
+        mediaBrowser?.release()
+        mediaBrowser = null
     }
 
     protected open fun onMediaControllerConnected() {
@@ -118,75 +103,47 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
             .commit()
     }
 
-    protected fun shouldShowControls(): Boolean {
-        val mediaController = MediaControllerCompat.getMediaController(this)
-        if (mediaController == null ||
-            mediaController.metadata == null ||
-            mediaController.playbackState == null
-        ) {
-            return false
-        }
-        return when (mediaController.playbackState.state) {
-            PlaybackStateCompat.STATE_ERROR,
-            PlaybackStateCompat.STATE_NONE,
-            PlaybackStateCompat.STATE_STOPPED -> false
-            else -> true
-        }
+    private fun shouldShowControls(): Boolean {
+        val browser = mediaBrowser ?: return false
+        val hasItem = browser.currentMediaItem != null
+        return hasItem &&
+            browser.playbackState != Player.STATE_IDLE &&
+            browser.playbackState != Player.STATE_ENDED
     }
 
-    @Throws(RemoteException::class)
-    private fun connectToSession(token: MediaSessionCompat.Token) {
-        val mediaController = MediaControllerCompat(this, token)
-        MediaControllerCompat.setMediaController(this, mediaController)
-        mediaController.registerCallback(mediaControllerCallback)
-
+    private fun updateControlsVisibility() {
         if (shouldShowControls()) {
             showPlaybackControls()
         } else {
-            Timber.d("connectionCallback.onConnected: hiding controls because metadata is null")
             hidePlaybackControls()
         }
-
-        controlsFragment.onConnected()
-        onMediaControllerConnected()
     }
 
-    private val mediaControllerCallback = object : MediaControllerCompat.Callback() {
-        @SuppressLint("BinaryOperationInTimber")
-        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            if (shouldShowControls()) {
-                showPlaybackControls()
-            } else {
-                Timber.d(
-                    "mediaControllerCallback.onPlaybackStateChanged: hiding controls because state is %s",
-                    state?.state
-                )
-                hidePlaybackControls()
-            }
+    private fun connectBrowserIfNeeded() {
+        if (mediaBrowser != null) {
+            updateControlsVisibility()
+            controlsFragment.onConnected()
+            onMediaControllerConnected()
+            return
         }
-
-        @SuppressLint("BinaryOperationInTimber")
-        override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-            if (shouldShowControls()) {
-                showPlaybackControls()
-            } else {
-                Timber.d(
-                    "mediaControllerCallback.onMetadataChanged: hiding controls because metadata is null"
-                )
-                hidePlaybackControls()
-            }
-        }
-    }
-
-    private val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
-        override fun onConnected() {
-            Timber.d("onConnected")
-            try {
-                connectToSession(mediaBrowser.sessionToken)
-            } catch (e: RemoteException) {
-                Timber.e(e, "could not connect media controller")
-                hidePlaybackControls()
-            }
-        }
+        val token = SessionToken(this, ComponentName(this, MusicService::class.java))
+        val future = MediaBrowser.Builder(this, token).buildAsync()
+        mediaBrowserFuture = future
+        future.addListener(
+            {
+                try {
+                    val browser = future.get()
+                    mediaBrowser = browser
+                    browser.addListener(playerListener)
+                    updateControlsVisibility()
+                    controlsFragment.onConnected()
+                    onMediaControllerConnected()
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to connect MediaBrowser")
+                    hidePlaybackControls()
+                }
+            },
+            MoreExecutors.directExecutor()
+        )
     }
 }

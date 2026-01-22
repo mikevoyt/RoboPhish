@@ -4,9 +4,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -17,29 +14,18 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.inject
-import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.framework.CastState
-import com.google.android.gms.cast.framework.CastStateListener
-import com.google.android.gms.cast.framework.IntroductoryOverlay
 import com.google.android.material.navigation.NavigationView
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
- * Abstract activity with toolbar, navigation drawer and cast support.
+ * Abstract activity with toolbar and navigation drawer.
  */
 abstract class ActionBarCastActivity : AppCompatActivity() {
-    @Inject lateinit var castContext: CastContext
-
-    private var mediaRouteMenuItem: MenuItem? = null
     private lateinit var toolbar: Toolbar
     private var drawerToggle: ActionBarDrawerToggle? = null
     private var drawerLayout: DrawerLayout? = null
     private var toolbarInitialized = false
     private var itemToOpenWhenDrawerCloses = -1
-    private val mainHandler = Handler(Looper.getMainLooper())
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -60,16 +46,6 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
 
     private val backStackChangedListener = FragmentManager.OnBackStackChangedListener {
         updateDrawerToggle()
-    }
-
-    private val castStateListener = CastStateListener { newState ->
-        if (newState == CastState.NO_DEVICES_AVAILABLE) return@CastStateListener
-        mainHandler.postDelayed({
-            if (mediaRouteMenuItem?.isVisible == true) {
-                Timber.d("Cast Icon is visible")
-                showFtu()
-            }
-        }, DELAY_MILLIS)
     }
 
     private val drawerListener = object : DrawerLayout.DrawerListener {
@@ -113,8 +89,6 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("Activity onCreate")
-        inject()
-        CastContext.getSharedInstance(this)
         onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
@@ -134,7 +108,6 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        castContext.addCastStateListener(castStateListener)
         supportFragmentManager.addOnBackStackChangedListener(backStackChangedListener)
     }
 
@@ -145,20 +118,7 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        castContext.removeCastStateListener(castStateListener)
         supportFragmentManager.removeOnBackStackChangedListener(backStackChangedListener)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.main, menu)
-        CastButtonFactory.setUpMediaRouteButton(
-            applicationContext,
-            menu,
-            R.id.media_route_menu_item
-        )
-        mediaRouteMenuItem = menu.findItem(R.id.media_route_menu_item)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -188,7 +148,6 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
 
     protected fun initializeToolbar() {
         toolbar = findViewById(R.id.toolbar)
-        toolbar.inflateMenu(R.menu.main)
 
         drawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout != null) {
@@ -242,16 +201,5 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
         }
     }
 
-    private fun showFtu() {
-        val item = mediaRouteMenuItem ?: return
-        IntroductoryOverlay.Builder(this, item)
-            .setTitleText(R.string.touch_to_cast)
-            .setSingleTime()
-            .build()
-            .show()
-    }
-
-    companion object {
-        private const val DELAY_MILLIS = 1000L
-    }
+    companion object
 }

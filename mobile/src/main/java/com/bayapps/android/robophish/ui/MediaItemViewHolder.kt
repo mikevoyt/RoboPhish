@@ -4,14 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.AnimationDrawable
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import android.support.v4.media.MediaDescriptionCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.media3.common.MediaItem
 import com.bayapps.android.robophish.R
 
 object MediaItemViewHolder {
@@ -29,7 +29,7 @@ object MediaItemViewHolder {
         activity: Activity,
         convertView: View?,
         parent: ViewGroup,
-        description: MediaDescriptionCompat,
+        item: MediaItem,
         state: Int
     ): View {
         if (colorStateNotPlaying == null || colorStatePlaying == null) {
@@ -45,7 +45,8 @@ object MediaItemViewHolder {
             holder = Holder(
                 imageView = view.findViewById(R.id.play_eq),
                 titleView = view.findViewById(R.id.title),
-                descriptionView = view.findViewById(R.id.description)
+                descriptionView = view.findViewById(R.id.description),
+                locationView = view.findViewById(R.id.location)
             )
             view.tag = holder
         } else {
@@ -53,8 +54,12 @@ object MediaItemViewHolder {
             cachedState = view.getTag(R.id.tag_mediaitem_state_cache) as? Int ?: STATE_INVALID
         }
 
-        holder.titleView.text = description.title
-        holder.descriptionView.text = description.subtitle
+        holder.titleView.text = item.mediaMetadata.title
+        holder.descriptionView.text = item.mediaMetadata.subtitle
+        val location = item.mediaMetadata.description
+        val showLocation = item.mediaMetadata.isBrowsable == true && !location.isNullOrBlank()
+        holder.locationView.visibility = if (showLocation) View.VISIBLE else View.GONE
+        holder.locationView.text = if (showLocation) location else ""
 
         val resultView = view ?: throw IllegalStateException("Missing view")
         if (cachedState != state) {
@@ -104,6 +109,7 @@ object MediaItemViewHolder {
     private data class Holder(
         val imageView: ImageView,
         val titleView: TextView,
-        val descriptionView: TextView
+        val descriptionView: TextView,
+        val locationView: TextView
     )
 }

@@ -4,18 +4,15 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.Moshi
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.junit.jupiter.api.Test
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
-import org.kodein.di.generic.instance
 import robophish.model.Track
-import robophish.networkingModule
 
 /**
  * Test both json adapters in the moshi package.
  */
-class HttpUrlAdapterTest: KodeinAware {
-
-    private val moshi: Moshi by instance()
+class HttpUrlAdapterTest {
+    private val moshi: Moshi = Moshi.Builder()
+        .add(HttpUrlAdapter)
+        .build()
 
     @Test
     fun `should be bijective`() {
@@ -34,7 +31,4 @@ class HttpUrlAdapterTest: KodeinAware {
         assertThat(result).isEqualTo(testData)
     }
 
-    override val kodein: Kodein = Kodein.lazy {
-        import(networkingModule)
-    }
 }

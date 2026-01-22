@@ -27,7 +27,6 @@
     <string name="random_queue_title">Random music</string>
     <string name="error_no_connection">Cannot connect to server. Please, check your Internet connectivity.</string>
     <string name="error_loading_media">Error Loading Media</string>
-    <string name="casting_to_device">Casting to %1$s</string>
     <string name="currently_playing_song">Song currently playing</string>
     <string name="currently_playing_artist">Artist of currently playing song</string>
     <string name="currently_playing_extra_info">Extra info for currently playing song</string>
@@ -35,10 +34,6 @@
     <string name="play_pause">play or pause</string>
     <string name="skip_next">skip to next</string>
     <string name="skip_prev">skip to previous</string>
-    <string name="touch_to_cast">Touch to connect to a Google Cast device</string>
-    <!-- Use the default receiver. To customize a styled media receiver, you can use
-         the css and images under <project-root>/docs/cast_styled_receiver -->
-    <string name="cast_application_id">CC1AD845</string>
     <string name="home_title">Home</string>
     <string name="related_content_header">You may also like</string>
     <string name="action_listen">Listen</string>
@@ -53,7 +48,6 @@
     <string name="search_queue_title">Search results</string>
     <string name="no_search_results">No search results.</string>
     <string name="loading">Loading…</string>
-    <string name="media_route_menu_title">Play on…</string>
     <string name="about">About</string>
     <string name="downloads">Downloads</string>
 </resources>
