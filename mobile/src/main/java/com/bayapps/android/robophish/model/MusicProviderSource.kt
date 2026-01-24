@@ -41,5 +41,7 @@ data class TrackData(
     val showDate: String,
     val artUrl: String,
     val sourceUrl: String,
-    val taperNotes: String?
+    val taperNotes: String?,
+    val set: String?,
+    val setName: String?
 )

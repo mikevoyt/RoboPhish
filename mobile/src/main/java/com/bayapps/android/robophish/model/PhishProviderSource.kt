@@ -74,7 +74,9 @@ class PhishProviderSource(
                             showDate = show.date.toSimpleFormat(),
                             artUrl = artUrl,
                             sourceUrl = mp3Url.toString(),
-                            taperNotes = show.taper_notes
+                            taperNotes = show.taper_notes,
+                            set = track.set,
+                            setName = track.setName
                         )
                     }
                 }

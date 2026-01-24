@@ -1,6 +1,7 @@
 package com.bayapps.android.robophish.model
 
 import android.content.Context
+import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.bayapps.android.robophish.R
@@ -120,7 +121,7 @@ class MusicProvider(
             showId
         )
 
-        val metadata = MediaMetadata.Builder()
+        val metadataBuilder = MediaMetadata.Builder()
             .setTitle(title)
             .setSubtitle(durationText)
             .setArtist(artist)
@@ -129,7 +130,14 @@ class MusicProvider(
             .setArtworkUri(artUrl.let { android.net.Uri.parse(it) })
             .setIsBrowsable(false)
             .setIsPlayable(true)
-            .build()
+        if (!set.isNullOrBlank() || !setName.isNullOrBlank()) {
+            val extras = Bundle().apply {
+                if (!set.isNullOrBlank()) putString(METADATA_SET, set)
+                if (!setName.isNullOrBlank()) putString(METADATA_SET_NAME, setName)
+            }
+            metadataBuilder.setExtras(extras)
+        }
+        val metadata = metadataBuilder.build()
 
         return MediaItem.Builder()
             .setMediaId(hierarchyAwareMediaId)
@@ -143,5 +151,10 @@ class MusicProvider(
         val seconds = TimeUnit.MILLISECONDS.toSeconds(durationMs) -
             TimeUnit.MINUTES.toSeconds(minutes)
         return String.format("%d:%02d", minutes, seconds)
+    }
+
+    companion object {
+        const val METADATA_SET = "robophish.metadata.SET"
+        const val METADATA_SET_NAME = "robophish.metadata.SET_NAME"
     }
 }
