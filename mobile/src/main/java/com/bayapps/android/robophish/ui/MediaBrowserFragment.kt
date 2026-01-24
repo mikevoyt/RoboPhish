@@ -15,6 +15,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewConfiguration
 import android.webkit.WebView
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -27,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
@@ -144,6 +146,7 @@ class MediaBrowserFragment : Fragment() {
             )
             viewPager.adapter = pagerAdapter
             viewPager.offscreenPageLimit = 3
+            tunePagerSwipeSensitivity(viewPager)
 
             val tabLayout = view.findViewById<TabLayout>(R.id.sliding_tabs)
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -639,6 +642,19 @@ class MediaBrowserFragment : Fragment() {
             },
             com.google.common.util.concurrent.MoreExecutors.directExecutor()
         )
+    }
+
+    private fun tunePagerSwipeSensitivity(viewPager: ViewPager2) {
+        val recyclerView = viewPager.getChildAt(0) as? RecyclerView ?: return
+        recyclerView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+        try {
+            val field = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+            field.isAccessible = true
+            val slop = field.getInt(recyclerView)
+            field.setInt(recyclerView, slop * 3)
+        } catch (_: Exception) {
+            // Best-effort: if reflection fails, the default paging slop still helps.
+        }
     }
 
     private class BrowseAdapter(context: android.app.Activity) :
