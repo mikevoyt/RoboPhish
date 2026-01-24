@@ -23,6 +23,20 @@ android {
     namespace "com.bayapps.android.robophish"
     compileSdk 35
 
+    def gitSha = "unknown"
+    try {
+        def out = new ByteArrayOutputStream()
+        exec {
+            commandLine "git", "rev-parse", "--short", "HEAD"
+            standardOutput = out
+            errorOutput = new ByteArrayOutputStream()
+        }
+        gitSha = out.toString().trim()
+    } catch (Exception ignored) {
+        // best-effort for builds without git metadata
+    }
+    def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss z", TimeZone.getTimeZone("UTC"))
+
     signingConfigs {
         debug {
             storeFile = file("$rootDir/keystore/debug.keystore")
@@ -48,6 +62,8 @@ android {
 
         buildConfigField("String", "PHISHIN_API_KEY", "\"$phishinApiKey\"")
         buildConfigField("String", "PHISHNET_API_KEY", "\"$phishnetApiKey\"")
+        buildConfigField("String", "GIT_SHA", "\"$gitSha\"")
+        buildConfigField("String", "BUILD_TIME_UTC", "\"$buildTime\"")
     }
 
     compileOptions {
