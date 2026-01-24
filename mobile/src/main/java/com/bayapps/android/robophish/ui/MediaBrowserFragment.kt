@@ -15,6 +15,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewConfiguration
 import android.webkit.WebView
 import android.widget.BaseAdapter
 import android.widget.ListView
@@ -28,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
@@ -128,21 +130,25 @@ class MediaBrowserFragment : Fragment() {
                 onSetlistViewCreated = { pageView ->
                     setlistWebView = pageView.findViewById(R.id.setlist_webview)
                     setlistWebView?.settings?.javaScriptEnabled = true
-                    setlistHtml?.let { html -> setlistWebView?.loadData(html, "text/html", null) }
+                    setlistWebView?.settings?.defaultTextEncodingName = "utf-8"
+                    setlistHtml?.let { html -> setlistWebView?.loadHtml(html) }
                 },
                 onReviewsViewCreated = { pageView ->
                     reviewsWebView = pageView.findViewById(R.id.reviews_webview)
                     reviewsWebView?.settings?.javaScriptEnabled = true
-                    reviewsHtml?.let { html -> reviewsWebView?.loadData(html, "text/html", null) }
+                    reviewsWebView?.settings?.defaultTextEncodingName = "utf-8"
+                    reviewsHtml?.let { html -> reviewsWebView?.loadHtml(html) }
                 },
                 onTaperNotesViewCreated = { pageView ->
                     tapernotesWebView = pageView.findViewById(R.id.tapernotes_webview)
                     tapernotesWebView?.settings?.javaScriptEnabled = true
-                    taperNotesHtml?.let { html -> tapernotesWebView?.loadData(html, "text/html", null) }
+                    tapernotesWebView?.settings?.defaultTextEncodingName = "utf-8"
+                    taperNotesHtml?.let { html -> tapernotesWebView?.loadHtml(html) }
                 }
             )
             viewPager.adapter = pagerAdapter
             viewPager.offscreenPageLimit = 3
+            tunePagerSwipeSensitivity(viewPager)
 
             val tabLayout = view.findViewById<TabLayout>(R.id.sliding_tabs)
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -168,7 +174,7 @@ class MediaBrowserFragment : Fragment() {
                     if (!isAdded) return@launch
                     if (response == null) {
                         taperNotesHtml = "<div>Error loading Taper Notes</div>"
-                        tapernotesWebView?.loadData(taperNotesHtml!!, "text/html", null)
+                        tapernotesWebView?.loadHtml(taperNotesHtml!!)
                         updateCache(showId, null, null, taperNotesHtml)
                         return@launch
                     }
@@ -180,7 +186,7 @@ class MediaBrowserFragment : Fragment() {
                         if (tapernotes == "null") tapernotes = "Not available"
                         val notesSubs = tapernotes.replace("\n", "<br/>")
                         taperNotesHtml = notesSubs
-                        tapernotesWebView?.loadData(taperNotesHtml!!, "text/html", null)
+                        tapernotesWebView?.loadHtml(taperNotesHtml!!)
                         updateCache(showId, null, null, taperNotesHtml, responseDate)
                         if (!responseDate.isNullOrBlank()) {
                             loadSetlistAndReviews(responseDate, showId)
@@ -188,7 +194,7 @@ class MediaBrowserFragment : Fragment() {
                     } catch (e: JSONException) {
                         Timber.e(e, "Error parsing taper notes response")
                         taperNotesHtml = "<div>Error loading Taper Notes</div>"
-                        tapernotesWebView?.loadData(taperNotesHtml!!, "text/html", null)
+                        tapernotesWebView?.loadHtml(taperNotesHtml!!)
                         updateCache(showId, null, null, taperNotesHtml)
                     }
                 }
@@ -483,8 +489,8 @@ class MediaBrowserFragment : Fragment() {
             if (setlistResponse == null) {
                 setlistHtml = "<div>Error loading Setlist</div>"
                 reviewsHtml = "<div>Error loading Reviews</div>"
-                setlistWebView?.loadData(setlistHtml!!, "text/html", null)
-                reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                setlistWebView?.loadHtml(setlistHtml!!)
+                reviewsWebView?.loadHtml(reviewsHtml!!)
                 updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
                 return@launch
             }
@@ -500,7 +506,7 @@ class MediaBrowserFragment : Fragment() {
                 val setlistdata = result.getString("setlistdata")
                 val setlistnotes = result.getString("setlistnotes")
                 setlistHtml = header + setlistdata + setlistnotes
-                setlistWebView?.loadData(setlistHtml!!, "text/html", null)
+                setlistWebView?.loadHtml(setlistHtml!!)
 
                 val reviewsResponse = fetchJson(
                     "https://api.phish.net/v3/reviews/query",
@@ -513,7 +519,7 @@ class MediaBrowserFragment : Fragment() {
                 if (!isAdded) return@launch
                 if (reviewsResponse == null) {
                     reviewsHtml = "<div>Error loading Reviews</div>"
-                    reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                    reviewsWebView?.loadHtml(reviewsHtml!!)
                     updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
                     return@launch
                 }
@@ -535,17 +541,21 @@ class MediaBrowserFragment : Fragment() {
                     display.append(reviewSubs).append("<br/>")
                 }
                 reviewsHtml = display.toString()
-                reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                reviewsWebView?.loadHtml(reviewsHtml!!)
                 updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
             } catch (e: JSONException) {
                 Timber.e(e, "Error parsing setlist/reviews response")
                 setlistHtml = "<div>Error loading Setlist</div>"
                 reviewsHtml = "<div>Error loading Reviews</div>"
-                setlistWebView?.loadData(setlistHtml!!, "text/html", null)
-                reviewsWebView?.loadData(reviewsHtml!!, "text/html", null)
+                setlistWebView?.loadHtml(setlistHtml!!)
+                reviewsWebView?.loadHtml(reviewsHtml!!)
                 updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
             }
         }
+    }
+
+    private fun WebView.loadHtml(html: String) {
+        loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
     }
 
     private fun restoreSelectionIfNeeded() {
@@ -636,6 +646,22 @@ class MediaBrowserFragment : Fragment() {
         )
     }
 
+    private fun tunePagerSwipeSensitivity(viewPager: ViewPager2) {
+        val recyclerView = viewPager.getChildAt(0) as? RecyclerView ?: return
+        recyclerView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+        try {
+            val field = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+            field.isAccessible = true
+            val slop = field.getInt(recyclerView)
+            field.setInt(recyclerView, slop * 3)
+        } catch (_: Exception) {
+            // Best-effort: if reflection fails, the default paging slop still helps.
+        }
+    }
+
+    private class BrowseAdapter(context: android.app.Activity) :
+        ArrayAdapter<MediaItem>(context, R.layout.media_list_item, mutableListOf()) {
+        val items: MutableList<MediaItem> get() = (0 until count).mapNotNull { getItem(it) }.toMutableList()
     private class BrowseAdapter(private val activity: android.app.Activity) : BaseAdapter() {
         private val rows: MutableList<BrowseRow> = mutableListOf()
         private val mediaItems: MutableList<MediaItem> = mutableListOf()
