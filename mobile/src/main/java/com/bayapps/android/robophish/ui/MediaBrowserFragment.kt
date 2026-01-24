@@ -659,9 +659,6 @@ class MediaBrowserFragment : Fragment() {
         }
     }
 
-    private class BrowseAdapter(context: android.app.Activity) :
-        ArrayAdapter<MediaItem>(context, R.layout.media_list_item, mutableListOf()) {
-        val items: MutableList<MediaItem> get() = (0 until count).mapNotNull { getItem(it) }.toMutableList()
     private class BrowseAdapter(private val activity: android.app.Activity) : BaseAdapter() {
         private val rows: MutableList<BrowseRow> = mutableListOf()
         private val mediaItems: MutableList<MediaItem> = mutableListOf()
