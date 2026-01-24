@@ -16,8 +16,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -31,6 +32,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
+import com.bayapps.android.robophish.model.MusicProvider
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
@@ -436,7 +438,7 @@ class MediaBrowserFragment : Fragment() {
         listView?.adapter = browserAdapter
         listView?.setOnItemClickListener { _, _, position, _ ->
             checkForUserVisibleErrors(false)
-            val item = browserAdapter?.getItem(position)
+            val item = browserAdapter?.getMediaItem(position)
             if (item != null) {
                 val siblings = browserAdapter?.items ?: emptyList()
                 mediaFragmentListener?.onMediaItemSelected(item, siblings)
@@ -553,7 +555,7 @@ class MediaBrowserFragment : Fragment() {
         if (count == 0) return
         var targetPosition: Int? = null
         for (i in 0 until count) {
-            val item = adapter.getItem(i) ?: continue
+            val item = adapter.getMediaItem(i) ?: continue
             val mediaId = item.mediaId
             val trackId = MediaIDHelper.extractMusicIDFromMediaID(mediaId)
             if (trackId == selectedTrackId) {
@@ -634,21 +636,85 @@ class MediaBrowserFragment : Fragment() {
         )
     }
 
-    private class BrowseAdapter(context: android.app.Activity) :
-        ArrayAdapter<MediaItem>(context, R.layout.media_list_item, mutableListOf()) {
-        val items: MutableList<MediaItem> get() = (0 until count).mapNotNull { getItem(it) }.toMutableList()
+    private class BrowseAdapter(private val activity: android.app.Activity) : BaseAdapter() {
+        private val rows: MutableList<BrowseRow> = mutableListOf()
+        private val mediaItems: MutableList<MediaItem> = mutableListOf()
+
+        val items: List<MediaItem> get() = mediaItems
 
         fun setItems(newItems: List<MediaItem>) {
-            clear()
-            addAll(newItems)
+            rows.clear()
+            mediaItems.clear()
+            mediaItems.addAll(newItems)
+            if (shouldGroupBySet(newItems)) {
+                var lastLabel: String? = null
+                newItems.forEach { item ->
+                    val label = resolveSetLabel(item)
+                    if (!label.isNullOrBlank() && label != lastLabel) {
+                        rows.add(BrowseRow.Header(label))
+                        lastLabel = label
+                    }
+                    rows.add(BrowseRow.Media(item))
+                }
+            } else {
+                newItems.forEach { item -> rows.add(BrowseRow.Media(item)) }
+            }
         }
 
+        fun getMediaItem(position: Int): MediaItem? {
+            return (rows.getOrNull(position) as? BrowseRow.Media)?.item
+        }
+
+        override fun getCount(): Int = rows.size
+
+        override fun getItem(position: Int): BrowseRow = rows[position]
+
+        override fun getItemId(position: Int): Long = position.toLong()
+
+        override fun getViewTypeCount(): Int = VIEW_TYPE_COUNT
+
+        override fun getItemViewType(position: Int): Int {
+            return when (rows[position]) {
+                is BrowseRow.Header -> VIEW_TYPE_HEADER
+                is BrowseRow.Media -> VIEW_TYPE_MEDIA
+            }
+        }
+
+        override fun areAllItemsEnabled(): Boolean = false
+
+        override fun isEnabled(position: Int): Boolean = rows[position] is BrowseRow.Media
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val item = getItem(position)
+            return when (val row = rows[position]) {
+                is BrowseRow.Header -> bindHeaderView(row, convertView, parent)
+                is BrowseRow.Media -> bindMediaView(row, convertView, parent)
+            }
+        }
+
+        private fun bindHeaderView(
+            row: BrowseRow.Header,
+            convertView: View?,
+            parent: ViewGroup
+        ): View {
+            val view = convertView?.takeIf { it.tag is HeaderHolder }
+                ?: LayoutInflater.from(activity).inflate(R.layout.media_list_set_header, parent, false)
+            val holder = (view.tag as? HeaderHolder) ?: HeaderHolder(
+                labelView = view.findViewById(R.id.set_label)
+            ).also { view.tag = it }
+            holder.labelView.text = row.title
+            return view
+        }
+
+        private fun bindMediaView(
+            row: BrowseRow.Media,
+            convertView: View?,
+            parent: ViewGroup
+        ): View {
+            val item = row.item
             var itemState = MediaItemViewHolder.STATE_NONE
-            if (item?.mediaMetadata?.isPlayable == true) {
+            if (item.mediaMetadata.isPlayable == true) {
                 itemState = MediaItemViewHolder.STATE_PLAYABLE
-                val provider = (context as? MediaBrowserProvider)
+                val provider = (activity as? MediaBrowserProvider)
                 val controller = provider?.mediaBrowser
                 val currentPlayingId = controller?.currentMediaItem?.mediaId
                 if (currentPlayingId != null && currentPlayingId == item.mediaId) {
@@ -659,14 +725,51 @@ class MediaBrowserFragment : Fragment() {
                     }
                 }
             }
-
+            val safeConvertView = convertView?.takeIf { it.tag !is HeaderHolder }
             return MediaItemViewHolder.setupView(
-                context as android.app.Activity,
-                convertView,
+                activity,
+                safeConvertView,
                 parent,
-                item ?: throw IllegalStateException("Missing item"),
+                item,
                 itemState
             )
+        }
+
+        private fun shouldGroupBySet(items: List<MediaItem>): Boolean {
+            if (items.isEmpty()) return false
+            return items.any { item ->
+                item.mediaMetadata.isPlayable == true && !resolveSetLabel(item).isNullOrBlank()
+            }
+        }
+
+        private fun resolveSetLabel(item: MediaItem): String? {
+            val extras = item.mediaMetadata.extras ?: return null
+            val setName = extras.getString(MusicProvider.METADATA_SET_NAME)
+            if (!setName.isNullOrBlank()) return setName
+            val setCode = extras.getString(MusicProvider.METADATA_SET)
+            return when (setCode?.trim()?.uppercase()) {
+                "1" -> "Set 1"
+                "2" -> "Set 2"
+                "3" -> "Set 3"
+                "E" -> "Encore"
+                "S" -> "Soundcheck"
+                else -> null
+            }
+        }
+
+        private data class HeaderHolder(
+            val labelView: TextView
+        )
+
+        private sealed class BrowseRow {
+            data class Media(val item: MediaItem) : BrowseRow()
+            data class Header(val title: String) : BrowseRow()
+        }
+
+        companion object {
+            private const val VIEW_TYPE_MEDIA = 0
+            private const val VIEW_TYPE_HEADER = 1
+            private const val VIEW_TYPE_COUNT = 2
         }
     }
 

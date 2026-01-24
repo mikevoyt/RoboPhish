@@ -38,4 +38,7 @@
     <color name="accentColor">#ffff5722</color>
     <color name="secondaryTextColor">#89000000</color>
     <color name="contentBackground">#fffafafa</color>
+
+    <color name="set_header_line">#E0E0E0</color>
+    <color name="set_header_text">#000000</color>
 </resources>
