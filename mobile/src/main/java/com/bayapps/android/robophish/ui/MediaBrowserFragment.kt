@@ -75,15 +75,16 @@ class MediaBrowserFragment : Fragment() {
 
     private val okHttpClient by lazy { ServiceLocator.get(requireContext()).okHttpClient }
     private val okHttpNoAuthClient by lazy { ServiceLocator.get(requireContext()).okHttpNoAuthClient }
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private var oldOnline = false
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
-            handleNetworkChange(true)
+            mainHandler.post { handleNetworkChange(true) }
         }
 
         override fun onLost(network: Network) {
-            handleNetworkChange(false)
+            mainHandler.post { handleNetworkChange(false) }
         }
     }
 
