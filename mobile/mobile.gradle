@@ -56,8 +56,8 @@ android {
         applicationId "com.bayapps.android.robophish"
         minSdkVersion 26
         targetSdk 35
-        versionCode 38
-        versionName "2.1.1"
+        versionCode 39
+        versionName "2.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "PHISHIN_API_KEY", "\"$phishinApiKey\"")
