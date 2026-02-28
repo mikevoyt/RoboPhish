@@ -77,6 +77,8 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
     protected fun showPlaybackControls() {
         Timber.d("showPlaybackControls")
         if (NetworkHelper.isOnline(this)) {
+            if (isFinishing || isDestroyed) return
+            if (supportFragmentManager.isDestroyed || supportFragmentManager.isStateSaved) return
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.animator.slide_in_from_bottom,
@@ -91,6 +93,8 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
 
     protected fun hidePlaybackControls() {
         Timber.d("hidePlaybackControls")
+        if (isFinishing || isDestroyed) return
+        if (supportFragmentManager.isDestroyed || supportFragmentManager.isStateSaved) return
         supportFragmentManager.beginTransaction()
             .hide(controlsFragment)
             .commit()

@@ -41,4 +41,6 @@
 
     <color name="set_header_line">#E0E0E0</color>
     <color name="set_header_text">#000000</color>
+    <color name="show_badge_bg">#FFD54F</color>
+    <color name="show_badge_text">#3A2E00</color>
 </resources>
