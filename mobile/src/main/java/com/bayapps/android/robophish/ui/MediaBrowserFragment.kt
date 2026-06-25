@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -224,23 +225,30 @@ class MediaBrowserFragment : Fragment() {
     }
 
     private fun formatReviewText(raw: String): String {
-        var text = raw
-        text = text.replace("[b]", "<b>").replace("[/b]", "</b>")
-        text = text.replace("[i]", "<i>").replace("[/i]", "</i>")
-        text = text.replace("[u]", "<u>").replace("[/u]", "</u>")
-        text = text.replace("[quote]", "<blockquote>").replace("[/quote]", "</blockquote>")
+        var text = escapeHtml(raw)
+        text = text.replace(Regex("(?i)\\[b]"), "<b>")
+            .replace(Regex("(?i)\\[/b]"), "</b>")
+        text = text.replace(Regex("(?i)\\[i]"), "<i>")
+            .replace(Regex("(?i)\\[/i]"), "</i>")
+        text = text.replace(Regex("(?i)\\[u]"), "<u>")
+            .replace(Regex("(?i)\\[/u]"), "</u>")
+        text = text.replace(Regex("(?i)\\[quote]"), "<blockquote>")
+            .replace(Regex("(?i)\\[/quote]"), "</blockquote>")
         text = text.replace(
-            Regex("(?i)\\[url=(.+?)](.*?)\\[/url]"),
-            "<a href=\"$1\">$2</a>"
-        )
+            Regex("(?i)\\[url=([^]]+)](.*?)\\[/url]")
+        ) { match ->
+            "<a href=\"${match.groupValues[1]}\">${match.groupValues[2]}</a>"
+        }
         text = text.replace(
-            Regex("(?i)\\[url](.+?)\\[/url]"),
-            "<a href=\"$1\">$1</a>"
-        )
+            Regex("(?i)\\[url](.+?)\\[/url]")
+        ) { match ->
+            "<a href=\"${match.groupValues[1]}\">${match.groupValues[1]}</a>"
+        }
         text = text.replace(
-            Regex("(?i)\\[img](.+?)\\[/img]"),
-            "<img src=\"$1\" />"
-        )
+            Regex("(?i)\\[img](.+?)\\[/img]")
+        ) { match ->
+            "<img src=\"${match.groupValues[1]}\" />"
+        }
         return text.replace("\n", "<br/>")
     }
 
@@ -475,13 +483,12 @@ class MediaBrowserFragment : Fragment() {
 
     private fun loadSetlistAndReviews(showDate: String, showId: String?) {
         lifecycleScope.launch {
-            if (!setlistHtml.isNullOrBlank() && !reviewsHtml.isNullOrBlank()) {
+            if (hasLoadedDetail(setlistHtml) && hasLoadedDetail(reviewsHtml)) {
                 return@launch
             }
             val setlistResponse = fetchJson(
-                "https://api.phish.net/v3/setlists/get",
+                "https://api.phish.net/v5/setlists/showdate/$showDate.json",
                 mapOf(
-                    "showdate" to showDate,
                     "apikey" to BuildConfig.PHISHNET_API_KEY
                 ),
                 client = okHttpNoAuthClient
@@ -492,67 +499,203 @@ class MediaBrowserFragment : Fragment() {
                 reviewsHtml = "<div>Error loading Reviews</div>"
                 setlistWebView?.loadHtml(setlistHtml!!)
                 reviewsWebView?.loadHtml(reviewsHtml!!)
-                updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
                 return@launch
             }
-            try {
-                val result = setlistResponse
-                    .getJSONObject("response")
-                    .getJSONArray("data")
-                    .getJSONObject(0)
-                val phishNetShowId = result.getInt("showid")
-                val location = result.getString("location")
-                val venue = result.getString("venue")
-                val header = "<h1>$venue</h1><h2>$location</h2>"
-                val setlistdata = result.getString("setlistdata")
-                val setlistnotes = result.getString("setlistnotes")
-                setlistHtml = header + setlistdata + setlistnotes
-                setlistWebView?.loadHtml(setlistHtml!!)
-
-                val reviewsResponse = fetchJson(
-                    "https://api.phish.net/v3/reviews/query",
-                    mapOf(
-                        "showid" to phishNetShowId.toString(),
-                        "apikey" to BuildConfig.PHISHNET_API_KEY
-                    ),
-                    client = okHttpNoAuthClient
-                )
-                if (!isAdded) return@launch
-                if (reviewsResponse == null) {
-                    reviewsHtml = "<div>Error loading Reviews</div>"
-                    reviewsWebView?.loadHtml(reviewsHtml!!)
-                    updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
-                    return@launch
+            val phishNetShowId = try {
+                val setlistData = setlistResponse.getJSONArray("data")
+                val renderedSetlist = buildSetlistHtml(setlistData)
+                if (renderedSetlist == null) {
+                    setlistHtml = "<div>Setlist not available</div>"
+                    setlistWebView?.loadHtml(setlistHtml!!)
+                    updateCache(showId, setlistHtml, null, null, showDate)
+                    null
+                } else {
+                    setlistHtml = renderedSetlist.html
+                    setlistWebView?.loadHtml(setlistHtml!!)
+                    updateCache(showId, setlistHtml, null, null, showDate)
+                    renderedSetlist.showId
                 }
-                val reviewsData = reviewsResponse
-                    .getJSONObject("response")
-                    .getJSONArray("data")
-                val display = StringBuilder()
-                for (i in 0 until reviewsData.length()) {
-                    val entry = reviewsData.getJSONObject(i)
-                    val author = entry.getString("username")
-                    val review = entry.getString("reviewtext")
-                    val reviewDate = entry.getString("posted_date")
-                    val reviewSubs = formatReviewText(review)
-                    display.append("<h2>")
-                        .append(author)
-                        .append("</h2><h4>")
-                        .append(reviewDate)
-                        .append("</h4>")
-                    display.append(reviewSubs).append("<br/>")
-                }
-                reviewsHtml = display.toString()
-                reviewsWebView?.loadHtml(reviewsHtml!!)
-                updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
             } catch (e: JSONException) {
-                Timber.e(e, "Error parsing setlist/reviews response")
+                Timber.e(e, "Error parsing setlist response")
                 setlistHtml = "<div>Error loading Setlist</div>"
                 reviewsHtml = "<div>Error loading Reviews</div>"
                 setlistWebView?.loadHtml(setlistHtml!!)
                 reviewsWebView?.loadHtml(reviewsHtml!!)
+                return@launch
+            }
+
+            val reviewsUrl = if (phishNetShowId != null) {
+                "https://api.phish.net/v5/reviews/showid/$phishNetShowId.json"
+            } else {
+                "https://api.phish.net/v5/reviews/showdate/$showDate.json"
+            }
+            val reviewsResponse = fetchJson(
+                reviewsUrl,
+                mapOf("apikey" to BuildConfig.PHISHNET_API_KEY),
+                client = okHttpNoAuthClient
+            )
+            if (!isAdded) return@launch
+            if (reviewsResponse == null) {
+                reviewsHtml = "<div>Error loading Reviews</div>"
+                reviewsWebView?.loadHtml(reviewsHtml!!)
+                return@launch
+            }
+            try {
+                reviewsHtml = buildReviewsHtml(reviewsResponse.getJSONArray("data"))
+                reviewsWebView?.loadHtml(reviewsHtml!!)
                 updateCache(showId, setlistHtml, reviewsHtml, null, showDate)
+            } catch (e: JSONException) {
+                Timber.e(e, "Error parsing reviews response")
+                reviewsHtml = "<div>Error loading Reviews</div>"
+                reviewsWebView?.loadHtml(reviewsHtml!!)
             }
         }
+    }
+
+    private data class RenderedSetlist(
+        val showId: Int?,
+        val html: String
+    )
+
+    private fun hasLoadedDetail(html: String?): Boolean {
+        return !html.isNullOrBlank() && !html.startsWith("<div>Error loading")
+    }
+
+    private fun buildSetlistHtml(setlistData: JSONArray): RenderedSetlist? {
+        if (setlistData.length() == 0) return null
+
+        val first = setlistData.getJSONObject(0)
+        val phishNetShowId = first.optInt("showid").takeIf { it > 0 }
+        val venue = first.optString("venue")
+        val location = listOf(
+            first.optString("city"),
+            first.optString("state"),
+            first.optString("country")
+        ).filter { it.isNotBlank() }.joinToString(", ")
+        val html = StringBuilder()
+            .append("<h1>")
+            .append(escapeHtml(venue))
+            .append("</h1><h2>")
+            .append(escapeHtml(location))
+            .append("</h2>")
+
+        val footnotes = mutableListOf<String>()
+        var currentSet: String? = null
+        for (i in 0 until setlistData.length()) {
+            val entry = setlistData.getJSONObject(i)
+            val set = entry.optString("set")
+            if (set != currentSet) {
+                if (currentSet != null) {
+                    html.append("</p>")
+                }
+                currentSet = set
+                html.append("<p class='pnetset pnetset")
+                    .append(escapeHtml(set))
+                    .append("'><span class='pnetsetlabel'>")
+                    .append(escapeHtml(setLabel(set)))
+                    .append(":</span> ")
+            }
+
+            val song = entry.optString("song")
+            val slug = entry.optString("slug")
+            if (slug.isBlank()) {
+                html.append(escapeHtml(song))
+            } else {
+                html.append("<a href=\"https://phish.net/song/")
+                    .append(escapeHtml(slug))
+                    .append("\" class=\"setlist-song\">")
+                    .append(escapeHtml(song))
+                    .append("</a>")
+            }
+
+            val footnote = entry.optString("footnote")
+            if (footnote.isNotBlank()) {
+                footnotes.add(footnote)
+                html.append("<sup>[")
+                    .append(footnotes.size)
+                    .append("]</sup>")
+            }
+
+            val nextSet = if (i + 1 < setlistData.length()) {
+                setlistData.getJSONObject(i + 1).optString("set")
+            } else {
+                null
+            }
+            if (set == nextSet) {
+                val transition = entry.optString("trans_mark")
+                html.append(transition.ifBlank { ", " })
+            }
+        }
+        html.append("</p>")
+
+        if (footnotes.isNotEmpty()) {
+            html.append("<p class='pnetfootnotes'>")
+            footnotes.forEachIndexed { index, footnote ->
+                html.append("[")
+                    .append(index + 1)
+                    .append("] ")
+                    .append(escapeHtml(footnote))
+                    .append("<br />")
+            }
+            html.append("</p>")
+        }
+
+        val setlistNotes = first.optString("setlistnotes")
+        if (setlistNotes.isNotBlank()) {
+            html.append("<p>").append(setlistNotes).append("</p>")
+        }
+
+        return RenderedSetlist(phishNetShowId, html.toString())
+    }
+
+    private fun setLabel(set: String): String {
+        return when (set.lowercase()) {
+            "e" -> "Encore"
+            "s" -> "Soundcheck"
+            "" -> "Set"
+            else -> "Set $set"
+        }
+    }
+
+    private fun buildReviewsHtml(reviewsData: JSONArray): String {
+        if (reviewsData.length() == 0) {
+            return "<div>No reviews available</div>"
+        }
+
+        val display = StringBuilder()
+        for (i in 0 until reviewsData.length()) {
+            val entry = reviewsData.getJSONObject(i)
+            val author = entry.optString("username").ifBlank { "Unknown" }
+            val review = entry.optString("review_text").ifBlank {
+                entry.optString("reviewtext")
+            }
+            val reviewDate = entry.optString("posted_at").ifBlank {
+                entry.optString("posted_date")
+            }
+            display.append("<h2>")
+                .append(escapeHtml(author))
+                .append("</h2><h4>")
+                .append(escapeHtml(reviewDate))
+                .append("</h4>")
+                .append(formatReviewText(review))
+                .append("<br/>")
+        }
+        return display.toString()
+    }
+
+    private fun escapeHtml(value: String): String {
+        val escaped = StringBuilder(value.length)
+        value.forEach { char ->
+            when (char) {
+                '&' -> escaped.append("&amp;")
+                '<' -> escaped.append("&lt;")
+                '>' -> escaped.append("&gt;")
+                '"' -> escaped.append("&quot;")
+                '\'' -> escaped.append("&#39;")
+                else -> escaped.append(char)
+            }
+        }
+        return escaped.toString()
     }
 
     private fun WebView.loadHtml(html: String) {
