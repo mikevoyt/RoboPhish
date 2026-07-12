@@ -1,6 +1,7 @@
 package com.bayapps.android.robophish.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -33,7 +34,7 @@ class PlaybackControlsFragment : Fragment() {
     private lateinit var albumArt: ImageView
     private var artUrl: String? = null
 
-    private val imageLoader: ImageLoader by lazy { ServiceLocator.get(requireContext()).imageLoader }
+    private lateinit var imageLoader: ImageLoader
     private var controller: Player? = null
 
     private val playerListener = object : Player.Listener {
@@ -52,6 +53,11 @@ class PlaybackControlsFragment : Fragment() {
         override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
             updateMetadata(mediaMetadata)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        imageLoader = ServiceLocator.get(context).imageLoader
     }
 
     override fun onCreateView(
@@ -92,6 +98,7 @@ class PlaybackControlsFragment : Fragment() {
     }
 
     fun onConnected() {
+        if (view == null) return
         val browser = (activity as? MediaBrowserProvider)?.mediaBrowser ?: return
         controller?.removeListener(playerListener)
         controller = browser
@@ -103,6 +110,8 @@ class PlaybackControlsFragment : Fragment() {
     @SuppressLint("BinaryOperationInTimber")
     private fun updateMetadata(metadata: MediaMetadata?) {
         Timber.d("onMetadataChanged %s", metadata)
+        val context = context ?: return
+        if (view == null) return
         if (metadata == null) return
 
         title.text = metadata.title
@@ -113,7 +122,7 @@ class PlaybackControlsFragment : Fragment() {
         if (!TextUtils.equals(newArtUrl, artUrl)) {
             artUrl = newArtUrl
             if (!artUrl.isNullOrBlank()) {
-                val request = ImageRequest.Builder(requireContext())
+                val request = ImageRequest.Builder(context)
                     .data(artUrl)
                     .target(albumArt)
                     .build()
@@ -125,6 +134,8 @@ class PlaybackControlsFragment : Fragment() {
     }
 
     private fun updatePlaybackState() {
+        val context = context ?: return
+        if (view == null) return
         val player = controller ?: return
         val isPlaying = player.isPlaying
         val state = player.playbackState
@@ -132,9 +143,9 @@ class PlaybackControlsFragment : Fragment() {
         playPause.isEnabled = isEnabled
 
         val drawable = if (isPlaying) {
-            ContextCompat.getDrawable(requireContext(), R.drawable.uamp_ic_pause_white_48dp)
+            ContextCompat.getDrawable(context, R.drawable.uamp_ic_pause_white_48dp)
         } else {
-            ContextCompat.getDrawable(requireContext(), R.drawable.uamp_ic_play_arrow_white_48dp)
+            ContextCompat.getDrawable(context, R.drawable.uamp_ic_play_arrow_white_48dp)
         }
         playPause.setImageDrawable(drawable)
     }
