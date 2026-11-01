@@ -26,12 +26,38 @@ Saved-copy processing and playback are local. This does not add remote Cast play
 
 The JVM suites cover overlap/add timing, arbitrary decoder chunking, source-rate confidence, stereo/phase invariants, abstention, clipping, WAV integrity, storage exhaustion, RIFF limits and gapless trimming. Android tests cover actual local decode/render/playback, default-original selection, explicit version choice, recreation, original hashes, cancellation, stale publication, missing-copy recovery and a VBR file without a seek header.
 
-Use a disposable emulator for synthetic tests; never run these fixtures against personal phone data. `scripts/test-offline-device.sh` guards that requirement and disconnects the emulator for playback checks. The normal debug application ID is `com.bayapps.android.robophish.dev`; no release or production signing configuration is changed.
+Use a disposable emulator for synthetic tests; never run these fixtures against personal phone data. `scripts/test-offline-device.sh` guards that requirement and disconnects the emulator for playback checks. It leaves the emulator offline. Use a fresh emulator or restore its connectivity after testing.
+
+Run the following from the repository root with JDK 17, Android SDK platform 35, Android SDK command-line/platform tools, and an emulator installed. Set `JAVA_HOME` to your JDK 17 directory, configure the SDK through `ANDROID_HOME` or an existing `local.properties`, and put `adb` on `PATH`. The explicit Gradle property below overrides this branch's machine-specific Homebrew JDK path. The device script also reads `JAVA_HOME` and uses GNU `timeout` to collect evidence; on macOS, provide that command on `PATH` (for example, Coreutils' `gnubin` directory). Initial dependency resolution requires network access.
 
 ```sh
-./gradlew --no-daemon :mobile:assembleDebug :mobile:assembleDebugAndroidTest \
+./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" \
+  :mobile:assembleDebug :mobile:assembleDebugAndroidTest \
   :mobile:testDebugUnitTest :networking:test :mobile:lintDebug
+# Start exactly one disposable emulator and disconnect other devices before this
+# script: its adb calls and Gradle's connected tests must select the same device.
+adb devices -l
 bash scripts/test-offline-device.sh
 ```
+
+## Install the debug preview
+
+The APK is `mobile/build/outputs/apk/debug/mobile-debug.apk`, labelled **RoboPhish Dev**, application ID `com.bayapps.android.robophish.dev`, version **2.2.3-dev / code 42**. It can coexist with the production app, `com.bayapps.android.robophish`. This branch does not change release signing or the production app's version.
+
+For a fresh Dev installation, or an update from a compatible Dev version no higher than 42, explicitly select the intended device:
+
+```sh
+adb -s DEVICE_SERIAL install -r mobile/build/outputs/apk/debug/mobile-debug.apk
+```
+
+As of 2026-11-01, main builds Dev **code 46** with the same application ID. A normal update from that version to this preview is rejected as a downgrade. To deliberately install this **debuggable** preview over Dev46 while retaining installed app data, use:
+
+```sh
+adb -s DEVICE_SERIAL install -r -d mobile/build/outputs/apk/debug/mobile-debug.apk
+```
+
+`-r` replaces the app while retaining data; `-d` allows a version-code downgrade for a debuggable package. Both still require a matching signing certificate. If Android reports a signature mismatch or refuses the downgrade, stop and diagnose it; cancel any uninstall prompt and preserve the existing app and data. Data retention is not proof that every newer feature's stored state is compatible with an older preview. The synthetic test script must still run only on a disposable emulator; use ordinary app UI checks on a personal phone.
+
+The [research reproduction guide](../research/audio/offline_restoration/REPRODUCING.md) separately documents desktop environments, source hashes, frozen scripts and model prerequisites. Its research models are not included in this APK.
 
 This feature is a separate branch and PR stacked on the existing audience-audio PR (#56), which itself depends on offline downloads (#55). The separate artwork fix is not included in this diff.

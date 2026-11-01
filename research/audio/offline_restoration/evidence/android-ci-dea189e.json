@@ -1,0 +1,20 @@
+{
+  "tested_commit": "dea189e33e1d182a1b3df409e281ca8931d70c88",
+  "android_run": "https://github.com/mikevoyt/RoboPhish/actions/runs/41350887678",
+  "android_result": "success",
+  "device_matrix": [
+    {"api": 26, "online_transfer_tests": 1, "disconnected_tests": 20, "result": "success"},
+    {"api": 35, "online_transfer_tests": 1, "disconnected_tests": 20, "result": "success"},
+    {"api": 36, "online_transfer_tests": 1, "disconnected_tests": 20, "result": "success"}
+  ],
+  "jvm_tests": {"mobile": 66, "networking": 10, "failures": 0, "errors": 0},
+  "lint": {"errors": 0, "warnings": 131},
+  "legacy_audio_run": "https://github.com/mikevoyt/RoboPhish/actions/runs/41350887752",
+  "legacy_audio_result": "success",
+  "limitations": [
+    "These are emulator checks, not physical-phone validation.",
+    "The legacy audio workflow does not run the new 30-track offline or neural experiments.",
+    "Passing implementation tests does not establish perceptual improvement."
+  ],
+  "recovery_test_correction": "The first CI run exposed a test assumption: Media3 could preload the queued WAV before deletion. The corrected test proves that no descriptor is open, deletes the resolved copy before prepare, and retains original-recovery, requested-position, queue and source-integrity assertions. No timeout increase or production behavior change was used."
+}

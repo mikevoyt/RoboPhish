@@ -1,0 +1,75 @@
+{
+  "frozen_at_utc": "2026-11-01T21:16:40.212220+00:00",
+  "date": "2016-10-31",
+  "title": "It Ain't Easy",
+  "source_sha256": "61e7ea913fbd18ffce0f444c051df8e220057760c75b5d76493b7fd61e734db2",
+  "script_sha256": "472352172d694a0095725366025d6de413aaba791888332cdb933ad6d4619e01",
+  "original_preregistration_sha256": "9670d40db3b64d8a8296c84c39115be81d54391a3b12d8f2734628798de067cf",
+  "reference_sha256": "502b1438717a229fcf635c9b3659360a3285d6eb5a094afc3fd78ff190ea7645",
+  "equivalence_sha256": "a0420958a495beb012f9fe28273efaa5730246dee8a7409065fdadfa84671705",
+  "config": {
+    "version": "classical-cohort-v1",
+    "fft_size": 4096,
+    "hop": 1024,
+    "band_centers_hz": [
+      125,
+      250,
+      500,
+      1000,
+      2000,
+      4000,
+      8000,
+      16000
+    ],
+    "reference_block_seconds": 20,
+    "reference_hop": 8192,
+    "normalization": "For each block, octave-band summed power divided by total FFT power over all bins/channels; dB. Median blocks per recording, then equal-weight cohort median and quartiles.",
+    "uncertainty_margin_db": 1.5,
+    "residual_fraction": 0.5,
+    "maximum_tonal_gain_db": 2.0,
+    "log_frequency_smoothing_sigma_octaves": 0.75,
+    "boost_allowed_hz": [
+      50,
+      3500
+    ],
+    "boost_full_strength_hz": [
+      88.3883476483,
+      2000
+    ],
+    "dynamics_ratio": 1.25,
+    "dynamics_threshold_percentile": 65,
+    "maximum_dynamic_attenuation_db": 1.0,
+    "attack_ms": 80,
+    "release_ms": 400,
+    "protected_quiet_percentile": 20,
+    "onset_flux_percentile": 75,
+    "onset_minimum_positive_flux_fraction": 0.015,
+    "protection_hold_ms": 80,
+    "broadband_rise_protection_db": 0.7,
+    "output_peak_limit_dbtp": -1.0,
+    "passage_seconds": 20,
+    "variants": [
+      "tonal_only",
+      "tonal_plus_dynamics"
+    ],
+    "selected_dates": [
+      "1991-03-09",
+      "1990-04-29",
+      "1995-12-07",
+      "2009-08-07"
+    ],
+    "reserved_dates": [
+      "1992-12-31",
+      "2025-07-26"
+    ],
+    "passage_rule": "Start at 50% of full decoded source duration, take next 20 seconds; no content search.",
+    "interpretation": "Cohort is varied audience audio, not a clean or soundboard reference. No denoiser, dereverberator, gap repair, source separation or generated identity."
+  },
+  "block_frames": 128,
+  "window_seconds": 20,
+  "profile_scope": "Complete selected track. Earlier six audition profiles were each estimated from a separate 20 s passage.",
+  "protocol": "One reserved full track, two frozen variants, no tuning. Full-track, fixed nonoverlapping 20 s windows, and first/last 1 s edge metrics with reconstructed-output phase; retain failures and undefined metrics. Exact WOLA trimming and continuous global dynamics state.",
+  "before_full_track_processing": true,
+  "superseded_validation_preregistration_sha256": "fc748f28c6e828a1b5f1b5355b75833af2cc777ea409a5a7d023ca748238bdc9",
+  "supersession_reason": "Parent review requested explicit 1 s edge diagnostics after initial wrapper freeze completed, before any full-track candidate render. Only validation/reporting changed; processing parameters and transform unchanged."
+}

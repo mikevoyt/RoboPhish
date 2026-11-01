@@ -75,6 +75,18 @@ The local `audio-classical-probe/RoboPhish-classical-audition.zip` is a 59.3 MB,
 
 This candidate is **research-only**, with no established listening preference or general full-track benefit, and is not the processor currently installed in the app. The immediate decision is whether listeners prefer any of these matched, actually changed passages while retaining musical identity and natural live atmosphere. Passing numerical guards is insufficient to promote it.
 
+### One additional full-track classical validation
+
+`classical_full_track.py` extends the unchanged candidate to a complete 2016-10-31 *It Ain't Easy*, a previously reserved recording excluded from the reference cohort. This is one additional exploratory validation, not a new sweep. Unlike the audition excerpts, **this target's tonal and dynamics profiles use the complete 210.733-second recording**. Two bounded-memory STFT passes accumulate full-track statistics and then reconstruct with continuous overlap/add and dynamics state. Before this run, the streaming implementation matched the frozen excerpt functions exactly for a natural Reba passage, 48 kHz boundary impulses/noise, and silence; unity error was at most 7.8×10⁻¹⁶.
+
+The validation wrapper was frozen before processing the target. An initial preregistration is retained alongside its replacement: the only added requirements were explicit first/last-second and reconstructed-phase diagnostics, requested before the full render. Processing parameters and the cohort reference did not change. The source, both WAVs and frozen inputs were hash checked afterward. All 9,293,340 stereo PCM16 frames are present in both saved outputs.
+
+**The complete-track profile requested no tonal correction.** The tonal-only file is bit-exact to the decoded original. The dynamics variant applies up to 0.999 dB attenuation during about 22.9% of frames, with protection active in about 71.5%. Both whole-track evaluations, all 22 variant/window evaluations and all four first/last-second evaluations pass the existing numerical bounds, with no undefined metrics. The final second is bit-exact in both versions. Across 20-second windows, minimum onset/envelope correlations are 0.998596/0.998485, maximum absolute side/mid change is 0.0462 dB, and maximum energy-weighted reconstructed phase error is 0.07794°.
+
+Profiling took 1.36 seconds and reconstructing both versions took 3.26 seconds on this local desktop run; these figures **exclude peak/headroom conversion and measurement**, and are not phone benchmarks. Measured process peak RSS was 414.6 MB, above the 300 MB design aspiration but below a multi-gigabyte full-transform allocation. `evidence/classical-full-track-results.json`, the preregistration/equivalence records and `classical-full-track-artifact-validation.json` retain the complete result.
+
+This supports full-length reconstruction and restrained dynamics continuity on one recording. It supplies **no full-track listening evidence for nonzero tonal correction**. Short-passage spectral differences can reflect the music being played as well as recording coloration; a pleasing excerpt change must not automatically be treated as a justified recording-wide correction. The small audition package remains unchanged, and neither classical variant has been promoted into the app.
+
 ## Independent dereverberation and model review
 
 | Candidate | Evidence and decision |
@@ -129,6 +141,8 @@ Before promoting a stronger treatment: collect actual blinded ratings, investiga
 
 ## Reproduction
 
+Start with [REPRODUCING.md](REPRODUCING.md) for verified environment pins, acquisition and source-hash checks, scratch-directory requirements, frozen-script path limitations, and exact Android/classical/neural commands. Existing published evidence must not be overwritten by a fresh experiment.
+
 Use an isolated Python environment. The full-track harness uses the parent directory's pinned `requirements.txt`, FFmpeg/FFprobe and Java 17 or newer. The optional WPE baseline additionally needs `nara_wpe==0.0.11`; it is not an Android dependency.
 
 ```sh
@@ -138,6 +152,8 @@ python controlled_degradation.py --corpus /path/to/source-mp3s --output /path/to
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python model_comparison.py --corpus /path/to/source-mp3s --output /path/to/wpe-results
 python neural_probe.py --help
 python export_probe.py --source /path/to/pinned-Apollo --checkpoint /path/to/pytorch_model.bin --output /path/to/export-evidence.json
+python classical_probe.py --help
+python classical_full_track.py --help
 ```
 
 The pinned manifests, compiled-source fingerprints, machine-readable measurements, development failures and final holdout results belong beside this method. Full audio stays in local artifact storage. No release, merge, upload or deployment is implied by this research record.

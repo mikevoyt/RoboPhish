@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "case": "selected-natural-1991-03-09",
+      "sample_rate": 44100,
+      "frames": 882000,
+      "stft_max_error": 0.0,
+      "tonal_curve_max_error_db": 0.0,
+      "dynamic_curve_max_error_db": 0.0,
+      "rendered_max_absolute_error": {
+        "tonal_only": 0.0,
+        "tonal_plus_dynamics": 0.0
+      },
+      "unity_max_absolute_error": 7.771561172376096e-16
+    },
+    {
+      "case": "48000-boundary-impulses",
+      "sample_rate": 48000,
+      "frames": 48037,
+      "stft_max_error": 0.0,
+      "tonal_curve_max_error_db": 0.0,
+      "dynamic_curve_max_error_db": 0.0,
+      "rendered_max_absolute_error": {
+        "tonal_only": 0.0,
+        "tonal_plus_dynamics": 0.0
+      },
+      "unity_max_absolute_error": 4.163336342344337e-17
+    },
+    {
+      "case": "all-quiet",
+      "sample_rate": 44100,
+      "frames": 44137,
+      "stft_max_error": 0.0,
+      "tonal_curve_max_error_db": 0.0,
+      "dynamic_curve_max_error_db": 0.0,
+      "rendered_max_absolute_error": {
+        "tonal_only": 0.0,
+        "tonal_plus_dynamics": 0.0
+      },
+      "unity_max_absolute_error": 0.0
+    }
+  ],
+  "threshold": 1e-10,
+  "passed": true
+}

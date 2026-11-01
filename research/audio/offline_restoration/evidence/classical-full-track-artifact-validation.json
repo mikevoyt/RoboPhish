@@ -1,0 +1,35 @@
+{
+  "date": "2016-10-31",
+  "source_sha256_unchanged": true,
+  "freeze_verified": true,
+  "original_classical_audition_zip_unchanged": true,
+  "original_classical_audition_zip_sha256": "429ea774cddf46e2534be8f6e96998bfcbf19a6ee14953f01729f2a3d5fde792",
+  "rendered_wavs": [
+    {
+      "variant": "tonal_only",
+      "frames": 9293340,
+      "wav_bytes": 37173438,
+      "pcm_sha256": "6564055766b423f0f0d69b6b592815afc5b9565b6702c0ef2e97c6c2aab4ce68",
+      "bit_exact_whole_track": true,
+      "bit_exact_first_second": true,
+      "bit_exact_last_second": true
+    },
+    {
+      "variant": "tonal_plus_dynamics",
+      "frames": 9293340,
+      "wav_bytes": 37173438,
+      "pcm_sha256": "bbdb81bbf77d9d1b4a67b29f9b95b820ab1b3c08eaf68c294a0b2eedf9d61e59",
+      "bit_exact_whole_track": false,
+      "bit_exact_first_second": false,
+      "bit_exact_last_second": true
+    }
+  ],
+  "window_extremes": {
+    "minimum_onset_correlation": 0.998595964560191,
+    "minimum_envelope_correlation": 0.9984854855107758,
+    "maximum_abs_width_change_db": 0.04619448592396225,
+    "minimum_low_level_gain_p05_db": -0.22040535171367817,
+    "maximum_weighted_reconstructed_phase_error_degrees": 0.0779386546133437
+  },
+  "browser_playback": "Not attempted; existing browser-policy block remains. No new audition claims."
+}
