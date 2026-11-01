@@ -86,10 +86,12 @@ def measures(x):
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--output',default='research/audio/results');parser.add_argument('--cache',default='/tmp/robophish-corpus')
+    parser.add_argument('--skip-sweep',action='store_true')
     args=parser.parse_args();out=Path(args.output);out.mkdir(parents=True,exist_ok=True);cache=Path(args.cache);cache.mkdir(parents=True,exist_ok=True)
     data=corpus(cache)
     (out/'corpus.json').write_text(json.dumps([m for m,x in data],indent=2))
     if len(data)<12:raise RuntimeError(f'Only {len(data)} recordings acquired; cannot claim a 12-track study')
+    if args.skip_sweep:return
     rows=[]
     variants=[(hp,mud,presence) for hp in (20,30,45) for mud in (0,-1.5,-3) for presence in (0,1,2)]
     for metadata,x in data:

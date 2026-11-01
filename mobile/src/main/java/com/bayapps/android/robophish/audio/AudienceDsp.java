@@ -8,8 +8,8 @@ package com.bayapps.android.robophish.audio;
 public final class AudienceDsp {
     public enum Mode { RUMBLE, CLARITY }
     private final int channels;
-    private final Biquad[] highpass, mud, presence;
-    private final double[] rumbleFrame, clarityFrame;
+    private final Biquad[] highpass, mud;
+    private final double[] clarityFrame;
     private final double rampStep, release;
     private double wet = 0, clarity = 0, limiter = 1;
 
@@ -20,12 +20,11 @@ public final class AudienceDsp {
         this.channels = channels;
         rampStep = 1.0 / (sampleRate * 0.05);
         release = Math.exp(-1.0 / (sampleRate * 0.080));
-        highpass = new Biquad[channels]; mud = new Biquad[channels]; presence = new Biquad[channels];
-        rumbleFrame = new double[channels]; clarityFrame = new double[channels];
+        highpass = new Biquad[channels]; mud = new Biquad[channels];
+        clarityFrame = new double[channels];
         for (int c = 0; c < channels; c++) {
             highpass[c] = Biquad.highpass(sampleRate, 30, Math.sqrt(0.5));
             mud[c] = Biquad.bell(sampleRate, 280, -1.5, 0.7);
-            presence[c] = Biquad.bell(sampleRate, 2200, 1, 0.7);
         }
     }
 
@@ -42,9 +41,8 @@ public final class AudienceDsp {
             double peak = 0;
             for (int c = 0; c < channels; c++) {
                 double hp = highpass[c].process(input[offset + c] / 32768.0);
-                rumbleFrame[c] = hp;
-                // 1 dB of headroom compensates the maximum presence boost.
-                clarityFrame[c] = presence[c].process(mud[c].process(hp)) * 0.891250938;
+                // Subtractive EQ only: boosting presence failed corpus stereo guardrails.
+                clarityFrame[c] = mud[c].process(hp);
                 double processed = hp + clarity * (clarityFrame[c] - hp);
                 clarityFrame[c] = processed;
                 peak = Math.max(peak, Math.abs(processed));

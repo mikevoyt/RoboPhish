@@ -29,7 +29,7 @@
             android:id="@+id/navigation_downloads"
             android:icon="@drawable/ic_offline_pin_black_24dp"
             android:title="@string/downloads"/>
-        <item android:id="@+id/navigation_audio" android:icon="@drawable/ic_eq_black_24dp" android:title="@string/audio_title"/>
+        <item android:id="@+id/navigation_audio" android:icon="@drawable/ic_audio_controls" android:title="@string/audio_title"/>
         <item
             android:id="@+id/navigation_about"
             android:icon="@drawable/ic_help_black_24dp"

@@ -8,7 +8,7 @@
     <string name="audio_enhanced_active">Enhancement is on</string>
     <string name="audio_rumble">Rumble reduction</string>
     <string name="audio_clarity">Rumble + gentle clarity</string>
-    <string name="audio_mode_hint">Rumble reduces very low bass. Clarity also softens low-mid buildup and adds a little presence.</string>
+    <string name="audio_mode_hint">Rumble reduces very low bass. Clarity also gently reduces low-mid buildup, without boosting treble or tape hiss.</string>
     <string name="audio_amount">Amount · %1$d%%</string>
     <string name="audio_amount_accessibility">Enhancement amount</string>
     <string name="audio_hear_original">Compare: hear original</string>

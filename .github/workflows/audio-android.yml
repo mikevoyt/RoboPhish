@@ -2,6 +2,9 @@ name: Audio Android checks
 on:
   pull_request:
     paths: ['mobile/**', '.github/workflows/audio-android.yml']
+concurrency:
+  group: audio-android-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
