@@ -24,11 +24,12 @@ api=$(adb shell getprop ro.build.version.sdk | tr -d '\r')
 if (( api >= 30 )); then
   adb shell cmd connectivity airplane-mode enable
 else
-  adb shell settings put global airplane_mode_on 1
-  # Older system images can reject this protected broadcast. The suite still
-  # asserts disconnected networking after svc disables both transports above.
-  adb shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true || true
+  # Older emulator radio stacks can remain registered after svc data disable.
+  # Use the emulator's supported modem control, not a protected OS broadcast.
+  adb emu gsm data off
 fi
+adb shell dumpsys connectivity > offline-network-state.txt
+rg 'NetworkAgentInfo|Active default network|VALIDATED' offline-network-state.txt || true
 ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.class=com.bayapps.android.robophish.downloads.OfflinePlaybackTest
 adb shell test -f /sdcard/Download/robophish-offline/offline-ready.png

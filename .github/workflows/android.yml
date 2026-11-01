@@ -79,3 +79,4 @@ jobs:
             mobile/build/outputs/apk/debug/
             offline-screenshots/
             android-crashes.txt
+            offline-network-state.txt

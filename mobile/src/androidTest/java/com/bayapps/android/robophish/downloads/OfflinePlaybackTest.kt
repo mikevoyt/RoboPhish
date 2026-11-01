@@ -18,9 +18,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import kotlin.math.sin
 
 /** CI disables Wi-Fi and cellular before these tests. No API key or catalog is needed. */
 @RunWith(AndroidJUnit4::class)
@@ -216,14 +213,10 @@ class OfflinePlaybackTest {
     }
 
     private fun fixture(id: String, order: Int): DownloadEntry {
-        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), "test_offline_$id.wav")
-        val rate = 22_050; val samples = rate * 12
-        val pcm = ByteBuffer.allocate(44 + samples * 2).order(ByteOrder.LITTLE_ENDIAN)
-        pcm.put("RIFF".toByteArray()).putInt(36 + samples * 2).put("WAVEfmt ".toByteArray())
-            .putInt(16).putShort(1).putShort(1).putInt(rate).putInt(rate * 2)
-            .putShort(2).putShort(16).put("data".toByteArray()).putInt(samples * 2)
-        repeat(samples) { pcm.putShort((sin(it * 2 * Math.PI * 440 / rate) * 1000).toInt().toShort()) }
-        file.writeBytes(pcm.array())
+        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), "test_offline_$id.mp3")
+        instrumentation.context.assets.open("offline-tone.mp3").use { input ->
+            file.outputStream().use { input.copyTo(it) }
+        }
         return DownloadEntry(trackId = id, showId = "1997-12-06", title = if (order == 1) "Tweezer" else "Isabella",
             album = "The Palace of Auburn Hills", venue = "The Palace of Auburn Hills", showDate = "1997-12-06",
             durationMs = 12_000, setName = "Set 2", trackNumber = order,

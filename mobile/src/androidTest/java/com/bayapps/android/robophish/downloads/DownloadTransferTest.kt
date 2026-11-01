@@ -24,7 +24,8 @@ class DownloadTransferTest {
         val repository = DownloadRepository.get(context)
         repository.remove(repository.store.getAll())
         repository.setWifiOnly(false)
-        val bytes = ByteArray(64 * 1024) { (it % 127).toByte() }
+        val bytes = InstrumentationRegistry.getInstrumentation().context.assets
+            .open("offline-tone.mp3").use { it.readBytes() }
         val fail = AtomicBoolean(false)
         val server = ServerSocket(0)
         val executor = Executors.newSingleThreadExecutor()
