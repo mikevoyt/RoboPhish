@@ -177,7 +177,10 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         line5.text = metadata.description
 
         val iconUri = metadata.artworkUri?.toString()
-        if (!iconUri.isNullOrEmpty() && iconUri != currentArtUrl) {
+        if (iconUri.isNullOrEmpty()) {
+            currentArtUrl = null
+            backgroundImage.setImageResource(R.drawable.ic_default_art)
+        } else if (iconUri != currentArtUrl) {
             currentArtUrl = iconUri
             val request = ImageRequest.Builder(this)
                 .data(iconUri)

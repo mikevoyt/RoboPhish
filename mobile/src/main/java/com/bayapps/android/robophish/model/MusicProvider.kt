@@ -37,7 +37,7 @@ class MusicProvider(
 
     fun getCachedTracksForShow(showId: String) = cachedTracks[showId]
 
-    fun getTrackItem(trackId: String?): MediaItem? = mediaItemsById[trackId]
+    fun getTrackItem(trackId: String?): MediaItem? = trackId?.let { mediaItemsById[it] }
 
     suspend fun children(mediaId: String): List<MediaItem> {
         if (!MediaIDHelper.isBrowseable(mediaId)) return emptyList()

@@ -120,10 +120,13 @@ class DownloadsActivity : BaseActivity() {
             return
         }
         lifecycleScope.launch {
-            val ready = withContext(Dispatchers.IO) {
-                DownloadShow.group(repository.reconcile()).firstOrNull { it.key == showKey }
-                    ?.tracks?.filter(OfflineMedia::isPlayable).orEmpty()
-            }
+            val ready = try {
+                withContext(Dispatchers.IO) {
+                    DownloadShow.group(repository.reconcile()).firstOrNull { it.key == showKey }
+                        ?.tracks?.filter(OfflineMedia::isPlayable).orEmpty()
+                }
+            } catch (e: CancellationException) { throw e }
+            catch (_: Exception) { message(getString(R.string.offline_operation_failed)); return@launch }
             val index = if (trackKey == null) 0 else ready.indexOfFirst { it.key == trackKey }
             if (ready.isEmpty() || index < 0) { message(getString(R.string.offline_unavailable)); return@launch }
             val controller = mediaBrowser ?: return@launch

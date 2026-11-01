@@ -79,6 +79,7 @@ class DownloadRepository private constructor(context: Context) {
             }
             val estimated = (entry.durationMs ?: 300_000) * 40
             if (directory.usableSpace < reserved + estimated + 32L * 1024 * 1024) {
+                previous?.let { removeTransfer(it) }
                 store.upsert(pending.copy(status = DownloadStatus.FAILED, failureReason = DownloadManager.ERROR_INSUFFICIENT_SPACE))
                 return false
             }

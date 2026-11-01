@@ -128,7 +128,7 @@ class PlaybackControlsFragment : Fragment() {
                     .build()
                 imageLoader.enqueue(request)
             } else {
-                albumArt.setImageDrawable(null)
+                albumArt.setImageResource(R.drawable.ic_default_art)
             }
         }
     }
