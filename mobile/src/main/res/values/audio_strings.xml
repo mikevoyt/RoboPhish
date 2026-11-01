@@ -1,0 +1,17 @@
+<resources>
+    <string name="audio_title">Audience audio</string>
+    <string name="audio_eyebrow">EXPERIMENTAL · ON YOUR DEVICE</string>
+    <string name="audio_headline">A lighter touch.\nA different perspective.</string>
+    <string name="audio_intro">Every tape is different. Start gently and compare with the original while the music keeps playing.</string>
+    <string name="audio_enable">Enhance audience audio</string>
+    <string name="audio_original_active">Original recording is playing</string>
+    <string name="audio_enhanced_active">Enhancement is on</string>
+    <string name="audio_rumble">Rumble reduction</string>
+    <string name="audio_clarity">Rumble + gentle clarity</string>
+    <string name="audio_mode_hint">Rumble reduces very low bass. Clarity also softens low-mid buildup and adds a little presence.</string>
+    <string name="audio_amount">Amount · %1$d%%</string>
+    <string name="audio_amount_accessibility">Enhancement amount</string>
+    <string name="audio_hear_original">Compare: hear original</string>
+    <string name="audio_hear_enhanced">Return to enhanced audio</string>
+    <string name="audio_limits">Applies to streaming and downloaded music. Your saved recordings stay unchanged.\n\nThis is gentle tone correction. It cannot recover detail lost to distortion or reliably remove the crowd. Clarity may sound slightly quieter; louder is not always better.</string>
+</resources>

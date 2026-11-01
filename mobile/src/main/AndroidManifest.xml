@@ -82,6 +82,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.AudienceAudioActivity" android:label="@string/audio_title" android:exported="false"/>
+
         <!-- Placeholder activity for phone UI -->
         <activity
             android:name=".ui.PlaceholderActivity"

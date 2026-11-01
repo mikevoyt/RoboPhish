@@ -62,6 +62,7 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
                     R.id.navigation_allmusic -> MusicPlayerActivity::class.java
                     R.id.navigation_playlists -> PlaceholderActivity::class.java
                     R.id.navigation_downloads -> PlaceholderActivity::class.java
+                    R.id.navigation_audio -> AudienceAudioActivity::class.java
                     R.id.navigation_about -> AboutActivity::class.java
                     else -> null
                 }
@@ -178,6 +179,7 @@ abstract class ActionBarCastActivity : AppCompatActivity() {
             true
         }
         when {
+            AudienceAudioActivity::class.java.isAssignableFrom(javaClass) -> navigationView.setCheckedItem(R.id.navigation_audio)
             MusicPlayerActivity::class.java.isAssignableFrom(javaClass) -> {
                 navigationView.setCheckedItem(R.id.navigation_allmusic)
             }

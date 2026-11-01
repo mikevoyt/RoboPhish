@@ -1,0 +1,29 @@
+name: Audio Android checks
+on:
+  pull_request:
+    paths: ['mobile/**', '.github/workflows/audio-android.yml']
+permissions:
+  contents: read
+jobs:
+  debug:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Compile and test
+        run: ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:assembleDebug :mobile:testDebugUnitTest :mobile:lintDebug
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audio-android-checks
+          path: |
+            mobile/build/reports/
+            mobile/build/outputs/apk/debug/

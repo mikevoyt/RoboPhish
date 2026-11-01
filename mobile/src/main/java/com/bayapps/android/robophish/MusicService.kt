@@ -11,6 +11,7 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import com.bayapps.android.robophish.audio.AudienceRenderersFactory
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
@@ -42,7 +43,7 @@ class MusicService : MediaLibraryService() {
     override fun onCreate() {
         super.onCreate()
 
-        player = ExoPlayer.Builder(this)
+        player = ExoPlayer.Builder(this, AudienceRenderersFactory(this))
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
