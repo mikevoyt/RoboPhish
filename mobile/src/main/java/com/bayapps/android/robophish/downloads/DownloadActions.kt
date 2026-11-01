@@ -10,6 +10,7 @@ import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.model.MusicProvider
 import com.bayapps.android.robophish.ui.DownloadsActivity
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,7 +30,8 @@ object DownloadActions {
                         result.added > 0 -> activity.resources.getQuantityString(R.plurals.offline_queued, result.added, result.added)
                         else -> activity.getString(R.string.offline_already_saved)
                     }
-                } catch (_: Exception) { activity.getString(R.string.offline_operation_failed) }
+                } catch (e: CancellationException) { throw e }
+                catch (_: Exception) { activity.getString(R.string.offline_operation_failed) }
                 Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
                     .setAction(R.string.offline_view) { activity.startActivity(Intent(activity, DownloadsActivity::class.java)) }.show()
             }

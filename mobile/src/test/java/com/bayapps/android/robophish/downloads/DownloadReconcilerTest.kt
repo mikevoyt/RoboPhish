@@ -29,6 +29,11 @@ class DownloadReconcilerTest {
         assertEquals(DownloadStatus.FAILED,
             DownloadReconciler.reconcile(entry.copy(status = DownloadStatus.COMPLETED), null, false).status)
     }
+    @Test fun missingFileDoesNotCountTowardUsedStorage() {
+        val missing = entry.copy(status = DownloadStatus.COMPLETED, bytesDownloaded = 1000)
+        assertEquals(0L, DownloadReconciler.reconcile(missing, null, false).bytesDownloaded)
+        assertEquals(0L, DownloadReconciler.reconcile(missing, row(8), false).bytesDownloaded)
+    }
     @Test fun wifiWaitRetainsReasonAndProgress() {
         val waiting = DownloadReconciler.reconcile(entry, row(4, 3), false)
         assertEquals(DownloadStatus.WAITING, waiting.status)

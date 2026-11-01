@@ -111,7 +111,8 @@ class DownloadRepository private constructor(context: Context) {
         if (entries.isEmpty()) return entries
         val rows = mutableMapOf<Long, DownloadSnapshot>()
         // A single binder query, not one query per song. Only this app's jobs are returned.
-        manager.query(DownloadManager.Query())?.use { cursor ->
+        val query = manager.query(DownloadManager.Query()) ?: return entries
+        query.use { cursor ->
             while (cursor.moveToNext()) {
                 fun long(column: String) = cursor.getLong(cursor.getColumnIndexOrThrow(column))
                 val id = long(DownloadManager.COLUMN_ID)
