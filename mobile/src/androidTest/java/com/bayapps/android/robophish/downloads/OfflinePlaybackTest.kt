@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Environment
 import android.os.SystemClock
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -49,7 +50,12 @@ class OfflinePlaybackTest {
             screenshot("offline-ready.png")
             scenario.onActivity { it.findViewById<RecyclerView>(R.id.downloads_list).scrollToPosition(1) }
             instrumentation.waitForIdleSync()
-            scenario.onActivity { it.findViewById<View>(R.id.download_play).performClick() }
+            scenario.onActivity {
+                val expected = java.time.LocalDate.of(1997, 12, 6).format(
+                    java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy", java.util.Locale.getDefault()))
+                assertEquals(expected, it.findViewById<TextView>(R.id.download_show_date).text.toString())
+                it.findViewById<View>(R.id.download_play).performClick()
+            }
             await {
                 var playing = false
                 scenario.onActivity { playing = it.mediaBrowser?.isPlaying == true && it.mediaBrowser?.currentMediaItem?.mediaId?.endsWith("|1") == true }
@@ -218,7 +224,7 @@ class OfflinePlaybackTest {
             file.outputStream().use { input.copyTo(it) }
         }
         return DownloadEntry(trackId = id, showId = "1997-12-06", title = if (order == 1) "Tweezer" else "Isabella",
-            album = "The Palace of Auburn Hills", venue = "The Palace of Auburn Hills", showDate = "1997-12-06",
+            album = "The Palace of Auburn Hills", venue = "The Palace of Auburn Hills", showDate = "1997.12.06",
             durationMs = 12_000, setName = "Set 2", trackNumber = order,
             fileUri = Uri.fromFile(file).toString(), status = DownloadStatus.COMPLETED,
             bytesDownloaded = file.length(), totalBytes = file.length())
