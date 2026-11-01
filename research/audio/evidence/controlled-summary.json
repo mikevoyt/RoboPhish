@@ -1,0 +1,41 @@
+{
+  "run_id": 41341368218,
+  "head_sha": "83322e4628ef03ed42c17a210c56e5e30c697fe5",
+  "artifact_id": 13098005052,
+  "artifact_expires": "2026-12-01",
+  "source_hashes_match_prior_corpus": true,
+  "interpretation": "Reconstruction error for deliberately added corruption only. Not subjective quality or recovery of the original concert.",
+  "candidates": [
+    {
+      "candidate": "confidence_gated_dehum",
+      "n": 24,
+      "median_error_improvement_db": 0,
+      "min_error_improvement_db": 0,
+      "max_error_improvement_db": 8.798932535037236,
+      "positive_trials": 2,
+      "detected_trials": 2
+    },
+    {
+      "candidate": "high_band_gate_3db",
+      "n": 12,
+      "median_error_improvement_db": 1.5348973473811305,
+      "min_error_improvement_db": 1.453319436531626,
+      "max_error_improvement_db": 1.6270868729848063,
+      "positive_trials": 12,
+      "detected_trials": 0
+    },
+    {
+      "candidate": "high_band_gate_6db",
+      "n": 12,
+      "median_error_improvement_db": 1.9019104612548439,
+      "min_error_improvement_db": 1.7845663963332,
+      "max_error_improvement_db": 2.028393064239254,
+      "positive_trials": 12,
+      "detected_trials": 0
+    }
+  ],
+  "adversarial_musical_tone_detected_lines": [
+    50,
+    100
+  ]
+}
