@@ -6,10 +6,10 @@
     <string name="offline_headline">Good music.
 Anywhere.</string>
     <string name="offline_intro">Save a show. Leave the signal behind.</string>
-    <string name="offline_stats">%1$d shows · %2$d tracks · %3$s saved</string>
+    <string name="offline_stats">%1$s · %2$s · %3$s used</string>
     <string name="offline_free">%1$s available on this device</string>
     <string name="offline_wifi_only">Download on Wi-Fi only</string>
-    <string name="offline_wifi_hint">Transfers wait for Wi-Fi. Playback is always ready.</string>
+    <string name="offline_wifi_hint">Transfers wait for Wi-Fi. Saved tracks play without data.</string>
     <string name="offline_mobile_hint">Mobile data allowed. Roaming is always off.</string>
     <string name="offline_mobile_title">Allow mobile downloads?</string>
     <string name="offline_mobile_message">Live shows can use hundreds of megabytes. Active transfers will restart with the new network setting. Completed tracks stay saved.</string>
@@ -34,7 +34,7 @@ Anywhere.</string>
     <string name="offline_removed">Downloads removed</string>
     <string name="offline_saved">Saved for offline playback</string>
     <string name="offline_in_progress">Download in progress</string>
-    <string name="offline_ready_status">Ready offline · %1$d tracks · %2$s</string>
+    <string name="offline_ready_status">Ready offline · %1$s · %2$s</string>
     <string name="offline_partial_status">%1$d of %2$d tracks saved · %3$s</string>
     <string name="offline_downloading">Downloading · %1$d%%</string>
     <string name="offline_waiting_wifi">Waiting for Wi-Fi</string>
@@ -61,4 +61,6 @@ Anywhere.</string>
     <string name="offline_enqueue_failed">%1$d tracks could not be queued. Open Downloads to retry.</string>
     <plurals name="offline_queued"><item quantity="one">%d track added to downloads</item><item quantity="other">%d tracks added to downloads</item></plurals>
 
+    <plurals name="offline_show_count"><item quantity="one">%d show</item><item quantity="other">%d shows</item></plurals>
+    <plurals name="offline_track_count"><item quantity="one">%d track</item><item quantity="other">%d tracks</item></plurals>
 </resources>

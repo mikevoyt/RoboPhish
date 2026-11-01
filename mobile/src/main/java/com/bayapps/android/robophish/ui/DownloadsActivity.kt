@@ -247,7 +247,9 @@ class DownloadsActivity : BaseActivity() {
             }
         }
         private fun bindHeader(view: View, row: Row.Header) {
-            view.findViewById<TextView>(R.id.offline_stats).text = getString(R.string.offline_stats, row.shows, row.tracks, size(row.bytes))
+            view.findViewById<TextView>(R.id.offline_stats).text = getString(R.string.offline_stats,
+                resources.getQuantityString(R.plurals.offline_show_count, row.shows, row.shows),
+                resources.getQuantityString(R.plurals.offline_track_count, row.tracks, row.tracks), size(row.bytes))
             view.findViewById<TextView>(R.id.offline_free).text = getString(R.string.offline_free, size(row.free))
             view.findViewById<TextView>(R.id.offline_wifi_hint).setText(if (row.wifi) R.string.offline_wifi_hint else R.string.offline_mobile_hint)
             view.findViewById<SwitchCompat>(R.id.offline_wifi).apply {
@@ -285,7 +287,8 @@ class DownloadsActivity : BaseActivity() {
                 } }
             }
             view.findViewById<TextView>(R.id.download_status).apply {
-                text = if (show.complete) getString(R.string.offline_ready_status, show.tracks.size, size(show.bytes))
+                text = if (show.complete) getString(R.string.offline_ready_status,
+                    resources.getQuantityString(R.plurals.offline_track_count, show.tracks.size, show.tracks.size), size(show.bytes))
                     else getString(R.string.offline_partial_status, show.ready.size, show.tracks.size, size(show.bytes))
                 setTextColor(ContextCompat.getColor(context, if (show.failed) R.color.offline_orange else R.color.offline_green))
             }

@@ -13,7 +13,7 @@ object DownloadReconciler {
         if (row == null) {
             return when {
                 entry.status == DownloadStatus.COMPLETED && validFile -> entry
-                entry.status == DownloadStatus.COMPLETED -> entry.copy(status = DownloadStatus.FAILED, failureReason = MISSING_FILE)
+                entry.status == DownloadStatus.COMPLETED -> entry.copy(status = DownloadStatus.FAILED, bytesDownloaded = 0, failureReason = MISSING_FILE)
                 entry.isActive -> entry.copy(status = DownloadStatus.FAILED, failureReason = MISSING_JOB)
                 else -> entry
             }
@@ -26,7 +26,7 @@ object DownloadReconciler {
             else -> DownloadStatus.FAILED
         }
         return entry.copy(downloadId = row.id, status = status,
-            bytesDownloaded = row.bytes.coerceAtLeast(0), totalBytes = row.totalBytes,
+            bytesDownloaded = if (row.status == 8 && !validFile) 0 else row.bytes.coerceAtLeast(0), totalBytes = row.totalBytes,
             fileUri = row.uri ?: entry.fileUri,
             failureReason = if (row.status == 8 && !validFile) MISSING_FILE else row.reason)
     }
