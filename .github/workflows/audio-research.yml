@@ -1,0 +1,30 @@
+name: Audio research
+on:
+  pull_request:
+    paths: ['research/audio/**', '.github/workflows/audio-research.yml']
+concurrency:
+  group: audio-research-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  corpus:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install -r research/audio/requirements.txt
+      - run: python research/audio/benchmark.py --skip-sweep
+      - run: python research/audio/evaluate_realtime.py
+      - run: python research/audio/evaluate_alternatives.py
+      - run: python research/audio/evaluate_controlled.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audio-research-metrics
+          path: research/audio/results/
+          retention-days: 30

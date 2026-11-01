@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audience audio · blind listening</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,sans-serif;color:#172e38;background:#f3f1eb}*{box-sizing:border-box}body{max-width:850px;margin:0 auto;padding:40px 24px}header{background:#173f45;color:#fff;border-radius:24px;padding:32px}small{letter-spacing:.12em;color:#bde5dc}h1{font-size:36px;line-height:1.1;margin:18px 0}p{line-height:1.6}main{background:white;border-radius:24px;margin-top:20px;padding:28px}label{display:block;font-weight:650;margin:20px 0 8px}select,textarea{width:100%;padding:13px;border:1px solid #b9c9c4;border-radius:10px;font:inherit}button{font:inherit;font-weight:650;border:1px solid #a6bfb8;border-radius:12px;padding:14px 18px;background:#edf4f1;color:#173f45;cursor:pointer}button[aria-pressed=true]{background:#173f45;color:#fff}.choices{display:flex;gap:12px;margin:24px 0}.choices button{flex:1;font-size:20px}audio{width:100%}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.muted{font-size:14px;color:#526b71}textarea{height:90px}#status{min-height:24px}footer{font-size:13px;color:#526b71;margin-top:20px}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ce7d3e;outline-offset:3px}
+</style>
+<header><small>ROBO PHISH / LISTENING LAB</small><h1>Let your ears decide.</h1><p>Three versions of the same passage. Equal loudness. Hidden processing labels. Choose what you prefer, including no difference.</p></header>
+<main>
+<label for="track">Recording</label><select id="track"></select>
+<div class="choices" aria-label="Listening version"><button data-version="A" aria-pressed="true">A</button><button data-version="B" aria-pressed="false">B</button><button data-version="C" aria-pressed="false">C</button></div>
+<audio id="player" controls preload="auto"></audio>
+<p class="muted">Switching keeps your position once the next file is ready. Use headphones at a comfortable, fixed volume. A short loading gap is a browser limitation, not the app’s playback processor.</p>
+<label for="preference">Overall preference</label><select id="preference"><option value="">Not rated</option><option>A</option><option>B</option><option>C</option><option>No preference / tie</option></select>
+<label for="notes">What changed?</label><textarea id="notes" placeholder="Bass naturalness, voice and cymbal detail, stereo image, crowd distraction, or artifacts…"></textarea>
+<div class="actions"><button id="save">Save rating</button><button id="export">Export ratings</button><button id="restart">Replay from start</button></div>
+<p id="status" class="muted" aria-live="polite"></p>
+</main>
+<footer>One version is original, two are conservative DSP. Levels are matched using integrated loudness plus a common peak-safe gain. This is a preference exercise, not a standardized reference-quality test. Open answer-key.json only after rating. Ratings stay in this browser until you export them; nothing is transmitted.</footer>
+<script>
+const dates=__TRACKS__;
+const $=s=>document.querySelector(s),player=$('#player'),track=$('#track');
+let version='A',epoch=0;
+let ratings={};try{ratings=JSON.parse(localStorage.getItem('robophish-audio-ratings')||'{}')}catch{}
+for(const r of dates){let o=document.createElement('option');o.value=r.date;o.textContent=r.date+' · '+r.title;track.append(o)}
+function src(v){return track.value+'-'+v+'.flac'}
+function switchVersion(v,reset=false){const wasPlaying=!player.paused,position=reset?0:player.currentTime;const token=++epoch;version=v;player.pause();player.src=src(v);player.onloadedmetadata=()=>{if(token!==epoch)return;player.currentTime=Math.min(position,Math.max(0,player.duration-.05));if(wasPlaying)player.play().catch(()=>{})};document.querySelectorAll('[data-version]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.version===v)))}
+function loadRating(){const r=ratings[track.value]||{};$('#preference').value=r.preference||'';$('#notes').value=r.notes||'';$('#status').textContent=''}
+track.onchange=()=>{switchVersion('A',true);loadRating()};
+document.querySelectorAll('[data-version]').forEach(b=>b.onclick=()=>switchVersion(b.dataset.version));
+$('#restart').onclick=()=>{player.currentTime=0;player.play().catch(()=>{})};
+$('#save').onclick=()=>{ratings[track.value]={preference:$('#preference').value,notes:$('#notes').value,updated:new Date().toISOString()};try{localStorage.setItem('robophish-audio-ratings',JSON.stringify(ratings));$('#status').textContent='Rating saved on this device.'}catch{$('#status').textContent='Browser storage unavailable. Export ratings before closing.'}};
+$('#export').onclick=()=>{const blob=new Blob([JSON.stringify({protocol:'blinded-loudness-matched-v1',ratings},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='audience-audio-ratings.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+player.onerror=()=>{$('#status').textContent='Audio file could not load. Extract the full artifact and open index.html beside the FLAC files.'};
+switchVersion('A',true);loadRating();
+</script></html>

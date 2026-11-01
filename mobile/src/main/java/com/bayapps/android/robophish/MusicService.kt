@@ -57,7 +57,7 @@ class MusicService : MediaLibraryService() {
                 spec.withUri(android.net.Uri.parse(saved.fileUri))
             } else spec
         }
-        player = ExoPlayer.Builder(this)
+        player = ExoPlayer.Builder(this, com.bayapps.android.robophish.audio.AudienceRenderersFactory(this))
             .setMediaSourceFactory(DefaultMediaSourceFactory(dataSource))
             .setAudioAttributes(
                 AudioAttributes.Builder()
