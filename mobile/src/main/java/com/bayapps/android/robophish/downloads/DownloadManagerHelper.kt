@@ -162,6 +162,7 @@ class DownloadRepository private constructor(context: Context) {
     @Synchronized fun remove(entries: List<DownloadEntry>) {
         entries.forEach { stale ->
             store.getAll().firstOrNull { it.key == stale.key }?.let { entry ->
+                com.bayapps.android.robophish.audio.offline.EnhancementRepository.get(context).remove(entry.key)
                 removeTransfer(entry)
                 store.delete(entry)
             }

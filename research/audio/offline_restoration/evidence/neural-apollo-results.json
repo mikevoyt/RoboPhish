@@ -1,0 +1,1049 @@
+{
+  "model": "Apollo",
+  "authors": "Kai Li, Yi Luo",
+  "license": "CC BY-SA 4.0",
+  "source": "https://github.com/JusperLee/Apollo",
+  "source_commit": "e84bcacc59d5455f05d86a5c97dd4aeb3c14dbb6",
+  "checkpoint": "https://huggingface.co/JusperLee/Apollo/resolve/c68bd80/pytorch_model.bin",
+  "checkpoint_sha256": "99d9af7f1ff20e63c393035513a655392818d66b4d7fc23d658175c1f15e8d76",
+  "torch_version": "2.11.0",
+  "checkpoint_loading": "weights_only=True; allowlisted builtins and inert, unused config placeholders; no upstream unsafe loader",
+  "checkpoint_metadata_globals": [
+    "builtins.dict",
+    "builtins.int",
+    "builtins.list",
+    "collections.defaultdict",
+    "omegaconf.base.ContainerMetadata",
+    "omegaconf.base.Metadata",
+    "omegaconf.dictconfig.DictConfig",
+    "omegaconf.listconfig.ListConfig",
+    "omegaconf.nodes.AnyNode",
+    "torch.torch_version.TorchVersion",
+    "typing.Any"
+  ],
+  "device": "mps",
+  "configuration": {
+    "chunk_seconds": 4,
+    "overlap_seconds": 1,
+    "context_seconds_per_side": 1,
+    "chunk_batch_size": 1
+  },
+  "scope": "Four development recordings only. Natural 10-second center excerpts and a controlled additional 64kbps MP3 degradation. No holdout. No human ratings.",
+  "records": [
+    {
+      "date": "1993-08-13",
+      "condition": "natural",
+      "inference_seconds_for_14s_context": 51.32438920799177,
+      "source_sha256": "088e8899aa16e4ac5c0b7fe309f2e554756a37bc6f9c2f2884701439652e73db",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.4922407865524292,
+            "oversampled_peak": 0.4959536430146672,
+            "crest_db": 14.27554522534419,
+            "integrated_lufs": -18.478773498547014,
+            "stereo_correlation": 0.6914749405302683,
+            "side_mid_db": -7.360177101439732
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5136144757270813,
+            "oversampled_peak": 0.5178254296271533,
+            "crest_db": 14.22652492401536,
+            "integrated_lufs": -18.063940776058086,
+            "stereo_correlation": 0.6915400539816932,
+            "side_mid_db": -7.361259056494837
+          },
+          "loudness_match_gain_db": -0.4148327224889279,
+          "identity_snr_db_after_one_global_gain": 33.45577955245972,
+          "stereo_correlation_change": 6.511345142490299e-05,
+          "side_mid_change_db": -0.0010819550551044443,
+          "crest_change_db": -0.04902030132883084,
+          "onset_flux_correlation": 0.9991354794691929,
+          "envelope_correlation": 0.9997748049584176,
+          "weighted_interchannel_phase_error_degrees": 0.3660381971742625,
+          "low_level_gain_p05_db": -0.07734382482293994,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.4922407865524292,
+            "oversampled_peak": 0.4959536430146672,
+            "crest_db": 14.27554522534419,
+            "integrated_lufs": -18.478773498547014,
+            "stereo_correlation": 0.6914749405302683,
+            "side_mid_db": -7.360177101439732
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.4973795413970947,
+            "oversampled_peak": 0.5014215758013193,
+            "crest_db": 14.259671700505832,
+            "integrated_lufs": -18.37383172813861,
+            "stereo_correlation": 0.6915255949555009,
+            "side_mid_db": -7.361007170405599
+          },
+          "loudness_match_gain_db": -0.10494177040840214,
+          "identity_snr_db_after_one_global_gain": 45.18484592437744,
+          "stereo_correlation_change": 5.065442523266572e-05,
+          "side_mid_change_db": -0.0008300689658664595,
+          "crest_change_db": -0.015873524838358577,
+          "onset_flux_correlation": 0.9999423313810053,
+          "envelope_correlation": 0.9999849308269325,
+          "weighted_interchannel_phase_error_degrees": 0.09453953204806242,
+          "low_level_gain_p05_db": -0.01980130780111223,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        }
+      }
+    },
+    {
+      "date": "1993-08-13",
+      "condition": "added_64kbps_mp3",
+      "inference_seconds_for_14s_context": 67.15684554097243,
+      "source_sha256": "088e8899aa16e4ac5c0b7fe309f2e554756a37bc6f9c2f2884701439652e73db",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.45958805084228516,
+            "oversampled_peak": 0.4602172479190953,
+            "crest_db": 14.121081455650316,
+            "integrated_lufs": -18.917721966115405,
+            "stereo_correlation": 0.6903743677884178,
+            "side_mid_db": -7.343921695482944
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.47698065638542175,
+            "oversampled_peak": 0.47728428561945835,
+            "crest_db": 14.061673328805897,
+            "integrated_lufs": -18.55528488653407,
+            "stereo_correlation": 0.6933094331728857,
+            "side_mid_db": -7.391765095416033
+          },
+          "loudness_match_gain_db": -0.3624370795813334,
+          "identity_snr_db_after_one_global_gain": 25.604286193847656,
+          "stereo_correlation_change": 0.002935065384467972,
+          "side_mid_change_db": -0.047843399933088726,
+          "crest_change_db": -0.059408126844418874,
+          "onset_flux_correlation": 0.9910130464779086,
+          "envelope_correlation": 0.9996289428100681,
+          "weighted_interchannel_phase_error_degrees": 0.6621880797655606,
+          "low_level_gain_p05_db": -0.10600482935735486,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 19.991363286972046,
+          "controlled_codec_reference_snr_after_db": 19.725791215896606,
+          "controlled_codec_error_improvement_db": -0.26557207107543945,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.07651140050732508,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.0691719651222229,
+                "log_magnitude_mae_db": 4.3556809425354,
+                "high_band_6_18khz_convergence": 0.5307472944259644,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.897078514099121
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.06996893882751465,
+                "log_magnitude_mae_db": 4.221200942993164,
+                "high_band_6_18khz_convergence": 0.5427007079124451,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.546551704406738
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.07039014250040054,
+                "log_magnitude_mae_db": 4.086565017700195,
+                "high_band_6_18khz_convergence": 0.5749626755714417,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.243598937988281
+              }
+            ],
+            "mean_spectral_convergence": 0.06984368215004604,
+            "mean_log_magnitude_mae_db": 4.22114896774292,
+            "mean_high_band_convergence": 0.5494702259699503,
+            "mean_high_band_log_magnitude_mae_db": 5.56240971883138
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 2.547013903662002,
+            "mean_log_magnitude_mae_db": 31.17992986913336,
+            "mean_high_band_convergence": 9.566395663070468,
+            "mean_high_band_log_magnitude_mae_db": 38.47707607759834
+          }
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.45958805084228516,
+            "oversampled_peak": 0.4602172479190953,
+            "crest_db": 14.121081455650316,
+            "integrated_lufs": -18.917721966115405,
+            "stereo_correlation": 0.6903743677884178,
+            "side_mid_db": -7.343921695482944
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.4639362096786499,
+            "oversampled_peak": 0.4644404930510231,
+            "crest_db": 14.108064857266784,
+            "integrated_lufs": -18.830849545899536,
+            "stereo_correlation": 0.6914477976801858,
+            "side_mid_db": -7.361409589590543
+          },
+          "loudness_match_gain_db": -0.08687242021586883,
+          "identity_snr_db_after_one_global_gain": 37.358245849609375,
+          "stereo_correlation_change": 0.001073429891768063,
+          "side_mid_change_db": -0.017487894107598656,
+          "crest_change_db": -0.01301659838353153,
+          "onset_flux_correlation": 0.9993489730949024,
+          "envelope_correlation": 0.9999749413872379,
+          "weighted_interchannel_phase_error_degrees": 0.16718238914903163,
+          "low_level_gain_p05_db": -0.02669443536163038,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 19.991363286972046,
+          "controlled_codec_reference_snr_after_db": 20.14991283416748,
+          "controlled_codec_error_improvement_db": 0.15854954719543457,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.35207606048787454,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.06944911926984787,
+                "log_magnitude_mae_db": 5.504903316497803,
+                "high_band_6_18khz_convergence": 0.5629843473434448,
+                "high_band_6_18khz_log_magnitude_mae_db": 8.282873153686523
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.0701165720820427,
+                "log_magnitude_mae_db": 5.327820301055908,
+                "high_band_6_18khz_convergence": 0.573296308517456,
+                "high_band_6_18khz_log_magnitude_mae_db": 7.5345540046691895
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.06861494481563568,
+                "log_magnitude_mae_db": 4.61245584487915,
+                "high_band_6_18khz_convergence": 0.561927318572998,
+                "high_band_6_18khz_log_magnitude_mae_db": 6.33523416519165
+              }
+            ],
+            "mean_spectral_convergence": 0.06939354538917542,
+            "mean_log_magnitude_mae_db": 5.148393154144287,
+            "mean_high_band_convergence": 0.5660693248112997,
+            "mean_high_band_log_magnitude_mae_db": 7.384220441182454
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 3.1750903473456957,
+            "mean_log_magnitude_mae_db": 16.062479519897817,
+            "mean_high_band_convergence": 6.834461763798068,
+            "mean_high_band_log_magnitude_mae_db": 18.326974208480983
+          }
+        }
+      },
+      "codec_spectral_baseline": {
+        "loudness_alignment_gain_db": 0.4389484898435292,
+        "resolutions": [
+          {
+            "fft_size": 512,
+            "spectral_convergence": 0.0717661902308464,
+            "log_magnitude_mae_db": 7.001405239105225,
+            "high_band_6_18khz_convergence": 0.6107025146484375,
+            "high_band_6_18khz_log_magnitude_mae_db": 10.859456062316895
+          },
+          {
+            "fft_size": 2048,
+            "spectral_convergence": 0.0725908875465393,
+            "log_magnitude_mae_db": 6.36280632019043,
+            "high_band_6_18khz_convergence": 0.6199043989181519,
+            "high_band_6_18khz_log_magnitude_mae_db": 9.21462345123291
+          },
+          {
+            "fft_size": 8192,
+            "spectral_convergence": 0.07065023481845856,
+            "log_magnitude_mae_db": 5.036593437194824,
+            "high_band_6_18khz_convergence": 0.5921786427497864,
+            "high_band_6_18khz_log_magnitude_mae_db": 7.049516201019287
+          }
+        ],
+        "mean_spectral_convergence": 0.07166910419861476,
+        "mean_log_magnitude_mae_db": 6.133601665496826,
+        "mean_high_band_convergence": 0.6075951854387919,
+        "mean_high_band_log_magnitude_mae_db": 9.041198571523031
+      }
+    },
+    {
+      "date": "1995-12-07",
+      "condition": "natural",
+      "inference_seconds_for_14s_context": 53.52314466703683,
+      "source_sha256": "bcf1c134bb0d1474c80d719ca988822bfa3bcc5ea40a3412f3c8e62c247d0d8a",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.6000000238418579,
+            "oversampled_peak": 0.6003819629105019,
+            "crest_db": 14.313369370769522,
+            "integrated_lufs": -17.1326954304504,
+            "stereo_correlation": 0.8152044053615005,
+            "side_mid_db": -9.916775479184256
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.6369648575782776,
+            "oversampled_peak": 0.6377612568918974,
+            "crest_db": 14.45654705118524,
+            "integrated_lufs": -16.749754828740432,
+            "stereo_correlation": 0.8143262937178358,
+            "side_mid_db": -9.893605260509837
+          },
+          "loudness_match_gain_db": -0.3829406017099686,
+          "identity_snr_db_after_one_global_gain": 32.077200412750244,
+          "stereo_correlation_change": -0.0008781116436646919,
+          "side_mid_change_db": 0.023170218674419374,
+          "crest_change_db": 0.1431776804157181,
+          "onset_flux_correlation": 0.9993116998845698,
+          "envelope_correlation": 0.9995470076790607,
+          "weighted_interchannel_phase_error_degrees": 0.34491713387913825,
+          "low_level_gain_p05_db": -0.037106108753244,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.6000000238418579,
+            "oversampled_peak": 0.6003819629105019,
+            "crest_db": 14.313369370769522,
+            "integrated_lufs": -17.1326954304504,
+            "stereo_correlation": 0.8152044053615005,
+            "side_mid_db": -9.916775479184256
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.609241247177124,
+            "oversampled_peak": 0.6096290688859239,
+            "crest_db": 14.351081323140074,
+            "integrated_lufs": -17.03646885544761,
+            "stereo_correlation": 0.8150411757510548,
+            "side_mid_db": -9.912417415495048
+          },
+          "loudness_match_gain_db": -0.09622657500279175,
+          "identity_snr_db_after_one_global_gain": 43.837342262268066,
+          "stereo_correlation_change": -0.00016322961044568096,
+          "side_mid_change_db": 0.004358063689208436,
+          "crest_change_db": 0.03771195237055203,
+          "onset_flux_correlation": 0.9999566006555801,
+          "envelope_correlation": 0.9999704449826475,
+          "weighted_interchannel_phase_error_degrees": 0.08859043944845982,
+          "low_level_gain_p05_db": -0.008835952809848962,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        }
+      }
+    },
+    {
+      "date": "1995-12-07",
+      "condition": "added_64kbps_mp3",
+      "inference_seconds_for_14s_context": 62.15656249993481,
+      "source_sha256": "bcf1c134bb0d1474c80d719ca988822bfa3bcc5ea40a3412f3c8e62c247d0d8a",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.565488874912262,
+            "oversampled_peak": 0.5658488453883123,
+            "crest_db": 14.22389774936903,
+            "integrated_lufs": -17.548487373135252,
+            "stereo_correlation": 0.8092366013610302,
+            "side_mid_db": -9.764908081669011
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5811575055122375,
+            "oversampled_peak": 0.581527450091522,
+            "crest_db": 14.142577598399747,
+            "integrated_lufs": -17.279976278628947,
+            "stereo_correlation": 0.8199458933363529,
+            "side_mid_db": -10.039369453261514
+          },
+          "loudness_match_gain_db": -0.26851109450630517,
+          "identity_snr_db_after_one_global_gain": 21.83767080307007,
+          "stereo_correlation_change": 0.010709291975322777,
+          "side_mid_change_db": -0.27446137159250306,
+          "crest_change_db": -0.08132015096928313,
+          "onset_flux_correlation": 0.9896461734754025,
+          "envelope_correlation": 0.9992477468336664,
+          "weighted_interchannel_phase_error_degrees": 0.9462990736833077,
+          "low_level_gain_p05_db": -0.05160417890676424,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 17.31346845626831,
+          "controlled_codec_reference_snr_after_db": 17.072216272354126,
+          "controlled_codec_error_improvement_db": -0.24125218391418457,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.14728089058215943,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.09104248881340027,
+                "log_magnitude_mae_db": 4.044839859008789,
+                "high_band_6_18khz_convergence": 0.5541204214096069,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.325743675231934
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.09293610602617264,
+                "log_magnitude_mae_db": 4.437596321105957,
+                "high_band_6_18khz_convergence": 0.5676051378250122,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.660396099090576
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.09521052986383438,
+                "log_magnitude_mae_db": 4.425472259521484,
+                "high_band_6_18khz_convergence": 0.5970982909202576,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.540632724761963
+              }
+            ],
+            "mean_spectral_convergence": 0.09306304156780243,
+            "mean_log_magnitude_mae_db": 4.30263614654541,
+            "mean_high_band_convergence": 0.5729412833849589,
+            "mean_high_band_log_magnitude_mae_db": 5.508924166361491
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 3.088628054270697,
+            "mean_log_magnitude_mae_db": 18.758628380944796,
+            "mean_high_band_convergence": 9.276795810051052,
+            "mean_high_band_log_magnitude_mae_db": 28.489000273073046
+          }
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.565488874912262,
+            "oversampled_peak": 0.5658488453883123,
+            "crest_db": 14.22389774936903,
+            "integrated_lufs": -17.548487373135252,
+            "stereo_correlation": 0.8092366013610302,
+            "side_mid_db": -9.764908081669011
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5694060325622559,
+            "oversampled_peak": 0.5697684965641147,
+            "crest_db": 14.20851896278441,
+            "integrated_lufs": -17.494954863035716,
+            "stereo_correlation": 0.813050646281389,
+            "side_mid_db": -9.861173819180841
+          },
+          "loudness_match_gain_db": -0.05353251009953652,
+          "identity_snr_db_after_one_global_gain": 33.63549470901489,
+          "stereo_correlation_change": 0.003814044920358861,
+          "side_mid_change_db": -0.0962657375118301,
+          "crest_change_db": -0.015378786584619775,
+          "onset_flux_correlation": 0.9991845527676563,
+          "envelope_correlation": 0.9999464180099655,
+          "weighted_interchannel_phase_error_degrees": 0.23397197163597383,
+          "low_level_gain_p05_db": -0.013994589000059567,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 17.31346845626831,
+          "controlled_codec_reference_snr_after_db": 17.54359006881714,
+          "controlled_codec_error_improvement_db": 0.23012161254882812,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.3622594525440377,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.09157919138669968,
+                "log_magnitude_mae_db": 4.392096042633057,
+                "high_band_6_18khz_convergence": 0.5907723307609558,
+                "high_band_6_18khz_log_magnitude_mae_db": 6.362156867980957
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.09355030953884125,
+                "log_magnitude_mae_db": 4.819602012634277,
+                "high_band_6_18khz_convergence": 0.6024610996246338,
+                "high_band_6_18khz_log_magnitude_mae_db": 6.724311351776123
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.09229015558958054,
+                "log_magnitude_mae_db": 4.393294334411621,
+                "high_band_6_18khz_convergence": 0.587234377861023,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.955977916717529
+              }
+            ],
+            "mean_spectral_convergence": 0.09247321883837382,
+            "mean_log_magnitude_mae_db": 4.534997463226318,
+            "mean_high_band_convergence": 0.5934892694155375,
+            "mean_high_band_log_magnitude_mae_db": 6.347482045491536
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 3.7028410538754395,
+            "mean_log_magnitude_mae_db": 14.371236225202487,
+            "mean_high_band_convergence": 6.023095672873363,
+            "mean_high_band_log_magnitude_mae_db": 17.603732940542812
+          }
+        }
+      },
+      "codec_spectral_baseline": {
+        "loudness_alignment_gain_db": 0.4157919691791605,
+        "resolutions": [
+          {
+            "fft_size": 512,
+            "spectral_convergence": 0.09499140083789825,
+            "log_magnitude_mae_db": 5.3026123046875,
+            "high_band_6_18khz_convergence": 0.6338672637939453,
+            "high_band_6_18khz_log_magnitude_mae_db": 8.00670051574707
+          },
+          {
+            "fft_size": 2048,
+            "spectral_convergence": 0.0974472314119339,
+            "log_magnitude_mae_db": 5.773754119873047,
+            "high_band_6_18khz_convergence": 0.6451838612556458,
+            "high_band_6_18khz_log_magnitude_mae_db": 8.407155990600586
+          },
+          {
+            "fft_size": 8192,
+            "spectral_convergence": 0.09564843028783798,
+            "log_magnitude_mae_db": 4.811977386474609,
+            "high_band_6_18khz_convergence": 0.6155290603637695,
+            "high_band_6_18khz_log_magnitude_mae_db": 6.69695520401001
+          }
+        ],
+        "mean_spectral_convergence": 0.09602902084589005,
+        "mean_log_magnitude_mae_db": 5.296114603678386,
+        "mean_high_band_convergence": 0.6315267284711202,
+        "mean_high_band_log_magnitude_mae_db": 7.703603903452556
+      }
+    },
+    {
+      "date": "2009-08-07",
+      "condition": "natural",
+      "inference_seconds_for_14s_context": 64.40121325000655,
+      "source_sha256": "3fd4946724604e15a99668b99c8f728de5279759c9dabf570ddbc55ca38c3d43",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.5999999642372131,
+            "oversampled_peak": 0.6003819032679149,
+            "crest_db": 15.647547077395473,
+            "integrated_lufs": -18.326899573012177,
+            "stereo_correlation": 0.8654838075725021,
+            "side_mid_db": -11.419709454234699
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.6387929916381836,
+            "oversampled_peak": 0.6391996249558297,
+            "crest_db": 15.77465876051737,
+            "integrated_lufs": -17.902656504743884,
+            "stereo_correlation": 0.8640476068793458,
+            "side_mid_db": -11.370077188717257
+          },
+          "loudness_match_gain_db": -0.42424306826829294,
+          "identity_snr_db_after_one_global_gain": 34.36952829360962,
+          "stereo_correlation_change": -0.0014362006931563087,
+          "side_mid_change_db": 0.04963226551744171,
+          "crest_change_db": 0.1271116831218979,
+          "onset_flux_correlation": 0.9998024535044107,
+          "envelope_correlation": 0.9998202424510206,
+          "weighted_interchannel_phase_error_degrees": 0.21877017648027777,
+          "low_level_gain_p05_db": -0.05165863259171833,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.5999999642372131,
+            "oversampled_peak": 0.6003819032679149,
+            "crest_db": 15.647547077395473,
+            "integrated_lufs": -18.326899573012177,
+            "stereo_correlation": 0.8654838075725021,
+            "side_mid_db": -11.419709454234699
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.6096982359886169,
+            "oversampled_peak": 0.6100863486005403,
+            "crest_db": 15.680967139091319,
+            "integrated_lufs": -18.219309468650895,
+            "stereo_correlation": 0.8651311193458163,
+            "side_mid_db": -11.407476269545684
+          },
+          "loudness_match_gain_db": -0.10759010436128236,
+          "identity_snr_db_after_one_global_gain": 46.099514961242676,
+          "stereo_correlation_change": -0.00035268822668577116,
+          "side_mid_change_db": 0.012233184689014465,
+          "crest_change_db": 0.033420061695846215,
+          "onset_flux_correlation": 0.999986238916784,
+          "envelope_correlation": 0.9999880778259581,
+          "weighted_interchannel_phase_error_degrees": 0.056538585620334855,
+          "low_level_gain_p05_db": -0.013411948253536796,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        }
+      }
+    },
+    {
+      "date": "2009-08-07",
+      "condition": "added_64kbps_mp3",
+      "inference_seconds_for_14s_context": 49.89846966706682,
+      "source_sha256": "3fd4946724604e15a99668b99c8f728de5279759c9dabf570ddbc55ca38c3d43",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.5625637769699097,
+            "oversampled_peak": 0.5637651049925386,
+            "crest_db": 15.530761265580576,
+            "integrated_lufs": -18.764627254615544,
+            "stereo_correlation": 0.8641018256153236,
+            "side_mid_db": -11.371776505969443
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.6039609909057617,
+            "oversampled_peak": 0.6043454513877577,
+            "crest_db": 15.750699055209063,
+            "integrated_lufs": -18.3708923294167,
+            "stereo_correlation": 0.8649062780264178,
+            "side_mid_db": -11.399369061189923
+          },
+          "loudness_match_gain_db": -0.39373492519884223,
+          "identity_snr_db_after_one_global_gain": 28.02828073501587,
+          "stereo_correlation_change": 0.0008044524110942808,
+          "side_mid_change_db": -0.027592555220479653,
+          "crest_change_db": 0.21993778962848687,
+          "onset_flux_correlation": 0.9977785319914805,
+          "envelope_correlation": 0.9997732801153558,
+          "weighted_interchannel_phase_error_degrees": 0.35913575977453116,
+          "low_level_gain_p05_db": -0.11615139864361886,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 22.124829292297363,
+          "controlled_codec_reference_snr_after_db": 21.793224811553955,
+          "controlled_codec_error_improvement_db": -0.3316044807434082,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.043992771495311445,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.055845778435468674,
+                "log_magnitude_mae_db": 3.232191324234009,
+                "high_band_6_18khz_convergence": 0.5818130373954773,
+                "high_band_6_18khz_log_magnitude_mae_db": 4.155307769775391
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.056131068617105484,
+                "log_magnitude_mae_db": 2.9288253784179688,
+                "high_band_6_18khz_convergence": 0.5920156240463257,
+                "high_band_6_18khz_log_magnitude_mae_db": 3.498483657836914
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.05547194927930832,
+                "log_magnitude_mae_db": 2.9588966369628906,
+                "high_band_6_18khz_convergence": 0.6011987328529358,
+                "high_band_6_18khz_log_magnitude_mae_db": 3.493234395980835
+              }
+            ],
+            "mean_spectral_convergence": 0.05581626544396082,
+            "mean_log_magnitude_mae_db": 3.039971113204956,
+            "mean_high_band_convergence": 0.5916757980982462,
+            "mean_high_band_log_magnitude_mae_db": 3.7156752745310464
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 0.5584115873761563,
+            "mean_log_magnitude_mae_db": 16.501079064027373,
+            "mean_high_band_convergence": 12.630479903643636,
+            "mean_high_band_log_magnitude_mae_db": 23.101283738079704
+          }
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.5625637769699097,
+            "oversampled_peak": 0.5637651049925386,
+            "crest_db": 15.530761265580576,
+            "integrated_lufs": -18.764627254615544,
+            "stereo_correlation": 0.8641018256153236,
+            "side_mid_db": -11.371776505969443
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5715097784996033,
+            "oversampled_peak": 0.5731976010622339,
+            "crest_db": 15.568197775590857,
+            "integrated_lufs": -18.66726242514608,
+            "stereo_correlation": 0.8644986076523432,
+            "side_mid_db": -11.385384251189754
+          },
+          "loudness_match_gain_db": -0.09736482946946268,
+          "identity_snr_db_after_one_global_gain": 39.772276878356934,
+          "stereo_correlation_change": 0.00039678203701964954,
+          "side_mid_change_db": -0.013607745220310719,
+          "crest_change_db": 0.0374365100102807,
+          "onset_flux_correlation": 0.9998399909815191,
+          "envelope_correlation": 0.9999847623331833,
+          "weighted_interchannel_phase_error_degrees": 0.09073669212533261,
+          "low_level_gain_p05_db": -0.03790191564367809,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 22.124829292297363,
+          "controlled_codec_reference_snr_after_db": 22.25017786026001,
+          "controlled_codec_error_improvement_db": 0.12534856796264648,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.3403628460279897,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.05513772368431091,
+                "log_magnitude_mae_db": 3.7527925968170166,
+                "high_band_6_18khz_convergence": 0.6371093988418579,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.1924967765808105
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.05521124601364136,
+                "log_magnitude_mae_db": 3.301772117614746,
+                "high_band_6_18khz_convergence": 0.6449415683746338,
+                "high_band_6_18khz_log_magnitude_mae_db": 4.165548801422119
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.053650543093681335,
+                "log_magnitude_mae_db": 3.10025691986084,
+                "high_band_6_18khz_convergence": 0.6194029450416565,
+                "high_band_6_18khz_log_magnitude_mae_db": 3.87024188041687
+              }
+            ],
+            "mean_spectral_convergence": 0.05466650426387787,
+            "mean_log_magnitude_mae_db": 3.3849405447642007,
+            "mean_high_band_convergence": 0.6338179707527161,
+            "mean_high_band_log_magnitude_mae_db": 4.4094291528066
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 2.606812302350764,
+            "mean_log_magnitude_mae_db": 7.025799787203938,
+            "mean_high_band_convergence": 6.407576393861329,
+            "mean_high_band_log_magnitude_mae_db": 8.743521366648665
+          }
+        }
+      },
+      "codec_spectral_baseline": {
+        "loudness_alignment_gain_db": 0.4377276795632099,
+        "resolutions": [
+          {
+            "fft_size": 512,
+            "spectral_convergence": 0.05672001838684082,
+            "log_magnitude_mae_db": 4.184256076812744,
+            "high_band_6_18khz_convergence": 0.6874755024909973,
+            "high_band_6_18khz_log_magnitude_mae_db": 5.923842430114746
+          },
+          {
+            "fft_size": 2048,
+            "spectral_convergence": 0.05675237253308296,
+            "log_magnitude_mae_db": 3.537513017654419,
+            "high_band_6_18khz_convergence": 0.6929603815078735,
+            "high_band_6_18khz_log_magnitude_mae_db": 4.534109592437744
+          },
+          {
+            "fft_size": 8192,
+            "spectral_convergence": 0.054916709661483765,
+            "log_magnitude_mae_db": 3.2004239559173584,
+            "high_band_6_18khz_convergence": 0.6511964201927185,
+            "high_band_6_18khz_log_magnitude_mae_db": 4.037772178649902
+          }
+        ],
+        "mean_spectral_convergence": 0.05612970019380251,
+        "mean_log_magnitude_mae_db": 3.6407310167948403,
+        "mean_high_band_convergence": 0.6772107680638632,
+        "mean_high_band_log_magnitude_mae_db": 4.831908067067464
+      }
+    },
+    {
+      "date": "2024-08-16",
+      "condition": "natural",
+      "inference_seconds_for_14s_context": 39.303673750022426,
+      "source_sha256": "d11d11f84740cf237f2d7bc70977ef142de123f1b50c5c164fe2bd0cc6a3e0bc",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.6000000238418579,
+            "oversampled_peak": 0.6003819629105019,
+            "crest_db": 15.070949013466187,
+            "integrated_lufs": -17.593040481898175,
+            "stereo_correlation": 0.7443974759433538,
+            "side_mid_db": -8.336484989031364
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5979358553886414,
+            "oversampled_peak": 0.59831648047971,
+            "crest_db": 14.626502405414366,
+            "integrated_lufs": -17.196884225838662,
+            "stereo_correlation": 0.7446093427473411,
+            "side_mid_db": -8.338688177164414
+          },
+          "loudness_match_gain_db": -0.39615625605951266,
+          "identity_snr_db_after_one_global_gain": 29.901316165924072,
+          "stereo_correlation_change": 0.00021186680398732616,
+          "side_mid_change_db": -0.0022031881330502046,
+          "crest_change_db": -0.44444660805182146,
+          "onset_flux_correlation": 0.9993431096792492,
+          "envelope_correlation": 0.9993096101884212,
+          "weighted_interchannel_phase_error_degrees": 0.5204698161220027,
+          "low_level_gain_p05_db": -0.04659414068034487,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.6000000238418579,
+            "oversampled_peak": 0.6003819629105019,
+            "crest_db": 15.070949013466187,
+            "integrated_lufs": -17.593040481898175,
+            "stereo_correlation": 0.7443974759433538,
+            "side_mid_db": -8.336484989031364
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5984490513801575,
+            "oversampled_peak": 0.5988300031538781,
+            "crest_db": 14.943822855353318,
+            "integrated_lufs": -17.494008917510314,
+            "stereo_correlation": 0.7445372658826681,
+            "side_mid_db": -8.338738831453908
+          },
+          "loudness_match_gain_db": -0.09903156438786098,
+          "identity_snr_db_after_one_global_gain": 41.63264751434326,
+          "stereo_correlation_change": 0.0001397899393142943,
+          "side_mid_change_db": -0.0022538424225437836,
+          "crest_change_db": -0.1271261581128691,
+          "onset_flux_correlation": 0.9999524569049112,
+          "envelope_correlation": 0.99995320814001,
+          "weighted_interchannel_phase_error_degrees": 0.13384873171167275,
+          "low_level_gain_p05_db": -0.011881808780231698,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        }
+      }
+    },
+    {
+      "date": "2024-08-16",
+      "condition": "added_64kbps_mp3",
+      "inference_seconds_for_14s_context": 34.56853966601193,
+      "source_sha256": "d11d11f84740cf237f2d7bc70977ef142de123f1b50c5c164fe2bd0cc6a3e0bc",
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.600685715675354,
+            "oversampled_peak": 0.6082794616443936,
+            "crest_db": 15.498247969101627,
+            "integrated_lufs": -17.981555123023696,
+            "stereo_correlation": 0.7400995250512014,
+            "side_mid_db": -8.252752210301713
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5706795454025269,
+            "oversampled_peak": 0.5710428200782003,
+            "crest_db": 14.721050095266786,
+            "integrated_lufs": -17.73623023978436,
+            "stereo_correlation": 0.7504382307966981,
+            "side_mid_db": -8.454781753188984
+          },
+          "loudness_match_gain_db": -0.24532488323933777,
+          "identity_snr_db_after_one_global_gain": 19.202367067337036,
+          "stereo_correlation_change": 0.010338705745496779,
+          "side_mid_change_db": -0.2020295428872707,
+          "crest_change_db": -0.7771978738348402,
+          "onset_flux_correlation": 0.9911704615333267,
+          "envelope_correlation": 0.9996900528916294,
+          "weighted_interchannel_phase_error_degrees": 1.425270083431187,
+          "low_level_gain_p05_db": -0.17182633405649045,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 15.635924339294434,
+          "controlled_codec_reference_snr_after_db": 15.073038339614868,
+          "controlled_codec_error_improvement_db": -0.5628859996795654,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.14318974668546147,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.11027795821428299,
+                "log_magnitude_mae_db": 3.299187183380127,
+                "high_band_6_18khz_convergence": 0.5361383557319641,
+                "high_band_6_18khz_log_magnitude_mae_db": 4.324431419372559
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.11338328570127487,
+                "log_magnitude_mae_db": 3.3898191452026367,
+                "high_band_6_18khz_convergence": 0.5461597442626953,
+                "high_band_6_18khz_log_magnitude_mae_db": 4.280097961425781
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.11668355762958527,
+                "log_magnitude_mae_db": 3.425661563873291,
+                "high_band_6_18khz_convergence": 0.5817955136299133,
+                "high_band_6_18khz_log_magnitude_mae_db": 4.163045883178711
+              }
+            ],
+            "mean_spectral_convergence": 0.11344826718171437,
+            "mean_log_magnitude_mae_db": 3.371555964152018,
+            "mean_high_band_convergence": 0.5546978712081909,
+            "mean_high_band_log_magnitude_mae_db": 4.255858421325684
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 0.4812488038168062,
+            "mean_log_magnitude_mae_db": 25.03488589110838,
+            "mean_high_band_convergence": 4.59309408913638,
+            "mean_high_band_log_magnitude_mae_db": 33.72500991876894
+          }
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.600685715675354,
+            "oversampled_peak": 0.6082794616443936,
+            "crest_db": 15.498247969101627,
+            "integrated_lufs": -17.981555123023696,
+            "stereo_correlation": 0.7400995250512014,
+            "side_mid_db": -8.252752210301713
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.5923901796340942,
+            "oversampled_peak": 0.5986121359730522,
+            "crest_db": 15.303248953594375,
+            "integrated_lufs": -17.945743366393817,
+            "stereo_correlation": 0.7443037174274243,
+            "side_mid_db": -8.333977887021856
+          },
+          "loudness_match_gain_db": -0.035811756629879454,
+          "identity_snr_db_after_one_global_gain": 30.985679626464844,
+          "stereo_correlation_change": 0.004204192376222937,
+          "side_mid_change_db": -0.08122567672014291,
+          "crest_change_db": -0.19499901550725163,
+          "onset_flux_correlation": 0.9992885923948415,
+          "envelope_correlation": 0.9999682273835537,
+          "weighted_interchannel_phase_error_degrees": 0.34116284598914837,
+          "low_level_gain_p05_db": -0.06496611287562207,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+          "controlled_codec_reference_snr_before_db": 15.635924339294434,
+          "controlled_codec_reference_snr_after_db": 15.842652320861816,
+          "controlled_codec_error_improvement_db": 0.2067279815673828,
+          "codec_spectral_after": {
+            "loudness_alignment_gain_db": 0.352702889188798,
+            "resolutions": [
+              {
+                "fft_size": 512,
+                "spectral_convergence": 0.10864901542663574,
+                "log_magnitude_mae_db": 4.01352596282959,
+                "high_band_6_18khz_convergence": 0.5508760213851929,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.778271198272705
+              },
+              {
+                "fft_size": 2048,
+                "spectral_convergence": 0.11188933998346329,
+                "log_magnitude_mae_db": 4.097710609436035,
+                "high_band_6_18khz_convergence": 0.5608417391777039,
+                "high_band_6_18khz_log_magnitude_mae_db": 5.6446309089660645
+              },
+              {
+                "fft_size": 8192,
+                "spectral_convergence": 0.11003638803958893,
+                "log_magnitude_mae_db": 3.7165515422821045,
+                "high_band_6_18khz_convergence": 0.5436949133872986,
+                "high_band_6_18khz_log_magnitude_mae_db": 4.91616153717041
+              }
+            ],
+            "mean_spectral_convergence": 0.11019158114989598,
+            "mean_log_magnitude_mae_db": 3.9425960381825766,
+            "mean_high_band_convergence": 0.5518042246500651,
+            "mean_high_band_log_magnitude_mae_db": 5.4463545481363935
+          },
+          "codec_spectral_improvement_percent": {
+            "mean_spectral_convergence": 3.338069229337225,
+            "mean_log_magnitude_mae_db": 12.338052510435901,
+            "mean_high_band_convergence": 5.090795413118549,
+            "mean_high_band_log_magnitude_mae_db": 15.185831406447397
+          }
+        }
+      },
+      "codec_spectral_baseline": {
+        "loudness_alignment_gain_db": 0.3885146410168545,
+        "resolutions": [
+          {
+            "fft_size": 512,
+            "spectral_convergence": 0.11249653995037079,
+            "log_magnitude_mae_db": 4.7109785079956055,
+            "high_band_6_18khz_convergence": 0.586402416229248,
+            "high_band_6_18khz_log_magnitude_mae_db": 7.027785301208496
+          },
+          {
+            "fft_size": 2048,
+            "spectral_convergence": 0.11622679233551025,
+            "log_magnitude_mae_db": 4.764120578765869,
+            "high_band_6_18khz_convergence": 0.5976870656013489,
+            "high_band_6_18khz_log_magnitude_mae_db": 6.7938714027404785
+          },
+          {
+            "fft_size": 8192,
+            "spectral_convergence": 0.11326729506254196,
+            "log_magnitude_mae_db": 4.017400741577148,
+            "high_band_6_18khz_convergence": 0.5601171851158142,
+            "high_band_6_18khz_log_magnitude_mae_db": 5.442888259887695
+          }
+        ],
+        "mean_spectral_convergence": 0.11399687578280766,
+        "mean_log_magnitude_mae_db": 4.497499942779541,
+        "mean_high_band_convergence": 0.5814022223154703,
+        "mean_high_band_log_magnitude_mae_db": 6.421514987945557
+      }
+    }
+  ],
+  "spectral_metric_method": "Three FFT sizes512/2048/8192;75%overlap; one integrated-loudness alignment;80dB log-magnitude floor relative to maximum reference bin;high band6\u201318kHz. Lower error is better. These metrics do not establish subjective preference.",
+  "checkpoint_revision": "c68bd80fdd9c0d93d2f4a833cb154624f660a561",
+  "source_license_url": "https://github.com/JusperLee/Apollo/blob/e84bcacc59d5455f05d86a5c97dd4aeb3c14dbb6/LICENSE",
+  "checkpoint_license_declaration_url": "https://huggingface.co/JusperLee/Apollo/blob/c68bd80fdd9c0d93d2f4a833cb154624f660a561/README.md",
+  "runtime_requirements": [
+    "anyio==4.16.0",
+    "certifi==2026.10.23",
+    "cffi==2.1.1",
+    "click==8.5.0",
+    "filelock==4.2.6",
+    "fsspec==2026.9.0",
+    "future==1.0.0",
+    "h11==0.16.0",
+    "hf-xet==1.8.0",
+    "httpcore==1.0.9",
+    "httpx==0.28.1",
+    "huggingface_hub==1.27.0",
+    "idna==3.20",
+    "Jinja2==3.1.6",
+    "MarkupSafe==3.0.4",
+    "mpmath==1.3.0",
+    "networkx==3.6.1",
+    "numpy==1.26.4",
+    "packaging==26.3",
+    "pycparser==3.12",
+    "pyloudnorm==0.1.1",
+    "PyYAML==6.0.3",
+    "scipy==1.14.1",
+    "soundfile==0.14.0",
+    "sympy==1.14.0",
+    "torch==2.11.0",
+    "tqdm==4.70.1",
+    "typing_extensions==4.16.0"
+  ],
+  "listening_artifact": "Local only: audio-neural-probe/results/listening.html; recordings and model weights excluded from repository.",
+  "metric_sanity": {
+    "identical_audio_spectral_convergence": 0.0,
+    "constant_gain_aligned_convergence": 4.1484271749932484e-16
+  }
+}

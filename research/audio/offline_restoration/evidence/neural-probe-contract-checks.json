@@ -1,0 +1,12 @@
+{
+  "type": "CPU identity-stub contract check, not a neural restoration pass",
+  "input_frames": 362357,
+  "output_frames": 362357,
+  "channels": 2,
+  "max_absolute_error": 1.4901161193847656e-08,
+  "full_track_compare_identity_lag_samples": [
+    0
+  ],
+  "spectral_identity_error": 0.0,
+  "spectral_gain_invariance_error": 4.1484271749932484e-16
+}

@@ -1,0 +1,1690 @@
+{
+  "study": "Exploratory extension after locked holdout; no tuning or confirmatory claims",
+  "complete": true,
+  "manifest_sha256": "3907d432f6bf4d7ff5345ac15cd363ed144a566840305c7c274bcf18eb136450",
+  "script_sha256": "d3100bb57033f5272a7d3ea309084b74a95927681f7c16438c28bb3c6152d951",
+  "core_fingerprint": {
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationProfile.java": "cde691d4f291fb5be925f449f47b214011d2afeeaa4c393de4d4f93fa84b9388",
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationDsp.java": "c8c4f011e42f6d59ded845c3a82090244d95d3dc9c5bba22255c2e0c92ec9252",
+    "research/audio/offline_restoration/OfflineRender.java": "508d691e1f7d2d9c11084e8ec99ed908aa1e3c26d08dd32309505ea839d0466c"
+  },
+  "summary": {
+    "recordings": 6,
+    "full_track_audio_hours": 0.9133599584278156,
+    "abstentions": 5,
+    "processed": 1,
+    "maximum_static_correction_db": 1.0,
+    "maximum_dynamic_correction_db": 0.5619518478538523,
+    "checks_passed": 6,
+    "failed": {},
+    "median_loudness_change_lu": 0.0,
+    "max_abs_crest_change_db": 0.0484271030800798,
+    "max_abs_stereo_correlation_change": 0.00828458765835105,
+    "max_abs_stereo_width_change_db": 0.345550702818759,
+    "minimum_onset_flux_correlation": 0.9997967826444857,
+    "max_oversampled_peak_dbfs": 0.11868974506005388,
+    "max_processed_oversampled_peak_dbfs": -2.3231568111879946,
+    "subjective_ratings_collected": 0,
+    "interpretation": "Preservation checks are provisional engineering bounds, not an audio quality score or evidence of soundboard equivalence."
+  },
+  "tracks": [
+    {
+      "metadata": {
+        "date": "1989-03-03",
+        "title": "Foam",
+        "set_name": "Set 1",
+        "track_id": 11087,
+        "url": "https://phish.in/blob/tm6jotjhf1nt3t851jy1zikoswwg.mp3",
+        "duration": 462.853333,
+        "venue": "Living and Learning Center, University of Vermont",
+        "location": "Burlington, VT",
+        "split": "exploratory",
+        "source_tags": [],
+        "source_notes": "Friday, March 3, 1989\nLiving and Learning Center \nUniversity of Vermont \nBurlington, VT \n\n\nSource: AUD>?>Cass/x>CDR>EAC>FLAC\t\n\nTransfer Info: I transferred my cassette using a Sony TC-WR665S for cassette playback and \nan Aiwa XC-RW700 stand alone burner for recording.  I eac'ed the resulting CDR to my \nhard drive, performed minor editing and encoded to flac.\n\nCD 1\nSet One\n01) 04:31 Wilson\n02) 08:39 McGrupp and the Watchful Hosemaster\n03) 01:14 crowd/banter\n04) 15:25 You Enjoy Myself\n05) 07:42 Foam\n06) 02:18 crowd/banter\n07) 06:05 AC/DC Bag\n\nCD 2\nSet One (continued)\n01) 06:32 The Curtain >\n02) 09:56 Run Like an Antelope\n03) 01:53 crowd/banter\n04) 03:32 I Didn't Know\n05) 12:47 Divided Sky\n06) 06:21 Alumni Blues > Letter to Jimmy Page > Alumni Blues\n07) 05:56 Good Times Bad Times\n\nNotes:  The tape I transferred wasn't that great.  Sounds like there are many analog \ngenerations.  Also, the pitch on my cassette was way off and needed adjustment.  I tried my \nbest to correct it using the tape decks pitch adjuster.  I also used Soundforge's \ngraphic equalizer to try and minimize the egregious amount of tape hiss.  Hopefully a better \nsounding source will surface along with the second set.\n\nTracks split using Soundforge 6.0.\n\nShntool used to verify sector boundaries. Encoded using \nFLAC frontend version 1.7.1 Etree version.\n\nbla blazo - 04 October 2004",
+        "source_lineage": [
+          "Source: AUD>?>Cass/x>CDR>EAC>FLAC\t"
+        ],
+        "selection_reason": "AUD cassette of unknown generation; taper describes many analog generations, severe hiss and incorrect pitch. Pitch adjustment and graphic EQ were already attempted.",
+        "documented_defect_paragraphs": [
+          "Notes:  The tape I transferred wasn't that great.  Sounds like there are many analog \ngenerations.  Also, the pitch on my cassette was way off and needed adjustment.  I tried my \nbest to correct it using the tape decks pitch adjuster.  I also used Soundforge's \ngraphic equalizer to try and minimize the egregious amount of tape hiss.  Hopefully a better \nsounding source will surface along with the second set."
+        ],
+        "metadata_url": "https://phish.in/api/v2/shows/1989-03-03",
+        "metadata_sha256": "e6c15e5cccf672b3885f5efd6c27b99263d482e4cc91cf4f54f5095060388602",
+        "sha256": "7c69f380564e8db923cc62b474f200d0afb86d491f237aeb2be4fc46ba3988e1",
+        "bytes": 12828149,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 20411832,
+          "analyzedWindows": 9966,
+          "sourcePeak": 0.902862548828125,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.125,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          -0.0625,
+          -0.125,
+          -0.0625,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          -5.5,
+          3.5,
+          15.5,
+          19.5,
+          18.5,
+          20.5,
+          20.0,
+          19.0,
+          17.0,
+          18.0,
+          15.5,
+          13.0,
+          11.5,
+          9.0,
+          6.5,
+          6.5,
+          5.5,
+          1.5,
+          -3.5,
+          -6.0,
+          -13.0,
+          -24.0,
+          -40.0,
+          -44.5,
+          -39.0,
+          -46.0
+        ],
+        "analysis_seconds": 1.504772209,
+        "render_seconds": 0.274788333,
+        "frames": 20411832,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.902862548828125,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 20411832,
+        "duration_seconds": 462.85333333333335,
+        "sample_peak_dbfs": -0.8875672269337448,
+        "oversampled_peak_estimate_dbfs": -0.8790432848189221,
+        "rms_dbfs": -16.902714442780763,
+        "crest_db": 16.01514721584702,
+        "stereo_correlation": 0.4668410313411269,
+        "side_mid_db": -4.392079780756344,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 5.237041827309855,
+            "mean_magnitude_squared_coherence": 0.0011172611028056406
+          },
+          "bass": {
+            "power": 17732.90884453471,
+            "mean_magnitude_squared_coherence": 0.7465223101863901
+          },
+          "low_mid": {
+            "power": 68352.46693039617,
+            "mean_magnitude_squared_coherence": 0.9004341410519876
+          },
+          "mid": {
+            "power": 36877.207344574555,
+            "mean_magnitude_squared_coherence": 0.46467658111895543
+          },
+          "presence": {
+            "power": 5326.7565829203695,
+            "mean_magnitude_squared_coherence": 0.21055011774963622
+          },
+          "air": {
+            "power": 7.43030713877725,
+            "mean_magnitude_squared_coherence": 0.007358113113592604
+          },
+          "upper": {
+            "power": 0.00224872341687852,
+            "mean_magnitude_squared_coherence": 0.0037862563209499042
+          }
+        },
+        "integrated_lufs": -14.2,
+        "loudness_range_lu": 2.3,
+        "ffmpeg_true_peak_dbtp": -0.9
+      },
+      "enhanced": {
+        "frames": 20411832,
+        "duration_seconds": 462.85333333333335,
+        "sample_peak_dbfs": -0.8875672269337448,
+        "oversampled_peak_estimate_dbfs": -0.8790432848189221,
+        "rms_dbfs": -16.902714442780763,
+        "crest_db": 16.01514721584702,
+        "stereo_correlation": 0.4668410313411269,
+        "side_mid_db": -4.392079780756344,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 5.237041827309855,
+            "mean_magnitude_squared_coherence": 0.0011172611028056406
+          },
+          "bass": {
+            "power": 17732.90884453471,
+            "mean_magnitude_squared_coherence": 0.7465223101863901
+          },
+          "low_mid": {
+            "power": 68352.46693039617,
+            "mean_magnitude_squared_coherence": 0.9004341410519876
+          },
+          "mid": {
+            "power": 36877.207344574555,
+            "mean_magnitude_squared_coherence": 0.46467658111895543
+          },
+          "presence": {
+            "power": 5326.7565829203695,
+            "mean_magnitude_squared_coherence": 0.21055011774963622
+          },
+          "air": {
+            "power": 7.43030713877725,
+            "mean_magnitude_squared_coherence": 0.007358113113592604
+          },
+          "upper": {
+            "power": 0.00224872341687852,
+            "mean_magnitude_squared_coherence": 0.0037862563209499042
+          }
+        },
+        "integrated_lufs": -14.2,
+        "loudness_range_lu": 2.3,
+        "ffmpeg_true_peak_dbtp": -0.9
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      },
+      "decoded_original_sha256": "56f2d0cd9df6eec34c5f9528e7b5c806a8de8005a9fc10fafbd6afb3ac006c01",
+      "rendered_pcm_sha256": "56f2d0cd9df6eec34c5f9528e7b5c806a8de8005a9fc10fafbd6afb3ac006c01",
+      "bit_exact": true,
+      "source_sha256_after": "7c69f380564e8db923cc62b474f200d0afb86d491f237aeb2be4fc46ba3988e1"
+    },
+    {
+      "metadata": {
+        "date": "1989-04-30",
+        "title": "Divided Sky",
+        "set_name": "Set 1",
+        "track_id": 11174,
+        "url": "https://phish.in/blob/3xp6kumgagk2sm1w2umm1mkzxzt2.mp3",
+        "duration": 778.426667,
+        "venue": "Night Stage",
+        "location": "Cambridge, MA",
+        "split": "exploratory",
+        "source_tags": [
+          "Lore",
+          "Narration"
+        ],
+        "source_notes": "Phish\nApril 30, 1989\nNight Stage \nCambridge, MA\n\nSource: Unknown AUD > Cass/x\nTransfer: Sony TC-KA3ES > DSP24 > Wavelab 24/48wavs > FLAC16\nTransfer, mastering, FLAC16 by Marmar- imthemarmar@gmail.com\nTape provided by Doug Madden\n\nDISC 1:\nIntro by Ben Hunter\nI Didn't Know\nYou Enjoy Myself\nGamehenge Tour\nMcGrupp and the Watchful Hosemasters\nThe Lizards\nDivided Sky\nWilson\nPeaches en Regalia\n\nDISC 2:\nVodka and Tonic\nRun Like an Antelope\nTerrapin\nEncore: \nPossum\n\n*NOTES*\n- There are moments where the source deck was paused, these were left as is.\n- Some distortion is present from the master. \n- Durring the fist side of the tape, there is print through due to the age of the tape, it is only audible durring quiet passages.",
+        "source_lineage": [
+          "Source: Unknown AUD > Cass/x"
+        ],
+        "selection_reason": "Unknown AUD cassette; master distortion and first-side print-through audible in quiet passages. Print-through applicability to this song is not confirmed from the notes.",
+        "documented_defect_paragraphs": [
+          "*NOTES*\n- There are moments where the source deck was paused, these were left as is.\n- Some distortion is present from the master. \n- Durring the fist side of the tape, there is print through due to the age of the tape, it is only audible durring quiet passages."
+        ],
+        "metadata_url": "https://phish.in/api/v2/shows/1989-04-30",
+        "metadata_sha256": "49841b49205d2b59f9a544eb3016da2819a9d786386de09231c14e45bd5c4d8e",
+        "sha256": "0fffa0ff76dcb3edd8bbc398fb665b324e3bffd7a8ab8f00a9cfcfe29ee649b8",
+        "bytes": 24646369,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 34328616,
+          "analyzedWindows": 16762,
+          "sourcePeak": 0.999969482421875,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          7.5,
+          20.0,
+          19.5,
+          17.0,
+          17.0,
+          16.5,
+          18.0,
+          15.5,
+          17.5,
+          15.5,
+          13.5,
+          14.5,
+          15.5,
+          10.5,
+          8.5,
+          5.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          -0.5,
+          -2.0,
+          -3.5,
+          -9.0,
+          -25.5,
+          -49.5
+        ],
+        "analysis_seconds": 3.366786542,
+        "render_seconds": 0.449283083,
+        "frames": 34328616,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.999969482421875,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 34328616,
+        "duration_seconds": 778.4266666666666,
+        "sample_peak_dbfs": -0.00026507636037961915,
+        "oversampled_peak_estimate_dbfs": 0.047332694583395875,
+        "rms_dbfs": -16.019525010433377,
+        "crest_db": 16.019259934073,
+        "stereo_correlation": 0.6998421476752745,
+        "side_mid_db": -7.499870532376635,
+        "clip_fraction": 1.4565108013675821e-08,
+        "bands": {
+          "sub": {
+            "power": 59.036780582088724,
+            "mean_magnitude_squared_coherence": 0.18651199295848317
+          },
+          "bass": {
+            "power": 24909.4953256036,
+            "mean_magnitude_squared_coherence": 0.8721870734201983
+          },
+          "low_mid": {
+            "power": 54806.413850483324,
+            "mean_magnitude_squared_coherence": 0.7950390258622696
+          },
+          "mid": {
+            "power": 61819.96845375574,
+            "mean_magnitude_squared_coherence": 0.6009654229192507
+          },
+          "presence": {
+            "power": 10972.29687013631,
+            "mean_magnitude_squared_coherence": 0.15283808557682596
+          },
+          "air": {
+            "power": 4766.7465726693235,
+            "mean_magnitude_squared_coherence": 0.013512359214006925
+          },
+          "upper": {
+            "power": 0.0007090389249295691,
+            "mean_magnitude_squared_coherence": 0.0038214834968917618
+          }
+        },
+        "integrated_lufs": -13.1,
+        "loudness_range_lu": 3.5,
+        "ffmpeg_true_peak_dbtp": 0.1
+      },
+      "enhanced": {
+        "frames": 34328616,
+        "duration_seconds": 778.4266666666666,
+        "sample_peak_dbfs": -0.00026507636037961915,
+        "oversampled_peak_estimate_dbfs": 0.047332694583395875,
+        "rms_dbfs": -16.019525010433377,
+        "crest_db": 16.019259934073,
+        "stereo_correlation": 0.6998421476752745,
+        "side_mid_db": -7.499870532376635,
+        "clip_fraction": 1.4565108013675821e-08,
+        "bands": {
+          "sub": {
+            "power": 59.036780582088724,
+            "mean_magnitude_squared_coherence": 0.18651199295848317
+          },
+          "bass": {
+            "power": 24909.4953256036,
+            "mean_magnitude_squared_coherence": 0.8721870734201983
+          },
+          "low_mid": {
+            "power": 54806.413850483324,
+            "mean_magnitude_squared_coherence": 0.7950390258622696
+          },
+          "mid": {
+            "power": 61819.96845375574,
+            "mean_magnitude_squared_coherence": 0.6009654229192507
+          },
+          "presence": {
+            "power": 10972.29687013631,
+            "mean_magnitude_squared_coherence": 0.15283808557682596
+          },
+          "air": {
+            "power": 4766.7465726693235,
+            "mean_magnitude_squared_coherence": 0.013512359214006925
+          },
+          "upper": {
+            "power": 0.0007090389249295691,
+            "mean_magnitude_squared_coherence": 0.0038214834968917618
+          }
+        },
+        "integrated_lufs": -13.1,
+        "loudness_range_lu": 3.5,
+        "ffmpeg_true_peak_dbtp": 0.1
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 0.9999999999999999,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      },
+      "decoded_original_sha256": "58e8cfbb63cc630727f445b9d9971e544e919af8a176bcd186fa5f7778545b66",
+      "rendered_pcm_sha256": "58e8cfbb63cc630727f445b9d9971e544e919af8a176bcd186fa5f7778545b66",
+      "bit_exact": true,
+      "source_sha256_after": "0fffa0ff76dcb3edd8bbc398fb665b324e3bffd7a8ab8f00a9cfcfe29ee649b8"
+    },
+    {
+      "metadata": {
+        "date": "1990-01-29",
+        "title": "Jesus Just Left Chicago",
+        "set_name": "Set 2",
+        "track_id": 13691,
+        "url": "https://phish.in/blob/t1sbmcjlddpr7p0jm10yseiji38s.mp3",
+        "duration": 472.526077,
+        "venue": "The Haunt",
+        "location": "Ithaca, NY",
+        "split": "exploratory",
+        "source_tags": [],
+        "source_notes": "Phish\nJanuary 29, 1990\nThe Haunt \nIthaca, NY\nSet II-partial\n\nSource:\nUnknown Mic(s) set up on the bar\n\nTransfer: \nMaster Cassette->Nakamichi DR-10->Digi003->Xact 1.62->FLAC16\nThanks to Dave Schanker for the source tape!\nSeeded by Caravan2001, January 5, 2009\n\n\nSet 2 (partial) TRT: 56:38\n\n1./Lizards (4:25)\n2./If I Only Had Brain (2:41)\n3.Mike's Song > (5:36)\n4.I Am Hydrogen > (2:12)\n5.Weekapaug Groove (5:58)\n6./Jesus Just Left Chicago > (7:52)7.Possum/ (6:46)\n8.Highway To Hell (3:24)\nE:\n9.Harpua (13:10)\n10.Fire (4:30)\n\nNotes:  This show was recorded back at the bar so it sounds a little distant and there are a few times where people near the deck were screaming.  You can hear Pete D. and Rob S. by the mics the whole time, but not sure who actually brought a deck, but it was not either of them. There was a 3 second dropout during the slow part of Lizards which was removed and crossfaded.  There were also a number of instances where they stopped and started the tape between a few songs. Also, Possum is cut. Some level fluctuations too.  Certainly not perfect, but a pretty good indication of what it was like to see Phish at this venue.",
+        "source_lineage": [
+          "Source:\nUnknown Mic(s) set up on the bar"
+        ],
+        "selection_reason": "Unknown microphones on the bar, master cassette; distant perspective, nearby screaming and conversation, and level fluctuations. The notes describe the source overall.",
+        "documented_defect_paragraphs": [
+          "Notes:  This show was recorded back at the bar so it sounds a little distant and there are a few times where people near the deck were screaming.  You can hear Pete D. and Rob S. by the mics the whole time, but not sure who actually brought a deck, but it was not either of them. There was a 3 second dropout during the slow part of Lizards which was removed and crossfaded.  There were also a number of instances where they stopped and started the tape between a few songs. Also, Possum is cut. Some level fluctuations too.  Certainly not perfect, but a pretty good indication of what it was like to see Phish at this venue."
+        ],
+        "metadata_url": "https://phish.in/api/v2/shows/1990-01-29",
+        "metadata_sha256": "da42305f9e61fb869835d5e475869f847cc38eaaead1ba699b5a12d5356620d2",
+        "sha256": "ab08235b6274fdfc37f36d39334c9f0ac69f7328a5b79af295539377e11254dd",
+        "bytes": 9010999,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 20838400,
+          "analyzedWindows": 10175,
+          "sourcePeak": 0.983856201171875,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          12.5,
+          20.5,
+          24.0,
+          22.5,
+          18.5,
+          20.0,
+          16.5,
+          15.5,
+          15.5,
+          12.5,
+          15.0,
+          15.5,
+          15.0,
+          11.0,
+          5.5,
+          3.5,
+          -2.5,
+          -6.0,
+          -6.0,
+          -9.0,
+          -15.0,
+          -23.5,
+          -26.0,
+          -29.5,
+          -34.0,
+          -40.0
+        ],
+        "analysis_seconds": 2.917836917,
+        "render_seconds": 0.397952375,
+        "frames": 20838400,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.983856201171875,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 20838400,
+        "duration_seconds": 472.52607709750566,
+        "sample_peak_dbfs": -0.14136745416194477,
+        "oversampled_peak_estimate_dbfs": -0.1358400791308757,
+        "rms_dbfs": -16.06384207660476,
+        "crest_db": 15.922474622442815,
+        "stereo_correlation": 1.0,
+        "side_mid_db": -357.1248016254057,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 20.251924238428497,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "bass": {
+            "power": 50056.06847081054,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "low_mid": {
+            "power": 37123.94351556607,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "mid": {
+            "power": 66413.2396783162,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "presence": {
+            "power": 1940.862104940862,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "air": {
+            "power": 39.994639413084464,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "upper": {
+            "power": 1.063714365409103,
+            "mean_magnitude_squared_coherence": 1.0
+          }
+        },
+        "integrated_lufs": -13.8,
+        "loudness_range_lu": 5.9,
+        "ffmpeg_true_peak_dbtp": -0.1
+      },
+      "enhanced": {
+        "frames": 20838400,
+        "duration_seconds": 472.52607709750566,
+        "sample_peak_dbfs": -0.14136745416194477,
+        "oversampled_peak_estimate_dbfs": -0.1358400791308757,
+        "rms_dbfs": -16.06384207660476,
+        "crest_db": 15.922474622442815,
+        "stereo_correlation": 1.0,
+        "side_mid_db": -357.1248016254057,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 20.251924238428497,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "bass": {
+            "power": 50056.06847081054,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "low_mid": {
+            "power": 37123.94351556607,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "mid": {
+            "power": 66413.2396783162,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "presence": {
+            "power": 1940.862104940862,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "air": {
+            "power": 39.994639413084464,
+            "mean_magnitude_squared_coherence": 1.0
+          },
+          "upper": {
+            "power": 1.063714365409103,
+            "mean_magnitude_squared_coherence": 1.0
+          }
+        },
+        "integrated_lufs": -13.8,
+        "loudness_range_lu": 5.9,
+        "ffmpeg_true_peak_dbtp": -0.1
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": true,
+        "envelope_correlation": 0.9999999999999999,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      },
+      "decoded_original_sha256": "00437bd7d7cbf3dfccf9be5b2d436ed3ba5be1be1d1a5aa7eb51c26c68b2da8f",
+      "rendered_pcm_sha256": "00437bd7d7cbf3dfccf9be5b2d436ed3ba5be1be1d1a5aa7eb51c26c68b2da8f",
+      "bit_exact": true,
+      "source_sha256_after": "ab08235b6274fdfc37f36d39334c9f0ac69f7328a5b79af295539377e11254dd"
+    },
+    {
+      "metadata": {
+        "date": "1990-04-29",
+        "title": "Walk Away",
+        "set_name": "Set 1",
+        "track_id": 26765,
+        "url": "https://phish.in/blob/w1y08zz30567bpofokqhtrjztblb.mp3",
+        "duration": 235.146667,
+        "venue": "Woodbury Ski & Racquet Club",
+        "location": "Woodbury, CT",
+        "split": "exploratory",
+        "source_tags": [
+          "Alt Rig"
+        ],
+        "source_notes": "Phish\nWoodbury Ski Club \nWoodbury, CT\n04/29/90 \nPartial\n\nTAPER: John Redmond\nSOURCE Unknown mics > Nak CR-1A\n\nAUD MCass (Maxell XLII-S 90 min)> Sony TC-WE805S >\nArt DI/O (48Khz, Input gain +12dB, No \"Tube Warmth\")>\nDelta DIO 2496> WaveLab v4.0c> WAV (@24/48)> FLAC (24-bit, v1.1.0)>\nMastering (see notes) > SHNv3\n(transfer>24bit FLAC files by Weave - Weave@furthurnet.org on 09/28/2003)\n\nMastering info: both FLAC files were converted to .WAV with FLAC v1.1.0 and loaded into Wavelab.  X-Noise was used to remove the noise floor.  This cassette sounded great, there was'nt much to deal with in terms of noise.  The 2-band EQ was used first in the chain to roll-off below 55Hz (this helped reduce some of the impact of those boomy bursts of wind), the BBE Sonic Maximizer was used to \"brighten\" the top end, I had Process set to just below 3, Lo Contour at halfway to 1.  The Blue Tubes LM2S topped it all off with final limiting and gain.  The stereo 192KHz resampler was used for the sample rate conversion and UV22 HR was used for the dither when the files were rendered from 24-bit to 16-bits.\n\nAll edits and mastering performed in WaveLab on Doomtooth by shakedown 10/31/03\n- shakedown@furthurnet.org\n\nAnomolies: The recording is a little \"boomy\" in spots, and there are bursts of wind noise.   There is also a weird phasi-ness which I attribute to poor stereo mic'ing and some wind at certain points, or maybe it's just people walking in front of the mics.  I removed some \"crackle\" from points in YEM with the Waves X-Crackle. I used a crossfade to smooth over the tape flip.  There is a dropout in Divided Sky, I smoothed it out with a fade.  During Walk Away you can hear someone (the taper?) ask \"where you gonna put it?\" and something was placed in front of the mics, the phase of the recording is thrown off until after Walk Away.  There was a cut/dropout in the crowd noise before Love You.  It sounds like the taper may have moved the mics, as the bass is more present and there is a greater dynamic to the AUD.\n\nDISC ONE\n01. tuning & stage banter\n02. Carolina\n03. Possum\n04. Yamar\n05. You Enjoy Myself\n06. Dinner and a Movie\n07. Bouncin'\n08. Uncle Penn\n09. Divided Sky\n10. tuning\n\nDISC TWO\n01. Fluffhead\n02. Walk Away\n03. Henrietta intro & tuning\n04. Love You\n\nNotes\nOnly one set played this night.\nThe segue between Dinner & a Movie and Bouncin' is a nice tight drop\nFluffhead is dedicated to Sarah, on her birthday.\n\nNO tracking/editing/alterations performed before archiving to 24-bit FLAC(except to trim silence from the ends).\n\nSeeded to FurthurNet (www.furthurnet.org)",
+        "source_lineage": [],
+        "selection_reason": "AUD master cassette; source notes explicitly identify an obstruction and phase disturbance during Walk Away, plus boom/wind. Prior mastering included denoising, EQ, excitation and limiting.",
+        "documented_defect_paragraphs": [
+          "Mastering info: both FLAC files were converted to .WAV with FLAC v1.1.0 and loaded into Wavelab.  X-Noise was used to remove the noise floor.  This cassette sounded great, there was'nt much to deal with in terms of noise.  The 2-band EQ was used first in the chain to roll-off below 55Hz (this helped reduce some of the impact of those boomy bursts of wind), the BBE Sonic Maximizer was used to \"brighten\" the top end, I had Process set to just below 3, Lo Contour at halfway to 1.  The Blue Tubes LM2S topped it all off with final limiting and gain.  The stereo 192KHz resampler was used for the sample rate conversion and UV22 HR was used for the dither when the files were rendered from 24-bit to 16-bits.",
+          "Anomolies: The recording is a little \"boomy\" in spots, and there are bursts of wind noise.   There is also a weird phasi-ness which I attribute to poor stereo mic'ing and some wind at certain points, or maybe it's just people walking in front of the mics.  I removed some \"crackle\" from points in YEM with the Waves X-Crackle. I used a crossfade to smooth over the tape flip.  There is a dropout in Divided Sky, I smoothed it out with a fade.  During Walk Away you can hear someone (the taper?) ask \"where you gonna put it?\" and something was placed in front of the mics, the phase of the recording is thrown off until after Walk Away.  There was a cut/dropout in the crowd noise before Love You.  It sounds like the taper may have moved the mics, as the bass is more present and there is a greater dynamic to the AUD."
+        ],
+        "metadata_url": "https://phish.in/api/v2/shows/1990-04-29",
+        "metadata_sha256": "b222795f2c7ade99813c52ab51735e01c08a8f75f9efe7aa30f1c7d6731c2a5c",
+        "sha256": "36ad28e44ddef3a5158aa88e8b886c165d2fad1298cf05b46cff13488a4fc6f9",
+        "bytes": 6902870,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "Adjusted low and middle frequencies by up to 1.0 dB, with gentle control of sustained buildup. No generated audio.",
+          "analyzedFrames": 10369968,
+          "analyzedWindows": 5063,
+          "sourcePeak": 0.92047119140625,
+          "outputGain": 0.8691200848750084,
+          "maximumCorrectionDb": 1.0,
+          "passthrough": false
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          -0.5,
+          -1.0,
+          -0.5,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          16.0,
+          23.5,
+          26.0,
+          26.0,
+          24.0,
+          20.5,
+          14.0,
+          11.5,
+          15.0,
+          14.0,
+          16.0,
+          8.5,
+          9.0,
+          7.0,
+          1.0,
+          -2.5,
+          -1.5,
+          -2.0,
+          -3.0,
+          -9.0,
+          -6.0,
+          -15.0,
+          -20.5,
+          -31.5,
+          -41.5,
+          -49.5
+        ],
+        "analysis_seconds": 0.957575959,
+        "render_seconds": 5.280676458,
+        "frames": 10369968,
+        "processed_windows": 20257,
+        "dynamic_windows": 2694,
+        "maximum_dynamic_reduction_db": 0.5619518478538523,
+        "output_peak": 0.7648445230313362,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 10369968,
+        "duration_seconds": 235.14666666666668,
+        "sample_peak_dbfs": -0.7197959869599807,
+        "oversampled_peak_estimate_dbfs": -0.7142686119289109,
+        "rms_dbfs": -14.902187226998215,
+        "crest_db": 14.182391240038235,
+        "stereo_correlation": 0.8932661182063154,
+        "side_mid_db": -12.484172384084925,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 172.06098014867197,
+            "mean_magnitude_squared_coherence": 0.19246196728417847
+          },
+          "bass": {
+            "power": 139857.9677174118,
+            "mean_magnitude_squared_coherence": 0.9884815555917711
+          },
+          "low_mid": {
+            "power": 38812.98375903012,
+            "mean_magnitude_squared_coherence": 0.9139028155445
+          },
+          "mid": {
+            "power": 19116.16890384515,
+            "mean_magnitude_squared_coherence": 0.16340768605863515
+          },
+          "presence": {
+            "power": 5175.0828446475325,
+            "mean_magnitude_squared_coherence": 0.18207754070024154
+          },
+          "air": {
+            "power": 160.14511817712022,
+            "mean_magnitude_squared_coherence": 0.04063800669470526
+          },
+          "upper": {
+            "power": 0.003490905889469252,
+            "mean_magnitude_squared_coherence": 0.013490513748895675
+          }
+        },
+        "integrated_lufs": -13.2,
+        "loudness_range_lu": 1.7,
+        "ffmpeg_true_peak_dbtp": -0.7
+      },
+      "enhanced": {
+        "frames": 10369968,
+        "duration_seconds": 235.14666666666668,
+        "sample_peak_dbfs": -2.3286841862190637,
+        "oversampled_peak_estimate_dbfs": -2.3231568111879946,
+        "rms_dbfs": -16.46264832317722,
+        "crest_db": 14.133964136958156,
+        "stereo_correlation": 0.8849815305479644,
+        "side_mid_db": -12.138621681266166,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 129.8425488814743,
+            "mean_magnitude_squared_coherence": 0.19427231782314364
+          },
+          "bass": {
+            "power": 94083.72141192737,
+            "mean_magnitude_squared_coherence": 0.9884640561496927
+          },
+          "low_mid": {
+            "power": 29260.56852356585,
+            "mean_magnitude_squared_coherence": 0.9139021472116604
+          },
+          "mid": {
+            "power": 14439.777248621423,
+            "mean_magnitude_squared_coherence": 0.16340777858279146
+          },
+          "presence": {
+            "power": 3909.100796441244,
+            "mean_magnitude_squared_coherence": 0.18207755683073087
+          },
+          "air": {
+            "power": 120.96898371367284,
+            "mean_magnitude_squared_coherence": 0.040634193525384055
+          },
+          "upper": {
+            "power": 0.002770727456659053,
+            "mean_magnitude_squared_coherence": 0.0092207708020528
+          }
+        },
+        "integrated_lufs": -14.7,
+        "loudness_range_lu": 1.7,
+        "ffmpeg_true_peak_dbtp": -2.3
+      },
+      "comparison": {
+        "loudness_match_gain_db": 1.5,
+        "loudness_change_lu": -1.5,
+        "crest_change_db": -0.0484271030800798,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": -0.00828458765835105,
+        "side_mid_change_db": 0.345550702818759,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.345550702818759,
+        "near_mono_both": false,
+        "envelope_correlation": 0.9986727467379665,
+        "onset_flux_correlation": 0.9997967826444857,
+        "low_level_passage_gain_median_db": 0.17468424589928436,
+        "low_level_passage_gain_p05_db": -0.07583258495255332,
+        "band_power_change_db_matched": {
+          "sub": 0.2773463980558126,
+          "bass": -0.22172725928471126,
+          "low_mid": 0.27305729541626245,
+          "mid": 0.28159634615838103,
+          "presence": 0.28159562358726564,
+          "air": 0.28160327782970174,
+          "upper": 0.4965566746456158
+        },
+        "band_coherence_change": {
+          "sub": 0.0018103505389651664,
+          "bass": -1.7499442078405814e-05,
+          "low_mid": -6.683328396261956e-07,
+          "mid": 9.252415630878197e-08,
+          "presence": 1.6130489333132658e-08,
+          "air": -3.8131693212081763e-06,
+          "upper": -0.004269742946842875
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      },
+      "decoded_original_sha256": "7af6bc3627b742bcc23df07b0304d72d5b4f145c1322515da783295fc638930e",
+      "rendered_pcm_sha256": "aced4631cb6954d18ebf321fa8a23f3fd1751b2a826d8bf3574f9da026ea0d2a",
+      "bit_exact": false,
+      "source_sha256_after": "36ad28e44ddef3a5158aa88e8b886c165d2fad1298cf05b46cff13488a4fc6f9"
+    },
+    {
+      "metadata": {
+        "date": "1991-03-09",
+        "title": "Reba",
+        "set_name": "Set 1",
+        "track_id": 26706,
+        "url": "https://phish.in/blob/bkwhc1lzcfngk3gu44z42srvc1ty.mp3",
+        "duration": 599.61161,
+        "venue": "Tipitina's",
+        "location": "New Orleans, LA",
+        "split": "exploratory",
+        "source_tags": [],
+        "source_notes": "PHISH\n\nMarch 9, 1991\nTipitina's, New Orleans, LA\n\nSource:  Sennheiser mics (?) > Sony D5 \n\nTransfer:  Cass1 > HHB > CDR > Flac\n\nDisc One\nSet One \n01. Intro\n02. Carolina\n03. Landlady >\n04. You Enjoy Myself >\n05. My Sweet One >\n06. Foam >\n07. Divided Sky\n08. Cavern >\n09. Reba >\n10. Possum\n\nSet Two\n11. Oh Kee Pah >\n12. Suzy Greenberg\n\nDisc Two\n01. Squirming Coil >\n02. Buried Alive > \n03. Runaway Jim >\n04. Guelah Papyrus \n05. David Bowie\n06. Lizards\n07. HYHU > Love You >\n08. HYHU\n09. Fire\n\nEncore \n10. Lawn Boy\n11. Golgi Apparatus\n\nSecond Encore\n12. Good Times Bad Times\n\n\nThis show apparently has not circulated before.  I presume the online \"Spreadsheet\" will use this version soon.  \n\nGREAT THANKS ARE DUE TO JASON LAZAR, who sent me his analog cassette first gens for transfering and for sharing with you all -- and just in time for the Superbowl, featuring the NEW ORLEANS SAINTS no less.  Hopefully the Saints will not be destroyed by the Colts as most have predicted, and we'll get a good game.  \n\nThis show, which was Phish's second show in New Orleans, was taped by Rick Supan from Chattanooga, TN, and if anyone knows where he is, please let me know (cdirksen at earthlink.net), as apparently he also taped at least one other show that doesn't circulate.\n\nAlthough there's very little hiss given the low gen source, there are (alas) some traditional analog cassette flaws in this recording, and at inopportune times.  Unsurprisingly there are cuts at the tape flips and the start of the second set, namely cuts into Cavern, Oh Kee Pah and Lizards.  But unfortunately there is some ugly tape warbling and dropouts at the CLIMAX of Reba's jam, and also at one point during the serene Divided Sky. In addition, Sennheiser mics have (had?) a tendency to be bass-heavy and create boomy (aka muddy) recordings in small rooms, and this recording bears these characteristics to a certain extent.  There are also a few level issues here and there, but nothing terrifying.\n\nThe Phish.Net (and Phish Companion) setlists file used to have a partial setlist for this show, but thanks to this recording it has been corrected.  The shownotes at Phish.Net for this show now read the following, and if you have any additions or suggested revisions to them, I hope you let us know about it via the \"Submit a correction!\" button beneath the setlist on Phish.Net: \"Possum contained an Oom Pa Pa signal and a Dave's Energy Guide tease. Bowie featured Charlie Chan and Random Note signals.\"",
+        "source_lineage": [
+          "Source:  Sennheiser mics (?) > Sony D5 "
+        ],
+        "selection_reason": "Sennheiser microphones to cassette; documented warble/dropouts at the Reba climax, bass-heavy/boomy room sound and level issues. Notes explicitly describe little hiss.",
+        "documented_defect_paragraphs": [
+          "Although there's very little hiss given the low gen source, there are (alas) some traditional analog cassette flaws in this recording, and at inopportune times.  Unsurprisingly there are cuts at the tape flips and the start of the second set, namely cuts into Cavern, Oh Kee Pah and Lizards.  But unfortunately there is some ugly tape warbling and dropouts at the CLIMAX of Reba's jam, and also at one point during the serene Divided Sky. In addition, Sennheiser mics have (had?) a tendency to be bass-heavy and create boomy (aka muddy) recordings in small rooms, and this recording bears these characteristics to a certain extent.  There are also a few level issues here and there, but nothing terrifying."
+        ],
+        "metadata_url": "https://phish.in/api/v2/shows/1991-03-09",
+        "metadata_sha256": "c164072b62095528d966b9d855430dfaf93ea4e5467d47d37f5ac5fddbbab6ea",
+        "sha256": "29d823c02219be78d6c136bcdb13a329b6029bdd676aba12e54194cbb2a9f1c8",
+        "bytes": 18673182,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 26442872,
+          "analyzedWindows": 12911,
+          "sourcePeak": 1.0,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          20.5,
+          28.0,
+          26.0,
+          24.5,
+          19.5,
+          19.0,
+          17.5,
+          16.5,
+          8.5,
+          10.5,
+          10.0,
+          7.0,
+          4.5,
+          1.5,
+          -2.0,
+          -4.0,
+          -3.5,
+          -6.0,
+          -10.0,
+          -11.0,
+          -12.0,
+          -14.5,
+          -14.0,
+          -20.5,
+          -27.0,
+          -39.0
+        ],
+        "analysis_seconds": 2.459680542,
+        "render_seconds": 0.407319083,
+        "frames": 26442872,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 1.0,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 26442872,
+        "duration_seconds": 599.6116099773243,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.11868974506005388,
+        "rms_dbfs": -12.573653643712072,
+        "crest_db": 12.57365364371207,
+        "stereo_correlation": 0.9788676709145966,
+        "side_mid_db": -17.30677776915651,
+        "clip_fraction": 0.00015559958842594707,
+        "bands": {
+          "sub": {
+            "power": 3337.9019744476295,
+            "mean_magnitude_squared_coherence": 0.6553327409074903
+          },
+          "bass": {
+            "power": 287661.57494348654,
+            "mean_magnitude_squared_coherence": 0.9980825471948819
+          },
+          "low_mid": {
+            "power": 42455.064736221306,
+            "mean_magnitude_squared_coherence": 0.9916110506126157
+          },
+          "mid": {
+            "power": 11917.354611465882,
+            "mean_magnitude_squared_coherence": 0.9419424604225504
+          },
+          "presence": {
+            "power": 1630.354164772105,
+            "mean_magnitude_squared_coherence": 0.7690499785243381
+          },
+          "air": {
+            "power": 659.6296643970585,
+            "mean_magnitude_squared_coherence": 0.24800442354326035
+          },
+          "upper": {
+            "power": 0.9496652043633118,
+            "mean_magnitude_squared_coherence": 0.004547716814779767
+          }
+        },
+        "integrated_lufs": -11.7,
+        "loudness_range_lu": 5.5,
+        "ffmpeg_true_peak_dbtp": 0.1
+      },
+      "enhanced": {
+        "frames": 26442872,
+        "duration_seconds": 599.6116099773243,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.11868974506005388,
+        "rms_dbfs": -12.573653643712072,
+        "crest_db": 12.57365364371207,
+        "stereo_correlation": 0.9788676709145966,
+        "side_mid_db": -17.30677776915651,
+        "clip_fraction": 0.00015559958842594707,
+        "bands": {
+          "sub": {
+            "power": 3337.9019744476295,
+            "mean_magnitude_squared_coherence": 0.6553327409074903
+          },
+          "bass": {
+            "power": 287661.57494348654,
+            "mean_magnitude_squared_coherence": 0.9980825471948819
+          },
+          "low_mid": {
+            "power": 42455.064736221306,
+            "mean_magnitude_squared_coherence": 0.9916110506126157
+          },
+          "mid": {
+            "power": 11917.354611465882,
+            "mean_magnitude_squared_coherence": 0.9419424604225504
+          },
+          "presence": {
+            "power": 1630.354164772105,
+            "mean_magnitude_squared_coherence": 0.7690499785243381
+          },
+          "air": {
+            "power": 659.6296643970585,
+            "mean_magnitude_squared_coherence": 0.24800442354326035
+          },
+          "upper": {
+            "power": 0.9496652043633118,
+            "mean_magnitude_squared_coherence": 0.004547716814779767
+          }
+        },
+        "integrated_lufs": -11.7,
+        "loudness_range_lu": 5.5,
+        "ffmpeg_true_peak_dbtp": 0.1
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      },
+      "decoded_original_sha256": "6d9beebe45361163672bb9662d6b7a658ad37d3ebd3eff285f6a91873677c3c3",
+      "rendered_pcm_sha256": "6d9beebe45361163672bb9662d6b7a658ad37d3ebd3eff285f6a91873677c3c3",
+      "bit_exact": true,
+      "source_sha256_after": "29d823c02219be78d6c136bcdb13a329b6029bdd676aba12e54194cbb2a9f1c8"
+    },
+    {
+      "metadata": {
+        "date": "1991-10-31",
+        "title": "Harry Hood",
+        "set_name": "Set 2",
+        "track_id": 10326,
+        "url": "https://phish.in/blob/mzlruj3xk49totw9crbd9est7u5e.mp3",
+        "duration": 739.531497,
+        "venue": "Armstrong Hall, Colorado College",
+        "location": "Colorado Springs, CO",
+        "split": "exploratory",
+        "source_tags": [
+          "Lore"
+        ],
+        "source_notes": "PHISH\n\nOctober 31, 1991\nArmstrong Hall, Colorado College\nColorado Springs, CO\n\nSource:  FOB Aud Analog Cass, unknown gen (likely 5th or greater gen)\n\nTransfer:  Cass > HHB > CDR > Flac\n\nDisc One\nSet One \n\nMemories (MISSING)\n01. Brother\n02. Ya Mar (has a brief cut)\n03. The Sloth >\n04. Chalk Dust Torture\n05. Sparkle\n06. Foam\n07. Bathtub Gin\n08. Paul and Silas\n09. You Enjoy Myself\n10. Runaway Jim\n\n\nDisc Two\nSet Two\n01. Trey intro about the Costume Contest\n02. The Landlady\n03. Costume Contest\n04. Wait >\n05. Llama\n06. Fee ->\n07. Wait ->\n08. My Sweet One >\n09. Wait ->\n10. David Bowie (fade out in intro due to tape flip)\n11. Horn\n12. Dinner and a Movie\n13. Tube >\n14. I Didn't Know\n\nDisc 3\n01. Harry Hood\n02. Glide (E)\n03. Rocky Top (E)\n  \nNotes: This show marked the first appearance of Wait. During the costume contest, there \nwas a brief full-band tease of Jesus Just Left Chicago, inspired by a fan in a Jesus \ncostume (with a cross on his back!). The first round of the contest closed with a \nrendition of Can't Turn You Loose. After each unsuccessful entrant was eliminated, \nTrey forced them to stage-dive.  HYHU was also played briefly during the contest. First \nprize - free admission to all Phish shows for one year - was shared by The Bergen \nCounty Woman Cop and Captain Bong Hit. During the final Wait, before Bowie, the audience \nwas chanting Fuck you! in response. Bowie contained Charlie Chan and Oom Pa Pa \nsignals during the jam. I Didnt Know featured a vacuum solo by Showboat Gertrude, \nwhich continued well into the final verse of the song.\n\n\n\n\"A bucket of lard, a slice of pizza. It's Jesus... Let's get Jesus up on the trampolines.\"  \n\n--Trey, during the costume contest\n\n\nThanks to Bill Bowman and Dan Purcell for the analog cassette seed of this show.\n\nThe online Spreadsheet doesn't have this, though presumably it will use this version soon.  Hopefully a higher quality version of this show will circulate again at some point.\n\nI made several tape offers on Rec.Music.Phish of this show (among many others from Bill Bowman's collection) in the 1990s, but it nevertheless didn't circulate well, given its poor quality.  This is at best C-/D+ quality, which undoubtedly discouraged people from trading or sending b+p to get it.  And I bet many of you are discouraged to hear this, and will refrain from downloading it now.  \n\nFrom the sound of this recording, and given the timing of the cuts that appear (such as the one before Paul and Silas, the fade out during Bowie's intro, and the cut the second that Hood ends), my guess is that the source of this recording is a cheap microphone on the hat of a stealth FOB analog cassette taper who was relatively near the stage.  This recording has all the 'ole analog cassette stealth FOB flaws -- level changes, cuts, seemingly arbitrary mic-directional-shifts, intermittent wow and flutter. And oh yeah, the pitch seems somewhat off at times, and the muddy second set sounds like perhaps it is a higher gen copy of a tape from the same source as the first set. Since this is the only recording of this show I've ever seen circulate in the last 16 years, it's no wonder few have heard it. Perhaps there is a place for this dinosaur in the Smithsonian. \n\nNEVERTHELESS, this is an enjoyable, well-played 1991 show. The \"FUCK YOU\"s from the crowd during the second and third versions of \"Wait\" (the opening measure of what is now It's Ice) are priceless.  It's also got an unusually good Foam, and YEM's jam segment is the kind of YEM jam segment that makes a Phish fan out of someone for life. It's SICK, even though it's tough to hear how great it is given the poor sound quality. See also 11/16/91 Bayou for a fantastic early YEM jam.\n\nThe strange filler I've added here, a Cavern/YEM/Guelah \"mix\" of some sort, used to circulate on cassettes traded in the 1990s now and then.  If I ever knew who created it, or why, I don't recall now.  You might find it amusing, or not. If you know the story behind this, please post a \"comment\" and ideally email me, too: cdirksen@earthlink.net.  Thank you.\n\nShownotes from the current version of the Mockingbird Foundation/Phish Companion/Phish.Net setlists file: This show marked the first appearance of Wait. During the costume contest, there was a brief full-band tease of Jesus Just Left Chicago, inspired by a fan in a Jesus costume (with a cross on his back!). The first round of the contest closed with a rendition of Can't Turn You Loose. After each unsuccessful entrant was eliminated, Trey forced them to stage-dive.  HYHU was also played briefly during the contest. First prize - free admission to all Phish shows for one year - was shared by The Bergen County Woman Cop and Captain Bong Hit. During the final Wait, before Bowie, the audience was chanting: Fuck you! in response. Bowie contained Charlie Chan and Oom Pa Pa signals during the jam. I Didnt Know featured a vacuum solo by Showboat Gertrude, which continued well into the final verse of the song.",
+        "source_lineage": [
+          "Source:  FOB Aud Analog Cass, unknown gen (likely 5th or greater gen)"
+        ],
+        "selection_reason": "FOB AUD analog cassette, estimated fifth generation or more; muddy second set, wow/flutter, pitch, level and microphone-direction changes. Notes also identify a cut immediately at Hood's end.",
+        "documented_defect_paragraphs": [
+          "Source:  FOB Aud Analog Cass, unknown gen (likely 5th or greater gen)",
+          "From the sound of this recording, and given the timing of the cuts that appear (such as the one before Paul and Silas, the fade out during Bowie's intro, and the cut the second that Hood ends), my guess is that the source of this recording is a cheap microphone on the hat of a stealth FOB analog cassette taper who was relatively near the stage.  This recording has all the 'ole analog cassette stealth FOB flaws -- level changes, cuts, seemingly arbitrary mic-directional-shifts, intermittent wow and flutter. And oh yeah, the pitch seems somewhat off at times, and the muddy second set sounds like perhaps it is a higher gen copy of a tape from the same source as the first set. Since this is the only recording of this show I've ever seen circulate in the last 16 years, it's no wonder few have heard it. Perhaps there is a place for this dinosaur in the Smithsonian. "
+        ],
+        "metadata_url": "https://phish.in/api/v2/shows/1991-10-31",
+        "metadata_sha256": "b4dd6f27ac3502b2f253ef8340dbb62990693caffcc080cefc37a1e45efa4a54",
+        "sha256": "93a328684d5c42cae1d0cb1781fae74073739cefb87f06aa6a11668d5f9decfc",
+        "bytes": 19503288,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 32613339,
+          "analyzedWindows": 15924,
+          "sourcePeak": 0.871124267578125,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          7.0,
+          19.5,
+          16.0,
+          13.0,
+          18.0,
+          21.0,
+          22.0,
+          17.5,
+          18.5,
+          21.0,
+          13.5,
+          10.5,
+          12.5,
+          8.0,
+          7.5,
+          3.0,
+          -3.0,
+          -4.0,
+          -11.0,
+          -13.5,
+          -23.5,
+          -30.5,
+          -35.0,
+          -37.0,
+          -38.0,
+          -41.0
+        ],
+        "analysis_seconds": 2.749226708,
+        "render_seconds": 0.383927459,
+        "frames": 32613339,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.871124267578125,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 32613339,
+        "duration_seconds": 739.5314965986395,
+        "sample_peak_dbfs": -1.1983977523403246,
+        "oversampled_peak_estimate_dbfs": -1.1928703773092555,
+        "rms_dbfs": -17.04005413731985,
+        "crest_db": 15.841656384979528,
+        "stereo_correlation": 0.9893750356684984,
+        "side_mid_db": -16.637123342085374,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 2.362753964003349,
+            "mean_magnitude_squared_coherence": 0.046064329006046505
+          },
+          "bass": {
+            "power": 14957.001340840408,
+            "mean_magnitude_squared_coherence": 0.9591838130110336
+          },
+          "low_mid": {
+            "power": 77958.38608888087,
+            "mean_magnitude_squared_coherence": 0.9934343415910245
+          },
+          "mid": {
+            "power": 30658.373432877663,
+            "mean_magnitude_squared_coherence": 0.965314009951825
+          },
+          "presence": {
+            "power": 880.4254000212225,
+            "mean_magnitude_squared_coherence": 0.645308711206323
+          },
+          "air": {
+            "power": 4.382098577016418,
+            "mean_magnitude_squared_coherence": 0.018587197074107366
+          },
+          "upper": {
+            "power": 0.23717387118696523,
+            "mean_magnitude_squared_coherence": 0.0019189959283100132
+          }
+        },
+        "integrated_lufs": -14.6,
+        "loudness_range_lu": 6.1,
+        "ffmpeg_true_peak_dbtp": -1.2
+      },
+      "enhanced": {
+        "frames": 32613339,
+        "duration_seconds": 739.5314965986395,
+        "sample_peak_dbfs": -1.1983977523403246,
+        "oversampled_peak_estimate_dbfs": -1.1928703773092555,
+        "rms_dbfs": -17.04005413731985,
+        "crest_db": 15.841656384979528,
+        "stereo_correlation": 0.9893750356684984,
+        "side_mid_db": -16.637123342085374,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 2.362753964003349,
+            "mean_magnitude_squared_coherence": 0.046064329006046505
+          },
+          "bass": {
+            "power": 14957.001340840408,
+            "mean_magnitude_squared_coherence": 0.9591838130110336
+          },
+          "low_mid": {
+            "power": 77958.38608888087,
+            "mean_magnitude_squared_coherence": 0.9934343415910245
+          },
+          "mid": {
+            "power": 30658.373432877663,
+            "mean_magnitude_squared_coherence": 0.965314009951825
+          },
+          "presence": {
+            "power": 880.4254000212225,
+            "mean_magnitude_squared_coherence": 0.645308711206323
+          },
+          "air": {
+            "power": 4.382098577016418,
+            "mean_magnitude_squared_coherence": 0.018587197074107366
+          },
+          "upper": {
+            "power": 0.23717387118696523,
+            "mean_magnitude_squared_coherence": 0.0019189959283100132
+          }
+        },
+        "integrated_lufs": -14.6,
+        "loudness_range_lu": 6.1,
+        "ffmpeg_true_peak_dbtp": -1.2
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      },
+      "decoded_original_sha256": "46c938de8595562386365bb78971dd56b4dead5d90d8d7c3f7879d7bbc17ee2b",
+      "rendered_pcm_sha256": "46c938de8595562386365bb78971dd56b4dead5d90d8d7c3f7879d7bbc17ee2b",
+      "bit_exact": true,
+      "source_sha256_after": "93a328684d5c42cae1d0cb1781fae74073739cefb87f06aa6a11668d5f9decfc"
+    }
+  ],
+  "limitations": "Documented historical defects are not independent reference audio. All listening ratings remain empty. Preservation bounds cannot prove improvement or soundboard equivalence.",
+  "artifact_validation": {
+    "full_wav_hashes_and_frames_verified": [
+      "1989-03-03",
+      "1989-04-30",
+      "1990-01-29",
+      "1990-04-29",
+      "1991-03-09",
+      "1991-10-31"
+    ],
+    "source_hashes_unchanged": 6,
+    "locked_protocol_unchanged": true,
+    "paired_passages": 24,
+    "flac_files": 48,
+    "max_decoded_flac_loudness_difference_lu": 1.1572026892281428e-06,
+    "full_audio_links_verified": 12,
+    "javascript_syntax": "node --check passed",
+    "browser_playback": "Unverified. Earlier file URL was denied by browser security policy; no retry or workaround attempted."
+  }
+}

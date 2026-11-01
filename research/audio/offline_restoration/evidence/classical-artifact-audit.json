@@ -1,0 +1,308 @@
+{
+  "scope": "Posthoc artifact audit only; no parameter, selection or waveform changes",
+  "script_sha256": "6ab4eace5a7e0d9c1c0bcc76a08f4bf10960b7e9f1efedcd44e0ee723efcee88",
+  "phase_interpretation": "Energy-weighted error and weight of large deviations complement the unweighted maximum; none establishes perceived stereo fidelity",
+  "spectral_interpretation": "Delivered files are loudness matched. Band changes can alter instrument tone as well as recording coloration; the audience cohort is not a clean target",
+  "records": [
+    {
+      "date": "1991-03-09",
+      "variant": "tonal_plus_dynamics",
+      "original_flac_sha256": "bebaab8c2bf5895d260344796873e9cfe37958f1460a503e54e47d159102c35d",
+      "candidate_flac_sha256": "1f1a33afc70cca0c89be753c52ec38f1f3899b7de9bd87cf8733e7046495f44e",
+      "energy_weighted_phase_error_degrees": 0.0037019227529914442,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 2.2616410744206308e-08,
+      "phase_weight_fraction_above_90_degrees": 5.719870571424761e-09,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": -0.08320305483874259,
+        "250": 0.6647520854158904,
+        "500": 1.4220560847242365,
+        "1000": 1.594013390266832,
+        "2000": 1.3605531630277627,
+        "4000": -0.25406619573833494,
+        "8000": -0.35013747665864225,
+        "16000": -0.3519607667534437
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.2587637285476604,
+        -7.554828887464884e-05,
+        0.5439751187023046
+      ]
+    },
+    {
+      "date": "1991-03-09",
+      "variant": "tonal_only",
+      "original_flac_sha256": "bebaab8c2bf5895d260344796873e9cfe37958f1460a503e54e47d159102c35d",
+      "candidate_flac_sha256": "3583919acf1eeca825c2b06a04bdb33e59b8a0d2591178dfd0d72b864ac810c8",
+      "energy_weighted_phase_error_degrees": 0.0032437220321003407,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 1.1464220019115398e-08,
+      "phase_weight_fraction_above_90_degrees": 3.028987363184531e-09,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": -0.05954739451279149,
+        "250": 0.6534094779801589,
+        "500": 1.4166185599399097,
+        "1000": 1.6005355506156216,
+        "2000": 1.3492653796883691,
+        "4000": -0.26593003063444537,
+        "8000": -0.35949249507868514,
+        "16000": -0.35938513151951357
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.27064364832607407,
+        -0.01598650804766917,
+        0.5206936559292384
+      ]
+    },
+    {
+      "date": "1990-04-29",
+      "variant": "tonal_only",
+      "original_flac_sha256": "22a0994d6d0c29d696207cb717544fcc43d7e7a2df6a21d3d34bede47d56143d",
+      "candidate_flac_sha256": "c1c2344db755592395695abb6425b7dca9858032f7d799737f9099266540216f",
+      "energy_weighted_phase_error_degrees": 0.006259233098025759,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 7.058795639479823e-10,
+      "phase_weight_fraction_above_90_degrees": 1.452901089175639e-10,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": -0.10922396477262107,
+        "250": 0.3095579674646628,
+        "500": 0.3598107553949784,
+        "1000": 0.5055748600722066,
+        "2000": 0.4474272912283218,
+        "4000": -0.0589372392040003,
+        "8000": -0.10557086384998056,
+        "16000": -0.10425095793258164
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.21639052908879508,
+        -0.010256334529552408,
+        0.24845553787711833
+      ]
+    },
+    {
+      "date": "1990-04-29",
+      "variant": "tonal_plus_dynamics",
+      "original_flac_sha256": "22a0994d6d0c29d696207cb717544fcc43d7e7a2df6a21d3d34bede47d56143d",
+      "candidate_flac_sha256": "09e294889d1f455569f051b8225d82ad9f71c421f7c0d380707f66b6d8fb32c5",
+      "energy_weighted_phase_error_degrees": 0.007568127641855573,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 9.070967348017193e-09,
+      "phase_weight_fraction_above_90_degrees": 8.534750907116697e-10,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": -0.13116634897168644,
+        "250": 0.336190971689707,
+        "500": 0.3692870665800213,
+        "1000": 0.5323928986868269,
+        "2000": 0.4700621194367627,
+        "4000": -0.027638210723503906,
+        "8000": -0.07268499701586113,
+        "16000": -0.07228359381328081
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.21991463395292568,
+        0.01786586504782378,
+        0.2838356763906619
+      ]
+    },
+    {
+      "date": "1995-12-07",
+      "variant": "tonal_only",
+      "original_flac_sha256": "4a2563017f72e28140d90cc332c8a12d461b14f7f7723514b77b6af0ea43d86a",
+      "candidate_flac_sha256": "d9e593c3c835461095d8de7445d488f8fee5557a1430d57bbea5a26782d737ef",
+      "energy_weighted_phase_error_degrees": 0.0006895805701533533,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 1.275680825763457e-09,
+      "phase_weight_fraction_above_90_degrees": 2.793381113424815e-10,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": 0.042309546764484146,
+        "250": 0.042299339966932956,
+        "500": 0.0414378616591006,
+        "1000": 0.014374098982872289,
+        "2000": -0.12988066112451246,
+        "4000": -0.2898885639077553,
+        "8000": -0.15725634463034058,
+        "16000": -0.014313766871248135
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.005457013390503721,
+        0.02768632632196946,
+        0.03766910396661409
+      ]
+    },
+    {
+      "date": "1995-12-07",
+      "variant": "tonal_plus_dynamics",
+      "original_flac_sha256": "4a2563017f72e28140d90cc332c8a12d461b14f7f7723514b77b6af0ea43d86a",
+      "candidate_flac_sha256": "0c46724ce79e09761d21ca50a0a53f0c3eb91128d5448ac18b0fbeef0cac963b",
+      "energy_weighted_phase_error_degrees": 0.005592197545179256,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 7.125518394212822e-09,
+      "phase_weight_fraction_above_90_degrees": 3.0098401784737133e-10,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": 0.029399788070772696,
+        "250": 0.04907834408267525,
+        "500": 0.03778195482013171,
+        "1000": 0.029665273082195267,
+        "2000": -0.11947072908668774,
+        "4000": -0.28979623020129913,
+        "8000": -0.1497200254909928,
+        "16000": -0.003919718409803544
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.07850200073318017,
+        0.041179396502706474,
+        0.05628487806287725
+      ]
+    },
+    {
+      "date": "2009-08-07",
+      "variant": "tonal_plus_dynamics",
+      "original_flac_sha256": "0cc5e8a845d58b72a3f831e50e525afaf46051ec9b3a7d0aff54be7f14c21919",
+      "candidate_flac_sha256": "9076f4e006c01d9c1cbd6a6b7c699e3f83c207b9ad6711d15491c2c78553c127",
+      "energy_weighted_phase_error_degrees": 0.015588590399828016,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 1.5217659746957267e-07,
+      "phase_weight_fraction_above_90_degrees": 2.1041845911003603e-08,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": 0.04477287665424727,
+        "250": 0.26598711632245353,
+        "500": 0.09920830268190411,
+        "1000": -0.09069606734895014,
+        "2000": -0.06413786130410841,
+        "4000": -0.22344654209596762,
+        "8000": -0.231972370429189,
+        "16000": -0.23660863081236702
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.26310923726494456,
+        0.022775560022083037,
+        0.17239582465305625
+      ]
+    },
+    {
+      "date": "2009-08-07",
+      "variant": "tonal_only",
+      "original_flac_sha256": "0cc5e8a845d58b72a3f831e50e525afaf46051ec9b3a7d0aff54be7f14c21919",
+      "candidate_flac_sha256": "c51bd8d912724566790e9bfd6dc300e0a71d262737cba6eec7370a6d44bd1ca5",
+      "energy_weighted_phase_error_degrees": 0.008389796965940928,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 5.382342631770979e-09,
+      "phase_weight_fraction_above_90_degrees": 5.977039862951908e-10,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": 0.010473825001206194,
+        "250": 0.23104800404880999,
+        "500": 0.0685680049738164,
+        "1000": -0.15766180609738192,
+        "2000": -0.13651525724069966,
+        "4000": -0.27086992346453503,
+        "8000": -0.287572459200382,
+        "16000": -0.2871388695107887
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.23268918705230973,
+        -0.05759616480205638,
+        0.07526300725621678
+      ]
+    },
+    {
+      "date": "1992-12-31",
+      "variant": "tonal_only",
+      "original_flac_sha256": "ed9c47340f523ee7a1d0b525e73c56574a7d1aa8841b65b6af83f2fafecc8ac2",
+      "candidate_flac_sha256": "514230ce49046981bfd5c83605b5325c8c79d04f5c373165a9c143013d582cf4",
+      "energy_weighted_phase_error_degrees": 0.008652235323936969,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 5.804933832766429e-09,
+      "phase_weight_fraction_above_90_degrees": 1.633206926323712e-09,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": 0.1728423601443842,
+        "250": 0.05324452547689171,
+        "500": -0.056205000446495096,
+        "1000": 0.08296141172902859,
+        "2000": 0.16589344148517984,
+        "4000": -0.21086127947823094,
+        "8000": -0.8898945337166421,
+        "16000": -1.3121115987599172
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.1447395381268661,
+        0.04472390811008179,
+        0.12966147917999812
+      ]
+    },
+    {
+      "date": "1992-12-31",
+      "variant": "tonal_plus_dynamics",
+      "original_flac_sha256": "ed9c47340f523ee7a1d0b525e73c56574a7d1aa8841b65b6af83f2fafecc8ac2",
+      "candidate_flac_sha256": "270979c34f80a8ccb7d21656d21aee756b1a7bbf2c395f2bb10e76c2b781e0da",
+      "energy_weighted_phase_error_degrees": 0.01789133250088906,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 6.784004380687392e-09,
+      "phase_weight_fraction_above_90_degrees": 2.303227490201401e-09,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": 0.13887601655225928,
+        "250": 0.06795828665641951,
+        "500": -0.05921124658019452,
+        "1000": 0.08842236554640363,
+        "2000": 0.17887820168423385,
+        "4000": -0.21594558995217283,
+        "8000": -0.8879002325124513,
+        "16000": -1.2971425690747402
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.27693308960390767,
+        0.05896682725252855,
+        0.145448204870963
+      ]
+    },
+    {
+      "date": "2025-07-26",
+      "variant": "tonal_only",
+      "original_flac_sha256": "f2fd07b294efeae117dba9732ac678d95571dee09f2e8747d149eef0c303590e",
+      "candidate_flac_sha256": "8b02b23c48d4d8c9d7a3c668c354554d9fd3150b54c1aa5f05fe0c74ed6e4428",
+      "energy_weighted_phase_error_degrees": 0.0023187687534080284,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 7.752910141699667e-10,
+      "phase_weight_fraction_above_90_degrees": 1.8585857112711393e-10,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": -0.043588841175078025,
+        "250": 0.05570864258073175,
+        "500": 0.12931318186208637,
+        "1000": 0.040539015373316306,
+        "2000": -0.038993341709556935,
+        "4000": -0.06071625060595707,
+        "8000": -0.06091632317314328,
+        "16000": -0.06078795380363115
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.040674349178709907,
+        -0.007979069329370302,
+        0.04507621669798329
+      ]
+    },
+    {
+      "date": "2025-07-26",
+      "variant": "tonal_plus_dynamics",
+      "original_flac_sha256": "f2fd07b294efeae117dba9732ac678d95571dee09f2e8747d149eef0c303590e",
+      "candidate_flac_sha256": "1c53e006db59244ce38beff8f3bd749f378aaa6561f1df41c6efad95c0ebe022",
+      "energy_weighted_phase_error_degrees": 0.008182919690459119,
+      "maximum_phase_error_degrees": 180.0,
+      "phase_weight_fraction_above_30_degrees": 2.893501678641203e-08,
+      "phase_weight_fraction_above_90_degrees": 2.5375112616229516e-09,
+      "welch_octave_power_change_db_loudness_matched": {
+        "125": -0.04427333910324541,
+        "250": 0.04598501086288612,
+        "500": 0.1293916041318224,
+        "1000": 0.03385777035743015,
+        "2000": -0.043208079923907766,
+        "4000": -0.05309152789620353,
+        "8000": -0.04792412335894285,
+        "16000": -0.052374496733819095
+      },
+      "twenty_ms_envelope_gain_db_quantiles_05_50_95": [
+        -0.11247473721584306,
+        0.00888298766456097,
+        0.06323569771212063
+      ]
+    }
+  ]
+}

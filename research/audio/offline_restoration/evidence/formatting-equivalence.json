@@ -1,0 +1,27 @@
+{
+  "before": {
+    "source_sha256": {
+      "OfflineRestorationDsp.java": "2df71c5a28939730b975ce3d84ea5513d52e0058ea88dbee5c9bdf0e6ab4f5d9",
+      "OfflineRestorationProfile.java": "38bf2878a105ae1d6902bc2fc5143a9a2753ec0b2df9caae8fdefccfba2fd64e"
+    },
+    "javap_sha256": {
+      "OfflineRestorationDsp": "62117388a25ad3d98e5b1bfd23d0103dbf872404023c3ad23c78ed8aa18d6f60",
+      "OfflineRestorationDsp$PcmSink": "45f8db30319df2dbc6cb164417481df3a15cce9b71bb94f4382a7dcb27cca536",
+      "OfflineRestorationProfile": "da27c10f6327a0f4f24611369a7886e3467fa93de29b6277f8decfd4eb44a52b",
+      "OfflineRestorationProfile$Analyzer": "81575f702c2778f7beb503b6bb138d142a8421b1bfe9287bbf8bed02a38df658"
+    }
+  },
+  "after": {
+    "source_sha256": {
+      "OfflineRestorationDsp.java": "c8c4f011e42f6d59ded845c3a82090244d95d3dc9c5bba22255c2e0c92ec9252",
+      "OfflineRestorationProfile.java": "cde691d4f291fb5be925f449f47b214011d2afeeaa4c393de4d4f93fa84b9388"
+    },
+    "javap_sha256": {
+      "OfflineRestorationDsp": "62117388a25ad3d98e5b1bfd23d0103dbf872404023c3ad23c78ed8aa18d6f60",
+      "OfflineRestorationDsp$PcmSink": "45f8db30319df2dbc6cb164417481df3a15cce9b71bb94f4382a7dcb27cca536",
+      "OfflineRestorationProfile": "da27c10f6327a0f4f24611369a7886e3467fa93de29b6277f8decfd4eb44a52b",
+      "OfflineRestorationProfile$Analyzer": "81575f702c2778f7beb503b6bb138d142a8421b1bfe9287bbf8bed02a38df658"
+    }
+  },
+  "bytecode_instructions_equal": true
+}

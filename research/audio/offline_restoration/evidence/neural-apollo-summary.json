@@ -1,0 +1,130 @@
+{
+  "model": "Apollo",
+  "stage_one_status": "Complete:4 natural and4 added64kbps conditions",
+  "validation_status": "Complete: one full217.208-second development track and two fixed10-second neural holdouts; no retuning",
+  "source_license_url": "https://github.com/JusperLee/Apollo/blob/e84bcacc59d5455f05d86a5c97dd4aeb3c14dbb6/LICENSE",
+  "checkpoint_license_declaration_url": "https://huggingface.co/JusperLee/Apollo/blob/c68bd80fdd9c0d93d2f4a833cb154624f660a561/README.md",
+  "license": "CC BY-SA4.0; no model/code redistribution or Android bundling performed",
+  "controlled_codec": {
+    "Apollo": {
+      "mean_spectral_convergence": {
+        "min": 0.4812488038168062,
+        "mean": 1.6688255872814153,
+        "max": 3.088628054270697
+      },
+      "mean_log_magnitude_mae_db": {
+        "min": 16.501079064027373,
+        "mean": 22.868630801303482,
+        "max": 31.17992986913336
+      },
+      "mean_high_band_convergence": {
+        "min": 4.59309408913638,
+        "mean": 9.016691366475385,
+        "max": 12.630479903643636
+      },
+      "mean_high_band_log_magnitude_mae_db": {
+        "min": 23.101283738079704,
+        "mean": 30.948092501880005,
+        "max": 38.47707607759834
+      },
+      "waveform_snr_improvement_db": [
+        -0.26557207107543945,
+        -0.24125218391418457,
+        -0.3316044807434082,
+        -0.5628859996795654
+      ]
+    },
+    "Apollo25percent": {
+      "mean_spectral_convergence": {
+        "min": 2.606812302350764,
+        "mean": 3.2057032332272812,
+        "max": 3.7028410538754395
+      },
+      "mean_log_magnitude_mae_db": {
+        "min": 7.025799787203938,
+        "mean": 12.449392010685036,
+        "max": 16.062479519897817
+      },
+      "mean_high_band_convergence": {
+        "min": 5.090795413118549,
+        "mean": 6.088982310912828,
+        "max": 6.834461763798068
+      },
+      "mean_high_band_log_magnitude_mae_db": {
+        "min": 8.743521366648665,
+        "mean": 14.965014980529965,
+        "max": 18.326974208480983
+      },
+      "waveform_snr_improvement_db": [
+        0.15854954719543457,
+        0.23012161254882812,
+        0.12534856796264648,
+        0.2067279815673828
+      ]
+    }
+  },
+  "natural_recordings": {
+    "Apollo": {
+      "identity_snr_db_after_one_global_gain": {
+        "min": 29.901316165924072,
+        "max": 34.36952829360962
+      },
+      "weighted_interchannel_phase_error_degrees": {
+        "min": 0.21877017648027777,
+        "max": 0.5204698161220027
+      },
+      "side_mid_change_db": {
+        "min": -0.0022031881330502046,
+        "max": 0.04963226551744171
+      },
+      "crest_change_db": {
+        "min": -0.44444660805182146,
+        "max": 0.1431776804157181
+      },
+      "onset_flux_correlation": {
+        "min": 0.9991354794691929,
+        "max": 0.9998024535044107
+      },
+      "low_level_gain_p05_db": {
+        "min": -0.07734382482293994,
+        "max": -0.037106108753244
+      }
+    },
+    "Apollo25percent": {
+      "identity_snr_db_after_one_global_gain": {
+        "min": 41.63264751434326,
+        "max": 46.099514961242676
+      },
+      "weighted_interchannel_phase_error_degrees": {
+        "min": 0.056538585620334855,
+        "max": 0.13384873171167275
+      },
+      "side_mid_change_db": {
+        "min": -0.0022538424225437836,
+        "max": 0.012233184689014465
+      },
+      "crest_change_db": {
+        "min": -0.1271261581128691,
+        "max": 0.03771195237055203
+      },
+      "onset_flux_correlation": {
+        "min": 0.9999423313810053,
+        "max": 0.999986238916784
+      },
+      "low_level_gain_p05_db": {
+        "min": -0.01980130780111223,
+        "max": -0.008835952809848962
+      }
+    }
+  },
+  "human_listening_ratings": 0,
+  "conclusion": "Measurable correction of additional low-bitrate codec damage. Natural concert superiority and soundboard-like clarity are not established. Original audience recordings are the synthetic trial reference, not a soundboard reference.",
+  "stage_one_inference_seconds": 422.33283824904356,
+  "stage_one_realtime_factor": 3.770828912937889,
+  "full_track_inference_seconds": 683.2929097500164,
+  "full_track_realtime_factor": 3.1457949315177007,
+  "validation_total_inference_seconds": 822.621164875105,
+  "validation_file": "neural-apollo-validation.json",
+  "edge_limitation": "Last second less faithful: raw identity SNR21.86dB vs30.68dB whole track; crest change about\u22120.8dB for raw and blend. Posthoc measurements retained without modifying audio.",
+  "next_step": "Human loudness-matched full-track and tail assessment; desktop export/import design before any model integration. Capture-only export is not a validated mobile runtime."
+}

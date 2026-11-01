@@ -1,0 +1,42 @@
+{
+  "core_fingerprint": {
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationProfile.java": "cde691d4f291fb5be925f449f47b214011d2afeeaa4c393de4d4f93fa84b9388",
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationDsp.java": "c8c4f011e42f6d59ded845c3a82090244d95d3dc9c5bba22255c2e0c92ec9252",
+    "research/audio/offline_restoration/OfflineRender.java": "508d691e1f7d2d9c11084e8ec99ed908aa1e3c26d08dd32309505ea839d0466c"
+  },
+  "protocol_fingerprint": {
+    "evaluate.py": "5b20600b93e445a047001cd11ebbd676141d2f36ab944de7cd5076e780f43a22",
+    "manifest.json": "42441a8df1247165616ccde0b3bdea195fd384cb554860e5d8e68f03ac170f12"
+  },
+  "development_summary": {
+    "recordings": 16,
+    "full_track_audio_hours": 2.5975250257070415,
+    "abstentions": 16,
+    "processed": 0,
+    "maximum_static_correction_db": 0.125,
+    "maximum_dynamic_correction_db": 0.0,
+    "checks_passed": 16,
+    "failed": {},
+    "median_loudness_change_lu": 0.0,
+    "max_abs_crest_change_db": 0.0,
+    "max_abs_stereo_correlation_change": 0.0,
+    "max_abs_stereo_width_change_db": 0.0,
+    "minimum_onset_flux_correlation": 0.9999999999999998,
+    "max_oversampled_peak_dbfs": 0.33285757929857096,
+    "max_processed_oversampled_peak_dbfs": null,
+    "subjective_ratings_collected": 0,
+    "interpretation": "Preservation checks are provisional engineering bounds, not an audio quality score or evidence of soundboard equivalence."
+  },
+  "holdout_policy": "No threshold/parameter adjustment after this snapshot; any later changes invalidate confirmatory interpretation.",
+  "quality_claim": "None; listener ratings pending.",
+  "original_development_fingerprint": {
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationProfile.java": "38bf2878a105ae1d6902bc2fc5143a9a2753ec0b2df9caae8fdefccfba2fd64e",
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationDsp.java": "2df71c5a28939730b975ce3d84ea5513d52e0058ea88dbee5c9bdf0e6ab4f5d9",
+    "research/audio/offline_restoration/OfflineRender.java": "508d691e1f7d2d9c11084e8ec99ed908aa1e3c26d08dd32309505ea839d0466c"
+  },
+  "formatting_equivalence": {
+    "path": "evidence/formatting-equivalence.json",
+    "sha256": "ce466bfcdf4b695b8b194fe29cae96d22e5b96ff050723e7b6fc6c3ec3c2253f",
+    "explanation": "Readable formatting and comments only; compiled JVM instructions and constants match for all four DSP/profile classes. No algorithm or threshold changes."
+  }
+}

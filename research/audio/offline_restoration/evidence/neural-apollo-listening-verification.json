@@ -1,0 +1,47 @@
+{
+  "artifact": "Local only: audio-neural-probe/results/listening.html",
+  "records": [
+    {
+      "date": "1993-08-13",
+      "loudness_spread_lu": 2.7652848899606397e-07,
+      "maximum_oversampled_peak": 0.4959536099418217,
+      "frame_counts": [
+        441000,
+        441000,
+        441000
+      ]
+    },
+    {
+      "date": "1995-12-07",
+      "loudness_spread_lu": 2.645978014470529e-07,
+      "maximum_oversampled_peak": 0.6102546027914522,
+      "frame_counts": [
+        441000,
+        441000,
+        441000
+      ]
+    },
+    {
+      "date": "2009-08-07",
+      "loudness_spread_lu": 1.550799524352442e-07,
+      "maximum_oversampled_peak": 0.6087294201034439,
+      "frame_counts": [
+        441000,
+        441000,
+        441000
+      ]
+    },
+    {
+      "date": "2024-08-16",
+      "loudness_spread_lu": 1.9969982645307027e-07,
+      "maximum_oversampled_peak": 0.6003819629105019,
+      "frame_counts": [
+        441000,
+        441000,
+        441000
+      ]
+    }
+  ],
+  "human_ratings": 0,
+  "method": "Decoded 24-bit FLAC verification of integrated loudness and4xoversampled peak; outputs randomized via fixed date seed and all use common peak-safe attenuation."
+}

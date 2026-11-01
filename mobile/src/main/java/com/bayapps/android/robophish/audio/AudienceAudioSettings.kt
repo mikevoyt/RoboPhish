@@ -8,6 +8,8 @@ class AudienceAudioSettings private constructor(context: Context) {
     @Volatile var current: Settings = read()
         private set
     @Volatile var compareOriginal: Boolean = false
+    /** Runtime source state, never a saved preference. Enhanced copies already contain processing. */
+    @Volatile var playingSavedEnhancement: Boolean = false
 
     private fun read() = Settings(prefs.getBoolean("enabled", false),
         prefs.getFloat("amount", 0.6f).coerceIn(0f, 1f),

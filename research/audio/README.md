@@ -1,5 +1,7 @@
 # Audience audio: research and implementation record
 
+Follow-up: the [saved offline processing study](offline_restoration/METHOD.md) implements a separate background-render workflow and evaluates 24 full recordings. Its conservative final DSP candidate abstained on all 24; soundboard-grade restoration remains unproven. The record below describes the earlier live-control experiments and is retained as historical evidence.
+
 Status: experimental, default off. The evidence supports conservative tonal adjustment and preservation checks. It does **not** establish a large perceptual improvement, crowd removal, or restoration of missing musical information. No listening ratings have been collected. This is not a completed PhD-scale audio restoration result.
 
 ## What was actually done

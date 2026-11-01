@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "recordings": 6,
+    "selected": 4,
+    "reserved": 2,
+    "variants": 12,
+    "all_preservation_checks_pass": true,
+    "all_masks_nonzero": true,
+    "max_weighted_reconstructed_phase_error_degrees": 0.018024823132241238,
+    "min_onset_correlation": 0.9983820623024144,
+    "min_envelope_correlation": 0.9980035757356092,
+    "max_abs_stereo_width_change_db": 0.3779821381967867,
+    "min_low_level_gain_p05_db": -0.2398399640845773,
+    "max_abs_crest_change_db": 0.4906336719489328,
+    "max_dynamic_attenuation_db": 0.9451138550443067,
+    "max_protected_frame_attenuation_db": 0.0,
+    "ratings_collected": 0
+  },
+  "clips": [
+    {
+      "date": "1991-03-09",
+      "frames": 882000,
+      "sample_rate": 44100,
+      "loudness_difference_lu": 4.45337988708161e-09,
+      "maximum_oversampled_peak_dbfs": -7.888317808113295
+    },
+    {
+      "date": "1990-04-29",
+      "frames": 882000,
+      "sample_rate": 44100,
+      "loudness_difference_lu": 1.5796466357187455e-09,
+      "maximum_oversampled_peak_dbfs": -6.8845774816664544
+    },
+    {
+      "date": "1995-12-07",
+      "frames": 882000,
+      "sample_rate": 44100,
+      "loudness_difference_lu": 4.899895600374293e-09,
+      "maximum_oversampled_peak_dbfs": -5.26413074104727
+    },
+    {
+      "date": "2009-08-07",
+      "frames": 882000,
+      "sample_rate": 44100,
+      "loudness_difference_lu": 1.1489117213159261e-08,
+      "maximum_oversampled_peak_dbfs": -3.963050438184606
+    },
+    {
+      "date": "1992-12-31",
+      "frames": 882000,
+      "sample_rate": 44100,
+      "loudness_difference_lu": 2.4013147026380466e-09,
+      "maximum_oversampled_peak_dbfs": -8.840106078861258
+    },
+    {
+      "date": "2025-07-26",
+      "frames": 960000,
+      "sample_rate": 48000,
+      "loudness_difference_lu": 9.85744819104184e-09,
+      "maximum_oversampled_peak_dbfs": -7.565937564786264
+    }
+  ],
+  "decoded_flac_count": 18,
+  "selected_page_and_reserved_page_javascript_syntax": "node --check passed",
+  "all_trial_audio_links_exist": true,
+  "all_source_hashes_unchanged": true,
+  "freeze_verified": true,
+  "archive_path": "/Users/mikevoyt/Documents/Codex/2026-11-01/task-3/audio-classical-probe/RoboPhish-classical-audition.zip",
+  "archive_bytes": 59280225,
+  "archive_sha256": "429ea774cddf46e2534be8f6e96998bfcbf19a6ee14953f01729f2a3d5fde792",
+  "archive_entries": 24,
+  "archive_crc": "passed",
+  "browser_playback": "Unverified: earlier file: IAB URL policy denial remains; no retry or workaround",
+  "phase_caveat": "Raw reliable-bin maxima approach pi in weak bins; only weighted errors are small. No every-bin phase-preservation claim."
+}

@@ -23,10 +23,13 @@ class AudienceAudioProcessor(private val settings: AudienceAudioSettings) : Base
     }
 
     override fun queueInput(inputBuffer: ByteBuffer) {
+        // Media3 drains processors using a shared empty buffer. Copying that singleton
+        // into itself is illegal in ByteBuffer.put, even though it contains no bytes.
+        if (!inputBuffer.hasRemaining()) return
         val bytes = inputBuffer.remaining()
         val output = replaceOutputBuffer(bytes)
         val dsp = engine
-        if (dsp == null) {
+        if (dsp == null || settings.playingSavedEnhancement) {
             output.put(inputBuffer)
         } else {
             val count = bytes / 2

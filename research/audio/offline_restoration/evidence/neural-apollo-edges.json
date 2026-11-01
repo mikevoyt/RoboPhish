@@ -1,0 +1,130 @@
+{
+  "method": "Posthoc, analysis-only first and last1second diagnostics on already rendered full song; no parameter or waveform changes. Not used to tune the model.",
+  "date": "1996-12-06",
+  "variants": {
+    "Apollo": {
+      "first_second": {
+        "original": {
+          "frames": 44100,
+          "peak": 0.3682146966457367,
+          "oversampled_peak": 0.36919470823032974,
+          "crest_db": 12.702164096981061,
+          "integrated_lufs": -18.30619927465943,
+          "stereo_correlation": -0.25268707851815436,
+          "side_mid_db": 2.214784066684819
+        },
+        "processed": {
+          "frames": 44100,
+          "peak": 0.39168402552604675,
+          "oversampled_peak": 0.39260719584191023,
+          "crest_db": 12.744501553192858,
+          "integrated_lufs": -17.82447834913067,
+          "stereo_correlation": -0.25534075854518534,
+          "side_mid_db": 2.23694311947989
+        },
+        "loudness_match_gain_db": -0.4817209255287622,
+        "identity_snr_db_after_one_global_gain": 31.318988800048828,
+        "stereo_correlation_change": -0.00265368002703098,
+        "side_mid_change_db": 0.022159052795071243,
+        "crest_change_db": 0.042337456211797075,
+        "onset_flux_correlation": 0.9983785991240269,
+        "envelope_correlation": 0.9983565166259722,
+        "weighted_interchannel_phase_error_degrees": 1.022114156743276,
+        "low_level_gain_p05_db": -0.10204785840425963,
+        "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+      },
+      "last_second": {
+        "original": {
+          "frames": 44100,
+          "peak": 0.4492877125740051,
+          "oversampled_peak": 0.44957371344679664,
+          "crest_db": 14.240378244093488,
+          "integrated_lufs": -18.379866459015258,
+          "stereo_correlation": 0.31805727942126993,
+          "side_mid_db": -2.8616249954743163
+        },
+        "processed": {
+          "frames": 44100,
+          "peak": 0.4346785843372345,
+          "oversampled_peak": 0.43866633035811087,
+          "crest_db": 13.47532160531027,
+          "integrated_lufs": -17.905079232751934,
+          "stereo_correlation": 0.31995134387220475,
+          "side_mid_db": -2.879939039438921
+        },
+        "loudness_match_gain_db": -0.4747872262633237,
+        "identity_snr_db_after_one_global_gain": 21.85560941696167,
+        "stereo_correlation_change": 0.0018940644509348181,
+        "side_mid_change_db": -0.018314043964604565,
+        "crest_change_db": -0.7650566387832178,
+        "onset_flux_correlation": 0.9906292208018778,
+        "envelope_correlation": 0.9994508505685101,
+        "weighted_interchannel_phase_error_degrees": 0.8408888400707061,
+        "low_level_gain_p05_db": -0.047155404141767145,
+        "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+      }
+    },
+    "Apollo25percent": {
+      "first_second": {
+        "original": {
+          "frames": 44100,
+          "peak": 0.3682146966457367,
+          "oversampled_peak": 0.36919470823032974,
+          "crest_db": 12.702164096981061,
+          "integrated_lufs": -18.30619927465943,
+          "stereo_correlation": -0.25268707851815436,
+          "side_mid_db": 2.214784066684819
+        },
+        "processed": {
+          "frames": 44100,
+          "peak": 0.3740820288658142,
+          "oversampled_peak": 0.3750478251327879,
+          "crest_db": 12.713844715600285,
+          "integrated_lufs": -18.18400201053453,
+          "stereo_correlation": -0.2534232413862504,
+          "side_mid_db": 2.2209777677073346
+        },
+        "loudness_match_gain_db": -0.12219726412489962,
+        "identity_snr_db_after_one_global_gain": 42.9914665222168,
+        "stereo_correlation_change": -0.0007361628680960242,
+        "side_mid_change_db": 0.006193701022515707,
+        "crest_change_db": 0.011680618619223537,
+        "onset_flux_correlation": 0.9998931489144797,
+        "envelope_correlation": 0.9998843466432847,
+        "weighted_interchannel_phase_error_degrees": 0.2664165503952197,
+        "low_level_gain_p05_db": -0.026151236008852913,
+        "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+      },
+      "last_second": {
+        "original": {
+          "frames": 44100,
+          "peak": 0.4492877125740051,
+          "oversampled_peak": 0.44957371344679664,
+          "crest_db": 14.240378244093488,
+          "integrated_lufs": -18.379866459015258,
+          "stereo_correlation": 0.31805727942126993,
+          "side_mid_db": -2.8616249954743163
+        },
+        "processed": {
+          "frames": 44100,
+          "peak": 0.4155827760696411,
+          "oversampled_peak": 0.4195247480639643,
+          "crest_db": 13.446536611696194,
+          "integrated_lufs": -18.261185881589615,
+          "stereo_correlation": 0.3185012287521064,
+          "side_mid_db": -2.8659181295877216
+        },
+        "loudness_match_gain_db": -0.11868057742564275,
+        "identity_snr_db_after_one_global_gain": 33.535380363464355,
+        "stereo_correlation_change": 0.00044394933083646837,
+        "side_mid_change_db": -0.004293134113405372,
+        "crest_change_db": -0.7938416323972941,
+        "onset_flux_correlation": 0.9974844352686462,
+        "envelope_correlation": 0.9999886133142424,
+        "weighted_interchannel_phase_error_degrees": 0.21759691371645393,
+        "low_level_gain_p05_db": -0.010550139181905411,
+        "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+      }
+    }
+  }
+}
