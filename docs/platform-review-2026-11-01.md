@@ -26,7 +26,7 @@ Evidence is static source inspection plus primary documentation and upstream sou
 | Networking | OkHttp 4.12.0, Retrofit 2.11.0, Okio 3.9.0 | unchanged | Keep the stack. Fix client/auth boundaries first. Retrofit 3.0.0 is a documented upgrade candidate; assess OkHttp and its test server together. |
 | Serialization | Moshi 1.15.1; kapt code generation | unchanged | Keep typed DTOs; migrate code generation to KSP when the Kotlin upgrade is tested. Avoid a simultaneous serialization rewrite. |
 | Images | Coil 2.6.0 | unchanged | Fix credential isolation immediately. Coil 3.6.3 is available, but its package/network-module migration is a separate maintenance change. |
-| Tests | Mobile: JUnit 4, Mockito 3.2.0, old mockito-kotlin group. Networking: JUnit Platform/Jupiter with `kotlin-test-junit` | PR #55 is correcting networking to `kotlin-test-junit5` | Verify actual executed test counts. Modernize Mockito when touched; mixed JUnit versions across independent modules need not block shipping. |
+| Tests | Mobile: JUnit 4, Mockito 3.2.0, old mockito-kotlin group. Networking: JUnit Platform/Jupiter with `kotlin-test-junit` | PR #55 fixes networking to `kotlin-test-junit5` and makes the date test independent of the CI host timezone | Verify actual executed test counts. Modernize Mockito when touched; mixed JUnit versions across independent modules need not block shipping. |
 
 Build sources: `mobile/mobile.gradle`, `networking/networking.gradle.kts`, `buildSrc/buildSrc.gradle.kts`, and `gradle/wrapper/gradle-wrapper.properties`.
 
@@ -141,7 +141,7 @@ Do not sum all rows into the current offline delivery. The first two are release
 
 ## Tests, observability, and release hygiene
 
-The baseline has a few pure utility/JSON/auth tests and no tracked GitHub CI workflow. PR #55 adds CI and offline tests and is correcting the networking JUnit dependency mismatch discovered during its build. Treat those as work already underway, then add tests for the failure paths above rather than duplicating implementation details.
+The baseline has a few pure utility/JSON/auth tests and no tracked GitHub CI workflow. PR #55 adds CI and offline tests and fixes the networking JUnit dependency mismatch with `kotlin-test-junit5`. Its date test now explicitly checks Los Angeles and UTC and restores the original timezone, removing the CI host dependency. The initial full API 35 run passed; the follow-up below distinguishes that result from validation of the later retention fixes. These baseline test fixes are complete in PR #55, not additional roadmap work.
 
 Make CI fail on new lint errors instead of retaining `checkReleaseBuilds false` and `abortOnError false` indefinitely. Introduce a reviewed baseline for existing debt. Avoid relying on `unitTests.returnDefaultValues = true` to validate Android behavior: use pure fakes for domain logic and instrumentation/Robolectric where real lifecycle/platform semantics matter. Run a minified test build for reflection/JSON regressions, without requiring release signing secrets in ordinary PR jobs.
 
@@ -158,3 +158,19 @@ Centralize dependency versions in a version catalog, align related artifacts, ve
 Release version code/name also differ between upstream and the local SDK changes. Check the live Play Console, choose a strictly higher version code, and follow the repository's signing checklist using the normal Gradle user home. Never infer that a local version is unused or that a successful build used the correct upload certificate. No release artifact was built or approved by this audit.
 
 Additional release references: [Retrofit changelog](https://github.com/square/retrofit/blob/trunk/CHANGELOG.md), [Coil changelog](https://coil-kt.github.io/coil/changelog/).
+
+## Offline implementation follow-up
+
+A targeted static review of the concurrent offline feature found three concrete issues. Fixes are committed in [PR #55 at `42186a9`](https://github.com/mikevoyt/RoboPhish/commit/42186a9ddfdb0b9ce3a13a0f40a69f46d5ae652e):
+
+| Finding | Implemented fix |
+|---|---|
+| Android can delete invisible DownloadManager transfers and their files after seven days; retaining the managed destination does not provide durable offline storage. | A persisted `transferUri` journal precedes the atomic move into `Music/saved`. Recovery accepts either the original or final file, persists the completed final path before removing the system transfer, then clears its job ID/journal. Removal cleans both locations. |
+| Legacy metadata recovery could finish after the user removed the show and enqueue it again. | Recovery now goes through repository retry, which checks that the original record and attempt still exist under the repository lock. It no longer uses an unconditional enqueue after the fetch. |
+| The UI promised Wi-Fi-only transfers while the platform request actually restricted metered networks. | Copy now describes unmetered connections accurately. `NETWORK_WIFI` alone would not have changed that policy on supported Android versions. |
+
+Adoption also exposed a legacy identity edge: records without a track ID previously derived their key from paths/job IDs that change during adoption. PR #55 now persists a stable `recordId`, supplies a deterministic migration default, and uses fallback keys for playback lookup and removal. Interruption tests cover both sides of the rename, including a null-track-ID record retaining one identity; the transfer test checks that system-job cleanup cannot delete the saved final file, and a retry test covers a late response after removal.
+
+The pre-retention [full API 35 run `41335894203`](https://github.com/mikevoyt/RoboPhish/actions/runs/41335894203) passed. **Final API 26/35/36 validation of `42186a9` is pending at this follow-up**, so the earlier green run does not certify these subsequent changes. This reviewer checked the journal ordering and retry guard statically and did not run device tests. The audit remains recommendation-only; implementation changes belong to PR #55.
+
+Retention/policy evidence: [DownloadManager request contract](https://developer.android.com/reference/android/app/DownloadManager.Request), [AOSP idle cleanup](https://android.googlesource.com/platform/packages/providers/DownloadProvider/+/master/src/com/android/providers/downloads/DownloadIdleService.java), and [AOSP destination classification/file deletion](https://android.googlesource.com/platform/packages/providers/DownloadProvider/+/refs/heads/main/src/com/android/providers/downloads/DownloadProvider.java).
