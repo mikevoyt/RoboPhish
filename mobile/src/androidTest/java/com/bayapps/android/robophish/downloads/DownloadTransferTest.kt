@@ -52,8 +52,16 @@ class DownloadTransferTest {
                     .setMediaMetadata(MediaMetadata.Builder().setTitle("Transfer fixture")
                         .setIsPlayable(true).setTrackNumber(id.toInt()).build()).build()
                 assertEquals(1, repository.enqueue(listOf(item("1")), "test", "Test", "2026-01-01", null).added)
+                val transferId = repository.store.getAll().single().downloadId
                 await { repository.reconcile().firstOrNull()?.status == DownloadStatus.COMPLETED }
                 val downloaded = repository.store.getAll().single()
+                assertNull(downloaded.downloadId)
+                assertNull(downloaded.transferUri)
+                assertEquals("saved", OfflineMedia.file(downloaded)!!.parentFile!!.name)
+                // System retention cleanup must no longer own the saved file.
+                transferId?.let { id ->
+                    (context.getSystemService(android.content.Context.DOWNLOAD_SERVICE) as android.app.DownloadManager).remove(id)
+                }
                 assertArrayEquals(bytes, OfflineMedia.file(downloaded)!!.readBytes())
                 assertEquals(0, repository.enqueue(listOf(item("1")), "test", "Test", null, null).added)
                 assertEquals(1, repository.store.getAll().size)

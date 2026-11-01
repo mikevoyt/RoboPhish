@@ -23,9 +23,12 @@ data class DownloadEntry(
     val setName: String? = null,
     val bytesDownloaded: Long = 0,
     val totalBytes: Long = -1,
-    val failureReason: Int = 0
+    val failureReason: Int = 0,
+    /** Original system-owned destination while a completed file is being adopted. */
+    val transferUri: String? = null,
+    val recordId: String = java.util.UUID.randomUUID().toString()
 ) {
-    val key: String get() = trackId ?: "legacy:$downloadId:$fileUri"
+    val key: String get() = trackId ?: "legacy:$recordId"
     val showKey: String get() = showId ?: showDate ?: album ?: key
     val isActive: Boolean get() = status == DownloadStatus.QUEUED ||
         status == DownloadStatus.DOWNLOADING || status == DownloadStatus.WAITING

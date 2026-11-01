@@ -33,8 +33,7 @@ class DownloadRepository private constructor(context: Context) {
                 skipped++; return@forEachIndexed
             }
             val metadata = item.mediaMetadata
-            val source = metadata.extras?.getString(MusicProvider.METADATA_STREAM_URL)
-                ?: item.requestMetadata.mediaUri?.toString() ?: item.localConfiguration?.uri?.toString()
+            val source = sourceUrl(item)
             val entry = DownloadEntry(
                 trackId = id, showId = MediaIDHelper.getHierarchy(item.mediaId).getOrNull(1)
                     ?: showId?.substringBefore('|'),
@@ -53,19 +52,28 @@ class DownloadRepository private constructor(context: Context) {
         return EnqueueResult(added, skipped, failed)
     }
 
-    @Synchronized fun retry(entries: List<DownloadEntry>): EnqueueResult {
+    @Synchronized fun retry(entries: List<DownloadEntry>, recoveredItems: List<MediaItem> = emptyList()): EnqueueResult {
         reconcile()
+        val recovered = recoveredItems.associateBy { MediaIDHelper.extractMusicIDFromMediaID(it.mediaId) }
         var added = 0; var skipped = 0; var failed = 0
         entries.forEach { stale ->
             val current = store.getAll().firstOrNull { it.key == stale.key } ?: return@forEach
-            if (current.isActive || OfflineMedia.isPlayable(current)) skipped++
-            else if (start(current, current)) added++ else failed++
+            // Metadata recovery can outlive a removal or a newer attempt. Never resurrect it.
+            if (current.addedAt != stale.addedAt || current.downloadId != stale.downloadId || current.fileUri != stale.fileUri ||
+                current.isActive || OfflineMedia.isPlayable(current)) { skipped++; return@forEach }
+            val item = recovered[current.trackId]
+            val refreshed = if (current.sourceUrl.isNullOrBlank() && item != null) current.copy(
+                sourceUrl = sourceUrl(item),
+                trackNumber = item.mediaMetadata.trackNumber ?: current.trackNumber,
+                setName = item.mediaMetadata.extras?.getString(MusicProvider.METADATA_SET_NAME) ?: current.setName
+            ) else current
+            if (start(refreshed, current)) added++ else failed++
         }
         return EnqueueResult(added, skipped, failed)
     }
 
     private fun start(entry: DownloadEntry, previous: DownloadEntry?): Boolean {
-        var pending = entry.copy(downloadId = null, fileUri = null, status = DownloadStatus.QUEUED,
+        var pending = entry.copy(downloadId = null, fileUri = null, transferUri = null, status = DownloadStatus.QUEUED,
             bytesDownloaded = 0, totalBytes = -1, failureReason = 0)
         // Preserve the old file/job references if validation or cleanup fails before replacement.
         var failureEntry = previous ?: pending
@@ -129,13 +137,23 @@ class DownloadRepository private constructor(context: Context) {
             }
         }
         val updated = entries.map { entry ->
-            val row = entry.downloadId?.let { rows[it] } ?: rows.values.firstOrNull {
-                entry.downloadId == null && entry.fileUri != null && it.uri == entry.fileUri
+            try {
+                if (entry.transferUri != null) return@map finishAdoption(entry)
+                val row = entry.downloadId?.let { rows[it] } ?: rows.values.firstOrNull {
+                    entry.downloadId == null && entry.fileUri != null && it.uri == entry.fileUri
+                }
+                val candidate = if (row?.uri != null) entry.copy(fileUri = row.uri) else entry
+                val completeCandidate = candidate.copy(status = DownloadStatus.COMPLETED,
+                    totalBytes = row?.totalBytes?.takeIf { it > 0 } ?: entry.totalBytes)
+                val reconciled = DownloadReconciler.reconcile(candidate, row, OfflineMedia.isPlayable(completeCandidate))
+                if (reconciled.status == DownloadStatus.COMPLETED && reconciled.downloadId != null) {
+                    adopt(reconciled)
+                } else reconciled
+            } catch (_: Exception) {
+                // Keep both journal paths so remove/retry can clean up an interrupted adoption.
+                (store.getAll().firstOrNull { it.key == entry.key } ?: entry).copy(
+                    status = DownloadStatus.FAILED, failureReason = DownloadManager.ERROR_FILE_ERROR)
             }
-            val candidate = if (row?.uri != null) entry.copy(fileUri = row.uri) else entry
-            val completeCandidate = candidate.copy(status = DownloadStatus.COMPLETED,
-                totalBytes = row?.totalBytes?.takeIf { it > 0 } ?: entry.totalBytes)
-            DownloadReconciler.reconcile(candidate, row, OfflineMedia.isPlayable(completeCandidate))
         }
         store.replaceAll(updated)
         return updated
@@ -152,13 +170,53 @@ class DownloadRepository private constructor(context: Context) {
 
     private fun removeTransfer(entry: DownloadEntry) {
         entry.downloadId?.let { manager.remove(it) }
-        OfflineMedia.file(entry)?.let { file ->
-            val directory = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.canonicalFile
-            if (directory != null && file.canonicalFile.parentFile == directory && file.exists()) {
-                check(file.delete()) { "Unable to remove downloaded file" }
+        listOfNotNull(entry.fileUri, entry.transferUri).distinct().forEach { uri ->
+            OfflineMedia.file(entry.copy(fileUri = uri))?.let { file ->
+                if (owns(file) && file.exists()) {
+                    check(file.delete()) { "Unable to remove downloaded file" }
+                }
             }
         }
     }
+
+    private fun owns(file: File): Boolean {
+        val directory = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.canonicalFile ?: return false
+        return file.canonicalFile.parentFile == directory || file.canonicalFile.parentFile == File(directory, "saved")
+    }
+
+    private fun adopt(entry: DownloadEntry): DownloadEntry {
+        val source = OfflineMedia.file(entry) ?: return entry
+        if (!owns(source)) return entry
+        val directory = File(requireNotNull(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)), "saved")
+        check(directory.exists() || directory.mkdirs())
+        val destination = File(directory, source.name)
+        val pending = entry.copy(status = DownloadStatus.DOWNLOADING, transferUri = entry.fileUri,
+            fileUri = Uri.fromFile(destination).toString())
+        // The journal precedes the atomic rename. Either source or destination can recover it.
+        store.upsert(pending)
+        return finishAdoption(pending)
+    }
+
+    private fun finishAdoption(entry: DownloadEntry): DownloadEntry {
+        val destination = requireNotNull(OfflineMedia.file(entry))
+        val source = requireNotNull(OfflineMedia.file(entry.copy(fileUri = entry.transferUri)))
+        check(owns(source) && owns(destination) && source.canonicalFile != destination.canonicalFile)
+        val complete = entry.copy(status = DownloadStatus.COMPLETED, failureReason = 0)
+        if (!OfflineMedia.isPlayable(complete)) {
+            check(OfflineMedia.isPlayable(complete.copy(fileUri = entry.transferUri))) { "Downloaded file is missing" }
+            check(source.renameTo(destination)) { "Unable to keep downloaded file" }
+        }
+        check(OfflineMedia.isPlayable(complete))
+        // Persist the playable final path BEFORE deleting the system-owned transfer record.
+        store.upsert(complete)
+        try { entry.downloadId?.let { manager.remove(it) } }
+        catch (_: Exception) { return complete } // Next reconciliation retries only record cleanup.
+        return complete.copy(downloadId = null, transferUri = null).also(store::upsert)
+    }
+
+    private fun sourceUrl(item: MediaItem): String? =
+        item.mediaMetadata.extras?.getString(MusicProvider.METADATA_STREAM_URL)
+            ?: item.requestMetadata.mediaUri?.toString() ?: item.localConfiguration?.uri?.toString()
 
     @Synchronized fun setWifiOnly(value: Boolean) {
         check(prefs.edit().putBoolean("wifi_only", value).commit())

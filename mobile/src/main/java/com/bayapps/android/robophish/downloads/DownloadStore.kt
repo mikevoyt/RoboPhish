@@ -12,7 +12,7 @@ class DownloadStore private constructor(context: Context) {
     private val state = MutableStateFlow(read())
     val entries = state.asStateFlow()
     fun getAll(): List<DownloadEntry> = state.value
-    fun find(trackId: String?): DownloadEntry? = trackId?.let { id -> state.value.firstOrNull { it.trackId == id } }
+    fun find(trackId: String?): DownloadEntry? = trackId?.let { id -> state.value.firstOrNull { it.trackId == id || it.key == id } }
 
     @Synchronized fun upsert(entry: DownloadEntry) {
         replaceAll(state.value.filterNot { it.key == entry.key } + entry)
@@ -56,6 +56,8 @@ internal object DownloadJson {
         put("trackNumber", e.trackNumber); put("setName", e.setName)
         put("bytesDownloaded", e.bytesDownloaded); put("totalBytes", e.totalBytes)
         put("failureReason", e.failureReason)
+        put("transferUri", e.transferUri)
+        put("recordId", e.recordId)
     }
 
     fun decode(j: JSONObject) = DownloadEntry(
@@ -69,7 +71,8 @@ internal object DownloadJson {
         addedAt = j.optLong("addedAt"), sourceUrl = j.text("sourceUrl"),
         trackNumber = j.optInt("trackNumber"), setName = j.text("setName"),
         bytesDownloaded = j.optLong("bytesDownloaded"), totalBytes = j.optLong("totalBytes", -1),
-        failureReason = j.optInt("failureReason")
+        failureReason = j.optInt("failureReason"), transferUri = j.text("transferUri"),
+        recordId = j.text("recordId") ?: java.util.UUID.nameUUIDFromBytes(j.toString().toByteArray(Charsets.UTF_8)).toString()
     )
 
     private fun JSONObject.text(key: String): String? = if (isNull(key)) null else

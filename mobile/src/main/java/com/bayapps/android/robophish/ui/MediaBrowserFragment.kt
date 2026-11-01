@@ -38,7 +38,6 @@ import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.model.MusicProvider
 import com.bayapps.android.robophish.downloads.DownloadActions
 import com.bayapps.android.robophish.downloads.DownloadStore
-import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
 import com.bayapps.android.robophish.utils.ShowDetailsCache

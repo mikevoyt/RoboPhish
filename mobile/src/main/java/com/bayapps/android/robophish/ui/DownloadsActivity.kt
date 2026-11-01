@@ -139,17 +139,16 @@ class DownloadsActivity : BaseActivity() {
     private fun retry(tracks: List<DownloadEntry>) = operation {
         val failed = tracks.filter { it.status == DownloadStatus.FAILED }
         val legacy = failed.filter { it.sourceUrl.isNullOrBlank() }
-        var couldNotRestore = false
+        var recoveryFailed = 0
         legacy.groupBy { it.showId }.forEach { (showId, old) ->
-            if (showId == null) { couldNotRestore = true; return@forEach }
+            if (showId == null) { recoveryFailed += old.size; return@forEach }
             val available = ServiceLocator.get(this).musicProvider.getTracksForShow(showId)
                 .filter { item -> old.any { it.trackId == MediaIDHelper.extractMusicIDFromMediaID(item.mediaId) } }
-            if (available.isEmpty()) couldNotRestore = true
-            else repository.enqueue(available, showId, old.first().venue, old.first().showDate, old.first().location)
+            recoveryFailed += repository.retry(old, available).failed
         }
         val result = repository.retry(failed.filter { !it.sourceUrl.isNullOrBlank() })
         when {
-            couldNotRestore -> getString(R.string.offline_missing_source)
+            recoveryFailed > 0 -> getString(R.string.offline_missing_source)
             result.failed > 0 -> getString(R.string.offline_enqueue_failed, result.failed)
             else -> null
         }
@@ -162,7 +161,7 @@ class DownloadsActivity : BaseActivity() {
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.offline_remove) { _, _ ->
                 val controller = mediaBrowser
-                val ids = show.tracks.mapNotNull { it.trackId }.toSet()
+                val ids = show.tracks.map { it.trackId ?: it.key }.toSet()
                 if (MediaIDHelper.extractMusicIDFromMediaID(controller?.currentMediaItem?.mediaId ?: "") in ids) {
                     controller?.stop(); controller?.clearMediaItems()
                 } else if (controller != null) {

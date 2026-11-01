@@ -6,7 +6,7 @@ Downloads is available from the navigation drawer and the catalog root. Save an 
 
 The collection uses date tiles, venue names, expandable setlists, explicit progress, and storage totals. “Ready to play” includes shows with at least one saved track. “Play saved” queues only verified local files, in original setlist order, without filling gaps with streams. Removing a show also cancels its pending transfers; confirmation explains the storage and playback impact.
 
-Wi-Fi/unmetered downloads are the default. Roaming is disabled. Changing the network preference restarts active files because Android does not support editing a submitted DownloadManager request. Completed tracks are preserved.
+Unmetered downloads are the default, usually using Wi-Fi. This follows Android's metering classification rather than promising a strict network transport. Roaming is disabled. Changing the network preference restarts active files because Android does not support editing a submitted DownloadManager request. Completed tracks are preserved.
 
 ## Reliability
 
@@ -14,13 +14,16 @@ Wi-Fi/unmetered downloads are the default. Roaming is disabled. Changing the net
 - The app persists metadata, source URLs, ordering, destinations and transfer IDs before reporting downloads to the UI.
 - Track IDs prevent duplicate queued or completed requests. New attempts use unique destination names.
 - Destinations are saved before enqueue, so an interrupted enqueue can recover its system ID by matching the destination.
+- Completed files are journaled and atomically moved into a separate app-owned `Music/saved` directory before removing their system transfer record. This prevents Android's seven-day cleanup of non-visible managed downloads from deleting the saved collection. Reconciliation recovers interruptions before or after the move.
 - Startup and visible-screen reconciliation query system transfer state, recover missed completion broadcasts, and check local file availability and expected byte length.
 - Playback resolves local files in MediaSession callbacks, independently of the online catalog. The data source also checks at file-open time so a track downloaded after queuing can play locally.
 - Missing files and terminal download failures stay visible and retryable.
 - Storage estimates reserve space for other queued files and a 32 MiB margin. Estimates assume up to 320 kbps.
 - Completion processing uses BroadcastReceiver.goAsync; disk and download-manager work runs off the UI thread.
 - Existing prototype records migrate null fields and show IDs that accidentally contain a track suffix. Records without source URLs can recover metadata when the show is online.
+- A late metadata response cannot resurrect a removed legacy download: retry checks the original record/attempt under the repository lock.
 - Downloaded audio and setlist metadata live in app-specific persistent storage. Artwork uses an app-provided fallback offline. Uninstalling the app removes downloads.
+- Backup and device transfer exclude downloaded audio and installation-specific transfer records, preventing stale file paths and system job IDs from appearing on a different device.
 
 ## Design references
 

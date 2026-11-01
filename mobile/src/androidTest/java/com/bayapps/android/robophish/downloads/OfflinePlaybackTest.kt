@@ -2,7 +2,6 @@ package com.bayapps.android.robophish.downloads
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.os.SystemClock
@@ -114,6 +113,33 @@ class OfflinePlaybackTest {
         assertFalse(OfflineMedia.isPlayable(reconciled))
     }
 
+    @Test fun collectionRemainsPlayableAtTwoHundredPercentText() {
+        val originalScale = context.resources.configuration.fontScale
+        try {
+            shell("settings put system font_scale 2.0")
+            await { context.resources.configuration.fontScale >= 1.9f }
+            store.upsert(fixture("1", 1))
+            ActivityScenario.launch(DownloadsActivity::class.java).use { scenario ->
+                await {
+                    var ready = false
+                    scenario.onActivity {
+                        it.findViewById<RecyclerView>(R.id.downloads_list).scrollToPosition(1)
+                        ready = it.mediaBrowser != null && it.findViewById<View>(R.id.download_play)?.isShown == true
+                    }
+                    ready
+                }
+                instrumentation.waitForIdleSync()
+                screenshot("offline-large-text.png")
+                scenario.onActivity { it.findViewById<View>(R.id.download_play).performClick() }
+                await { var playing = false; scenario.onActivity { playing = it.mediaBrowser?.isPlaying == true }; playing }
+                scenario.onActivity { it.mediaBrowser!!.pause() }
+            }
+        } finally {
+            shell("settings put system font_scale $originalScale")
+            await { kotlin.math.abs(context.resources.configuration.fontScale - originalScale) < 0.01f }
+        }
+    }
+
     @Test fun persistenceRoundTripRetainsSetlistAndRetryMetadata() {
         val entry = fixture("1", 1).copy(setName = "Set 2", sourceUrl = "https://example.invalid/audio.mp3")
         store.upsert(entry)
@@ -121,6 +147,41 @@ class OfflinePlaybackTest {
         val restored = DownloadJson.decode(org.json.JSONArray(json).getJSONObject(0))
         assertEquals(entry, restored)
         assertTrue(OfflineMedia.isPlayable(restored))
+    }
+
+    @Test fun interruptedAdoptionRecoversBeforeAndAfterAtomicMove() {
+        listOf(false, true).forEachIndexed { index, alreadyMoved ->
+            val original = fixture("${index + 1}", index + 1).let { if (index == 0) it.copy(trackId = null) else it }
+            val source = OfflineMedia.file(original)!!
+            val destination = File(File(source.parentFile, "saved").apply { mkdirs() }, source.name)
+            val journal = original.copy(status = DownloadStatus.DOWNLOADING,
+                transferUri = original.fileUri, fileUri = Uri.fromFile(destination).toString())
+            // Simulate a process interruption on either side of the rename.
+            if (alreadyMoved) assertTrue(source.renameTo(destination))
+            store.upsert(journal)
+            repository.reconcile()
+            val recovered = store.find(original.trackId ?: original.key)!!
+            assertEquals(1, store.getAll().size)
+            assertEquals(original.key, recovered.key)
+            assertEquals(DownloadStatus.COMPLETED, recovered.status)
+            assertNull(recovered.transferUri)
+            assertNull(recovered.downloadId)
+            assertFalse(source.exists())
+            assertTrue(OfflineMedia.isPlayable(recovered))
+            repository.remove(listOf(recovered))
+            assertFalse(destination.exists())
+        }
+    }
+
+    @Test fun lateLegacyMetadataCannotResurrectRemovedDownload() {
+        val legacy = fixture("1", 1).copy(status = DownloadStatus.FAILED, sourceUrl = null)
+        store.upsert(legacy)
+        repository.remove(listOf(legacy))
+        val recoveredItem = androidx.media3.common.MediaItem.Builder()
+            .setMediaId("__TRACKS_BY_SHOW__/1997-12-06|1")
+            .setUri("https://example.invalid/late-metadata.mp3").build()
+        assertEquals(0, repository.retry(listOf(legacy), listOf(recoveredItem)).added)
+        assertTrue(store.getAll().isEmpty())
     }
 
     @Test fun legacyNullAndBadShowIdMigrateSafely() {
@@ -175,10 +236,15 @@ class OfflinePlaybackTest {
 
     private fun screenshot(name: String) {
         SystemClock.sleep(250)
-        val directory = File(context.getExternalFilesDir(null), "offline-screenshots").apply { mkdirs() }
-        instrumentation.uiAutomation.takeScreenshot()?.let { bitmap ->
-            File(directory, name).outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
-            bitmap.recycle()
+        // The test runner uninstalls the app afterward; keep evidence in the shell-owned
+        // Downloads directory prepared by CI rather than in app-specific storage.
+        shell("screencap -p /sdcard/Download/robophish-offline/$name")
+    }
+
+    private fun shell(command: String) {
+        val descriptor = instrumentation.uiAutomation.executeShellCommand(command)
+        android.os.ParcelFileDescriptor.AutoCloseInputStream(descriptor).use {
+            it.readBytes() // Wait for the command to finish before changing the UI.
         }
     }
 }
