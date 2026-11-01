@@ -51,6 +51,8 @@ def main():
         blind.append(dict(date=meta['date'],title=meta['title'],key=mapping))
     (OUT/'realtime.json').write_text(json.dumps(results,indent=2))
     (clips/'answer-key.json').write_text(json.dumps(blind,indent=2))
+    page=Path('research/audio/listening.html').read_text()
+    (clips/'index.html').write_text(page.replace('__TRACKS__',json.dumps([dict(date=m['date'],title=m['title']) for m in corpus])))
     (clips/'README.txt').write_text('Blind preference exercise. Each date has A/B/C versions of the same 12-second passage. One is original; two use conservative processing. Levels are matched using integrated loudness, with a common peak-safe gain. Compare with good headphones at comfortable volume. Rate clarity, bass naturalness, cymbal/vocal artifacts, crowd distraction, stereo image and overall preference, including ties. Do not inspect answer-key.json until ratings are complete. This is not a standardized MUSHRA test: no clean reference exists. No listening results have been collected yet.\\n')
     summary=[dict(date=r['date'],mode=r['mode'],amount=r['amount'],loudness_delta_lu=r['loudness_delta_lu'],
         crest_delta_db=r['crest_delta_db'],stereo_corr_delta=r['stereo_corr_delta'],

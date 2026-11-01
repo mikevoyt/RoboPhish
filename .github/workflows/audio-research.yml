@@ -21,6 +21,7 @@ jobs:
       - run: python research/audio/benchmark.py --skip-sweep
       - run: python research/audio/evaluate_realtime.py
       - run: python research/audio/evaluate_alternatives.py
+      - run: python research/audio/evaluate_controlled.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
