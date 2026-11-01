@@ -778,9 +778,16 @@ class MediaBrowserFragment : Fragment() {
         var showError = forceError
         val activity = activity ?: return
         if (!NetworkHelper.isOnline(activity)) {
-            (errorMessage as? android.widget.TextView)?.setText(R.string.error_no_connection)
-            showError = true
+            (errorMessage as? android.widget.TextView)?.setText(R.string.offline_connection_banner)
+            errorMessage?.setOnClickListener {
+                startActivity(android.content.Intent(activity, DownloadsActivity::class.java))
+            }
+            val offlineTracks = browserAdapter?.items?.let { items ->
+                items.isNotEmpty() && items.all { it.mediaMetadata.extras?.getBoolean(com.bayapps.android.robophish.downloads.OfflineMedia.OFFLINE_ONLY) == true }
+            } == true
+            showError = !offlineTracks
         } else if (forceError) {
+            errorMessage?.setOnClickListener(null)
             (errorMessage as? android.widget.TextView)?.setText(R.string.error_loading_media)
             showError = true
         }
