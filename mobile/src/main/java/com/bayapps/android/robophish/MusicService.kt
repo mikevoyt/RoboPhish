@@ -33,6 +33,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MusicService : MediaLibraryService() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
@@ -300,7 +301,11 @@ class MusicService : MediaLibraryService() {
                 startForeground(notificationId, notification)
             } else {
                 stopForegroundCompat(remove = false)
-                notificationManagerCompat.notify(notificationId, notification)
+                if (Build.VERSION.SDK_INT < 33 || androidx.core.content.ContextCompat.checkSelfPermission(
+                        this@MusicService, android.Manifest.permission.POST_NOTIFICATIONS
+                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    notificationManagerCompat.notify(notificationId, notification)
+                }
             }
         }
 

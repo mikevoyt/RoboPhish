@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 @RunWith(AndroidJUnit4::class)
 class DownloadTransferTest {
     @Test fun backgroundTransferDeduplicatesRetriesAndRemovesFiles() {
+        require(android.os.Build.HARDWARE in setOf("ranchu", "goldfish")) { "Synthetic fixtures require an emulator" }
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val repository = DownloadRepository.get(context)
         repository.remove(repository.store.getAll())

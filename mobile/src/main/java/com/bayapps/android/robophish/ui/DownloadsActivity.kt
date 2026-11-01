@@ -57,6 +57,8 @@ class DownloadsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.downloads_screen)
         initializeToolbar()
+        findViewById<View>(R.id.toolbar).setBackgroundColor(ContextCompat.getColor(this, R.color.offline_ink))
+        window.statusBarColor = ContextCompat.getColor(this, R.color.offline_ink)
         title = getString(R.string.offline_downloads)
         readyOnly = savedInstanceState?.getBoolean("ready_only") ?: false
         expanded.addAll(savedInstanceState?.getStringArrayList("expanded") ?: emptyList())
@@ -246,6 +248,11 @@ class DownloadsActivity : BaseActivity() {
             }
         }
         private fun bindHeader(view: View, row: Row.Header) {
+            view.findViewById<TextView>(R.id.offline_headline).apply {
+                setText(if (row.shows > 0) R.string.offline_collection_headline else R.string.offline_headline)
+                textSize = if (row.shows > 0) 26f else 34f
+            }
+            view.findViewById<View>(R.id.offline_intro).visibility = if (row.shows > 0) View.GONE else View.VISIBLE
             view.findViewById<TextView>(R.id.offline_stats).text = getString(R.string.offline_stats,
                 resources.getQuantityString(R.plurals.offline_show_count, row.shows, row.shows),
                 resources.getQuantityString(R.plurals.offline_track_count, row.tracks, row.tracks), size(row.bytes))

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="offline_collection_headline">Your shows. Anywhere.</string>
     <string name="offline_downloads">Downloads</string>
     <string name="offline_browse_subtitle">Your music, ready to go</string>
     <string name="offline_eyebrow">YOUR OFFLINE COLLECTION</string>

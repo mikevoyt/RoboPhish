@@ -17,6 +17,7 @@ import timber.log.Timber
 /**
  * Main activity for the music player.
  */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentListener {
     private var voiceSearchParams: Bundle? = null
 

@@ -30,8 +30,13 @@ class OfflinePlaybackTest {
     private val repository get() = DownloadRepository.get(context)
     private val store get() = DownloadStore.get(context)
 
-    @Before fun setup() { repository.remove(store.getAll()) }
+    @Before fun setup() {
+        require(android.os.Build.HARDWARE in setOf("ranchu", "goldfish")) { "Synthetic fixtures require an emulator" }
+        assertFalse("Offline suite requires disconnected networking", com.bayapps.android.robophish.utils.NetworkHelper.isOnline(context))
+        repository.remove(store.getAll())
+    }
     @After fun cleanup() {
+        if (android.os.Build.HARDWARE !in setOf("ranchu", "goldfish")) return
         context.stopService(Intent(context, com.bayapps.android.robophish.MusicService::class.java))
         repository.remove(store.getAll())
     }

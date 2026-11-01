@@ -25,6 +25,8 @@ jobs:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
       - name: Build debug and run tests
         if: matrix.api == 35
         run: ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:assembleDebug :mobile:testDebugUnitTest :networking:test :mobile:lintDebug
@@ -43,6 +45,7 @@ jobs:
               for issue in issues:
                   if issue.get('severity') == 'Error':
                       print('LINT_ERROR', issue.get('id'), [loc.get('file') for loc in issue.findall('location')])
+              assert not any(i.get('severity') == 'Error' for i in issues), 'Android lint errors must be resolved'
           PY
       - name: Enable emulator acceleration
         run: |

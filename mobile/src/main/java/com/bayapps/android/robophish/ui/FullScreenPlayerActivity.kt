@@ -82,6 +82,9 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() = navigateBackToShow()
+        })
         setContentView(R.layout.activity_full_player)
         initializeToolbar()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -136,7 +139,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         super.onStop()
         handler.removeCallbacks(updateProgressTask)
         controller?.removeListener(playerListener)
-        controller?.release()
+        controllerFuture?.let { MediaController.releaseFuture(it) }
         controller = null
         controllerFuture = null
     }
@@ -154,6 +157,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         future.addListener(
             {
                 try {
+                    if (controllerFuture !== future) return@addListener
                     val mediaController = future.get()
                     controller = mediaController
                     mediaController.addListener(playerListener)
@@ -242,10 +246,6 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        navigateBackToShow()
     }
 
     private fun navigateBackToShow() {
