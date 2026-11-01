@@ -26,6 +26,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
@@ -35,6 +36,8 @@ import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.model.MusicProvider
+import com.bayapps.android.robophish.downloads.DownloadActions
+import com.bayapps.android.robophish.downloads.DownloadStore
 import com.bayapps.android.robophish.utils.Downloader
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
@@ -315,6 +318,15 @@ class MediaBrowserFragment : Fragment() {
         pendingSelectedTrackId?.let { outState.putString(SELECTED_TRACK_ID_KEY, it) }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                DownloadStore.get(requireContext()).entries.collect { browserAdapter?.notifyDataSetChanged() }
+            }
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         pendingListState = listView?.onSaveInstanceState()
@@ -411,15 +423,31 @@ class MediaBrowserFragment : Fragment() {
         menuHost.addMenuProvider(
             object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    if (MediaIDHelper.isShow(getMediaId() ?: "")) {
+                        menu.add(0, MENU_DOWNLOAD_SHOW, 0, R.string.download_show)
+                            .setIcon(R.drawable.ic_file_download_black_36dp)
+                            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                    }
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    val context = activity ?: return false
                     return when (menuItem.itemId) {
-                        0 -> {
+                        MENU_DOWNLOAD_SHOW -> {
                             val showId = MediaIDHelper.extractShowFromMediaID(getMediaId() ?: "")
-                            val data = showData
-                            if (showId != null && data != null && activity != null) {
-                                Downloader(requireActivity(), data)
+                            val items = browserAdapter?.items ?: emptyList()
+                            if (!showId.isNullOrBlank() && items.isNotEmpty()) {
+                                val showTitle = getTitleText()
+                                val showSubtitle = getSubTitle()
+                                val location = items.firstOrNull()?.mediaMetadata?.description?.toString()
+                                DownloadActions.download(
+                                    context,
+                                    items.filter { it.mediaMetadata.isPlayable == true },
+                                    showId,
+                                    showTitle,
+                                    showSubtitle,
+                                    location
+                                )
                             }
                             true
                         }
@@ -459,6 +487,23 @@ class MediaBrowserFragment : Fragment() {
                 mediaFragmentListener?.onMediaItemSelected(item, siblings)
             }
         }
+        listView?.setOnItemLongClickListener { _, _, position, _ ->
+            val ctx = activity ?: return@setOnItemLongClickListener true
+            val item = browserAdapter?.getMediaItem(position) ?: return@setOnItemLongClickListener true
+            val showId = MediaIDHelper.extractShowFromMediaID(mediaId ?: "")
+            val showTitle = getTitleText()
+            val showSubtitle = getSubTitle()
+            val location = item.mediaMetadata.description?.toString()
+            DownloadActions.download(
+                ctx,
+                listOf(item),
+                showId,
+                showTitle,
+                showSubtitle,
+                location
+            )
+            true
+        }
     }
 
     private fun updateCache(
@@ -488,9 +533,7 @@ class MediaBrowserFragment : Fragment() {
             }
             val setlistResponse = fetchJson(
                 "https://api.phish.net/v5/setlists/showdate/$showDate.json",
-                mapOf(
-                    "apikey" to BuildConfig.PHISHNET_API_KEY
-                ),
+                mapOf("apikey" to BuildConfig.PHISHNET_API_KEY),
                 client = okHttpNoAuthClient
             )
             if (!isAdded) return@launch
@@ -899,7 +942,19 @@ class MediaBrowserFragment : Fragment() {
                 parent,
                 item,
                 itemState
-            )
+            ) { mediaItem ->
+                val showId = MediaIDHelper.extractShowFromMediaID(mediaItem.mediaId)
+                val showTitle = mediaItem.mediaMetadata.title?.toString()
+                val showSubtitle = mediaItem.mediaMetadata.description?.toString()
+                DownloadActions.download(
+                    activity as androidx.fragment.app.FragmentActivity,
+                    listOf(mediaItem),
+                    showId,
+                    showTitle,
+                    showSubtitle,
+                    showSubtitle
+                )
+            }
         }
 
         private fun shouldGroupBySet(items: List<MediaItem>): Boolean {
@@ -954,5 +1009,6 @@ class MediaBrowserFragment : Fragment() {
         private const val ARG_SELECTED_TRACK_ID = "selected_track_id"
         private const val LIST_STATE_KEY = "list_state"
         private const val SELECTED_TRACK_ID_KEY = "selected_track_id_state"
+        private const val MENU_DOWNLOAD_SHOW = 101
     }
 }

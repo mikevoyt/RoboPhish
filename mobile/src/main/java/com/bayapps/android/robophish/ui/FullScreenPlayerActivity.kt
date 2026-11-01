@@ -141,6 +141,11 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         controllerFuture = null
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
+    }
+
     private fun connectController() {
         if (controller != null) return
         val token = SessionToken(this, ComponentName(this, MusicService::class.java))

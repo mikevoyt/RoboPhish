@@ -50,4 +50,13 @@
     <string name="loading">Loading…</string>
     <string name="about">About</string>
     <string name="downloads">Downloads</string>
+    <string name="download_queued">Queued: %1$s</string>
+    <string name="download_failed">Download failed: %1$s</string>
+    <string name="download_show">Download show</string>
+    <string name="downloads_empty">No downloads yet. Grab a show to take it offline.</string>
+    <string name="download_status_queued">Queued</string>
+    <string name="download_status_completed">Ready</string>
+    <string name="download_status_failed">Failed</string>
+    <string name="download_track">Download track</string>
+    <string name="delete">Delete</string>
 </resources>

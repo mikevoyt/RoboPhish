@@ -40,6 +40,10 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     override fun onMediaItemSelected(item: MediaItem, siblings: List<MediaItem>) {
         Timber.d("onMediaItemSelected, mediaId=%s", item.mediaId)
+        if (item.mediaId == com.bayapps.android.robophish.model.MusicProvider.MEDIA_ID_DOWNLOADS) {
+            startActivity(Intent(this, DownloadsActivity::class.java))
+            return
+        }
         val browser = mediaBrowser
         when {
             item.mediaMetadata.isPlayable == true && browser != null -> {

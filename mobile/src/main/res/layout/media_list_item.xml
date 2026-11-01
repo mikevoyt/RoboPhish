@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/media_item_text_margin_start"
+        android:layout_marginEnd="@dimen/media_item_text_margin_end"
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
@@ -73,5 +74,36 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/show_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/media_item_badge_margin_end"
+        android:layout_marginTop="@dimen/media_item_badge_margin_top"
+        android:background="@drawable/show_badge_bg"
+        android:paddingStart="@dimen/media_item_badge_padding_h"
+        android:paddingEnd="@dimen/media_item_badge_padding_h"
+        android:paddingTop="@dimen/media_item_badge_padding_v"
+        android:paddingBottom="@dimen/media_item_badge_padding_v"
+        android:textAllCaps="true"
+        android:textColor="@color/show_badge_text"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="SBD" />
+
+    <ImageView
+        android:id="@+id/download_btn"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/download_track"
+        android:padding="6dp"
+        android:src="@drawable/ic_file_download_black_36dp"
+        android:tint="@color/media_item_icon_not_playing"
+        android:visibility="gone" />
 
 </RelativeLayout>

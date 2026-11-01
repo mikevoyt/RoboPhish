@@ -64,12 +64,7 @@ object MediaIDHelper {
 
     @JvmStatic
     fun extractShowFromMediaID(mediaID: String): String? {
-        val pos = mediaID.indexOf(CATEGORY_SEPARATOR)
-        return if (pos >= 0) {
-            mediaID.substring(pos + 1)
-        } else {
-            null
-        }
+        return getHierarchy(mediaID).getOrNull(1)
     }
 
     /**

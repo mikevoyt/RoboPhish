@@ -13,6 +13,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.media3.common.MediaItem
 import com.bayapps.android.robophish.R
+import com.bayapps.android.robophish.model.MusicProvider
+import com.bayapps.android.robophish.downloads.DownloadStore
+import com.bayapps.android.robophish.downloads.DownloadStatus
+import com.bayapps.android.robophish.utils.MediaIDHelper
 
 object MediaItemViewHolder {
     const val STATE_INVALID = -1
@@ -30,12 +34,12 @@ object MediaItemViewHolder {
         convertView: View?,
         parent: ViewGroup,
         item: MediaItem,
-        state: Int
+        state: Int,
+        onDownload: ((MediaItem) -> Unit)? = null
     ): View {
         if (colorStateNotPlaying == null || colorStatePlaying == null) {
             initializeColorStateLists(activity)
         }
-
         var view = convertView
         val holder: Holder
         var cachedState = STATE_INVALID
@@ -46,7 +50,9 @@ object MediaItemViewHolder {
                 imageView = view.findViewById(R.id.play_eq),
                 titleView = view.findViewById(R.id.title),
                 descriptionView = view.findViewById(R.id.description),
-                locationView = view.findViewById(R.id.location)
+                locationView = view.findViewById(R.id.location),
+                badgeView = view.findViewById(R.id.show_badge),
+                downloadView = view.findViewById(R.id.download_btn)
             )
             view.tag = holder
         } else {
@@ -60,6 +66,32 @@ object MediaItemViewHolder {
         val showLocation = item.mediaMetadata.isBrowsable == true && !location.isNullOrBlank()
         holder.locationView.visibility = if (showLocation) View.VISIBLE else View.GONE
         holder.locationView.text = if (showLocation) location else ""
+
+        val extras = item.mediaMetadata.extras
+        val showBadge = item.mediaMetadata.isBrowsable == true &&
+            extras?.getBoolean(MusicProvider.METADATA_SHOW_SBD, false) == true
+        holder.badgeView.visibility = if (showBadge) View.VISIBLE else View.GONE
+        holder.badgeView.text = if (showBadge) "SBD" else ""
+
+        if (item.mediaMetadata.isPlayable == true && onDownload != null) {
+            holder.downloadView.visibility = View.VISIBLE
+            val download = DownloadStore.get(activity).find(MediaIDHelper.extractMusicIDFromMediaID(item.mediaId))
+            val ready = download?.status == DownloadStatus.COMPLETED
+            holder.downloadView.setImageResource(when {
+                ready -> R.drawable.ic_offline_done
+                download?.isActive == true -> R.drawable.ic_offline_pending
+                else -> R.drawable.ic_file_download_black_36dp
+            })
+            holder.downloadView.contentDescription = activity.getString(when {
+                ready -> R.string.offline_saved
+                download?.isActive == true -> R.string.offline_in_progress
+                else -> R.string.download_track
+            })
+            holder.downloadView.setOnClickListener { onDownload(item) }
+        } else {
+            holder.downloadView.visibility = View.GONE
+            holder.downloadView.setOnClickListener(null)
+        }
 
         val resultView = view ?: throw IllegalStateException("Missing view")
         if (cachedState != state) {
@@ -110,6 +142,8 @@ object MediaItemViewHolder {
         val imageView: ImageView,
         val titleView: TextView,
         val descriptionView: TextView,
-        val locationView: TextView
+        val locationView: TextView,
+        val badgeView: TextView,
+        val downloadView: ImageView
     )
 }

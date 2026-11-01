@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp" android:background="@drawable/offline_card_bg" android:orientation="vertical" android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/download_date_tile" android:layout_width="62dp" android:layout_height="68dp" android:background="@drawable/offline_date_bg" android:gravity="center" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/offline_green" android:importantForAccessibility="no"/>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="14dp">
+            <TextView android:id="@+id/download_show_date" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="18sp" android:fontFamily="sans-serif-medium" android:textColor="@color/offline_ink"/>
+            <TextView android:id="@+id/download_venue" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textSize="14sp" android:textColor="@color/offline_muted"/>
+        </LinearLayout>
+        <ImageButton android:id="@+id/download_more" android:layout_width="48dp" android:layout_height="48dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_offline_more" android:contentDescription="@string/offline_remove"/>
+    </LinearLayout>
+    <TextView android:id="@+id/download_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/offline_green"/>
+    <ProgressBar android:id="@+id/download_progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="4dp" android:layout_marginTop="10dp" android:progressTint="@color/offline_green" android:progressBackgroundTint="@color/offline_line" android:max="100"/>
+    <TextView android:id="@+id/download_detail" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textSize="12sp" android:textColor="@color/offline_muted"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/download_play" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp" android:background="@drawable/offline_primary_bg" android:textColor="#FFFFFF" android:textAllCaps="false" android:text="@string/offline_play"/>
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/download_expand" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp" android:layout_marginStart="8dp" android:background="@drawable/offline_secondary_bg" android:textColor="@color/offline_ink" android:textAllCaps="false" android:text="@string/offline_expand"/>
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton android:id="@+id/download_retry" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:textAllCaps="false" android:textColor="@color/offline_orange" android:background="?attr/selectableItemBackground" android:text="@string/offline_retry"/>
+    <LinearLayout android:id="@+id/download_tracks" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"/>
+</LinearLayout>
