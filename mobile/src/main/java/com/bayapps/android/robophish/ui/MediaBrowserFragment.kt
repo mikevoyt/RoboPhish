@@ -26,16 +26,17 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.model.MusicProvider
-import com.bayapps.android.robophish.utils.Downloader
+import com.bayapps.android.robophish.downloads.DownloadActions
+import com.bayapps.android.robophish.downloads.DownloadStore
 import com.bayapps.android.robophish.utils.MediaIDHelper
 import com.bayapps.android.robophish.utils.NetworkHelper
 import com.bayapps.android.robophish.utils.ShowDetailsCache
@@ -75,7 +76,7 @@ class MediaBrowserFragment : Fragment() {
     private var pendingSelectedTrackId: String? = null
 
     private val okHttpClient by lazy { ServiceLocator.get(requireContext()).okHttpClient }
-    private val okHttpNoAuthClient by lazy { ServiceLocator.get(requireContext()).okHttpNoAuthClient }
+    private val phishNetClient by lazy { ServiceLocator.get(requireContext()).phishNetClient }
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private var oldOnline = false
@@ -170,8 +171,7 @@ class MediaBrowserFragment : Fragment() {
                         return@launch
                     }
                     val response = fetchJson(
-                        "https://phish.in/api/v1/shows/$showId",
-                        headers = mapOf("Authorization" to "Bearer ${BuildConfig.PHISHIN_API_KEY}")
+                        "https://phish.in/api/v1/shows/$showId"
                     )
                     if (!isAdded) return@launch
                     if (response == null) {
@@ -254,39 +254,29 @@ class MediaBrowserFragment : Fragment() {
 
     private suspend fun fetchJson(
         url: String,
-        queryParams: Map<String, String> = emptyMap(),
-        headers: Map<String, String> = emptyMap(),
         client: okhttp3.OkHttpClient = okHttpClient
     ): JSONObject? = withContext(Dispatchers.IO) {
-        val httpUrl = url.toHttpUrl().newBuilder().apply {
-            queryParams.forEach { (key, value) ->
-                addQueryParameter(key, value)
-            }
-        }.build()
+        val httpUrl = url.toHttpUrl()
         val request = Request.Builder()
             .url(httpUrl)
-            .apply {
-                headers.forEach { (key, value) ->
-                    addHeader(key, value)
-                }
-            }
             .build()
         try {
-            Timber.d("Requesting %s", httpUrl)
+            Timber.d("Requesting %s%s", httpUrl.host, httpUrl.encodedPath)
             client.newCall(request).execute().use { response ->
-                val body = response.body?.string()
                 if (!response.isSuccessful) {
-                    Timber.w("Request failed: %s body=%s", response.code, body)
+                    Timber.w("Request failed: HTTP %s", response.code)
                     return@withContext null
                 }
+                val body = response.body?.string()
                 if (body.isNullOrBlank()) {
-                    Timber.w("Request empty body for %s", httpUrl)
+                    Timber.w("Request empty body for %s%s", httpUrl.host, httpUrl.encodedPath)
                     return@withContext null
                 }
                 JSONObject(body)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Request failed for %s", url)
+            if (e is kotlinx.coroutines.CancellationException) throw e
+            Timber.w("Request failed for %s%s (%s)", httpUrl.host, httpUrl.encodedPath, e.javaClass.simpleName)
             null
         }
     }
@@ -313,6 +303,15 @@ class MediaBrowserFragment : Fragment() {
             pendingListState = state
         }
         pendingSelectedTrackId?.let { outState.putString(SELECTED_TRACK_ID_KEY, it) }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                DownloadStore.get(requireContext()).entries.collect { browserAdapter?.notifyDataSetChanged() }
+            }
+        }
     }
 
     override fun onPause() {
@@ -411,15 +410,31 @@ class MediaBrowserFragment : Fragment() {
         menuHost.addMenuProvider(
             object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    if (MediaIDHelper.isShow(getMediaId() ?: "")) {
+                        menu.add(0, MENU_DOWNLOAD_SHOW, 0, R.string.download_show)
+                            .setIcon(R.drawable.ic_file_download_black_36dp)
+                            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                    }
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    val context = activity ?: return false
                     return when (menuItem.itemId) {
-                        0 -> {
+                        MENU_DOWNLOAD_SHOW -> {
                             val showId = MediaIDHelper.extractShowFromMediaID(getMediaId() ?: "")
-                            val data = showData
-                            if (showId != null && data != null && activity != null) {
-                                Downloader(requireActivity(), data)
+                            val items = browserAdapter?.items ?: emptyList()
+                            if (!showId.isNullOrBlank() && items.isNotEmpty()) {
+                                val showTitle = getTitleText()
+                                val showSubtitle = getSubTitle()
+                                val location = items.firstOrNull()?.mediaMetadata?.description?.toString()
+                                DownloadActions.download(
+                                    context,
+                                    items.filter { it.mediaMetadata.isPlayable == true },
+                                    showId,
+                                    showTitle,
+                                    showSubtitle,
+                                    location
+                                )
                             }
                             true
                         }
@@ -459,6 +474,23 @@ class MediaBrowserFragment : Fragment() {
                 mediaFragmentListener?.onMediaItemSelected(item, siblings)
             }
         }
+        listView?.setOnItemLongClickListener { _, _, position, _ ->
+            val ctx = activity ?: return@setOnItemLongClickListener true
+            val item = browserAdapter?.getMediaItem(position) ?: return@setOnItemLongClickListener true
+            val showId = MediaIDHelper.extractShowFromMediaID(mediaId ?: "")
+            val showTitle = getTitleText()
+            val showSubtitle = getSubTitle()
+            val location = item.mediaMetadata.description?.toString()
+            DownloadActions.download(
+                ctx,
+                listOf(item),
+                showId,
+                showTitle,
+                showSubtitle,
+                location
+            )
+            true
+        }
     }
 
     private fun updateCache(
@@ -488,10 +520,7 @@ class MediaBrowserFragment : Fragment() {
             }
             val setlistResponse = fetchJson(
                 "https://api.phish.net/v5/setlists/showdate/$showDate.json",
-                mapOf(
-                    "apikey" to BuildConfig.PHISHNET_API_KEY
-                ),
-                client = okHttpNoAuthClient
+                client = phishNetClient
             )
             if (!isAdded) return@launch
             if (setlistResponse == null) {
@@ -531,8 +560,7 @@ class MediaBrowserFragment : Fragment() {
             }
             val reviewsResponse = fetchJson(
                 reviewsUrl,
-                mapOf("apikey" to BuildConfig.PHISHNET_API_KEY),
-                client = okHttpNoAuthClient
+                client = phishNetClient
             )
             if (!isAdded) return@launch
             if (reviewsResponse == null) {
@@ -735,9 +763,16 @@ class MediaBrowserFragment : Fragment() {
         var showError = forceError
         val activity = activity ?: return
         if (!NetworkHelper.isOnline(activity)) {
-            (errorMessage as? android.widget.TextView)?.setText(R.string.error_no_connection)
-            showError = true
+            (errorMessage as? android.widget.TextView)?.setText(R.string.offline_connection_banner)
+            errorMessage?.setOnClickListener {
+                startActivity(android.content.Intent(activity, DownloadsActivity::class.java))
+            }
+            val offlineTracks = browserAdapter?.items?.let { items ->
+                items.isNotEmpty() && items.all { it.mediaMetadata.extras?.getBoolean(com.bayapps.android.robophish.downloads.OfflineMedia.OFFLINE_ONLY) == true }
+            } == true
+            showError = !offlineTracks
         } else if (forceError) {
+            errorMessage?.setOnClickListener(null)
             (errorMessage as? android.widget.TextView)?.setText(R.string.error_loading_media)
             showError = true
         }
@@ -899,7 +934,19 @@ class MediaBrowserFragment : Fragment() {
                 parent,
                 item,
                 itemState
-            )
+            ) { mediaItem ->
+                val showId = MediaIDHelper.extractShowFromMediaID(mediaItem.mediaId)
+                val showTitle = mediaItem.mediaMetadata.title?.toString()
+                val showSubtitle = mediaItem.mediaMetadata.description?.toString()
+                DownloadActions.download(
+                    activity as androidx.fragment.app.FragmentActivity,
+                    listOf(mediaItem),
+                    showId,
+                    showTitle,
+                    showSubtitle,
+                    showSubtitle
+                )
+            }
         }
 
         private fun shouldGroupBySet(items: List<MediaItem>): Boolean {
@@ -954,5 +1001,6 @@ class MediaBrowserFragment : Fragment() {
         private const val ARG_SELECTED_TRACK_ID = "selected_track_id"
         private const val LIST_STATE_KEY = "list_state"
         private const val SELECTED_TRACK_ID_KEY = "selected_track_id_state"
+        private const val MENU_DOWNLOAD_SHOW = 101
     }
 }

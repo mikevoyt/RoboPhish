@@ -17,6 +17,7 @@ import timber.log.Timber
 /**
  * Main activity for the music player.
  */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentListener {
     private var voiceSearchParams: Bundle? = null
 
@@ -40,6 +41,10 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     override fun onMediaItemSelected(item: MediaItem, siblings: List<MediaItem>) {
         Timber.d("onMediaItemSelected, mediaId=%s", item.mediaId)
+        if (item.mediaId == com.bayapps.android.robophish.model.MusicProvider.MEDIA_ID_DOWNLOADS) {
+            startActivity(Intent(this, DownloadsActivity::class.java))
+            return
+        }
         val browser = mediaBrowser
         when {
             item.mediaMetadata.isPlayable == true && browser != null -> {

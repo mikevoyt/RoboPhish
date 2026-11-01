@@ -13,6 +13,13 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class MediaIDHelperTest {
     @Test
+    fun trackDownloadUsesShowIdWithoutTrackSuffix() {
+        assertEquals("1234", MediaIDHelper.extractShowFromMediaID("__TRACKS_BY_SHOW__/1234|9876"))
+        assertEquals("1234", MediaIDHelper.extractShowFromMediaID("__TRACKS_BY_SHOW__/1234"))
+        assertNull(MediaIDHelper.extractShowFromMediaID(MediaIDHelper.MEDIA_ID_ROOT))
+    }
+
+    @Test
     fun testNormalMediaIDStructure() {
         val mediaID = MediaIDHelper.createMediaID("784343", "BY_GENRE", "Classic 70's")
         assertEquals("Classic 70's", MediaIDHelper.extractBrowseCategoryValueFromMediaID(mediaID))

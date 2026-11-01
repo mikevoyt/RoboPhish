@@ -11,6 +11,11 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.datasource.ResolvingDataSource
+import com.bayapps.android.robophish.downloads.DownloadStore
+import com.bayapps.android.robophish.downloads.OfflineMedia
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
@@ -28,6 +33,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MusicService : MediaLibraryService() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
@@ -42,7 +48,17 @@ class MusicService : MediaLibraryService() {
     override fun onCreate() {
         super.onCreate()
 
+        val downloads = DownloadStore.get(this)
+        val dataSource = ResolvingDataSource.Factory(DefaultDataSource.Factory(this)) { spec ->
+            // Resolve at file-open time too: the next queued track may finish downloading
+            // while the current track plays. ExoPlayer calls this off the main thread.
+            val saved = downloads.getAll().firstOrNull { it.sourceUrl == spec.uri.toString() }
+            if (saved != null && OfflineMedia.isPlayable(saved)) {
+                spec.withUri(android.net.Uri.parse(saved.fileUri))
+            } else spec
+        }
         player = ExoPlayer.Builder(this)
+            .setMediaSourceFactory(DefaultMediaSourceFactory(dataSource))
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
@@ -100,15 +116,7 @@ class MusicService : MediaLibraryService() {
             controller: MediaSession.ControllerInfo,
             mediaItems: MutableList<MediaItem>
         ): com.google.common.util.concurrent.ListenableFuture<MutableList<MediaItem>> {
-            val resolved = mediaItems.map { item ->
-                if (item.localConfiguration?.uri != null) {
-                    item
-                } else {
-                    val trackId = MediaIDHelper.extractMusicIDFromMediaID(item.mediaId)
-                    musicProvider.getTrackItem(trackId) ?: item
-                }
-            }.toMutableList()
-            return Futures.immediateFuture(resolved)
+            return resolveAsync { mediaItems.map { resolveMediaItem(it) }.toMutableList() }
         }
 
         override fun onSetMediaItems(
@@ -117,19 +125,10 @@ class MusicService : MediaLibraryService() {
             mediaItems: MutableList<MediaItem>,
             startIndex: Int,
             startPositionMs: Long
-        ): com.google.common.util.concurrent.ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
-            val resolved = mediaItems.map { item ->
-                if (item.localConfiguration?.uri != null) {
-                    item
-                } else {
-                    val trackId = MediaIDHelper.extractMusicIDFromMediaID(item.mediaId)
-                    musicProvider.getTrackItem(trackId) ?: item
-                }
-            }
-            val safeIndex = startIndex.coerceIn(0, (resolved.size - 1).coerceAtLeast(0))
-            return Futures.immediateFuture(
-                MediaSession.MediaItemsWithStartPosition(resolved, safeIndex, startPositionMs)
-            )
+        ): com.google.common.util.concurrent.ListenableFuture<MediaSession.MediaItemsWithStartPosition> = resolveAsync {
+            val resolved = mediaItems.map { resolveMediaItem(it) }
+            MediaSession.MediaItemsWithStartPosition(resolved,
+                startIndex.coerceIn(0, (resolved.size - 1).coerceAtLeast(0)), startPositionMs)
         }
 
         override fun onPlaybackResumption(
@@ -186,6 +185,27 @@ class MusicService : MediaLibraryService() {
             pageSize: Int,
             params: LibraryParams?
         ) = immediateResultList(emptyList())
+    }
+
+    private fun resolveMediaItem(item: MediaItem): MediaItem {
+        val trackId = MediaIDHelper.extractMusicIDFromMediaID(item.mediaId)
+        val saved = DownloadStore.get(this).find(trackId)
+        if (saved != null && OfflineMedia.isPlayable(saved)) return OfflineMedia.toMediaItem(saved)
+        if (item.mediaMetadata.extras?.getBoolean(OfflineMedia.OFFLINE_ONLY) == true) {
+            throw java.io.IOException("Downloaded file is no longer available")
+        }
+        val catalog = musicProvider.getTrackItem(trackId) ?: item
+        val uri = catalog.localConfiguration?.uri ?: catalog.requestMetadata.mediaUri
+            ?: catalog.mediaMetadata.extras?.getString(MusicProvider.METADATA_STREAM_URL)?.let(android.net.Uri::parse)
+        return if (uri != null) catalog.buildUpon().setUri(uri).build() else catalog
+    }
+
+    private fun <T> resolveAsync(block: () -> T): com.google.common.util.concurrent.ListenableFuture<T> {
+        val future = SettableFuture.create<T>()
+        serviceScope.launch(Dispatchers.IO) {
+            try { future.set(block()) } catch (e: Exception) { future.setException(e) }
+        }
+        return future
     }
 
     private fun rootItem(): MediaItem {
@@ -281,7 +301,11 @@ class MusicService : MediaLibraryService() {
                 startForeground(notificationId, notification)
             } else {
                 stopForegroundCompat(remove = false)
-                notificationManagerCompat.notify(notificationId, notification)
+                if (Build.VERSION.SDK_INT < 33 || androidx.core.content.ContextCompat.checkSelfPermission(
+                        this@MusicService, android.Manifest.permission.POST_NOTIFICATIONS
+                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    notificationManagerCompat.notify(notificationId, notification)
+                }
             }
         }
 

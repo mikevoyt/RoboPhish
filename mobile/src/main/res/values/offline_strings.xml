@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_collection_headline">Your shows. Anywhere.</string>
+    <string name="offline_downloads">Downloads</string>
+    <string name="offline_browse_subtitle">Your music, ready to go</string>
+    <string name="offline_eyebrow">YOUR OFFLINE COLLECTION</string>
+    <string name="offline_headline">Good music.
+Anywhere.</string>
+    <string name="offline_intro">Save a show. Leave the signal behind.</string>
+    <string name="offline_stats">%1$s · %2$s · %3$s used</string>
+    <string name="offline_free">%1$s available on this device</string>
+    <string name="offline_wifi_only">Unmetered downloads only</string>
+    <string name="offline_wifi_hint">Downloads wait for an unmetered connection, usually Wi-Fi. Saved tracks play without data.</string>
+    <string name="offline_mobile_hint">Metered connections allowed. Roaming is always off.</string>
+    <string name="offline_mobile_title">Allow metered downloads?</string>
+    <string name="offline_mobile_message">Live shows can use hundreds of megabytes. Active transfers will restart with the new network setting. Completed tracks stay saved.</string>
+    <string name="offline_wifi_message">Active transfers will restart and wait for an unmetered connection. Completed tracks stay saved.</string>
+    <string name="offline_allow">Allow metered data</string>
+    <string name="offline_all">All shows</string>
+    <string name="offline_ready_filter">Ready to play</string>
+    <string name="offline_empty_title">Take a show with you.</string>
+    <string name="offline_empty_body">Open any show and tap the download arrow. Your setlist and music will be waiting here, even in airplane mode.</string>
+    <string name="offline_empty_ready">No completed downloads yet.</string>
+    <string name="offline_browse">Find a show</string>
+    <string name="offline_play">Play</string>
+    <string name="offline_play_saved">Play saved</string>
+    <string name="offline_retry">Retry failed</string>
+    <string name="offline_retry_track">Retry download</string>
+    <string name="offline_expand">View setlist</string>
+    <string name="offline_collapse">Hide setlist</string>
+    <string name="offline_show_options">Options for %1$s</string>
+    <string name="offline_remove">Remove downloads</string>
+    <string name="offline_remove_title">Remove this show?</string>
+    <string name="offline_remove_message">Remove %1$d saved or queued tracks and free %2$s? You can download them again anytime. Playback of this show will stop.</string>
+    <string name="offline_removed">Downloads removed</string>
+    <string name="offline_saved">Saved for offline playback</string>
+    <string name="offline_in_progress">Download in progress</string>
+    <string name="offline_ready_status">Ready offline · %1$s · %2$s</string>
+    <string name="offline_partial_status">%1$d of %2$d tracks saved · %3$s</string>
+    <string name="offline_downloading">Downloading · %1$d%%</string>
+    <string name="offline_waiting_wifi">Waiting for an unmetered connection</string>
+    <string name="offline_waiting_network">Waiting for a connection</string>
+    <string name="offline_waiting_retry">Connection interrupted · retrying</string>
+    <string name="offline_queued_status">Queued</string>
+    <string name="offline_needs_attention">Some tracks need attention</string>
+    <string name="offline_no_space">Not enough storage · free space and retry</string>
+    <string name="offline_missing_file">File unavailable · download again</string>
+    <string name="offline_failed">Download interrupted · tap to retry</string>
+    <string name="offline_missing_source">Open this show online to download it again</string>
+    <string name="offline_operation_failed">Could not update downloads. Please try again.</string>
+    <string name="offline_loading">Connecting to the player…</string>
+    <string name="offline_playback_error">Could not play this download. Try again, or download the track again.</string>
+    <string name="offline_unavailable">This file is no longer available. Download it again.</string>
+    <string name="offline_view">View</string>
+    <string name="offline_download">Download</string>
+    <string name="offline_confirm_download">Save %1$d tracks (about %2$s) for offline listening?
+
+%3$s Downloads continue when you leave the app.</string>
+    <string name="offline_on_wifi">Downloads wait for an unmetered connection, usually Wi-Fi.</string>
+    <string name="offline_on_any_network">Wi-Fi and mobile data are allowed.</string>
+    <string name="offline_already_saved">Already saved or in your download queue</string>
+    <string name="offline_enqueue_failed">%1$d tracks could not be queued. Open Downloads to retry.</string>
+    <plurals name="offline_queued"><item quantity="one">%d track added to downloads</item><item quantity="other">%d tracks added to downloads</item></plurals>
+
+    <plurals name="offline_show_count"><item quantity="one">%d show</item><item quantity="other">%d shows</item></plurals>
+    <plurals name="offline_track_count"><item quantity="one">%d track</item><item quantity="other">%d tracks</item></plurals>
+</resources>

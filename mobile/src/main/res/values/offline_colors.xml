@@ -1,0 +1,5 @@
+<resources>
+    <color name="offline_ink">#182B35</color><color name="offline_muted">#52636C</color>
+    <color name="offline_paper">#F3F1EB</color><color name="offline_green">#186849</color>
+    <color name="offline_orange">#B83D16</color><color name="offline_line">#DFE4E1</color>
+</resources>
