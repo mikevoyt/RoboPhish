@@ -1,0 +1,245 @@
+[
+  {
+    "hp": 20,
+    "mud": 0,
+    "presence": 0,
+    "passed": 12,
+    "median_rumble_reduction_db": -0.610737425513562,
+    "max_abs_crest_change_db": 0.860188625380605,
+    "max_true_peak_estimate_db": 0.678173226118117
+  },
+  {
+    "hp": 20,
+    "mud": 0,
+    "presence": 1,
+    "passed": 12,
+    "median_rumble_reduction_db": -0.7856567470733808,
+    "max_abs_crest_change_db": 0.8385362174780262,
+    "max_true_peak_estimate_db": 0.8184873336960252
+  },
+  {
+    "hp": 20,
+    "mud": 0,
+    "presence": 2,
+    "passed": 5,
+    "median_rumble_reduction_db": -1.0279036993802573,
+    "max_abs_crest_change_db": 0.8298415380252457,
+    "max_true_peak_estimate_db": 0.9346017508253672
+  },
+  {
+    "hp": 20,
+    "mud": -1.5,
+    "presence": 0,
+    "passed": 12,
+    "median_rumble_reduction_db": -0.2354414645428024,
+    "max_abs_crest_change_db": 1.0595642362618776,
+    "max_true_peak_estimate_db": 0.957972702458999
+  },
+  {
+    "hp": 20,
+    "mud": -1.5,
+    "presence": 1,
+    "passed": 5,
+    "median_rumble_reduction_db": -0.44915810623668756,
+    "max_abs_crest_change_db": 1.028573030914547,
+    "max_true_peak_estimate_db": 1.0853139693091367
+  },
+  {
+    "hp": 20,
+    "mud": -1.5,
+    "presence": 2,
+    "passed": 3,
+    "median_rumble_reduction_db": -0.6733934731600354,
+    "max_abs_crest_change_db": 1.1011632407162892,
+    "max_true_peak_estimate_db": 1.187223055565076
+  },
+  {
+    "hp": 20,
+    "mud": -3,
+    "presence": 0,
+    "passed": 6,
+    "median_rumble_reduction_db": 0.12746785313671014,
+    "max_abs_crest_change_db": 1.1927784915921826,
+    "max_true_peak_estimate_db": 1.194274677543988
+  },
+  {
+    "hp": 20,
+    "mud": -3,
+    "presence": 1,
+    "passed": 3,
+    "median_rumble_reduction_db": -0.09837546912745669,
+    "max_abs_crest_change_db": 1.1532708230362516,
+    "max_true_peak_estimate_db": 1.3095541849274548
+  },
+  {
+    "hp": 20,
+    "mud": -3,
+    "presence": 2,
+    "passed": 1,
+    "median_rumble_reduction_db": -0.3470270668119938,
+    "max_abs_crest_change_db": 1.3324513128339532,
+    "max_true_peak_estimate_db": 1.3983153518518112
+  },
+  {
+    "hp": 30,
+    "mud": 0,
+    "presence": 0,
+    "passed": 12,
+    "median_rumble_reduction_db": -1.5295414221661465,
+    "max_abs_crest_change_db": 0.8353899841557748,
+    "max_true_peak_estimate_db": 0.7604964427949062
+  },
+  {
+    "hp": 30,
+    "mud": 0,
+    "presence": 1,
+    "passed": 10,
+    "median_rumble_reduction_db": -1.6665063145084198,
+    "max_abs_crest_change_db": 0.8034118007959101,
+    "max_true_peak_estimate_db": 0.8948187711534481
+  },
+  {
+    "hp": 30,
+    "mud": 0,
+    "presence": 2,
+    "passed": 4,
+    "median_rumble_reduction_db": -1.877162034841464,
+    "max_abs_crest_change_db": 0.9715875338019586,
+    "max_true_peak_estimate_db": 1.00510136288705
+  },
+  {
+    "hp": 30,
+    "mud": -1.5,
+    "presence": 0,
+    "passed": 12,
+    "median_rumble_reduction_db": -1.0957230836996072,
+    "max_abs_crest_change_db": 1.1215896137568855,
+    "max_true_peak_estimate_db": 1.0549014840400508
+  },
+  {
+    "hp": 30,
+    "mud": -1.5,
+    "presence": 1,
+    "passed": 4,
+    "median_rumble_reduction_db": -1.3059054902108187,
+    "max_abs_crest_change_db": 1.078929306858587,
+    "max_true_peak_estimate_db": 1.1754779133723066
+  },
+  {
+    "hp": 30,
+    "mud": -1.5,
+    "presence": 2,
+    "passed": 2,
+    "median_rumble_reduction_db": -1.5369140317518153,
+    "max_abs_crest_change_db": 1.2641688025539644,
+    "max_true_peak_estimate_db": 1.2708060434480475
+  },
+  {
+    "hp": 30,
+    "mud": -3,
+    "presence": 0,
+    "passed": 6,
+    "median_rumble_reduction_db": -0.7456833232536864,
+    "max_abs_crest_change_db": 1.3446360898123686,
+    "max_true_peak_estimate_db": 1.305799874257729
+  },
+  {
+    "hp": 30,
+    "mud": -3,
+    "presence": 1,
+    "passed": 3,
+    "median_rumble_reduction_db": -0.9782318985702246,
+    "max_abs_crest_change_db": 1.2921160899390642,
+    "max_true_peak_estimate_db": 1.413518135783535
+  },
+  {
+    "hp": 30,
+    "mud": -3,
+    "presence": 2,
+    "passed": 1,
+    "median_rumble_reduction_db": -1.2296253845267007,
+    "max_abs_crest_change_db": 1.5166939890933229,
+    "max_true_peak_estimate_db": 1.4949304780050852
+  },
+  {
+    "hp": 45,
+    "mud": 0,
+    "presence": 0,
+    "passed": 11,
+    "median_rumble_reduction_db": -3.3870000665265065,
+    "max_abs_crest_change_db": 0.7194371029351441,
+    "max_true_peak_estimate_db": 0.7168715465140185
+  },
+  {
+    "hp": 45,
+    "mud": 0,
+    "presence": 1,
+    "passed": 7,
+    "median_rumble_reduction_db": -3.5671538046914733,
+    "max_abs_crest_change_db": 0.8297014698586196,
+    "max_true_peak_estimate_db": 0.8485677588281642
+  },
+  {
+    "hp": 45,
+    "mud": 0,
+    "presence": 2,
+    "passed": 3,
+    "median_rumble_reduction_db": -3.7557347328289405,
+    "max_abs_crest_change_db": 1.0804232636109887,
+    "max_true_peak_estimate_db": 0.9559535362516596
+  },
+  {
+    "hp": 45,
+    "mud": -1.5,
+    "presence": 0,
+    "passed": 4,
+    "median_rumble_reduction_db": -2.9359359338582056,
+    "max_abs_crest_change_db": 0.9064503380160644,
+    "max_true_peak_estimate_db": 1.0338749029729235
+  },
+  {
+    "hp": 45,
+    "mud": -1.5,
+    "presence": 1,
+    "passed": 3,
+    "median_rumble_reduction_db": -3.150091791503034,
+    "max_abs_crest_change_db": 1.1682457420472723,
+    "max_true_peak_estimate_db": 1.150429206848588
+  },
+  {
+    "hp": 45,
+    "mud": -1.5,
+    "presence": 2,
+    "passed": 1,
+    "median_rumble_reduction_db": -3.385160420926331,
+    "max_abs_crest_change_db": 1.4107773213556456,
+    "max_true_peak_estimate_db": 1.2414977537792558
+  },
+  {
+    "hp": 45,
+    "mud": -3,
+    "presence": 0,
+    "passed": 3,
+    "median_rumble_reduction_db": -2.6497189458506583,
+    "max_abs_crest_change_db": 1.2111327425661287,
+    "max_true_peak_estimate_db": 1.3131206403612778
+  },
+  {
+    "hp": 45,
+    "mud": -3,
+    "presence": 1,
+    "passed": 1,
+    "median_rumble_reduction_db": -2.8870812346868195,
+    "max_abs_crest_change_db": 1.4663767160962458,
+    "max_true_peak_estimate_db": 1.4096766536805705
+  },
+  {
+    "hp": 45,
+    "mud": -3,
+    "presence": 2,
+    "passed": 1,
+    "median_rumble_reduction_db": -3.1400133276950046,
+    "max_abs_crest_change_db": 1.7011070978169798,
+    "max_true_peak_estimate_db": 1.4854389934167718
+  }
+]

@@ -6,6 +6,7 @@ import androidx.media3.common.audio.BaseAudioProcessor
 import java.nio.ByteBuffer
 
 /** Retains a live pass-through stage so a toggle never rebuilds or restarts the player. */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class AudienceAudioProcessor(private val settings: AudienceAudioSettings) : BaseAudioProcessor() {
     private var engine: AudienceDsp? = null
     private var samples = ShortArray(0)

@@ -54,7 +54,10 @@ public final class AudienceDsp {
                     output[offset + c] = input[offset + c];
                 } else {
                     double original = input[offset + c] / 32768.0;
-                    double result = original + wet * (clarityFrame[c] * limiter - original);
+                    // One dB of smoothly blended headroom: sample limiting alone does not
+                    // prevent intersample overshoot on already hot audience masters.
+                    double result = (original + wet * (clarityFrame[c] * limiter - original))
+                        * (1 + wet * (0.8912509381337456 - 1));
                     output[offset + c] = (short) Math.max(-32768, Math.min(32767, Math.round(result * 32768)));
                 }
             }

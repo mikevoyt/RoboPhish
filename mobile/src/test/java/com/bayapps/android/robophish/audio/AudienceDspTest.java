@@ -59,7 +59,8 @@ public class AudienceDspTest {
             new AudienceDsp(sr,1).process(rumble,a,a.length,true,1,AudienceDsp.Mode.RUMBLE);
             new AudienceDsp(sr,1).process(bass,b,b.length,true,1,AudienceDsp.Mode.RUMBLE);
             assertTrue(20*Math.log10(rms(a,sr)/rms(rumble,sr)) < -18);
-            assertTrue(20*Math.log10(rms(b,sr)/rms(bass,sr)) > -1);
+            // Account separately for the intentional 1 dB headroom gain.
+            assertTrue(20*Math.log10(rms(b,sr)/rms(bass,sr)) > -1.5);
         }
     }
     @Test public void zeroAmountAndInvalidAmountAreTransparent() {
@@ -86,5 +87,17 @@ public class AudienceDspTest {
         short[] x=new short[100],y=new short[100];x[0]=1000;
         new AudienceDsp(44100,1).process(x,y,100,true,1,AudienceDsp.Mode.RUMBLE);
         assertTrue(y[0]!=0);assertEquals(x.length,y.length);
+    }
+    @Test public void modeSwitchAndBypassTransitionsStayContinuous() {
+        int sr=48000;
+        AudienceDsp dsp=new AudienceDsp(sr,2);
+        short[] block=sine(sr,2,280,.15,1), rendered=new short[block.length];
+        dsp.process(block,rendered,block.length,true,1,AudienceDsp.Mode.RUMBLE);
+        dsp.process(block,rendered,block.length,true,1,AudienceDsp.Mode.CLARITY);
+        // A 280 Hz sine at this amplitude changes by under 190 PCM units/frame.
+        // A mode discontinuity would add a step well beyond the natural slope.
+        for(int i=2;i<sr/10*2;i+=2) assertTrue(Math.abs(rendered[i]-rendered[i-2])<220);
+        dsp.process(block,rendered,block.length,false,1,AudienceDsp.Mode.RUMBLE);
+        for(int i=2;i<sr/10*2;i+=2) assertTrue(Math.abs(rendered[i]-rendered[i-2])<220);
     }
 }
