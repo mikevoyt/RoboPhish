@@ -156,6 +156,7 @@ class DownloadsActivity : BaseActivity() {
     }
 
     private fun confirmRemoval(show: DownloadShow) {
+        if (mediaBrowser == null) { message(getString(R.string.offline_loading)); return }
         AlertDialog.Builder(this).setTitle(R.string.offline_remove_title)
             .setMessage(getString(R.string.offline_remove_message, show.tracks.size, size(show.bytes)))
             .setNegativeButton(android.R.string.cancel, null)
@@ -295,6 +296,7 @@ class DownloadsActivity : BaseActivity() {
             view.findViewById<TextView>(R.id.download_detail).apply {
                 visibility = if (show.complete) View.GONE else View.VISIBLE
                 text = when {
+                    show.complete -> ""
                     show.tracks.any { it.status == DownloadStatus.DOWNLOADING } -> getString(R.string.offline_downloading, show.progress)
                     show.active -> status(show.tracks.first { it.isActive })
                     else -> status(show.tracks.first { it.status == DownloadStatus.FAILED })

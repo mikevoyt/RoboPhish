@@ -21,6 +21,33 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Build debug and run tests
         run: ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:assembleDebug :mobile:testDebugUnitTest :networking:test :mobile:lintDebug
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Exercise offline playback on Android
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: |
+            adb shell svc wifi disable
+            adb shell svc data disable
+            ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:connectedDebugAndroidTest
+      - name: Collect device evidence
+        if: always()
+        run: |
+          adb logcat -d -s AndroidRuntime > android-crashes.txt || true
+          adb pull /sdcard/Android/data/com.bayapps.android.robophish/files/offline-screenshots offline-screenshots || true
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+          for p in Path("offline-screenshots").glob("*.png"):
+              print("OFFLINE_SCREENSHOT:" + p.name + ":" + base64.b64encode(p.read_bytes()).decode())
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -29,3 +56,5 @@ jobs:
             mobile/build/reports/
             networking/build/reports/
             mobile/build/outputs/apk/debug/
+            offline-screenshots/
+            android-crashes.txt
