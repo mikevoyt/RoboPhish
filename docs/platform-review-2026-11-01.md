@@ -38,7 +38,7 @@ Media3's recent releases include MP3 timing/gapless and offload fixes relevant t
 
 ## P0: stop sending the Phish.in bearer to artwork hosts
 
-This is the most concrete urgent finding.
+This was the most concrete urgent baseline finding. Containment is implemented in [PR #55 at `e6ebc37`](https://github.com/mikevoyt/RoboPhish/commit/e6ebc37): Coil uses an unauthenticated client; network credentials are restricted to HTTPS, exact host/port, and API path; Phish.net uses `X-API-KEY`; and fetch diagnostics are sanitized. Redirect/authentication tests are running in [run #14](https://github.com/mikevoyt/RoboPhish/actions/runs/41338131823) at this update. The baseline evidence and acceptance criteria below remain useful for review; this containment does not remove secrets embedded in the APK.
 
 - [`ServiceLocator.kt:48–53`](https://github.com/mikevoyt/RoboPhish/blob/520bf958533e052bc0c362478c1fd4851af6714c/mobile/src/main/java/com/bayapps/android/robophish/ServiceLocator.kt#L48) adds `PhishinAuthInterceptor` as a **network interceptor**.
 - [`ServiceLocator.kt:79–82`](https://github.com/mikevoyt/RoboPhish/blob/520bf958533e052bc0c362478c1fd4851af6714c/mobile/src/main/java/com/bayapps/android/robophish/ServiceLocator.kt#L79) gives that same authenticated client to Coil.
@@ -47,7 +47,7 @@ This is the most concrete urgent finding.
 
 The resulting request construction sends the bearer to those third parties. Because it is a network interceptor, it can also reattach the header on a redirected request after OkHttp has stripped a cross-origin authorization header. This is a source-confirmed exposure path, not a claim that a third party has abused the credential.
 
-**Scoped patch:** use `okHttpNoAuthClient` for Coil; restrict the auth interceptor to exact HTTPS origin `phish.in:443` and the required `/api/v1/` path boundary; fail closed on cleartext/downgrade redirects. Keep downloads, MP3/CDN requests, and arbitrary artwork on explicitly unauthenticated clients. Avoid suffix-host checks and broad `/api` substring matching. Do not forward a caller-provided bearer to an unrelated host.
+**Containment criteria:** use `okHttpNoAuthClient` for Coil; restrict the auth interceptor to exact HTTPS origin `phish.in:443` and the required `/api/v1/` path boundary; fail closed on cleartext/downgrade credential forwarding. Keep downloads, MP3/CDN requests, and arbitrary artwork on explicitly unauthenticated clients. Avoid suffix-host checks and broad `/api` substring matching. Do not forward a caller-provided bearer to an unrelated host.
 
 **Tests:** use MockWebServer with fake credentials and test TLS/DNS routing to verify authorized API requests, unrelated hosts, subdomain lookalikes, non-API paths, port/scheme changes, redirects from API to artwork/CDN, and same-origin redirects. Assert the destination receives no credential. A loader wiring test should prove artwork uses the no-auth client. Review provider-side key replacement with the owner after the exposure is contained; do not print or rotate credentials as part of this audit. Estimated effort: 1–2 days, low implementation risk.
 
@@ -61,7 +61,7 @@ The current `PhishinService` is tied to v1 `years`, `years/{year}`, and `shows/{
 
 Build a v2 adapter behind the existing repository contract. It must handle paginated `shows?year=...`, date-based show detail, `mp3_url`, missing audio, tags, real artwork, and explicit duration units. Preserve stable track/show identifiers already stored by downloads and queues. Test old cached data migration, era ranges, all pages, 404/429/5xx, nullable artwork/audio, and partial shows. Once all v1 consumers are gone, remove the Phish.in key build plugin and interceptor. Do not simply delete auth while still calling v1. [Provider API entry point](https://phish.in/api-docs)
 
-Phish.net is a separate provider. `MediaBrowserFragment.fetchJson` currently puts `apikey` in a query string and logs the full URL in debug. Move it to `X-API-KEY` immediately and redact sensitive URLs/headers from diagnostics. That reduces accidental exposure but does **not** make a key embedded in an APK secret. The provider's current security addendum, effective November 1, 2026 with an existing-holder compliance date of May 1, 2027, says keys must not live in client-side code. Plan a narrow caching backend or another provider-approved access model; do not introduce a generic open proxy. Limit routes/parameters, rate-limit it, and keep provider credentials server-side. [Phish.net authentication](https://docs.phish.net/about-the-api), [security addendum](https://docs.phish.net/security-addendum)
+Phish.net is a separate provider. The baseline `MediaBrowserFragment.fetchJson` puts `apikey` in a query string and logs the full URL in debug; PR #55 at `e6ebc37` replaces that with `X-API-KEY` and sanitized fetch diagnostics. That reduces accidental exposure but does **not** make a key embedded in an APK secret. The provider's current security addendum, effective November 1, 2026 with an existing-holder compliance date of May 1, 2027, says keys must not live in client-side code. A narrow caching backend or another provider-approved access model remains a priority after containment, alongside the keyless Phish.in v2 migration. Do not introduce a generic open proxy: limit routes/parameters, rate-limit it, and keep provider credentials server-side. [Phish.net authentication](https://docs.phish.net/about-the-api), [security addendum](https://docs.phish.net/security-addendum)
 
 ## Playback reliability: one owner, durable state
 
@@ -127,7 +127,7 @@ The separate enhancement project should keep expensive analysis outside playback
 
 | Priority / order | Deliverable | Effort / risk | Acceptance evidence |
 |---|---|---|---|
-| P0 / first | Isolate artwork auth; exact-origin API auth; redact query credentials; Phish.net header migration | 1–2 days / low | Fake-key TLS/redirect tests; no credentials to third parties or logs. |
+| P0 / containment implemented, verification pending | Isolate artwork auth; exact-origin API auth; redact query credentials; Phish.net header migration | Implemented in PR #55 at `e6ebc37` / low | Fake-key TLS/redirect tests running in run #14; verify no credentials to third parties or logs. APK-secret architecture work remains. |
 | P0 / release gate | Promote supported API 36 toolchain; reconcile release metadata; enable actionable lint gates | 1–3 days / medium | Debug and release-like minified checks; API 26/35/36 smoke tests; correct generated manifest. Release signing follows AGENTS.md separately. |
 | P1 / next | Complete offline merge, one download owner, crash/reboot/storage reconciliation | 3–6 days / medium | Kill/relaunch offline, partial download/retry, low storage, deletion during playback, upgrade/restore tests. Count only work remaining after PR #55. |
 | P1 / next | Service-owned notification, durable queue/resumption, controller and browse contract | 3–5 days / medium | Single notification; cold resume; malformed IDs; notification-denied state; Bluetooth and Auto/voice tests. |
@@ -171,6 +171,15 @@ A targeted static review of the concurrent offline feature found three concrete 
 
 Adoption also exposed a legacy identity edge: records without a track ID previously derived their key from paths/job IDs that change during adoption. PR #55 now persists a stable `recordId`, supplies a deterministic migration default, and uses fallback keys for playback lookup and removal. Interruption tests cover both sides of the rename, including a null-track-ID record retaining one identity; the transfer test checks that system-job cleanup cannot delete the saved final file, and a retry test covers a late response after removal.
 
-The pre-retention [full API 35 run `41335894203`](https://github.com/mikevoyt/RoboPhish/actions/runs/41335894203) passed. **Final API 26/35/36 validation of `42186a9` is pending at this follow-up**, so the earlier green run does not certify these subsequent changes. This reviewer checked the journal ordering and retry guard statically and did not run device tests. The audit remains recommendation-only; implementation changes belong to PR #55.
+The pre-retention [full API 35 run `41335894203`](https://github.com/mikevoyt/RoboPhish/actions/runs/41335894203) passed. Later [run #13 at `2cda126`](https://github.com/mikevoyt/RoboPhish/actions/runs/41337447120) supplies validation after the retention fixes:
+
+| Environment | Verified result and limit |
+|---|---|
+| API 35 emulator | One real-transfer test and nine offline instrumentation tests passed; 38 mobile and five networking JVM tests passed; lint reported zero errors and 120 warnings. [Job evidence](https://github.com/mikevoyt/RoboPhish/actions/runs/41337447120/job/124940154048) |
+| API 36 emulator | One real-transfer test and nine offline instrumentation tests passed. [Job evidence](https://github.com/mikevoyt/RoboPhish/actions/runs/41337447120/job/124940154186) |
+| API 26 emulator | The real-transfer test passed. The remaining suite was blocked by the test harness attempting a protected `AIRPLANE_MODE` broadcast; a harness fix is queued in run #14. Full API 26 validation is not yet established. |
+| Native Android Studio and physical device | The root API 36 project opened, synced, and built successfully. RoboPhish Dev (`.dev`) was installed alongside the release app on the actual Pixel 9 Pro running API 37.1. The mirror connected, but the phone was locked, so physical playback has not been verified. |
+
+These runtime results were reported by the implementation workstream; this reviewer checked journal ordering and the retry guard statically and did not personally run device tests. They apply to the stated commits: later credential containment at `e6ebc37` is still being validated in [run #14](https://github.com/mikevoyt/RoboPhish/actions/runs/41338131823). The audit remains recommendation-only; implementation changes belong to PR #55. Successful debug builds and installation do not establish release-signing readiness.
 
 Retention/policy evidence: [DownloadManager request contract](https://developer.android.com/reference/android/app/DownloadManager.Request), [AOSP idle cleanup](https://android.googlesource.com/platform/packages/providers/DownloadProvider/+/master/src/com/android/providers/downloads/DownloadIdleService.java), and [AOSP destination classification/file deletion](https://android.googlesource.com/platform/packages/providers/DownloadProvider/+/refs/heads/main/src/com/android/providers/downloads/DownloadProvider.java).
