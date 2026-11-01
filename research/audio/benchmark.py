@@ -1,5 +1,5 @@
 """Audience-tape study: metrics are guardrails, not perceptual quality scores."""
-import argparse, hashlib, json, math, subprocess, time, urllib.request
+import argparse, hashlib, json, math, re, subprocess, time, urllib.request
 from pathlib import Path
 import numpy as np
 from scipy import signal
@@ -31,7 +31,10 @@ def corpus(cache):
             raw=request('https://phish.in/api/v2/shows/'+date)
             show=raw.get('data',raw)
             print('SHOW',date,'keys',sorted(show.keys()),flush=True)
-            if show.get('sbd') is True or show.get('audio_status') in ('missing','none'): continue
+            notes=show.get('taper_notes') or ''
+            tags=' '.join(str(t.get('name','') if isinstance(t,dict) else t) for t in show.get('tags',[]))
+            print('SOURCE',date,show.get('audio_status'),tags,notes[:700].replace('\n',' '),flush=True)
+            if show.get('sbd') is True or show.get('audio_status') in ('missing','none') or re.search(r'\bsbd\b|\bsoundboard\b',tags+' '+notes,re.I): continue
             tracks=show.get('tracks',[])
             candidates=[t for t in tracks if t.get('mp3_url',t.get('mp3')) and
                         (t.get('duration',0)>180_000 or 180<t.get('duration',0)<10000)]
@@ -51,7 +54,7 @@ def corpus(cache):
                 windows.append(np.frombuffer(data,'<f4').reshape(-1,2).astype(np.float64))
             audio=np.concatenate(windows)
             selected.append((dict(date=date,title=title,url=url,sha256=digest,duration=duration,
-                source_notes=show.get('taper_notes'),sbd_flag=show.get('sbd'),audio_status=show.get('audio_status'),
+                source_notes=notes,source_tags=tags,sbd_flag=show.get('sbd'),audio_status=show.get('audio_status'),
                 split='development' if len(selected)%2==0 else 'holdout'),audio))
             print('DOWNLOADED',date,title,'seconds',round(duration),'bytes',path.stat().st_size,flush=True)
             time.sleep(.5)
