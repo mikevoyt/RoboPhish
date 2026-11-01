@@ -51,7 +51,7 @@ class OfflinePlaybackTest {
             scenario.onActivity { it.findViewById<View>(R.id.download_play).performClick() }
             await {
                 var playing = false
-                scenario.onActivity { playing = it.mediaBrowser?.isPlaying == true }
+                scenario.onActivity { playing = it.mediaBrowser?.isPlaying == true && it.mediaBrowser?.currentMediaItem?.mediaId?.endsWith("|1") == true }
                 playing
             }
             scenario.onActivity { activity ->
@@ -77,6 +77,29 @@ class OfflinePlaybackTest {
             scenario.recreate()
             await { var connected = false; scenario.onActivity { connected = it.mediaBrowser != null }; connected }
             screenshot("offline-playing.png")
+        }
+    }
+
+    @Test fun normalCatalogPlaybackPrefersSavedFileToUnreachableStream() {
+        store.upsert(fixture("1", 1))
+        ActivityScenario.launch(DownloadsActivity::class.java).use { scenario ->
+            await { var connected = false; scenario.onActivity { connected = it.mediaBrowser != null }; connected }
+            scenario.onActivity { activity ->
+                val remote = androidx.media3.common.MediaItem.Builder()
+                    .setMediaId("__TRACKS_BY_SHOW__/1997-12-06|1")
+                    .setUri("https://example.invalid/should-never-be-requested.mp3")
+                    .build()
+                activity.mediaBrowser!!.setMediaItem(remote)
+                activity.mediaBrowser!!.prepare()
+                activity.mediaBrowser!!.play()
+            }
+            await {
+                var local = false
+                scenario.onActivity { local = it.mediaBrowser?.isPlaying == true &&
+                    it.mediaBrowser?.mediaMetadata?.extras?.getBoolean(OfflineMedia.OFFLINE_ONLY) == true }
+                local
+            }
+            scenario.onActivity { it.mediaBrowser!!.pause() }
         }
     }
 

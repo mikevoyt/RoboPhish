@@ -67,6 +67,8 @@ class DownloadRepository private constructor(context: Context) {
     private fun start(entry: DownloadEntry, previous: DownloadEntry?): Boolean {
         var pending = entry.copy(downloadId = null, fileUri = null, status = DownloadStatus.QUEUED,
             bytesDownloaded = 0, totalBytes = -1, failureReason = 0)
+        // Preserve the old file/job references if validation or cleanup fails before replacement.
+        var failureEntry = previous ?: pending
         try {
             val uri = Uri.parse(entry.sourceUrl ?: throw IllegalArgumentException("Missing source"))
             require(uri.scheme == "https" || uri.scheme == "http")
@@ -84,9 +86,11 @@ class DownloadRepository private constructor(context: Context) {
                 return false
             }
             previous?.let { removeTransfer(it) }
+            failureEntry = pending
             val name = "offline_${UUID.randomUUID()}.mp3"
             val destination = File(directory, name)
             pending = pending.copy(fileUri = Uri.fromFile(destination).toString())
+            failureEntry = pending
             // Write the destination before enqueue, so reconciliation can recover a lost job ID.
             store.upsert(pending)
             val request = DownloadManager.Request(uri)
@@ -98,10 +102,11 @@ class DownloadRepository private constructor(context: Context) {
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                 .setDestinationInExternalFilesDir(context, Environment.DIRECTORY_MUSIC, name)
             val id = manager.enqueue(request)
-            store.upsert(pending.copy(downloadId = id))
+            failureEntry = pending.copy(downloadId = id)
+            store.upsert(failureEntry)
             return true
         } catch (_: Exception) {
-            store.upsert(pending.copy(status = DownloadStatus.FAILED, failureReason = DownloadManager.ERROR_UNKNOWN))
+            store.upsert(failureEntry.copy(status = DownloadStatus.FAILED, failureReason = DownloadManager.ERROR_UNKNOWN))
             return false
         }
     }

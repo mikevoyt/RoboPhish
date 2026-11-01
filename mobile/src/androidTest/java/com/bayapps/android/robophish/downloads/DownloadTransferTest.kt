@@ -69,6 +69,12 @@ class DownloadTransferTest {
                 repository.remove(repository.store.getAll())
                 assertTrue(repository.store.getAll().isEmpty())
                 assertTrue(files.none { file -> file.exists() })
+                assertEquals(1, repository.enqueue(listOf(item("3")), "test", "Test", null, null).added)
+                val cancelled = repository.store.getAll()
+                repository.remove(cancelled)
+                android.os.SystemClock.sleep(500)
+                assertTrue(repository.reconcile().isEmpty())
+                assertTrue(cancelled.mapNotNull(OfflineMedia::file).none { file -> file.exists() })
             } finally {
                 server.close()
                 executor.shutdownNow()

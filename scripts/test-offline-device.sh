@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 capture_evidence() {
-  adb logcat -d -s AndroidRuntime > android-crashes.txt || true
-  adb pull /sdcard/Android/data/com.bayapps.android.robophish/files/offline-screenshots offline-screenshots || true
+  timeout 20s adb logcat -d -s AndroidRuntime > android-crashes.txt || true
+  timeout 20s adb pull /sdcard/Android/data/com.bayapps.android.robophish/files/offline-screenshots offline-screenshots || true
 }
 trap capture_evidence EXIT
 
