@@ -1,0 +1,142 @@
+{
+  "config": {
+    "version": "classical-cohort-v1",
+    "fft_size": 4096,
+    "hop": 1024,
+    "band_centers_hz": [
+      125,
+      250,
+      500,
+      1000,
+      2000,
+      4000,
+      8000,
+      16000
+    ],
+    "reference_block_seconds": 20,
+    "reference_hop": 8192,
+    "normalization": "For each block, octave-band summed power divided by total FFT power over all bins/channels; dB. Median blocks per recording, then equal-weight cohort median and quartiles.",
+    "uncertainty_margin_db": 1.5,
+    "residual_fraction": 0.5,
+    "maximum_tonal_gain_db": 2.0,
+    "log_frequency_smoothing_sigma_octaves": 0.75,
+    "boost_allowed_hz": [
+      50,
+      3500
+    ],
+    "boost_full_strength_hz": [
+      88.3883476483,
+      2000
+    ],
+    "dynamics_ratio": 1.25,
+    "dynamics_threshold_percentile": 65,
+    "maximum_dynamic_attenuation_db": 1.0,
+    "attack_ms": 80,
+    "release_ms": 400,
+    "protected_quiet_percentile": 20,
+    "onset_flux_percentile": 75,
+    "onset_minimum_positive_flux_fraction": 0.015,
+    "protection_hold_ms": 80,
+    "broadband_rise_protection_db": 0.7,
+    "output_peak_limit_dbtp": -1.0,
+    "passage_seconds": 20,
+    "variants": [
+      "tonal_only",
+      "tonal_plus_dynamics"
+    ],
+    "selected_dates": [
+      "1991-03-09",
+      "1990-04-29",
+      "1995-12-07",
+      "2009-08-07"
+    ],
+    "reserved_dates": [
+      "1992-12-31",
+      "2025-07-26"
+    ],
+    "passage_rule": "Start at 50% of full decoded source duration, take next 20 seconds; no content search.",
+    "interpretation": "Cohort is varied audience audio, not a clean or soundboard reference. No denoiser, dereverberator, gap repair, source separation or generated identity."
+  },
+  "frozen_at_utc": "2026-11-01T21:06:41.274409+00:00",
+  "reference_sha256": "502b1438717a229fcf635c9b3659360a3285d6eb5a094afc3fd78ff190ea7645",
+  "script_sha256": "cf6217e7e13c38f1c0765834eb6a95817be52f77637a5202fbff0f1a42cd667c",
+  "evaluator_sha256": "5b20600b93e445a047001cd11ebbd676141d2f36ab944de7cd5076e780f43a22",
+  "listening_template_sha256": "a37e8a26115714d624122188d605e59ec448f9bc08fb5e7c52cedb09b2d65a03",
+  "original_frozen_protocol_sha256": "4d936676a6d07bb92e53820f5aa30630c1cfc55190576d8e0fb445fa066af46e",
+  "original_core_fingerprint": {
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationProfile.java": "cde691d4f291fb5be925f449f47b214011d2afeeaa4c393de4d4f93fa84b9388",
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationDsp.java": "c8c4f011e42f6d59ded845c3a82090244d95d3dc9c5bba22255c2e0c92ec9252",
+    "research/audio/offline_restoration/OfflineRender.java": "508d691e1f7d2d9c11084e8ec99ed908aa1e3c26d08dd32309505ea839d0466c"
+  },
+  "clips": [
+    {
+      "date": "1991-03-09",
+      "title": "Reba",
+      "split": "exploratory",
+      "sha256": "29d823c02219be78d6c136bcdb13a329b6029bdd676aba12e54194cbb2a9f1c8",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration": 599.61161
+    },
+    {
+      "date": "1990-04-29",
+      "title": "Walk Away",
+      "split": "exploratory",
+      "sha256": "36ad28e44ddef3a5158aa88e8b886c165d2fad1298cf05b46cff13488a4fc6f9",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration": 235.146667
+    },
+    {
+      "date": "1995-12-07",
+      "title": "Taste That Surrounds",
+      "split": "development",
+      "sha256": "bcf1c134bb0d1474c80d719ca988822bfa3bcc5ea40a3412f3c8e62c247d0d8a",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration": 455.76
+    },
+    {
+      "date": "2009-08-07",
+      "title": "The Moma Dance",
+      "split": "development",
+      "sha256": "3fd4946724604e15a99668b99c8f728de5279759c9dabf570ddbc55ca38c3d43",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration": 465.513379
+    },
+    {
+      "date": "1992-12-31",
+      "title": "Colonel Forbin's Ascent",
+      "split": "holdout",
+      "sha256": "fc60b5f43d05f674bc9e27ff93f1d917667560acf14d109813a65b75666bfa98",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration": 816.506667
+    },
+    {
+      "date": "2025-07-26",
+      "title": "No Men in No Man's Land",
+      "split": "holdout",
+      "sha256": "2d7a787bf7a19a0c3b9349ca1852dfb879fa8184ea249c19220d72bb057f3b0f",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 637.732104
+    }
+  ],
+  "unity_reconstruction": [
+    {
+      "sample_rate": 44100,
+      "frames": 44137,
+      "max_absolute_error": 4.163336342344337e-17
+    },
+    {
+      "sample_rate": 48000,
+      "frames": 48037,
+      "max_absolute_error": 5.551115123125783e-17
+    }
+  ],
+  "frozen_before_any_candidate_render": true,
+  "protocol": "One fixed candidate, two variants. All four selected passages render and measure before either reserved passage. No parameter sweep or post-result change. Earlier holdout originals have been measured previously; these passages remain excluded from cohort fitting.",
+  "quality_claim": "None. No subjective ratings collected."
+}

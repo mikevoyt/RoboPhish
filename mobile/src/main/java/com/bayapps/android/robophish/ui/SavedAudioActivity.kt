@@ -187,6 +187,13 @@ class SavedAudioActivity : BaseActivity() {
             }.show()
     }
 
+    private fun showAboutProcessing() {
+        val details = listOf(R.string.saved_audio_eyebrow, R.string.saved_audio_quality_hint,
+            R.string.saved_audio_storage_hint, R.string.saved_audio_choose_hint).joinToString("\n\n") { getString(it) }
+        AlertDialog.Builder(this).setTitle(R.string.saved_audio_about_title)
+            .setMessage(details).setPositiveButton(android.R.string.ok, null).show()
+    }
+
     private fun operation(key: String, block: suspend () -> String?) {
         if (!busy.add(key)) return
         render()
@@ -241,6 +248,7 @@ class SavedAudioActivity : BaseActivity() {
             val view = holder.itemView
             when (val row = getItem(position)) {
                 is Row.Header -> {
+                    view.findViewById<View>(R.id.saved_audio_about).setOnClickListener { showAboutProcessing() }
                     view.findViewById<TextView>(R.id.saved_audio_counts).text =
                         getString(R.string.saved_audio_counts, row.ready, row.unchanged, row.active)
                     view.findViewById<TextView>(R.id.saved_audio_storage).text =
@@ -291,6 +299,7 @@ class SavedAudioActivity : BaseActivity() {
                 visibility = if ((ready || unchanged) && !text.isNullOrBlank()) View.VISIBLE else View.GONE
             }
             view.findViewById<View>(R.id.saved_audio_version_label).visibility = if (ready) View.VISIBLE else View.GONE
+            view.findViewById<View>(R.id.saved_audio_version_hint).visibility = if (ready) View.VISIBLE else View.GONE
             view.findViewById<RadioGroup>(R.id.saved_audio_version_choice).apply {
                 setOnCheckedChangeListener(null)
                 visibility = if (ready) View.VISIBLE else View.GONE

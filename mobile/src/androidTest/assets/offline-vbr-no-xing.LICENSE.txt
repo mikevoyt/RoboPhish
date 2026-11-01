@@ -1,0 +1,29 @@
+offline-vbr-no-xing.mp3 is generated entirely from mathematical sine waves and
+seeded pseudo-random noise. It contains no third-party recording. It is licensed
+under Apache License 2.0, as in the repository LICENSE.
+
+Purpose: an eight-second VBR MP3 without a Xing/VBRI seek header, used to verify
+that estimated container duration is not mistaken for an exact frame count.
+For the committed 87,263-byte fixture, FFprobe estimated 12.666594 seconds;
+the synthetic PCM source is exactly eight seconds. Decoder priming may add
+a small number of decoded frames because no gapless seek metadata is present.
+This is a software regression fixture, not a recording or quality demonstration.
+
+Exact generation commands used, run from the repository root:
+
+python3 - <<'PY'
+import math, random, struct, wave
+rng=random.Random(4121)
+with wave.open('/tmp/robophish-vbr-no-xing.wav','wb') as w:
+    w.setparams((2,2,44100,0,'NONE','not compressed'))
+    for second in range(8):
+        data=bytearray()
+        for i in range(44100):
+            value=int(5000*math.sin(2*math.pi*440*i/44100)) if second<3 else rng.randrange(-5000,5001)
+            data.extend(struct.pack('<hh',value,value))
+        w.writeframes(data)
+PY
+ffmpeg -hide_banner -loglevel error -y -i /tmp/robophish-vbr-no-xing.wav -codec:a libmp3lame -q:a 2 -write_xing 0 mobile/src/androidTest/assets/offline-vbr-no-xing.mp3
+
+The source waveform is deterministic. Encoded MP3 bytes can vary with the
+installed FFmpeg/libmp3lame version while preserving this regression case.

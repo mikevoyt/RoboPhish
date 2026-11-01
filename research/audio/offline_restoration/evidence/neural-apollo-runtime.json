@@ -1,0 +1,92 @@
+{
+  "platform": "macOS-15.5-arm64-arm-64bit",
+  "machine": "arm64",
+  "cpu_brand": "Unavailable: sandbox denied sysctl -n machdep.cpu.brand_string; not retried.",
+  "ffmpeg_version": "ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers",
+  "source_streams": {
+    "1993-08-13": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2,
+          "bit_rate": "213902"
+        },
+        {
+          "codec_name": "mjpeg"
+        }
+      ]
+    },
+    "1995-12-07": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2,
+          "bit_rate": "320000"
+        },
+        {
+          "codec_name": "mjpeg"
+        }
+      ]
+    },
+    "2009-08-07": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2,
+          "bit_rate": "246489",
+          "side_data_list": [
+            {}
+          ]
+        },
+        {
+          "codec_name": "mjpeg"
+        }
+      ]
+    },
+    "2024-08-16": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "48000",
+          "channels": 2,
+          "bit_rate": "259976",
+          "side_data_list": [
+            {}
+          ]
+        },
+        {
+          "codec_name": "mjpeg"
+        }
+      ]
+    },
+    "1996-12-06": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2,
+          "bit_rate": "250404",
+          "side_data_list": [
+            {}
+          ]
+        },
+        {
+          "codec_name": "mjpeg"
+        }
+      ]
+    }
+  }
+}

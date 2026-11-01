@@ -206,6 +206,9 @@ class SavedAudioUiTest {
 
     private fun screenshot(name: String) {
         instrumentation.waitForIdleSync()
+        // Surface/window animations can continue after the main thread becomes idle.
+        SystemClock.sleep(350)
+        instrumentation.waitForIdleSync()
         val bitmap = requireNotNull(instrumentation.uiAutomation.takeScreenshot()) { "Could not capture saved audio screen" }
         try {
             val file = File(requireNotNull(context.getExternalFilesDir(null)), name)

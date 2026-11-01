@@ -1,0 +1,31 @@
+{
+  "frozen_at_utc": "2026-11-01T20:50:24.546740+00:00",
+  "source_commit": "e84bcacc59d5455f05d86a5c97dd4aeb3c14dbb6",
+  "checkpoint_sha256": "99d9af7f1ff20e63c393035513a655392818d66b4d7fc23d658175c1f15e8d76",
+  "script_sha256": "6ad78bdfd7c25ffb23afade09a2991c59aee18ac819f9a79e1c5c29d084e7584",
+  "upstream_inference_sha256": "6410cae56d31fe0e802f0995c14ce390b4256bf5207311cf67db4fbac3bab8c7",
+  "configuration": {
+    "chunk_seconds": 4,
+    "overlap_seconds": 1,
+    "context_seconds_per_side": 1,
+    "chunk_batch_size": 1,
+    "blend": 0.25,
+    "input_peak_cap": 0.6
+  },
+  "selections": [
+    [
+      "1996-12-06",
+      "development_full_track"
+    ],
+    [
+      "1992-12-31",
+      "neural_holdout_midpoint_10s"
+    ],
+    [
+      "2025-07-26",
+      "neural_holdout_midpoint_10s"
+    ]
+  ],
+  "policy": "No parameter tuning after freeze or after holdout inspection. Full-track raw model edges retained and reported; heldout centers exclude two context seconds each side.",
+  "configuration_sha256": "ca88bb23d77fbd0e568271402afdfd29b3e3900e049a68f84b1b1fd945816dcd"
+}

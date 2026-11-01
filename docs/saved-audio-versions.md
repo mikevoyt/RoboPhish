@@ -1,6 +1,6 @@
 # Saved audio versions
 
-Audience audio → Saved versions can process a completed download in the background and keep a separate lossless copy. Originals remain the default and are never rewritten. Choosing Enhanced changes the preference for future play requests; **Play selected version** explicitly starts that version. Finishing a job never interrupts or switches current playback.
+Audience audio → Saved versions can process a completed download in the background and keep a separate lossless copy. Originals remain the default and are never rewritten. Choosing Enhanced changes the preference for future play requests; **Play selected version** explicitly starts that version. Items already queued retain the version selected when that queue was created. Finishing a job never interrupts or switches current playback.
 
 The current algorithm is experimental adaptive mastering. When it cannot identify a sufficiently persistent broad resonance, analysis finishes with **Original retained** and creates no duplicate WAV. The screen shows that outcome. A saved file is not evidence of improved sound, and soundboard-quality restoration has not been established. The [research method and results](../research/audio/offline_restoration/METHOD.md) describe the development failures, corpus separation, measurements and listening protocol.
 

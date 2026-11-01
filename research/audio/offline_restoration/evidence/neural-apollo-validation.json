@@ -1,0 +1,2475 @@
+{
+  "freeze": {
+    "frozen_at_utc": "2026-11-01T20:50:24.546740+00:00",
+    "source_commit": "e84bcacc59d5455f05d86a5c97dd4aeb3c14dbb6",
+    "checkpoint_sha256": "99d9af7f1ff20e63c393035513a655392818d66b4d7fc23d658175c1f15e8d76",
+    "script_sha256": "6ad78bdfd7c25ffb23afade09a2991c59aee18ac819f9a79e1c5c29d084e7584",
+    "upstream_inference_sha256": "6410cae56d31fe0e802f0995c14ce390b4256bf5207311cf67db4fbac3bab8c7",
+    "configuration": {
+      "chunk_seconds": 4,
+      "overlap_seconds": 1,
+      "context_seconds_per_side": 1,
+      "chunk_batch_size": 1,
+      "blend": 0.25,
+      "input_peak_cap": 0.6
+    },
+    "selections": [
+      [
+        "1996-12-06",
+        "development_full_track"
+      ],
+      [
+        "1992-12-31",
+        "neural_holdout_midpoint_10s"
+      ],
+      [
+        "2025-07-26",
+        "neural_holdout_midpoint_10s"
+      ]
+    ],
+    "policy": "No parameter tuning after freeze or after holdout inspection. Full-track raw model edges retained and reported; heldout centers exclude two context seconds each side.",
+    "configuration_sha256": "ca88bb23d77fbd0e568271402afdfd29b3e3900e049a68f84b1b1fd945816dcd"
+  },
+  "device": "mps",
+  "records": [
+    {
+      "date": "1996-12-06",
+      "split": "development_full_track",
+      "source_sha256": "8883d367bbb8ea4461404530f5c229083d67ae9f1e8961b9f711783e6975b4fb",
+      "input_headroom_gain": 0.8087743276148663,
+      "input_duration_seconds": 217.20834467120181,
+      "inference_seconds": 683.2929097500164,
+      "variants": {
+        "Apollo": {
+          "input_frames": 9578888,
+          "output_frames": 9578888,
+          "all_finite": true,
+          "duration_seconds": 217.20834467120181,
+          "original_lufs": -20.66107913532841,
+          "candidate_lufs": -20.18031991110038,
+          "identity_snr_db_after_one_global_gain": 30.676989555358887,
+          "sample_peak": 0.629170298576355,
+          "max_window_oversampled_peak": 0.6295738166217187,
+          "windows": [
+            {
+              "start_seconds": 0.0,
+              "end_seconds": 20.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.3682146966457367,
+                  "oversampled_peak": 0.36919470823032974,
+                  "crest_db": 19.310449488128253,
+                  "integrated_lufs": -25.24956305679806,
+                  "stereo_correlation": 0.0190764216731094,
+                  "side_mid_db": -0.16338606772046171
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.39168402552604675,
+                  "oversampled_peak": 0.39260719584191023,
+                  "crest_db": 19.37726697856826,
+                  "integrated_lufs": -24.772639971485575,
+                  "stereo_correlation": 0.01739492928983145,
+                  "side_mid_db": -0.14888452754889842
+                },
+                "loudness_match_gain_db": -0.4769230853124853,
+                "identity_snr_db_after_one_global_gain": 30.703213214874268,
+                "stereo_correlation_change": -0.0016814923832779508,
+                "side_mid_change_db": 0.014501540171563299,
+                "crest_change_db": 0.06681749044000895,
+                "onset_flux_correlation": 0.9991630900985472,
+                "envelope_correlation": 0.9998919492314876,
+                "weighted_interchannel_phase_error_degrees": 0.9118754549891813,
+                "low_level_gain_p05_db": -0.14796469038421095,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 20.0,
+              "end_seconds": 40.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.31258562207221985,
+                  "oversampled_peak": 0.31278460316658935,
+                  "crest_db": 17.283029139162668,
+                  "integrated_lufs": -25.621530018914765,
+                  "stereo_correlation": 0.6323380560384538,
+                  "side_mid_db": -6.465612169061673
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.32710686326026917,
+                  "oversampled_peak": 0.3273804462858696,
+                  "crest_db": 17.221486814030918,
+                  "integrated_lufs": -25.170537951524746,
+                  "stereo_correlation": 0.6338849236101879,
+                  "side_mid_db": -6.487172277111477
+                },
+                "loudness_match_gain_db": -0.4509920673900183,
+                "identity_snr_db_after_one_global_gain": 32.292232513427734,
+                "stereo_correlation_change": 0.0015468675717340563,
+                "side_mid_change_db": -0.021560108049803794,
+                "crest_change_db": -0.061542325131750175,
+                "onset_flux_correlation": 0.9991390619763449,
+                "envelope_correlation": 0.999884508467336,
+                "weighted_interchannel_phase_error_degrees": 0.5240313697423076,
+                "low_level_gain_p05_db": -0.06696487558638926,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 40.0,
+              "end_seconds": 60.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4055154025554657,
+                  "oversampled_peak": 0.4062946559090607,
+                  "crest_db": 16.020823004011532,
+                  "integrated_lufs": -21.683274605761063,
+                  "stereo_correlation": 0.6725188903094047,
+                  "side_mid_db": -7.058222870412164
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.4288444519042969,
+                  "oversampled_peak": 0.42934395528637576,
+                  "crest_db": 16.015210304772612,
+                  "integrated_lufs": -21.191662237419788,
+                  "stereo_correlation": 0.6749264551177143,
+                  "side_mid_db": -7.091952804578508
+                },
+                "loudness_match_gain_db": -0.49161236834127564,
+                "identity_snr_db_after_one_global_gain": 31.82102680206299,
+                "stereo_correlation_change": 0.0024075648083096146,
+                "side_mid_change_db": -0.03372993416634351,
+                "crest_change_db": -0.005612699238920271,
+                "onset_flux_correlation": 0.9992336675713718,
+                "envelope_correlation": 0.9997692708618476,
+                "weighted_interchannel_phase_error_degrees": 0.48755104801674765,
+                "low_level_gain_p05_db": -0.09510917819222214,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 60.0,
+              "end_seconds": 80.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4748600423336029,
+                  "oversampled_peak": 0.47549089342199696,
+                  "crest_db": 16.80266540665708,
+                  "integrated_lufs": -20.834253739405366,
+                  "stereo_correlation": 0.6240006941661397,
+                  "side_mid_db": -6.339534791588671
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.5093122720718384,
+                  "oversampled_peak": 0.510180896718106,
+                  "crest_db": 16.918139504640298,
+                  "integrated_lufs": -20.340708321922307,
+                  "stereo_correlation": 0.6267176799382989,
+                  "side_mid_db": -6.373914034718209
+                },
+                "loudness_match_gain_db": -0.4935454174830589,
+                "identity_snr_db_after_one_global_gain": 30.520975589752197,
+                "stereo_correlation_change": 0.002716985772159175,
+                "side_mid_change_db": -0.03437924312953822,
+                "crest_change_db": 0.11547409798321695,
+                "onset_flux_correlation": 0.9992032036385633,
+                "envelope_correlation": 0.9996292781011917,
+                "weighted_interchannel_phase_error_degrees": 0.573398558045553,
+                "low_level_gain_p05_db": -0.10347558600954061,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 80.0,
+              "end_seconds": 100.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.6000000238418579,
+                  "oversampled_peak": 0.6003819629105019,
+                  "crest_db": 17.67698697526192,
+                  "integrated_lufs": -19.890534586505726,
+                  "stereo_correlation": 0.5953267496746769,
+                  "side_mid_db": -5.926201009524782
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.629170298576355,
+                  "oversampled_peak": 0.6295738166217187,
+                  "crest_db": 17.604991200253863,
+                  "integrated_lufs": -19.410783578050633,
+                  "stereo_correlation": 0.59801601989826,
+                  "side_mid_db": -5.956578391275417
+                },
+                "loudness_match_gain_db": -0.4797510084550929,
+                "identity_snr_db_after_one_global_gain": 31.59759283065796,
+                "stereo_correlation_change": 0.002689270223583118,
+                "side_mid_change_db": -0.030377381750635202,
+                "crest_change_db": -0.07199577500805532,
+                "onset_flux_correlation": 0.9993171256131052,
+                "envelope_correlation": 0.9997019530899656,
+                "weighted_interchannel_phase_error_degrees": 0.5460327880345631,
+                "low_level_gain_p05_db": -0.09092897717423097,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 100.0,
+              "end_seconds": 120.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.50216144323349,
+                  "oversampled_peak": 0.5036692753916239,
+                  "crest_db": 16.649490869348192,
+                  "integrated_lufs": -20.430174208819405,
+                  "stereo_correlation": 0.533925893312509,
+                  "side_mid_db": -5.147803781353076
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.540486216545105,
+                  "oversampled_peak": 0.5448514014599194,
+                  "crest_db": 16.820196037154442,
+                  "integrated_lufs": -19.966724712829652,
+                  "stereo_correlation": 0.536282409027893,
+                  "side_mid_db": -5.172508125329054
+                },
+                "loudness_match_gain_db": -0.46344949598975305,
+                "identity_snr_db_after_one_global_gain": 31.747467517852783,
+                "stereo_correlation_change": 0.0023565157153840888,
+                "side_mid_change_db": -0.024704343975978205,
+                "crest_change_db": 0.17070516780625056,
+                "onset_flux_correlation": 0.9994145625235152,
+                "envelope_correlation": 0.9997260109641263,
+                "weighted_interchannel_phase_error_degrees": 0.6046969603774014,
+                "low_level_gain_p05_db": -0.08267992662480347,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 120.0,
+              "end_seconds": 140.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.44476068019866943,
+                  "oversampled_peak": 0.4457593214352626,
+                  "crest_db": 15.243185030392134,
+                  "integrated_lufs": -19.998845399517098,
+                  "stereo_correlation": 0.5278909873629348,
+                  "side_mid_db": -5.074479996819347
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.47483712434768677,
+                  "oversampled_peak": 0.4763959276582328,
+                  "crest_db": 15.32890604946789,
+                  "integrated_lufs": -19.52159603436257,
+                  "stereo_correlation": 0.5308957525427024,
+                  "side_mid_db": -5.105103164516198
+                },
+                "loudness_match_gain_db": -0.47724936515452754,
+                "identity_snr_db_after_one_global_gain": 31.74534320831299,
+                "stereo_correlation_change": 0.0030047651797675545,
+                "side_mid_change_db": -0.030623167696850473,
+                "crest_change_db": 0.08572101907575558,
+                "onset_flux_correlation": 0.9991908942240797,
+                "envelope_correlation": 0.999694951342429,
+                "weighted_interchannel_phase_error_degrees": 0.5838720051205529,
+                "low_level_gain_p05_db": -0.08307754971867118,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 140.0,
+              "end_seconds": 160.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4043195843696594,
+                  "oversampled_peak": 0.40457696010191335,
+                  "crest_db": 15.003163417602089,
+                  "integrated_lufs": -20.773759674565948,
+                  "stereo_correlation": 0.6042826711439144,
+                  "side_mid_db": -6.024435399062823
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.4233253598213196,
+                  "oversampled_peak": 0.42444681193689965,
+                  "crest_db": 14.924881255132654,
+                  "integrated_lufs": -20.30095957274781,
+                  "stereo_correlation": 0.6074803185753488,
+                  "side_mid_db": -6.06336603878325
+                },
+                "loudness_match_gain_db": -0.47280010181813736,
+                "identity_snr_db_after_one_global_gain": 32.11385488510132,
+                "stereo_correlation_change": 0.0031976474314343584,
+                "side_mid_change_db": -0.03893063972042654,
+                "crest_change_db": -0.07828216246943498,
+                "onset_flux_correlation": 0.9991660833493756,
+                "envelope_correlation": 0.9995853168837816,
+                "weighted_interchannel_phase_error_degrees": 0.5299395224553988,
+                "low_level_gain_p05_db": -0.08468398481615616,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 160.0,
+              "end_seconds": 180.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4142746031284332,
+                  "oversampled_peak": 0.4146026174411419,
+                  "crest_db": 15.835729390877162,
+                  "integrated_lufs": -21.43410413521132,
+                  "stereo_correlation": 0.6420914448583697,
+                  "side_mid_db": -6.567979010689934
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.4445931315422058,
+                  "oversampled_peak": 0.44559029325052146,
+                  "crest_db": 15.963714860243277,
+                  "integrated_lufs": -20.958703951489348,
+                  "stereo_correlation": 0.6465287660232268,
+                  "side_mid_db": -6.624969832118
+                },
+                "loudness_match_gain_db": -0.47540018372197324,
+                "identity_snr_db_after_one_global_gain": 31.08240842819214,
+                "stereo_correlation_change": 0.0044373211648571775,
+                "side_mid_change_db": -0.056990821428066774,
+                "crest_change_db": 0.12798546936611466,
+                "onset_flux_correlation": 0.9989007996938375,
+                "envelope_correlation": 0.9996237427624206,
+                "weighted_interchannel_phase_error_degrees": 0.5532889189097226,
+                "low_level_gain_p05_db": -0.09591011081379806,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 180.0,
+              "end_seconds": 200.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.47108471393585205,
+                  "oversampled_peak": 0.4713845900187578,
+                  "crest_db": 15.358706926568768,
+                  "integrated_lufs": -19.288936859447652,
+                  "stereo_correlation": 0.4035651176801191,
+                  "side_mid_db": -3.6999913603451433
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.501573920249939,
+                  "oversampled_peak": 0.501893204697179,
+                  "crest_db": 15.429821684239688,
+                  "integrated_lufs": -18.822300401094818,
+                  "stereo_correlation": 0.4063340904643904,
+                  "side_mid_db": -3.726161533828477
+                },
+                "loudness_match_gain_db": -0.4666364583528342,
+                "identity_snr_db_after_one_global_gain": 29.889626502990723,
+                "stereo_correlation_change": 0.0027689727842712952,
+                "side_mid_change_db": -0.026170173483333503,
+                "crest_change_db": 0.07111475767091946,
+                "onset_flux_correlation": 0.9987551278961914,
+                "envelope_correlation": 0.9994795884502922,
+                "weighted_interchannel_phase_error_degrees": 0.7632765891553122,
+                "low_level_gain_p05_db": -0.08307261564858866,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 200.0,
+              "end_seconds": 217.20834467120181,
+              "measurement": {
+                "original": {
+                  "frames": 758888,
+                  "peak": 0.5295153260231018,
+                  "oversampled_peak": 0.5298523969937978,
+                  "crest_db": 15.27041588361326,
+                  "integrated_lufs": -18.08068872029763,
+                  "stereo_correlation": 0.3458509205122281,
+                  "side_mid_db": -3.125688453555629
+                },
+                "processed": {
+                  "frames": 758888,
+                  "peak": 0.5740712285041809,
+                  "oversampled_peak": 0.5744366622069103,
+                  "crest_db": 15.461344398187322,
+                  "integrated_lufs": -17.579594442244616,
+                  "stereo_correlation": 0.3476161302377466,
+                  "side_mid_db": -3.1409106405186327
+                },
+                "loudness_match_gain_db": -0.5010942780530137,
+                "identity_snr_db_after_one_global_gain": 28.235509395599365,
+                "stereo_correlation_change": 0.001765209725518524,
+                "side_mid_change_db": -0.015222186963003814,
+                "crest_change_db": 0.19092851457406113,
+                "onset_flux_correlation": 0.9984709835970348,
+                "envelope_correlation": 0.9995442374872806,
+                "weighted_interchannel_phase_error_degrees": 0.8593532595934577,
+                "low_level_gain_p05_db": -0.1058432699623741,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            }
+          ],
+          "chunk_boundary_audit": {
+            "positions_checked": 144,
+            "records": [
+              {
+                "frame": 132300,
+                "output_step_over_local_original_step_rms": 0.07117511366345644,
+                "residual_step_over_local_original_step_rms": 0.07582335558728673
+              },
+              {
+                "frame": 176400,
+                "output_step_over_local_original_step_rms": 0.38671879525455993,
+                "residual_step_over_local_original_step_rms": 0.12426281597474838
+              },
+              {
+                "frame": 264600,
+                "output_step_over_local_original_step_rms": 0.6960247536934304,
+                "residual_step_over_local_original_step_rms": 0.02270061954317646
+              },
+              {
+                "frame": 308700,
+                "output_step_over_local_original_step_rms": 0.6024393761646047,
+                "residual_step_over_local_original_step_rms": 0.13154692995051195
+              },
+              {
+                "frame": 396900,
+                "output_step_over_local_original_step_rms": 1.1147830553814913,
+                "residual_step_over_local_original_step_rms": 0.21626581556396543
+              },
+              {
+                "frame": 441000,
+                "output_step_over_local_original_step_rms": 1.0675614987045843,
+                "residual_step_over_local_original_step_rms": 0.13175556391566598
+              },
+              {
+                "frame": 529200,
+                "output_step_over_local_original_step_rms": 0.7133347754416806,
+                "residual_step_over_local_original_step_rms": 0.37720422079008276
+              },
+              {
+                "frame": 573300,
+                "output_step_over_local_original_step_rms": 1.1293540630472612,
+                "residual_step_over_local_original_step_rms": 0.03723440749251615
+              },
+              {
+                "frame": 661500,
+                "output_step_over_local_original_step_rms": 0.49932767635646585,
+                "residual_step_over_local_original_step_rms": 0.044458851218115894
+              },
+              {
+                "frame": 705600,
+                "output_step_over_local_original_step_rms": 0.5339511673938448,
+                "residual_step_over_local_original_step_rms": 0.04374523861600299
+              },
+              {
+                "frame": 793800,
+                "output_step_over_local_original_step_rms": 0.3975996155955322,
+                "residual_step_over_local_original_step_rms": 0.04928397522806153
+              },
+              {
+                "frame": 837900,
+                "output_step_over_local_original_step_rms": 2.0492004048634658,
+                "residual_step_over_local_original_step_rms": 0.22876439569840223
+              },
+              {
+                "frame": 926100,
+                "output_step_over_local_original_step_rms": 0.9649205610797201,
+                "residual_step_over_local_original_step_rms": 0.057012249981641394
+              },
+              {
+                "frame": 970200,
+                "output_step_over_local_original_step_rms": 2.7335987619585618,
+                "residual_step_over_local_original_step_rms": 0.08829361614283998
+              },
+              {
+                "frame": 1058400,
+                "output_step_over_local_original_step_rms": 0.8971769882175811,
+                "residual_step_over_local_original_step_rms": 0.032845610872756774
+              },
+              {
+                "frame": 1102500,
+                "output_step_over_local_original_step_rms": 1.0553788266822695,
+                "residual_step_over_local_original_step_rms": 0.24303275169933478
+              },
+              {
+                "frame": 1190700,
+                "output_step_over_local_original_step_rms": 0.6986046895770422,
+                "residual_step_over_local_original_step_rms": 0.07585164684417955
+              },
+              {
+                "frame": 1234800,
+                "output_step_over_local_original_step_rms": 2.4592157391755562,
+                "residual_step_over_local_original_step_rms": 0.11687566105826624
+              },
+              {
+                "frame": 1323000,
+                "output_step_over_local_original_step_rms": 1.2441760391514562,
+                "residual_step_over_local_original_step_rms": 0.09879943733142203
+              },
+              {
+                "frame": 1367100,
+                "output_step_over_local_original_step_rms": 0.8430006807974966,
+                "residual_step_over_local_original_step_rms": 0.03811045803775482
+              },
+              {
+                "frame": 1455300,
+                "output_step_over_local_original_step_rms": 0.778447343788324,
+                "residual_step_over_local_original_step_rms": 0.10342093934737231
+              },
+              {
+                "frame": 1499400,
+                "output_step_over_local_original_step_rms": 0.17347787882146753,
+                "residual_step_over_local_original_step_rms": 0.046571663108450886
+              },
+              {
+                "frame": 1587600,
+                "output_step_over_local_original_step_rms": 0.5922242884830173,
+                "residual_step_over_local_original_step_rms": 0.06953495612889324
+              },
+              {
+                "frame": 1631700,
+                "output_step_over_local_original_step_rms": 0.17495684029231975,
+                "residual_step_over_local_original_step_rms": 0.032275859507341124
+              },
+              {
+                "frame": 1719900,
+                "output_step_over_local_original_step_rms": 2.043139563386245,
+                "residual_step_over_local_original_step_rms": 0.09684907188008349
+              },
+              {
+                "frame": 1764000,
+                "output_step_over_local_original_step_rms": 0.1413031357665728,
+                "residual_step_over_local_original_step_rms": 0.09684941772642017
+              },
+              {
+                "frame": 1852200,
+                "output_step_over_local_original_step_rms": 0.7344805451641959,
+                "residual_step_over_local_original_step_rms": 0.12695374074998492
+              },
+              {
+                "frame": 1896300,
+                "output_step_over_local_original_step_rms": 0.8005305150505416,
+                "residual_step_over_local_original_step_rms": 0.11786563960805872
+              },
+              {
+                "frame": 1984500,
+                "output_step_over_local_original_step_rms": 1.4290123942212367,
+                "residual_step_over_local_original_step_rms": 0.050696695812006226
+              },
+              {
+                "frame": 2028600,
+                "output_step_over_local_original_step_rms": 0.6197667722680431,
+                "residual_step_over_local_original_step_rms": 0.1586402687401484
+              },
+              {
+                "frame": 2116800,
+                "output_step_over_local_original_step_rms": 0.9310155022906252,
+                "residual_step_over_local_original_step_rms": 0.24044866305983886
+              },
+              {
+                "frame": 2160900,
+                "output_step_over_local_original_step_rms": 1.8529501323851716,
+                "residual_step_over_local_original_step_rms": 0.2621365608209337
+              },
+              {
+                "frame": 2249100,
+                "output_step_over_local_original_step_rms": 0.862667408911723,
+                "residual_step_over_local_original_step_rms": 0.10496363097108391
+              },
+              {
+                "frame": 2293200,
+                "output_step_over_local_original_step_rms": 2.5648583615600655,
+                "residual_step_over_local_original_step_rms": 0.2290357494637032
+              },
+              {
+                "frame": 2381400,
+                "output_step_over_local_original_step_rms": 0.3552973441175799,
+                "residual_step_over_local_original_step_rms": 0.12681494928052475
+              },
+              {
+                "frame": 2425500,
+                "output_step_over_local_original_step_rms": 1.5911346845285748,
+                "residual_step_over_local_original_step_rms": 0.21529244499579173
+              },
+              {
+                "frame": 2513700,
+                "output_step_over_local_original_step_rms": 1.289685751099491,
+                "residual_step_over_local_original_step_rms": 0.0656924983397956
+              },
+              {
+                "frame": 2557800,
+                "output_step_over_local_original_step_rms": 1.50050434092389,
+                "residual_step_over_local_original_step_rms": 0.09395268418556557
+              },
+              {
+                "frame": 2646000,
+                "output_step_over_local_original_step_rms": 1.860548218293497,
+                "residual_step_over_local_original_step_rms": 0.18643930760691685
+              },
+              {
+                "frame": 2690100,
+                "output_step_over_local_original_step_rms": 1.2262517325749092,
+                "residual_step_over_local_original_step_rms": 0.24721024537011982
+              },
+              {
+                "frame": 2778300,
+                "output_step_over_local_original_step_rms": 2.0353945237428923,
+                "residual_step_over_local_original_step_rms": 0.050555188752648826
+              },
+              {
+                "frame": 2822400,
+                "output_step_over_local_original_step_rms": 0.8840237757197934,
+                "residual_step_over_local_original_step_rms": 0.13170502417778995
+              },
+              {
+                "frame": 2910600,
+                "output_step_over_local_original_step_rms": 0.3882227680647396,
+                "residual_step_over_local_original_step_rms": 0.06263145403570787
+              },
+              {
+                "frame": 2954700,
+                "output_step_over_local_original_step_rms": 1.537782256408251,
+                "residual_step_over_local_original_step_rms": 0.07740393609676711
+              },
+              {
+                "frame": 3042900,
+                "output_step_over_local_original_step_rms": 0.3219143445238209,
+                "residual_step_over_local_original_step_rms": 0.13826614616568902
+              },
+              {
+                "frame": 3087000,
+                "output_step_over_local_original_step_rms": 1.0070083376034027,
+                "residual_step_over_local_original_step_rms": 0.11807673746072822
+              },
+              {
+                "frame": 3175200,
+                "output_step_over_local_original_step_rms": 1.9630783148716568,
+                "residual_step_over_local_original_step_rms": 0.1850416836930097
+              },
+              {
+                "frame": 3219300,
+                "output_step_over_local_original_step_rms": 1.4262368064207123,
+                "residual_step_over_local_original_step_rms": 0.40739124794065534
+              },
+              {
+                "frame": 3307500,
+                "output_step_over_local_original_step_rms": 0.6646611903468781,
+                "residual_step_over_local_original_step_rms": 0.1631343842980663
+              },
+              {
+                "frame": 3351600,
+                "output_step_over_local_original_step_rms": 0.8067039519560546,
+                "residual_step_over_local_original_step_rms": 0.16811339281902404
+              },
+              {
+                "frame": 3439800,
+                "output_step_over_local_original_step_rms": 1.5553655844250247,
+                "residual_step_over_local_original_step_rms": 0.18525884544829285
+              },
+              {
+                "frame": 3483900,
+                "output_step_over_local_original_step_rms": 0.24493845747750384,
+                "residual_step_over_local_original_step_rms": 0.1430254952807869
+              },
+              {
+                "frame": 3572100,
+                "output_step_over_local_original_step_rms": 0.2953479103260459,
+                "residual_step_over_local_original_step_rms": 0.03766326444670131
+              },
+              {
+                "frame": 3616200,
+                "output_step_over_local_original_step_rms": 0.9515570760032976,
+                "residual_step_over_local_original_step_rms": 0.06276075556652076
+              },
+              {
+                "frame": 3704400,
+                "output_step_over_local_original_step_rms": 0.778147429461178,
+                "residual_step_over_local_original_step_rms": 0.10296965143628058
+              },
+              {
+                "frame": 3748500,
+                "output_step_over_local_original_step_rms": 1.0204242871669151,
+                "residual_step_over_local_original_step_rms": 0.19734098517455761
+              },
+              {
+                "frame": 3836700,
+                "output_step_over_local_original_step_rms": 0.5721201926249487,
+                "residual_step_over_local_original_step_rms": 0.10664643632819996
+              },
+              {
+                "frame": 3880800,
+                "output_step_over_local_original_step_rms": 1.2707373263864183,
+                "residual_step_over_local_original_step_rms": 0.18512147863129044
+              },
+              {
+                "frame": 3969000,
+                "output_step_over_local_original_step_rms": 1.3426525393993378,
+                "residual_step_over_local_original_step_rms": 0.04453365089267749
+              },
+              {
+                "frame": 4013100,
+                "output_step_over_local_original_step_rms": 2.3075570836452286,
+                "residual_step_over_local_original_step_rms": 0.10304048503277392
+              },
+              {
+                "frame": 4101300,
+                "output_step_over_local_original_step_rms": 0.5094534962163256,
+                "residual_step_over_local_original_step_rms": 0.015202736860586307
+              },
+              {
+                "frame": 4145400,
+                "output_step_over_local_original_step_rms": 1.6628804129728751,
+                "residual_step_over_local_original_step_rms": 0.11035549265076416
+              },
+              {
+                "frame": 4233600,
+                "output_step_over_local_original_step_rms": 0.6819362159916232,
+                "residual_step_over_local_original_step_rms": 0.14619842869754915
+              },
+              {
+                "frame": 4277700,
+                "output_step_over_local_original_step_rms": 0.8866383389053748,
+                "residual_step_over_local_original_step_rms": 0.19910195334584146
+              },
+              {
+                "frame": 4365900,
+                "output_step_over_local_original_step_rms": 1.2326139791114967,
+                "residual_step_over_local_original_step_rms": 0.15418895303571103
+              },
+              {
+                "frame": 4410000,
+                "output_step_over_local_original_step_rms": 1.131290277621543,
+                "residual_step_over_local_original_step_rms": 0.10706221304387097
+              },
+              {
+                "frame": 4498200,
+                "output_step_over_local_original_step_rms": 1.3007276133980807,
+                "residual_step_over_local_original_step_rms": 0.11951708737733015
+              },
+              {
+                "frame": 4542300,
+                "output_step_over_local_original_step_rms": 1.0486125093391536,
+                "residual_step_over_local_original_step_rms": 0.14897469044986816
+              },
+              {
+                "frame": 4630500,
+                "output_step_over_local_original_step_rms": 2.3898670688609918,
+                "residual_step_over_local_original_step_rms": 0.13005080106167471
+              },
+              {
+                "frame": 4674600,
+                "output_step_over_local_original_step_rms": 1.031363865157162,
+                "residual_step_over_local_original_step_rms": 0.11377800728064195
+              },
+              {
+                "frame": 4762800,
+                "output_step_over_local_original_step_rms": 1.1106899893190576,
+                "residual_step_over_local_original_step_rms": 0.05873854269965584
+              },
+              {
+                "frame": 4806900,
+                "output_step_over_local_original_step_rms": 1.0345280361558336,
+                "residual_step_over_local_original_step_rms": 0.09320535451716415
+              },
+              {
+                "frame": 4895100,
+                "output_step_over_local_original_step_rms": 1.3004791534635403,
+                "residual_step_over_local_original_step_rms": 0.30099287511282674
+              },
+              {
+                "frame": 4939200,
+                "output_step_over_local_original_step_rms": 0.8526677684411443,
+                "residual_step_over_local_original_step_rms": 0.12366565024091618
+              },
+              {
+                "frame": 5027400,
+                "output_step_over_local_original_step_rms": 1.4526397270065212,
+                "residual_step_over_local_original_step_rms": 0.03866928903953252
+              },
+              {
+                "frame": 5071500,
+                "output_step_over_local_original_step_rms": 2.481654306961757,
+                "residual_step_over_local_original_step_rms": 0.12596466354106808
+              },
+              {
+                "frame": 5159700,
+                "output_step_over_local_original_step_rms": 0.80343232915462,
+                "residual_step_over_local_original_step_rms": 0.08432324350396973
+              },
+              {
+                "frame": 5203800,
+                "output_step_over_local_original_step_rms": 0.6556842320877824,
+                "residual_step_over_local_original_step_rms": 0.07895357242795474
+              },
+              {
+                "frame": 5292000,
+                "output_step_over_local_original_step_rms": 0.786122362227393,
+                "residual_step_over_local_original_step_rms": 0.06446924948657706
+              },
+              {
+                "frame": 5336100,
+                "output_step_over_local_original_step_rms": 1.97587673759019,
+                "residual_step_over_local_original_step_rms": 0.04151521067753914
+              },
+              {
+                "frame": 5424300,
+                "output_step_over_local_original_step_rms": 0.7253209624210398,
+                "residual_step_over_local_original_step_rms": 0.04276821849833441
+              },
+              {
+                "frame": 5468400,
+                "output_step_over_local_original_step_rms": 0.6462092137858721,
+                "residual_step_over_local_original_step_rms": 0.08538312964581204
+              },
+              {
+                "frame": 5556600,
+                "output_step_over_local_original_step_rms": 2.3743920170641157,
+                "residual_step_over_local_original_step_rms": 0.08278212420853912
+              },
+              {
+                "frame": 5600700,
+                "output_step_over_local_original_step_rms": 2.306708521659736,
+                "residual_step_over_local_original_step_rms": 0.31106478180408204
+              },
+              {
+                "frame": 5688900,
+                "output_step_over_local_original_step_rms": 1.0058510727862051,
+                "residual_step_over_local_original_step_rms": 0.07718817116606289
+              },
+              {
+                "frame": 5733000,
+                "output_step_over_local_original_step_rms": 2.2218157861020438,
+                "residual_step_over_local_original_step_rms": 0.14548479344013662
+              },
+              {
+                "frame": 5821200,
+                "output_step_over_local_original_step_rms": 1.4451938302019252,
+                "residual_step_over_local_original_step_rms": 0.08034062435392147
+              },
+              {
+                "frame": 5865300,
+                "output_step_over_local_original_step_rms": 1.097583653281772,
+                "residual_step_over_local_original_step_rms": 0.22325918873168926
+              },
+              {
+                "frame": 5953500,
+                "output_step_over_local_original_step_rms": 1.8434405489123267,
+                "residual_step_over_local_original_step_rms": 0.17325613025699946
+              },
+              {
+                "frame": 5997600,
+                "output_step_over_local_original_step_rms": 1.141064351725433,
+                "residual_step_over_local_original_step_rms": 0.2128408783054217
+              },
+              {
+                "frame": 6085800,
+                "output_step_over_local_original_step_rms": 0.5468919425112868,
+                "residual_step_over_local_original_step_rms": 0.21416930044022453
+              },
+              {
+                "frame": 6129900,
+                "output_step_over_local_original_step_rms": 1.4259552357971579,
+                "residual_step_over_local_original_step_rms": 0.33153800672226535
+              },
+              {
+                "frame": 6218100,
+                "output_step_over_local_original_step_rms": 1.631897421022408,
+                "residual_step_over_local_original_step_rms": 0.028245196497208518
+              },
+              {
+                "frame": 6262200,
+                "output_step_over_local_original_step_rms": 1.1424224432487007,
+                "residual_step_over_local_original_step_rms": 0.07212345811387655
+              },
+              {
+                "frame": 6350400,
+                "output_step_over_local_original_step_rms": 0.7644953516207444,
+                "residual_step_over_local_original_step_rms": 0.0691424189938483
+              },
+              {
+                "frame": 6394500,
+                "output_step_over_local_original_step_rms": 0.4841475792738756,
+                "residual_step_over_local_original_step_rms": 0.06938176654147281
+              },
+              {
+                "frame": 6482700,
+                "output_step_over_local_original_step_rms": 0.7349693364781107,
+                "residual_step_over_local_original_step_rms": 0.0675977882495739
+              },
+              {
+                "frame": 6526800,
+                "output_step_over_local_original_step_rms": 0.3831428848637278,
+                "residual_step_over_local_original_step_rms": 0.06005200134478456
+              },
+              {
+                "frame": 6615000,
+                "output_step_over_local_original_step_rms": 2.0472601605408793,
+                "residual_step_over_local_original_step_rms": 0.4127674571269905
+              },
+              {
+                "frame": 6659100,
+                "output_step_over_local_original_step_rms": 0.48729731493350836,
+                "residual_step_over_local_original_step_rms": 0.04093765116947538
+              },
+              {
+                "frame": 6747300,
+                "output_step_over_local_original_step_rms": 0.2571907949854155,
+                "residual_step_over_local_original_step_rms": 0.0823782468082348
+              },
+              {
+                "frame": 6791400,
+                "output_step_over_local_original_step_rms": 2.8871954033859404,
+                "residual_step_over_local_original_step_rms": 0.21808232986486242
+              },
+              {
+                "frame": 6879600,
+                "output_step_over_local_original_step_rms": 1.1650671366153404,
+                "residual_step_over_local_original_step_rms": 0.10472325898376743
+              },
+              {
+                "frame": 6923700,
+                "output_step_over_local_original_step_rms": 1.0021269590563835,
+                "residual_step_over_local_original_step_rms": 0.10483780728433975
+              },
+              {
+                "frame": 7011900,
+                "output_step_over_local_original_step_rms": 0.9566857385510952,
+                "residual_step_over_local_original_step_rms": 0.12500233053400256
+              },
+              {
+                "frame": 7056000,
+                "output_step_over_local_original_step_rms": 1.0004825633739807,
+                "residual_step_over_local_original_step_rms": 0.021131441620022062
+              },
+              {
+                "frame": 7144200,
+                "output_step_over_local_original_step_rms": 2.575359978519138,
+                "residual_step_over_local_original_step_rms": 0.024990538251388705
+              },
+              {
+                "frame": 7188300,
+                "output_step_over_local_original_step_rms": 0.9904284789777269,
+                "residual_step_over_local_original_step_rms": 0.10039414431566335
+              },
+              {
+                "frame": 7276500,
+                "output_step_over_local_original_step_rms": 0.2653625296224955,
+                "residual_step_over_local_original_step_rms": 0.1846315134048645
+              },
+              {
+                "frame": 7320600,
+                "output_step_over_local_original_step_rms": 2.54793234358126,
+                "residual_step_over_local_original_step_rms": 0.11018191694759816
+              },
+              {
+                "frame": 7408800,
+                "output_step_over_local_original_step_rms": 1.145615393319077,
+                "residual_step_over_local_original_step_rms": 0.17410577594181517
+              },
+              {
+                "frame": 7452900,
+                "output_step_over_local_original_step_rms": 1.1561185869427035,
+                "residual_step_over_local_original_step_rms": 0.29716305454370734
+              },
+              {
+                "frame": 7541100,
+                "output_step_over_local_original_step_rms": 0.7377452520192405,
+                "residual_step_over_local_original_step_rms": 0.19473754653744985
+              },
+              {
+                "frame": 7585200,
+                "output_step_over_local_original_step_rms": 1.2117683077914563,
+                "residual_step_over_local_original_step_rms": 0.07476913374532886
+              },
+              {
+                "frame": 7673400,
+                "output_step_over_local_original_step_rms": 1.634100124149268,
+                "residual_step_over_local_original_step_rms": 0.10930061773485818
+              },
+              {
+                "frame": 7717500,
+                "output_step_over_local_original_step_rms": 1.4792507477689067,
+                "residual_step_over_local_original_step_rms": 0.10661242836942067
+              },
+              {
+                "frame": 7805700,
+                "output_step_over_local_original_step_rms": 0.6803203504688891,
+                "residual_step_over_local_original_step_rms": 0.08330063543369481
+              },
+              {
+                "frame": 7849800,
+                "output_step_over_local_original_step_rms": 0.9587140369136468,
+                "residual_step_over_local_original_step_rms": 0.14821838569478513
+              },
+              {
+                "frame": 7938000,
+                "output_step_over_local_original_step_rms": 0.5187507604402295,
+                "residual_step_over_local_original_step_rms": 0.1998653858997943
+              },
+              {
+                "frame": 7982100,
+                "output_step_over_local_original_step_rms": 1.1971470988748543,
+                "residual_step_over_local_original_step_rms": 0.14054456783334252
+              },
+              {
+                "frame": 8070300,
+                "output_step_over_local_original_step_rms": 1.8101022468714103,
+                "residual_step_over_local_original_step_rms": 0.12400325663864961
+              },
+              {
+                "frame": 8114400,
+                "output_step_over_local_original_step_rms": 0.06136732473060193,
+                "residual_step_over_local_original_step_rms": 0.16654784402420347
+              },
+              {
+                "frame": 8202600,
+                "output_step_over_local_original_step_rms": 0.3846930050208518,
+                "residual_step_over_local_original_step_rms": 0.20858545093422243
+              },
+              {
+                "frame": 8246700,
+                "output_step_over_local_original_step_rms": 0.9723316955528638,
+                "residual_step_over_local_original_step_rms": 0.31065010897879375
+              },
+              {
+                "frame": 8334900,
+                "output_step_over_local_original_step_rms": 1.5936935529654692,
+                "residual_step_over_local_original_step_rms": 0.12173372831204962
+              },
+              {
+                "frame": 8379000,
+                "output_step_over_local_original_step_rms": 2.3783163556981557,
+                "residual_step_over_local_original_step_rms": 0.13893129450440903
+              },
+              {
+                "frame": 8467200,
+                "output_step_over_local_original_step_rms": 1.0306557193117316,
+                "residual_step_over_local_original_step_rms": 0.14766736835443792
+              },
+              {
+                "frame": 8511300,
+                "output_step_over_local_original_step_rms": 0.23264178528886906,
+                "residual_step_over_local_original_step_rms": 0.06563205913697243
+              },
+              {
+                "frame": 8599500,
+                "output_step_over_local_original_step_rms": 1.088187433028309,
+                "residual_step_over_local_original_step_rms": 0.10424487710257743
+              },
+              {
+                "frame": 8643600,
+                "output_step_over_local_original_step_rms": 1.329701498031665,
+                "residual_step_over_local_original_step_rms": 0.12794603226306636
+              },
+              {
+                "frame": 8731800,
+                "output_step_over_local_original_step_rms": 0.8510163827376671,
+                "residual_step_over_local_original_step_rms": 0.18134871316218693
+              },
+              {
+                "frame": 8775900,
+                "output_step_over_local_original_step_rms": 0.9954414120138365,
+                "residual_step_over_local_original_step_rms": 0.2573923125530842
+              },
+              {
+                "frame": 8864100,
+                "output_step_over_local_original_step_rms": 0.6406987565680613,
+                "residual_step_over_local_original_step_rms": 0.1883408704668205
+              },
+              {
+                "frame": 8908200,
+                "output_step_over_local_original_step_rms": 1.1509616681538617,
+                "residual_step_over_local_original_step_rms": 0.49313539800808137
+              },
+              {
+                "frame": 8996400,
+                "output_step_over_local_original_step_rms": 1.0622333712977978,
+                "residual_step_over_local_original_step_rms": 0.17566384721149492
+              },
+              {
+                "frame": 9040500,
+                "output_step_over_local_original_step_rms": 0.27781471987612183,
+                "residual_step_over_local_original_step_rms": 0.1689219866614049
+              },
+              {
+                "frame": 9128700,
+                "output_step_over_local_original_step_rms": 1.4944385114825307,
+                "residual_step_over_local_original_step_rms": 0.12011191034990787
+              },
+              {
+                "frame": 9172800,
+                "output_step_over_local_original_step_rms": 0.4809485823000992,
+                "residual_step_over_local_original_step_rms": 0.050824422418657096
+              },
+              {
+                "frame": 9261000,
+                "output_step_over_local_original_step_rms": 0.7145193120760887,
+                "residual_step_over_local_original_step_rms": 0.22883168898106576
+              },
+              {
+                "frame": 9305100,
+                "output_step_over_local_original_step_rms": 0.542382599920541,
+                "residual_step_over_local_original_step_rms": 0.0975423903527821
+              },
+              {
+                "frame": 9393300,
+                "output_step_over_local_original_step_rms": 1.386524182289701,
+                "residual_step_over_local_original_step_rms": 0.18986763717087216
+              },
+              {
+                "frame": 9437400,
+                "output_step_over_local_original_step_rms": 1.3971389064105353,
+                "residual_step_over_local_original_step_rms": 0.10704578306763173
+              },
+              {
+                "frame": 9525600,
+                "output_step_over_local_original_step_rms": 1.9887279484335838,
+                "residual_step_over_local_original_step_rms": 0.01835456856477263
+              },
+              {
+                "frame": 9569700,
+                "output_step_over_local_original_step_rms": 0.789477003019603,
+                "residual_step_over_local_original_step_rms": 0.008101463862816627
+              }
+            ],
+            "caveat": "Large ratios may be musical transients; this is not a validated perceptual click metric."
+          },
+          "crowd_caveat": "Windows are time-coded only; low-level envelopes do not semantically identify crowd and cannot establish preservation by listening."
+        },
+        "Apollo25percent": {
+          "input_frames": 9578888,
+          "output_frames": 9578888,
+          "all_finite": true,
+          "duration_seconds": 217.20834467120181,
+          "original_lufs": -20.66107913532841,
+          "candidate_lufs": -20.54002244572318,
+          "identity_snr_db_after_one_global_gain": 42.35696792602539,
+          "sample_peak": 0.6072925925254822,
+          "max_window_oversampled_peak": 0.6076791737887601,
+          "windows": [
+            {
+              "start_seconds": 0.0,
+              "end_seconds": 20.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.3682146966457367,
+                  "oversampled_peak": 0.36919470823032974,
+                  "crest_db": 19.310449488128253,
+                  "integrated_lufs": -25.24956305679806,
+                  "stereo_correlation": 0.0190764216731094,
+                  "side_mid_db": -0.16338606772046171
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.3740820288658142,
+                  "oversampled_peak": 0.3750478251327879,
+                  "crest_db": 19.32860163802139,
+                  "integrated_lufs": -25.114113805027017,
+                  "stereo_correlation": 0.01861497504030806,
+                  "side_mid_db": -0.1594053202764995
+                },
+                "loudness_match_gain_db": -0.1354492517710426,
+                "identity_snr_db_after_one_global_gain": 42.393693923950195,
+                "stereo_correlation_change": -0.0004614466328013399,
+                "side_mid_change_db": 0.003980747443962207,
+                "crest_change_db": 0.018152149893136738,
+                "onset_flux_correlation": 0.9999498995215014,
+                "envelope_correlation": 0.9999926848799954,
+                "weighted_interchannel_phase_error_degrees": 0.23695423999633664,
+                "low_level_gain_p05_db": -0.05713168865051197,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 20.0,
+              "end_seconds": 40.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.31258562207221985,
+                  "oversampled_peak": 0.31278460316658935,
+                  "crest_db": 17.283029139162668,
+                  "integrated_lufs": -25.621530018914765,
+                  "stereo_correlation": 0.6323380560384538,
+                  "side_mid_db": -6.465612169061673
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.3162159323692322,
+                  "oversampled_peak": 0.3164172243923994,
+                  "crest_db": 17.267564780106916,
+                  "integrated_lufs": -25.507412458644797,
+                  "stereo_correlation": 0.6327732598440959,
+                  "side_mid_db": -6.471696226404358
+                },
+                "loudness_match_gain_db": -0.11411756026996756,
+                "identity_snr_db_after_one_global_gain": 43.993234634399414,
+                "stereo_correlation_change": 0.0004352038056421037,
+                "side_mid_change_db": -0.006084057342684801,
+                "crest_change_db": -0.015464359055751942,
+                "onset_flux_correlation": 0.9999497350407219,
+                "envelope_correlation": 0.9999922604501758,
+                "weighted_interchannel_phase_error_degrees": 0.13596317664961136,
+                "low_level_gain_p05_db": -0.018067849562912186,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 40.0,
+              "end_seconds": 60.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4055154025554657,
+                  "oversampled_peak": 0.4062946559090607,
+                  "crest_db": 16.020823004011532,
+                  "integrated_lufs": -21.683274605761063,
+                  "stereo_correlation": 0.6725188903094047,
+                  "side_mid_db": -7.058222870412164
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.4113476574420929,
+                  "oversampled_peak": 0.41205696913856876,
+                  "crest_db": 16.019910198827446,
+                  "integrated_lufs": -21.558682643348817,
+                  "stereo_correlation": 0.6731919616596335,
+                  "side_mid_db": -7.067768387214778
+                },
+                "loudness_match_gain_db": -0.12459196241224646,
+                "identity_snr_db_after_one_global_gain": 43.49571228027344,
+                "stereo_correlation_change": 0.00067307135022876,
+                "side_mid_change_db": -0.009545516802613285,
+                "crest_change_db": -0.0009128051840860962,
+                "onset_flux_correlation": 0.9999507149334373,
+                "envelope_correlation": 0.9999844432272975,
+                "weighted_interchannel_phase_error_degrees": 0.12685072662333788,
+                "low_level_gain_p05_db": -0.02439610713773781,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 60.0,
+              "end_seconds": 80.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4748600423336029,
+                  "oversampled_peak": 0.47549089342199696,
+                  "crest_db": 16.80266540665708,
+                  "integrated_lufs": -20.834253739405366,
+                  "stereo_correlation": 0.6240006941661397,
+                  "side_mid_db": -6.339534791588671
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.4834730923175812,
+                  "oversampled_peak": 0.48416338909755613,
+                  "crest_db": 16.833670884821945,
+                  "integrated_lufs": -20.709543937813155,
+                  "stereo_correlation": 0.6247707335640966,
+                  "side_mid_db": -6.349430967034696
+                },
+                "loudness_match_gain_db": -0.12470980159221057,
+                "identity_snr_db_after_one_global_gain": 42.19440937042236,
+                "stereo_correlation_change": 0.0007700393979569453,
+                "side_mid_change_db": -0.009896175446025168,
+                "crest_change_db": 0.03100547816486454,
+                "onset_flux_correlation": 0.9999457583523119,
+                "envelope_correlation": 0.9999754770237095,
+                "weighted_interchannel_phase_error_degrees": 0.14911387107651836,
+                "low_level_gain_p05_db": -0.026409977002006604,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 80.0,
+              "end_seconds": 100.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.6000000238418579,
+                  "oversampled_peak": 0.6003819629105019,
+                  "crest_db": 17.67698697526192,
+                  "integrated_lufs": -19.890534586505726,
+                  "stereo_correlation": 0.5953267496746769,
+                  "side_mid_db": -5.926201009524782
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.6072925925254822,
+                  "oversampled_peak": 0.6076791737887601,
+                  "crest_db": 17.658861683753585,
+                  "integrated_lufs": -19.769058606753603,
+                  "stereo_correlation": 0.5960693535428634,
+                  "side_mid_db": -5.934726501750324
+                },
+                "loudness_match_gain_db": -0.12147597975212321,
+                "identity_snr_db_after_one_global_gain": 43.27752113342285,
+                "stereo_correlation_change": 0.0007426038681864755,
+                "side_mid_change_db": -0.008525492225542664,
+                "crest_change_db": -0.01812529150833342,
+                "onset_flux_correlation": 0.9999581868947706,
+                "envelope_correlation": 0.9999798752916358,
+                "weighted_interchannel_phase_error_degrees": 0.14201727315182935,
+                "low_level_gain_p05_db": -0.023547238010934054,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 100.0,
+              "end_seconds": 120.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.50216144323349,
+                  "oversampled_peak": 0.5036692753916239,
+                  "crest_db": 16.649490869348192,
+                  "integrated_lufs": -20.430174208819405,
+                  "stereo_correlation": 0.533925893312509,
+                  "side_mid_db": -5.147803781353076
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.5117425918579102,
+                  "oversampled_peak": 0.5137453725764829,
+                  "crest_db": 16.6947977354181,
+                  "integrated_lufs": -20.31289358477531,
+                  "stereo_correlation": 0.5345746401622111,
+                  "side_mid_db": -5.1546920797593305
+                },
+                "loudness_match_gain_db": -0.11728062404409556,
+                "identity_snr_db_after_one_global_gain": 43.43940258026123,
+                "stereo_correlation_change": 0.0006487468497021753,
+                "side_mid_change_db": -0.006888298406254378,
+                "crest_change_db": 0.045306866069907414,
+                "onset_flux_correlation": 0.9999625088516045,
+                "envelope_correlation": 0.9999815092242768,
+                "weighted_interchannel_phase_error_degrees": 0.15697984593896128,
+                "low_level_gain_p05_db": -0.021464736921571012,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 120.0,
+              "end_seconds": 140.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.44476068019866943,
+                  "oversampled_peak": 0.4457593214352626,
+                  "crest_db": 15.243185030392134,
+                  "integrated_lufs": -19.998845399517098,
+                  "stereo_correlation": 0.5278909873629348,
+                  "side_mid_db": -5.074479996819347
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.45158156752586365,
+                  "oversampled_peak": 0.451869028586637,
+                  "crest_db": 15.25274280275733,
+                  "integrated_lufs": -19.877949855385143,
+                  "stereo_correlation": 0.5287093350205724,
+                  "side_mid_db": -5.082935464371551
+                },
+                "loudness_match_gain_db": -0.12089554413195458,
+                "identity_snr_db_after_one_global_gain": 43.42653751373291,
+                "stereo_correlation_change": 0.0008183476576375526,
+                "side_mid_change_db": -0.008455467552203721,
+                "crest_change_db": 0.009557772365196726,
+                "onset_flux_correlation": 0.9999507570518241,
+                "envelope_correlation": 0.9999793471783509,
+                "weighted_interchannel_phase_error_degrees": 0.15177123556587532,
+                "low_level_gain_p05_db": -0.021611039570011457,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 140.0,
+              "end_seconds": 160.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4043195843696594,
+                  "oversampled_peak": 0.40457696010191335,
+                  "crest_db": 15.003163417602089,
+                  "integrated_lufs": -20.773759674565948,
+                  "stereo_correlation": 0.6042826711439144,
+                  "side_mid_db": -6.024435399062823
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.40836259722709656,
+                  "oversampled_peak": 0.4092472682047514,
+                  "crest_db": 14.968302129749514,
+                  "integrated_lufs": -20.653978300409204,
+                  "stereo_correlation": 0.6051493310990147,
+                  "side_mid_db": -6.035042379236721
+                },
+                "loudness_match_gain_db": -0.11978137415674439,
+                "identity_snr_db_after_one_global_gain": 43.7990665435791,
+                "stereo_correlation_change": 0.0008666599551002685,
+                "side_mid_change_db": -0.010606980173897718,
+                "crest_change_db": -0.03486128785257492,
+                "onset_flux_correlation": 0.9999485103276865,
+                "envelope_correlation": 0.9999720629665128,
+                "weighted_interchannel_phase_error_degrees": 0.13771119672353074,
+                "low_level_gain_p05_db": -0.021646950369711072,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 160.0,
+              "end_seconds": 180.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.4142746031284332,
+                  "oversampled_peak": 0.4146026174411419,
+                  "crest_db": 15.835729390877162,
+                  "integrated_lufs": -21.43410413521132,
+                  "stereo_correlation": 0.6420914448583697,
+                  "side_mid_db": -6.567979010689934
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.42185425758361816,
+                  "oversampled_peak": 0.42232612948126946,
+                  "crest_db": 15.869920783230569,
+                  "integrated_lufs": -21.313972806417986,
+                  "stereo_correlation": 0.6433044041310347,
+                  "side_mid_db": -6.583700276498526
+                },
+                "loudness_match_gain_db": -0.12013132879333455,
+                "identity_snr_db_after_one_global_gain": 42.76139736175537,
+                "stereo_correlation_change": 0.0012129592726650706,
+                "side_mid_change_db": -0.015721265808592122,
+                "crest_change_db": 0.03419139235340651,
+                "onset_flux_correlation": 0.9999303725714702,
+                "envelope_correlation": 0.999974394528461,
+                "weighted_interchannel_phase_error_degrees": 0.14378144340909216,
+                "low_level_gain_p05_db": -0.024433353418396406,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 180.0,
+              "end_seconds": 200.0,
+              "measurement": {
+                "original": {
+                  "frames": 882000,
+                  "peak": 0.47108471393585205,
+                  "oversampled_peak": 0.4713845900187578,
+                  "crest_db": 15.358706926568768,
+                  "integrated_lufs": -19.288936859447652,
+                  "stereo_correlation": 0.4035651176801191,
+                  "side_mid_db": -3.6999913603451433
+                },
+                "processed": {
+                  "frames": 882000,
+                  "peak": 0.47725528478622437,
+                  "oversampled_peak": 0.47772960306857276,
+                  "crest_db": 15.351755909637943,
+                  "integrated_lufs": -19.17138464092218,
+                  "stereo_correlation": 0.40433340842242227,
+                  "side_mid_db": -3.7073112793340197
+                },
+                "loudness_match_gain_db": -0.11755221852547137,
+                "identity_snr_db_after_one_global_gain": 41.577205657958984,
+                "stereo_correlation_change": 0.0007682907423031682,
+                "side_mid_change_db": -0.007319918988876406,
+                "crest_change_db": -0.00695101693082556,
+                "onset_flux_correlation": 0.9999248027812716,
+                "envelope_correlation": 0.9999646570465962,
+                "weighted_interchannel_phase_error_degrees": 0.19791580076179738,
+                "low_level_gain_p05_db": -0.020795830138121106,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            },
+            {
+              "start_seconds": 200.0,
+              "end_seconds": 217.20834467120181,
+              "measurement": {
+                "original": {
+                  "frames": 758888,
+                  "peak": 0.5295153260231018,
+                  "oversampled_peak": 0.5298523969937978,
+                  "crest_db": 15.27041588361326,
+                  "integrated_lufs": -18.08068872029763,
+                  "stereo_correlation": 0.3458509205122281,
+                  "side_mid_db": -3.125688453555629
+                },
+                "processed": {
+                  "frames": 758888,
+                  "peak": 0.537055492401123,
+                  "oversampled_peak": 0.5385173107020774,
+                  "crest_db": 15.263939258140567,
+                  "integrated_lufs": -17.954409334576525,
+                  "stereo_correlation": 0.3463567281571325,
+                  "side_mid_db": -3.1301385800559567
+                },
+                "loudness_match_gain_db": -0.1262793857211051,
+                "identity_snr_db_after_one_global_gain": 39.89518165588379,
+                "stereo_correlation_change": 0.0005058076449043769,
+                "side_mid_change_db": -0.004450126500327833,
+                "crest_change_db": -0.0064766254726933425,
+                "onset_flux_correlation": 0.9998376396256164,
+                "envelope_correlation": 0.9999699813251021,
+                "weighted_interchannel_phase_error_degrees": 0.22331792156662186,
+                "low_level_gain_p05_db": -0.027357684199781886,
+                "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings.",
+                "estimated_lag_samples_within_32": 0
+              }
+            }
+          ],
+          "chunk_boundary_audit": {
+            "positions_checked": 144,
+            "records": [
+              {
+                "frame": 132300,
+                "output_step_over_local_original_step_rms": 0.0947221614782041,
+                "residual_step_over_local_original_step_rms": 0.01895615055259165
+              },
+              {
+                "frame": 176400,
+                "output_step_over_local_original_step_rms": 0.3605073930084526,
+                "residual_step_over_local_original_step_rms": 0.0310656651172866
+              },
+              {
+                "frame": 264600,
+                "output_step_over_local_original_step_rms": 0.6789993863750339,
+                "residual_step_over_local_original_step_rms": 0.005675252224779858
+              },
+              {
+                "frame": 308700,
+                "output_step_over_local_original_step_rms": 0.5921786849801236,
+                "residual_step_over_local_original_step_rms": 0.0328868290685351
+              },
+              {
+                "frame": 396900,
+                "output_step_over_local_original_step_rms": 1.123740502348578,
+                "residual_step_over_local_original_step_rms": 0.05406631056266687
+              },
+              {
+                "frame": 441000,
+                "output_step_over_local_original_step_rms": 1.0554623648305974,
+                "residual_step_over_local_original_step_rms": 0.03293863963101626
+              },
+              {
+                "frame": 529200,
+                "output_step_over_local_original_step_rms": 0.43043151480682845,
+                "residual_step_over_local_original_step_rms": 0.09430096015523066
+              },
+              {
+                "frame": 573300,
+                "output_step_over_local_original_step_rms": 1.1273809786982667,
+                "residual_step_over_local_original_step_rms": 0.009308119986610783
+              },
+              {
+                "frame": 661500,
+                "output_step_over_local_original_step_rms": 0.46598353794287894,
+                "residual_step_over_local_original_step_rms": 0.011114712804528974
+              },
+              {
+                "frame": 705600,
+                "output_step_over_local_original_step_rms": 0.5667600963558471,
+                "residual_step_over_local_original_step_rms": 0.010936309654000748
+              },
+              {
+                "frame": 793800,
+                "output_step_over_local_original_step_rms": 0.3606364108912217,
+                "residual_step_over_local_original_step_rms": 0.012320770523751088
+              },
+              {
+                "frame": 837900,
+                "output_step_over_local_original_step_rms": 2.0255063983433876,
+                "residual_step_over_local_original_step_rms": 0.05719130309175425
+              },
+              {
+                "frame": 926100,
+                "output_step_over_local_original_step_rms": 0.922161373593489,
+                "residual_step_over_local_original_step_rms": 0.014253062495410349
+              },
+              {
+                "frame": 970200,
+                "output_step_over_local_original_step_rms": 2.6673784495883344,
+                "residual_step_over_local_original_step_rms": 0.022073267313304095
+              },
+              {
+                "frame": 1058400,
+                "output_step_over_local_original_step_rms": 0.8826826784795776,
+                "residual_step_over_local_original_step_rms": 0.008211852600544958
+              },
+              {
+                "frame": 1102500,
+                "output_step_over_local_original_step_rms": 0.9611147882379888,
+                "residual_step_over_local_original_step_rms": 0.060758187924833694
+              },
+              {
+                "frame": 1190700,
+                "output_step_over_local_original_step_rms": 0.7205383501846945,
+                "residual_step_over_local_original_step_rms": 0.01896291171104489
+              },
+              {
+                "frame": 1234800,
+                "output_step_over_local_original_step_rms": 2.3715591146256134,
+                "residual_step_over_local_original_step_rms": 0.029218961896780603
+              },
+              {
+                "frame": 1323000,
+                "output_step_over_local_original_step_rms": 1.2686778973004538,
+                "residual_step_over_local_original_step_rms": 0.02469952739457578
+              },
+              {
+                "frame": 1367100,
+                "output_step_over_local_original_step_rms": 0.8715833270789646,
+                "residual_step_over_local_original_step_rms": 0.009527811756286923
+              },
+              {
+                "frame": 1455300,
+                "output_step_over_local_original_step_rms": 0.7615441216956907,
+                "residual_step_over_local_original_step_rms": 0.0258553912612563
+              },
+              {
+                "frame": 1499400,
+                "output_step_over_local_original_step_rms": 0.16970721426242122,
+                "residual_step_over_local_original_step_rms": 0.01164331738160298
+              },
+              {
+                "frame": 1587600,
+                "output_step_over_local_original_step_rms": 0.5400730713863474,
+                "residual_step_over_local_original_step_rms": 0.01738373903222331
+              },
+              {
+                "frame": 1631700,
+                "output_step_over_local_original_step_rms": 0.17214966900529405,
+                "residual_step_over_local_original_step_rms": 0.008068964876835281
+              },
+              {
+                "frame": 1719900,
+                "output_step_over_local_original_step_rms": 2.1157772957876206,
+                "residual_step_over_local_original_step_rms": 0.024211339478707836
+              },
+              {
+                "frame": 1764000,
+                "output_step_over_local_original_step_rms": 0.12363989560066829,
+                "residual_step_over_local_original_step_rms": 0.024212441480375768
+              },
+              {
+                "frame": 1852200,
+                "output_step_over_local_original_step_rms": 0.8296958507266846,
+                "residual_step_over_local_original_step_rms": 0.03173843518749623
+              },
+              {
+                "frame": 1896300,
+                "output_step_over_local_original_step_rms": 0.7121312853444977,
+                "residual_step_over_local_original_step_rms": 0.02946640990201468
+              },
+              {
+                "frame": 1984500,
+                "output_step_over_local_original_step_rms": 1.4065572205826988,
+                "residual_step_over_local_original_step_rms": 0.012675611912379025
+              },
+              {
+                "frame": 2028600,
+                "output_step_over_local_original_step_rms": 0.648603482585663,
+                "residual_step_over_local_original_step_rms": 0.03966246480961452
+              },
+              {
+                "frame": 2116800,
+                "output_step_over_local_original_step_rms": 1.111352218663543,
+                "residual_step_over_local_original_step_rms": 0.06011194668692116
+              },
+              {
+                "frame": 2160900,
+                "output_step_over_local_original_step_rms": 1.656348991858156,
+                "residual_step_over_local_original_step_rms": 0.06553542029391796
+              },
+              {
+                "frame": 2249100,
+                "output_step_over_local_original_step_rms": 0.7839446856834101,
+                "residual_step_over_local_original_step_rms": 0.026240907742770977
+              },
+              {
+                "frame": 2293200,
+                "output_step_over_local_original_step_rms": 2.411797617276575,
+                "residual_step_over_local_original_step_rms": 0.05725898222179798
+              },
+              {
+                "frame": 2381400,
+                "output_step_over_local_original_step_rms": 0.26018599237635337,
+                "residual_step_over_local_original_step_rms": 0.03170359753929822
+              },
+              {
+                "frame": 2425500,
+                "output_step_over_local_original_step_rms": 1.494913634542073,
+                "residual_step_over_local_original_step_rms": 0.0538234615495993
+              },
+              {
+                "frame": 2513700,
+                "output_step_over_local_original_step_rms": 1.2404162763743296,
+                "residual_step_over_local_original_step_rms": 0.016423023614634272
+              },
+              {
+                "frame": 2557800,
+                "output_step_over_local_original_step_rms": 1.5709688960250348,
+                "residual_step_over_local_original_step_rms": 0.023488129084420856
+              },
+              {
+                "frame": 2646000,
+                "output_step_over_local_original_step_rms": 1.773640859005554,
+                "residual_step_over_local_original_step_rms": 0.04660982690172921
+              },
+              {
+                "frame": 2690100,
+                "output_step_over_local_original_step_rms": 1.0408440485473194,
+                "residual_step_over_local_original_step_rms": 0.061802561342529955
+              },
+              {
+                "frame": 2778300,
+                "output_step_over_local_original_step_rms": 2.0353854159306595,
+                "residual_step_over_local_original_step_rms": 0.012639366426426773
+              },
+              {
+                "frame": 2822400,
+                "output_step_over_local_original_step_rms": 0.82118187578511,
+                "residual_step_over_local_original_step_rms": 0.03292549514836808
+              },
+              {
+                "frame": 2910600,
+                "output_step_over_local_original_step_rms": 0.40040859721260136,
+                "residual_step_over_local_original_step_rms": 0.015657902099521285
+              },
+              {
+                "frame": 2954700,
+                "output_step_over_local_original_step_rms": 1.4797293043356758,
+                "residual_step_over_local_original_step_rms": 0.01935098402419178
+              },
+              {
+                "frame": 3042900,
+                "output_step_over_local_original_step_rms": 0.28206901872120893,
+                "residual_step_over_local_original_step_rms": 0.03456646061056307
+              },
+              {
+                "frame": 3087000,
+                "output_step_over_local_original_step_rms": 0.9736183851405086,
+                "residual_step_over_local_original_step_rms": 0.029519136842523063
+              },
+              {
+                "frame": 3175200,
+                "output_step_over_local_original_step_rms": 1.8242972084563027,
+                "residual_step_over_local_original_step_rms": 0.04626057727765563
+              },
+              {
+                "frame": 3219300,
+                "output_step_over_local_original_step_rms": 1.1206940369198068,
+                "residual_step_over_local_original_step_rms": 0.10184847843974984
+              },
+              {
+                "frame": 3307500,
+                "output_step_over_local_original_step_rms": 0.5423104613891482,
+                "residual_step_over_local_original_step_rms": 0.04078365534033634
+              },
+              {
+                "frame": 3351600,
+                "output_step_over_local_original_step_rms": 0.7098364855056996,
+                "residual_step_over_local_original_step_rms": 0.04202820589449117
+              },
+              {
+                "frame": 3439800,
+                "output_step_over_local_original_step_rms": 1.4164216550981072,
+                "residual_step_over_local_original_step_rms": 0.04631491612137558
+              },
+              {
+                "frame": 3483900,
+                "output_step_over_local_original_step_rms": 0.30217084018560153,
+                "residual_step_over_local_original_step_rms": 0.03575623032345815
+              },
+              {
+                "frame": 3572100,
+                "output_step_over_local_original_step_rms": 0.2671001891294497,
+                "residual_step_over_local_original_step_rms": 0.009415543250105097
+              },
+              {
+                "frame": 3616200,
+                "output_step_over_local_original_step_rms": 0.9044870005525043,
+                "residual_step_over_local_original_step_rms": 0.015690680115727485
+              },
+              {
+                "frame": 3704400,
+                "output_step_over_local_original_step_rms": 0.7834137101431713,
+                "residual_step_over_local_original_step_rms": 0.02574239337241819
+              },
+              {
+                "frame": 3748500,
+                "output_step_over_local_original_step_rms": 0.8724183625616952,
+                "residual_step_over_local_original_step_rms": 0.04933506056933785
+              },
+              {
+                "frame": 3836700,
+                "output_step_over_local_original_step_rms": 0.49213536537879876,
+                "residual_step_over_local_original_step_rms": 0.02666160908204999
+              },
+              {
+                "frame": 3880800,
+                "output_step_over_local_original_step_rms": 1.1318964164383432,
+                "residual_step_over_local_original_step_rms": 0.046280568683215166
+              },
+              {
+                "frame": 3969000,
+                "output_step_over_local_original_step_rms": 1.3621558654872987,
+                "residual_step_over_local_original_step_rms": 0.011134176331723774
+              },
+              {
+                "frame": 4013100,
+                "output_step_over_local_original_step_rms": 2.230277237360378,
+                "residual_step_over_local_original_step_rms": 0.02576063874792325
+              },
+              {
+                "frame": 4101300,
+                "output_step_over_local_original_step_rms": 0.4980514832208214,
+                "residual_step_over_local_original_step_rms": 0.0038007238650820544
+              },
+              {
+                "frame": 4145400,
+                "output_step_over_local_original_step_rms": 1.6456258967545052,
+                "residual_step_over_local_original_step_rms": 0.027588769708425533
+              },
+              {
+                "frame": 4233600,
+                "output_step_over_local_original_step_rms": 0.6115915309602679,
+                "residual_step_over_local_original_step_rms": 0.03654981596684654
+              },
+              {
+                "frame": 4277700,
+                "output_step_over_local_original_step_rms": 1.0359649325993165,
+                "residual_step_over_local_original_step_rms": 0.049775359651899685
+              },
+              {
+                "frame": 4365900,
+                "output_step_over_local_original_step_rms": 1.1926312726476238,
+                "residual_step_over_local_original_step_rms": 0.03854723825892776
+              },
+              {
+                "frame": 4410000,
+                "output_step_over_local_original_step_rms": 1.1144942721381148,
+                "residual_step_over_local_original_step_rms": 0.02676578908705355
+              },
+              {
+                "frame": 4498200,
+                "output_step_over_local_original_step_rms": 1.2110902554763774,
+                "residual_step_over_local_original_step_rms": 0.02987972945562675
+              },
+              {
+                "frame": 4542300,
+                "output_step_over_local_original_step_rms": 1.0878444312454472,
+                "residual_step_over_local_original_step_rms": 0.03724375523242523
+              },
+              {
+                "frame": 4630500,
+                "output_step_over_local_original_step_rms": 2.292329030445519,
+                "residual_step_over_local_original_step_rms": 0.03251273492140946
+              },
+              {
+                "frame": 4674600,
+                "output_step_over_local_original_step_rms": 1.0101812927786074,
+                "residual_step_over_local_original_step_rms": 0.028444712073191603
+              },
+              {
+                "frame": 4762800,
+                "output_step_over_local_original_step_rms": 1.066636300028338,
+                "residual_step_over_local_original_step_rms": 0.014684853408936393
+              },
+              {
+                "frame": 4806900,
+                "output_step_over_local_original_step_rms": 1.0932024912585063,
+                "residual_step_over_local_original_step_rms": 0.023301617971599128
+              },
+              {
+                "frame": 4895100,
+                "output_step_over_local_original_step_rms": 1.07473449712892,
+                "residual_step_over_local_original_step_rms": 0.07524821877820669
+              },
+              {
+                "frame": 4939200,
+                "output_step_over_local_original_step_rms": 0.8746598077325947,
+                "residual_step_over_local_original_step_rms": 0.030916412560229044
+              },
+              {
+                "frame": 5027400,
+                "output_step_over_local_original_step_rms": 1.4816417712753878,
+                "residual_step_over_local_original_step_rms": 0.009667244770666012
+              },
+              {
+                "frame": 5071500,
+                "output_step_over_local_original_step_rms": 2.4637701764773023,
+                "residual_step_over_local_original_step_rms": 0.031491092673663595
+              },
+              {
+                "frame": 5159700,
+                "output_step_over_local_original_step_rms": 0.8189816776539249,
+                "residual_step_over_local_original_step_rms": 0.02108045055925961
+              },
+              {
+                "frame": 5203800,
+                "output_step_over_local_original_step_rms": 0.6793627798077981,
+                "residual_step_over_local_original_step_rms": 0.01973773527019125
+              },
+              {
+                "frame": 5292000,
+                "output_step_over_local_original_step_rms": 0.7377705820865276,
+                "residual_step_over_local_original_step_rms": 0.01611746934571168
+              },
+              {
+                "frame": 5336100,
+                "output_step_over_local_original_step_rms": 1.9767185781371623,
+                "residual_step_over_local_original_step_rms": 0.010378802669384785
+              },
+              {
+                "frame": 5424300,
+                "output_step_over_local_original_step_rms": 0.6932441935535344,
+                "residual_step_over_local_original_step_rms": 0.01069144963082903
+              },
+              {
+                "frame": 5468400,
+                "output_step_over_local_original_step_rms": 0.6992755559676878,
+                "residual_step_over_local_original_step_rms": 0.021346348988292067
+              },
+              {
+                "frame": 5556600,
+                "output_step_over_local_original_step_rms": 2.3386762583163594,
+                "residual_step_over_local_original_step_rms": 0.02069565509705864
+              },
+              {
+                "frame": 5600700,
+                "output_step_over_local_original_step_rms": 2.0734103070646657,
+                "residual_step_over_local_original_step_rms": 0.07776656720901201
+              },
+              {
+                "frame": 5688900,
+                "output_step_over_local_original_step_rms": 0.9805390184978029,
+                "residual_step_over_local_original_step_rms": 0.019296629587456034
+              },
+              {
+                "frame": 5733000,
+                "output_step_over_local_original_step_rms": 2.112702125985225,
+                "residual_step_over_local_original_step_rms": 0.03637113332331768
+              },
+              {
+                "frame": 5821200,
+                "output_step_over_local_original_step_rms": 1.3849384982669333,
+                "residual_step_over_local_original_step_rms": 0.020085292418929566
+              },
+              {
+                "frame": 5865300,
+                "output_step_over_local_original_step_rms": 1.237471157113628,
+                "residual_step_over_local_original_step_rms": 0.05581495560591646
+              },
+              {
+                "frame": 5953500,
+                "output_step_over_local_original_step_rms": 1.7134985720104383,
+                "residual_step_over_local_original_step_rms": 0.04331415335511112
+              },
+              {
+                "frame": 5997600,
+                "output_step_over_local_original_step_rms": 0.9814338585400816,
+                "residual_step_over_local_original_step_rms": 0.0532103851200701
+              },
+              {
+                "frame": 6085800,
+                "output_step_over_local_original_step_rms": 0.5338692667955786,
+                "residual_step_over_local_original_step_rms": 0.05354229481048304
+              },
+              {
+                "frame": 6129900,
+                "output_step_over_local_original_step_rms": 1.566035573910887,
+                "residual_step_over_local_original_step_rms": 0.08288450168056634
+              },
+              {
+                "frame": 6218100,
+                "output_step_over_local_original_step_rms": 1.610713250263032,
+                "residual_step_over_local_original_step_rms": 0.007061025737832491
+              },
+              {
+                "frame": 6262200,
+                "output_step_over_local_original_step_rms": 1.088329932911741,
+                "residual_step_over_local_original_step_rms": 0.018030947776916804
+              },
+              {
+                "frame": 6350400,
+                "output_step_over_local_original_step_rms": 0.8163523384822418,
+                "residual_step_over_local_original_step_rms": 0.017285432132350988
+              },
+              {
+                "frame": 6394500,
+                "output_step_over_local_original_step_rms": 0.480945120242166,
+                "residual_step_over_local_original_step_rms": 0.01734536689276305
+              },
+              {
+                "frame": 6482700,
+                "output_step_over_local_original_step_rms": 0.7160104810077882,
+                "residual_step_over_local_original_step_rms": 0.016899507783842006
+              },
+              {
+                "frame": 6526800,
+                "output_step_over_local_original_step_rms": 0.42818188587231615,
+                "residual_step_over_local_original_step_rms": 0.01501300033619614
+              },
+              {
+                "frame": 6615000,
+                "output_step_over_local_original_step_rms": 1.7376847851747124,
+                "residual_step_over_local_original_step_rms": 0.10319208176082369
+              },
+              {
+                "frame": 6659100,
+                "output_step_over_local_original_step_rms": 0.5179996904480576,
+                "residual_step_over_local_original_step_rms": 0.010235275654926164
+              },
+              {
+                "frame": 6747300,
+                "output_step_over_local_original_step_rms": 0.20983499245038756,
+                "residual_step_over_local_original_step_rms": 0.0205945617020587
+              },
+              {
+                "frame": 6791400,
+                "output_step_over_local_original_step_rms": 2.7236337315278734,
+                "residual_step_over_local_original_step_rms": 0.05452050692563589
+              },
+              {
+                "frame": 6879600,
+                "output_step_over_local_original_step_rms": 1.0949326316793435,
+                "residual_step_over_local_original_step_rms": 0.026181084170728022
+              },
+              {
+                "frame": 6923700,
+                "output_step_over_local_original_step_rms": 1.0435899974443337,
+                "residual_step_over_local_original_step_rms": 0.026209624501242146
+              },
+              {
+                "frame": 7011900,
+                "output_step_over_local_original_step_rms": 0.9691351033518784,
+                "residual_step_over_local_original_step_rms": 0.03125002608806719
+              },
+              {
+                "frame": 7056000,
+                "output_step_over_local_original_step_rms": 0.9846340042553089,
+                "residual_step_over_local_original_step_rms": 0.005282860405005516
+              },
+              {
+                "frame": 7144200,
+                "output_step_over_local_original_step_rms": 2.558691771422188,
+                "residual_step_over_local_original_step_rms": 0.006247885039316039
+              },
+              {
+                "frame": 7188300,
+                "output_step_over_local_original_step_rms": 1.0657239821737485,
+                "residual_step_over_local_original_step_rms": 0.0250986411196417
+              },
+              {
+                "frame": 7276500,
+                "output_step_over_local_original_step_rms": 0.25271237794665874,
+                "residual_step_over_local_original_step_rms": 0.04615794818676876
+              },
+              {
+                "frame": 7320600,
+                "output_step_over_local_original_step_rms": 2.4652957091972127,
+                "residual_step_over_local_original_step_rms": 0.027545282563550568
+              },
+              {
+                "frame": 7408800,
+                "output_step_over_local_original_step_rms": 1.0150363148304584,
+                "residual_step_over_local_original_step_rms": 0.04352669745319668
+              },
+              {
+                "frame": 7452900,
+                "output_step_over_local_original_step_rms": 1.097394186368928,
+                "residual_step_over_local_original_step_rms": 0.0742915143889321
+              },
+              {
+                "frame": 7541100,
+                "output_step_over_local_original_step_rms": 0.7983380018737897,
+                "residual_step_over_local_original_step_rms": 0.0486847280683305
+              },
+              {
+                "frame": 7585200,
+                "output_step_over_local_original_step_rms": 1.1693352336278044,
+                "residual_step_over_local_original_step_rms": 0.018692911203963523
+              },
+              {
+                "frame": 7673400,
+                "output_step_over_local_original_step_rms": 1.5521246143746392,
+                "residual_step_over_local_original_step_rms": 0.027325107960229477
+              },
+              {
+                "frame": 7717500,
+                "output_step_over_local_original_step_rms": 1.3992914264918412,
+                "residual_step_over_local_original_step_rms": 0.026653107092355167
+              },
+              {
+                "frame": 7805700,
+                "output_step_over_local_original_step_rms": 0.7145952518241019,
+                "residual_step_over_local_original_step_rms": 0.020825100849139896
+              },
+              {
+                "frame": 7849800,
+                "output_step_over_local_original_step_rms": 0.9305954927485447,
+                "residual_step_over_local_original_step_rms": 0.03705459642369628
+              },
+              {
+                "frame": 7938000,
+                "output_step_over_local_original_step_rms": 0.5322540043811712,
+                "residual_step_over_local_original_step_rms": 0.04996647591158339
+              },
+              {
+                "frame": 7982100,
+                "output_step_over_local_original_step_rms": 1.122647267351265,
+                "residual_step_over_local_original_step_rms": 0.03513610381849014
+              },
+              {
+                "frame": 8070300,
+                "output_step_over_local_original_step_rms": 1.8017046741670253,
+                "residual_step_over_local_original_step_rms": 0.03100084457507119
+              },
+              {
+                "frame": 8114400,
+                "output_step_over_local_original_step_rms": 0.1513591705529276,
+                "residual_step_over_local_original_step_rms": 0.041636458643733935
+              },
+              {
+                "frame": 8202600,
+                "output_step_over_local_original_step_rms": 0.4990204231615577,
+                "residual_step_over_local_original_step_rms": 0.052146373356189844
+              },
+              {
+                "frame": 8246700,
+                "output_step_over_local_original_step_rms": 0.7393440583221073,
+                "residual_step_over_local_original_step_rms": 0.07766247174803717
+              },
+              {
+                "frame": 8334900,
+                "output_step_over_local_original_step_rms": 1.6644033364601007,
+                "residual_step_over_local_original_step_rms": 0.03043331503880474
+              },
+              {
+                "frame": 8379000,
+                "output_step_over_local_original_step_rms": 2.2741179861169227,
+                "residual_step_over_local_original_step_rms": 0.03473288808787665
+              },
+              {
+                "frame": 8467200,
+                "output_step_over_local_original_step_rms": 1.0805879430368677,
+                "residual_step_over_local_original_step_rms": 0.03691691466198443
+              },
+              {
+                "frame": 8511300,
+                "output_step_over_local_original_step_rms": 0.18341830671024353,
+                "residual_step_over_local_original_step_rms": 0.016408580558346906
+              },
+              {
+                "frame": 8599500,
+                "output_step_over_local_original_step_rms": 1.0320124365556436,
+                "residual_step_over_local_original_step_rms": 0.026061346386801795
+              },
+              {
+                "frame": 8643600,
+                "output_step_over_local_original_step_rms": 1.4256609734249697,
+                "residual_step_over_local_original_step_rms": 0.03198650109376726
+              },
+              {
+                "frame": 8731800,
+                "output_step_over_local_original_step_rms": 0.987027776754625,
+                "residual_step_over_local_original_step_rms": 0.045337319145228996
+              },
+              {
+                "frame": 8775900,
+                "output_step_over_local_original_step_rms": 0.8209164088730055,
+                "residual_step_over_local_original_step_rms": 0.06434828562503676
+              },
+              {
+                "frame": 8864100,
+                "output_step_over_local_original_step_rms": 0.609033771040104,
+                "residual_step_over_local_original_step_rms": 0.04708525154483246
+              },
+              {
+                "frame": 8908200,
+                "output_step_over_local_original_step_rms": 1.098480249303962,
+                "residual_step_over_local_original_step_rms": 0.123284025241455
+              },
+              {
+                "frame": 8996400,
+                "output_step_over_local_original_step_rms": 1.0503957395271588,
+                "residual_step_over_local_original_step_rms": 0.043915836265928675
+              },
+              {
+                "frame": 9040500,
+                "output_step_over_local_original_step_rms": 0.40450619519967396,
+                "residual_step_over_local_original_step_rms": 0.04223051133785278
+              },
+              {
+                "frame": 9128700,
+                "output_step_over_local_original_step_rms": 1.4095702405398864,
+                "residual_step_over_local_original_step_rms": 0.030027862235009427
+              },
+              {
+                "frame": 9172800,
+                "output_step_over_local_original_step_rms": 0.5190667930770084,
+                "residual_step_over_local_original_step_rms": 0.012706211641747775
+              },
+              {
+                "frame": 9261000,
+                "output_step_over_local_original_step_rms": 0.5428956114537625,
+                "residual_step_over_local_original_step_rms": 0.057207988358739637
+              },
+              {
+                "frame": 9305100,
+                "output_step_over_local_original_step_rms": 0.613435519213094,
+                "residual_step_over_local_original_step_rms": 0.024385439366531085
+              },
+              {
+                "frame": 9393300,
+                "output_step_over_local_original_step_rms": 1.2773362590753914,
+                "residual_step_over_local_original_step_rms": 0.047466901047908676
+              },
+              {
+                "frame": 9437400,
+                "output_step_over_local_original_step_rms": 1.4255943663851267,
+                "residual_step_over_local_original_step_rms": 0.02676144576690793
+              },
+              {
+                "frame": 9525600,
+                "output_step_over_local_original_step_rms": 1.993627010498892,
+                "residual_step_over_local_original_step_rms": 0.004588635564917834
+              },
+              {
+                "frame": 9569700,
+                "output_step_over_local_original_step_rms": 0.7926039769483049,
+                "residual_step_over_local_original_step_rms": 0.00202542013870455
+              }
+            ],
+            "caveat": "Large ratios may be musical transients; this is not a validated perceptual click metric."
+          },
+          "crowd_caveat": "Windows are time-coded only; low-level envelopes do not semantically identify crowd and cannot establish preservation by listening."
+        }
+      }
+    },
+    {
+      "date": "1992-12-31",
+      "split": "neural_holdout_midpoint_10s",
+      "source_sha256": "fc60b5f43d05f674bc9e27ff93f1d917667560acf14d109813a65b75666bfa98",
+      "input_headroom_gain": 1.0,
+      "input_duration_seconds": 14.0,
+      "inference_seconds": 77.9789318330586,
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.3548945486545563,
+            "oversampled_peak": 0.35512046213454584,
+            "crest_db": 16.04935275114038,
+            "integrated_lufs": -22.494653925827283,
+            "stereo_correlation": 0.8946578270299621,
+            "side_mid_db": -12.53935031134343
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.38340404629707336,
+            "oversampled_peak": 0.38364810792797027,
+            "crest_db": 16.23916627144722,
+            "integrated_lufs": -22.009431753169196,
+            "stereo_correlation": 0.8948560821399482,
+            "side_mid_db": -12.547232522426398
+          },
+          "loudness_match_gain_db": -0.4852221726580872,
+          "identity_snr_db_after_one_global_gain": 31.82973623275757,
+          "stereo_correlation_change": 0.00019825510998605633,
+          "side_mid_change_db": -0.007882211082968382,
+          "crest_change_db": 0.18981352030684207,
+          "onset_flux_correlation": 0.9995353599755741,
+          "envelope_correlation": 0.999821451368583,
+          "weighted_interchannel_phase_error_degrees": 0.3099627648742208,
+          "low_level_gain_p05_db": -0.08387327504912755,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.3548945486545563,
+            "oversampled_peak": 0.35512046213454584,
+            "crest_db": 16.04935275114038,
+            "integrated_lufs": -22.494653925827283,
+            "stereo_correlation": 0.8946578270299621,
+            "side_mid_db": -12.53935031134343
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.3619557023048401,
+            "oversampled_peak": 0.3621861106687323,
+            "crest_db": 16.09816671256184,
+            "integrated_lufs": -22.37168994160684,
+            "stereo_correlation": 0.8947199709588796,
+            "side_mid_db": -12.541860462621155
+          },
+          "loudness_match_gain_db": -0.12296398422044419,
+          "identity_snr_db_after_one_global_gain": 43.5119104385376,
+          "stereo_correlation_change": 6.214392891745746e-05,
+          "side_mid_change_db": -0.0025101512777254698,
+          "crest_change_db": 0.04881396142146244,
+          "onset_flux_correlation": 0.9999692625321518,
+          "envelope_correlation": 0.9999879845538403,
+          "weighted_interchannel_phase_error_degrees": 0.08064638554775451,
+          "low_level_gain_p05_db": -0.02214749440932981,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        }
+      }
+    },
+    {
+      "date": "2025-07-26",
+      "split": "neural_holdout_midpoint_10s",
+      "source_sha256": "2d7a787bf7a19a0c3b9349ca1852dfb879fa8184ea249c19220d72bb057f3b0f",
+      "input_headroom_gain": 0.8032309477479709,
+      "input_duration_seconds": 14.0,
+      "inference_seconds": 61.34932329203002,
+      "variants": {
+        "Apollo": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.5771812200546265,
+            "oversampled_peak": 0.5779611473070023,
+            "crest_db": 11.486402750558565,
+            "integrated_lufs": -14.500918996983497,
+            "stereo_correlation": 0.8315060170258708,
+            "side_mid_db": -10.269618973131463
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.609338104724884,
+            "oversampled_peak": 0.6097259880898175,
+            "crest_db": 11.454219163697331,
+            "integrated_lufs": -14.025442750820517,
+            "stereo_correlation": 0.8360365093937387,
+            "side_mid_db": -10.40543339217313
+          },
+          "loudness_match_gain_db": -0.47547624616298023,
+          "identity_snr_db_after_one_global_gain": 30.78007936477661,
+          "stereo_correlation_change": 0.004530492367867955,
+          "side_mid_change_db": -0.13581441904166702,
+          "crest_change_db": -0.03218358686123324,
+          "onset_flux_correlation": 0.9990131651456761,
+          "envelope_correlation": 0.9985192764209143,
+          "weighted_interchannel_phase_error_degrees": 0.3124778832551443,
+          "low_level_gain_p05_db": -0.12509659981246363,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        },
+        "Apollo25percent": {
+          "original": {
+            "frames": 441000,
+            "peak": 0.5771812200546265,
+            "oversampled_peak": 0.5779611473070023,
+            "crest_db": 11.486402750558565,
+            "integrated_lufs": -14.500918996983497,
+            "stereo_correlation": 0.8315060170258708,
+            "side_mid_db": -10.269618973131463
+          },
+          "processed": {
+            "frames": 441000,
+            "peak": 0.585220456123352,
+            "oversampled_peak": 0.5857708465389535,
+            "crest_db": 11.478714178189009,
+            "integrated_lufs": -14.380861811834695,
+            "stereo_correlation": 0.832762809482095,
+            "side_mid_db": -10.306848635101979
+          },
+          "loudness_match_gain_db": -0.12005718514880215,
+          "identity_snr_db_after_one_global_gain": 42.44600772857666,
+          "stereo_correlation_change": 0.0012567924562242316,
+          "side_mid_change_db": -0.03722966197051569,
+          "crest_change_db": -0.0076885723695561126,
+          "onset_flux_correlation": 0.9999298146389322,
+          "envelope_correlation": 0.999895135473347,
+          "weighted_interchannel_phase_error_degrees": 0.08096746720892879,
+          "low_level_gain_p05_db": -0.032136497433866096,
+          "crowd_metric_caveat": "Low-level envelope is only a proxy; no semantic crowd labels or subjective listening ratings."
+        }
+      }
+    }
+  ],
+  "scope": "Natural-source evidence only; no soundboard reference, no subjective ratings, no model tuning.",
+  "listening_verification": [
+    {
+      "date": "1996-12-06",
+      "loudness_spread_lu": 2.0478014306490877e-07,
+      "maximum_oversampled_peak": 0.6003819704055786,
+      "frame_counts": [
+        9578888,
+        9578888,
+        9578888
+      ],
+      "input_headroom_gain": 0.8087743276148663
+    },
+    {
+      "date": "1992-12-31",
+      "loudness_spread_lu": 2.9480547070193097e-07,
+      "maximum_oversampled_peak": 0.36280396580696106,
+      "frame_counts": [
+        441000,
+        441000,
+        441000
+      ],
+      "input_headroom_gain": 1.0
+    },
+    {
+      "date": "2025-07-26",
+      "loudness_spread_lu": 2.374467111820877e-07,
+      "maximum_oversampled_peak": 0.5779611468315125,
+      "frame_counts": [
+        441000,
+        441000,
+        441000
+      ],
+      "input_headroom_gain": 0.8032309477479709
+    }
+  ],
+  "human_listening_ratings": 0,
+  "local_artifact": "audio-neural-probe/validation/listening.html",
+  "recordings_committed_or_uploaded": false
+}

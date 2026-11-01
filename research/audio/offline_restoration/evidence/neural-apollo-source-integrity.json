@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "date": "1993-08-13",
+      "sha256": "088e8899aa16e4ac5c0b7fe309f2e554756a37bc6f9c2f2884701439652e73db",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 353.893333,
+      "selection_start_seconds": 174.9466665,
+      "selection_method": "Decode14seconds at half header duration minus2seconds;score center2to12seconds"
+    },
+    {
+      "date": "1995-12-07",
+      "sha256": "bcf1c134bb0d1474c80d719ca988822bfa3bcc5ea40a3412f3c8e62c247d0d8a",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 455.76,
+      "selection_start_seconds": 225.88,
+      "selection_method": "Decode14seconds at half header duration minus2seconds;score center2to12seconds"
+    },
+    {
+      "date": "2009-08-07",
+      "sha256": "3fd4946724604e15a99668b99c8f728de5279759c9dabf570ddbc55ca38c3d43",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 465.513379,
+      "selection_start_seconds": 230.7566895,
+      "selection_method": "Decode14seconds at half header duration minus2seconds;score center2to12seconds"
+    },
+    {
+      "date": "2024-08-16",
+      "sha256": "d11d11f84740cf237f2d7bc70977ef142de123f1b50c5c164fe2bd0cc6a3e0bc",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 443.885604,
+      "selection_start_seconds": 219.942802,
+      "selection_method": "Decode14seconds at half header duration minus2seconds;score center2to12seconds"
+    },
+    {
+      "date": "1996-12-06",
+      "sha256": "8883d367bbb8ea4461404530f5c229083d67ae9f1e8961b9f711783e6975b4fb",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 217.208345,
+      "selection_start_seconds": 0,
+      "selection_method": "Full decoded track"
+    },
+    {
+      "date": "1992-12-31",
+      "sha256": "fc60b5f43d05f674bc9e27ff93f1d917667560acf14d109813a65b75666bfa98",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 816.506667,
+      "selection_start_seconds": 406.2533335,
+      "selection_method": "Decode14seconds at half header duration minus2seconds;score center2to12seconds"
+    },
+    {
+      "date": "2025-07-26",
+      "sha256": "2d7a787bf7a19a0c3b9349ca1852dfb879fa8184ea249c19220d72bb057f3b0f",
+      "prior_corpus_integrity_match": true,
+      "mp3_header_duration_seconds": 637.732104,
+      "selection_start_seconds": 316.866052,
+      "selection_method": "Decode14seconds at half header duration minus2seconds;score center2to12seconds"
+    }
+  ]
+}

@@ -34,6 +34,9 @@
             android:layout_height="wrap_content" android:minHeight="48dp"
             android:text="@string/saved_audio_enhanced" android:textColor="@color/offline_ink" android:textSize="14sp" />
     </RadioGroup>
+    <TextView android:id="@+id/saved_audio_version_hint" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="@string/saved_audio_choose_short"
+        android:textColor="@color/offline_muted" android:textSize="12sp" android:lineSpacingExtra="2dp" />
     <androidx.appcompat.widget.AppCompatButton android:id="@+id/saved_audio_play"
         android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"
         android:layout_marginTop="12dp" android:background="@drawable/offline_secondary_bg"
