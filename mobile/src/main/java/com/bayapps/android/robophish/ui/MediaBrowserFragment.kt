@@ -32,7 +32,6 @@ import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bayapps.android.robophish.BuildConfig
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.ServiceLocator
 import com.bayapps.android.robophish.model.MusicProvider
@@ -77,7 +76,7 @@ class MediaBrowserFragment : Fragment() {
     private var pendingSelectedTrackId: String? = null
 
     private val okHttpClient by lazy { ServiceLocator.get(requireContext()).okHttpClient }
-    private val okHttpNoAuthClient by lazy { ServiceLocator.get(requireContext()).okHttpNoAuthClient }
+    private val phishNetClient by lazy { ServiceLocator.get(requireContext()).phishNetClient }
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private var oldOnline = false
@@ -172,8 +171,7 @@ class MediaBrowserFragment : Fragment() {
                         return@launch
                     }
                     val response = fetchJson(
-                        "https://phish.in/api/v1/shows/$showId",
-                        headers = mapOf("Authorization" to "Bearer ${BuildConfig.PHISHIN_API_KEY}")
+                        "https://phish.in/api/v1/shows/$showId"
                     )
                     if (!isAdded) return@launch
                     if (response == null) {
@@ -256,39 +254,29 @@ class MediaBrowserFragment : Fragment() {
 
     private suspend fun fetchJson(
         url: String,
-        queryParams: Map<String, String> = emptyMap(),
-        headers: Map<String, String> = emptyMap(),
         client: okhttp3.OkHttpClient = okHttpClient
     ): JSONObject? = withContext(Dispatchers.IO) {
-        val httpUrl = url.toHttpUrl().newBuilder().apply {
-            queryParams.forEach { (key, value) ->
-                addQueryParameter(key, value)
-            }
-        }.build()
+        val httpUrl = url.toHttpUrl()
         val request = Request.Builder()
             .url(httpUrl)
-            .apply {
-                headers.forEach { (key, value) ->
-                    addHeader(key, value)
-                }
-            }
             .build()
         try {
-            Timber.d("Requesting %s", httpUrl)
+            Timber.d("Requesting %s%s", httpUrl.host, httpUrl.encodedPath)
             client.newCall(request).execute().use { response ->
-                val body = response.body?.string()
                 if (!response.isSuccessful) {
-                    Timber.w("Request failed: %s body=%s", response.code, body)
+                    Timber.w("Request failed: HTTP %s", response.code)
                     return@withContext null
                 }
+                val body = response.body?.string()
                 if (body.isNullOrBlank()) {
-                    Timber.w("Request empty body for %s", httpUrl)
+                    Timber.w("Request empty body for %s%s", httpUrl.host, httpUrl.encodedPath)
                     return@withContext null
                 }
                 JSONObject(body)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Request failed for %s", url)
+            if (e is kotlinx.coroutines.CancellationException) throw e
+            Timber.w("Request failed for %s%s (%s)", httpUrl.host, httpUrl.encodedPath, e.javaClass.simpleName)
             null
         }
     }
@@ -532,8 +520,7 @@ class MediaBrowserFragment : Fragment() {
             }
             val setlistResponse = fetchJson(
                 "https://api.phish.net/v5/setlists/showdate/$showDate.json",
-                mapOf("apikey" to BuildConfig.PHISHNET_API_KEY),
-                client = okHttpNoAuthClient
+                client = phishNetClient
             )
             if (!isAdded) return@launch
             if (setlistResponse == null) {
@@ -573,8 +560,7 @@ class MediaBrowserFragment : Fragment() {
             }
             val reviewsResponse = fetchJson(
                 reviewsUrl,
-                mapOf("apikey" to BuildConfig.PHISHNET_API_KEY),
-                client = okHttpNoAuthClient
+                client = phishNetClient
             )
             if (!isAdded) return@launch
             if (reviewsResponse == null) {

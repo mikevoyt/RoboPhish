@@ -25,7 +25,9 @@ if (( api >= 30 )); then
   adb shell cmd connectivity airplane-mode enable
 else
   adb shell settings put global airplane_mode_on 1
-  adb shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true
+  # Older system images can reject this protected broadcast. The suite still
+  # asserts disconnected networking after svc disables both transports above.
+  adb shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true || true
 fi
 ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.class=com.bayapps.android.robophish.downloads.OfflinePlaybackTest

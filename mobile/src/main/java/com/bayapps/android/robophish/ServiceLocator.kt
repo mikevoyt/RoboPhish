@@ -11,6 +11,7 @@ import coil.ImageLoader
 import coil.util.DebugLogger
 import okhttp3.Cache
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -50,6 +51,7 @@ class ServiceLocator private constructor(private val appContext: Context) {
         OkHttpClient.Builder()
             .cache(Cache(File(cacheDir, "http"), cacheSize.toLong()))
             .addNetworkInterceptor(PhishinAuthInterceptor(phishinApiKey))
+            .followSslRedirects(false)
             .build()
     }
 
@@ -57,6 +59,15 @@ class ServiceLocator private constructor(private val appContext: Context) {
         val cacheSize = 20 * 1024 * 1024
         OkHttpClient.Builder()
             .cache(Cache(File(cacheDir, "http-no-auth"), cacheSize.toLong()))
+            .build()
+    }
+
+    val phishNetClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .cache(Cache(File(cacheDir, "phishnet"), 20L * 1024 * 1024))
+            .addNetworkInterceptor(robophish.ScopedCredentialInterceptor(
+                "https://api.phish.net/".toHttpUrl(), "/v5/", "X-API-KEY", BuildConfig.PHISHNET_API_KEY))
+            .followSslRedirects(false)
             .build()
     }
 
@@ -78,7 +89,7 @@ class ServiceLocator private constructor(private val appContext: Context) {
 
     val imageLoader: ImageLoader by lazy {
         ImageLoader.Builder(appContext)
-            .okHttpClient(okHttpClient)
+            .okHttpClient(okHttpNoAuthClient)
             .apply {
                 if (BuildConfig.DEBUG) {
                     logger(DebugLogger())
