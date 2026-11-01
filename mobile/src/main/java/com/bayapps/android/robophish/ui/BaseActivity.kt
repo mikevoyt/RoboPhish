@@ -11,7 +11,6 @@ import androidx.media3.session.MediaBrowser
 import androidx.media3.session.SessionToken
 import com.bayapps.android.robophish.MusicService
 import com.bayapps.android.robophish.R
-import com.bayapps.android.robophish.utils.NetworkHelper
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import timber.log.Timber
@@ -67,7 +66,8 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
         super.onStop()
         Timber.d("Activity onStop")
         mediaBrowser?.removeListener(playerListener)
-        mediaBrowser?.release()
+        mediaBrowserFuture?.let { MediaBrowser.releaseFuture(it) }
+        mediaBrowserFuture = null
         mediaBrowser = null
     }
 
@@ -76,19 +76,11 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
 
     protected fun showPlaybackControls() {
         Timber.d("showPlaybackControls")
-        if (NetworkHelper.isOnline(this)) {
-            if (isFinishing || isDestroyed) return
-            if (supportFragmentManager.isDestroyed || supportFragmentManager.isStateSaved) return
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.animator.slide_in_from_bottom,
-                    R.animator.slide_out_to_bottom,
-                    R.animator.slide_in_from_bottom,
-                    R.animator.slide_out_to_bottom
-                )
-                .show(controlsFragment)
-                .commit()
-        }
+        if (isFinishing || isDestroyed) return
+        if (supportFragmentManager.isDestroyed || supportFragmentManager.isStateSaved) return
+        supportFragmentManager.beginTransaction()
+            .show(controlsFragment)
+            .commit()
     }
 
     protected fun hidePlaybackControls() {
@@ -129,6 +121,7 @@ abstract class BaseActivity : ActionBarCastActivity(), MediaBrowserProvider {
         future.addListener(
             {
                 try {
+                    if (mediaBrowserFuture !== future) return@addListener
                     val browser = future.get()
                     mediaBrowser = browser
                     browser.addListener(playerListener)

@@ -82,6 +82,9 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() = navigateBackToShow()
+        })
         setContentView(R.layout.activity_full_player)
         initializeToolbar()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -136,9 +139,14 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         super.onStop()
         handler.removeCallbacks(updateProgressTask)
         controller?.removeListener(playerListener)
-        controller?.release()
+        controllerFuture?.let { MediaController.releaseFuture(it) }
         controller = null
         controllerFuture = null
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
     private fun connectController() {
@@ -149,6 +157,7 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         future.addListener(
             {
                 try {
+                    if (controllerFuture !== future) return@addListener
                     val mediaController = future.get()
                     controller = mediaController
                     mediaController.addListener(playerListener)
@@ -172,7 +181,10 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
         line5.text = metadata.description
 
         val iconUri = metadata.artworkUri?.toString()
-        if (!iconUri.isNullOrEmpty() && iconUri != currentArtUrl) {
+        if (iconUri.isNullOrEmpty()) {
+            currentArtUrl = null
+            backgroundImage.setImageResource(R.drawable.ic_default_art)
+        } else if (iconUri != currentArtUrl) {
             currentArtUrl = iconUri
             val request = ImageRequest.Builder(this)
                 .data(iconUri)
@@ -234,10 +246,6 @@ class FullScreenPlayerActivity : ActionBarCastActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        navigateBackToShow()
     }
 
     private fun navigateBackToShow() {

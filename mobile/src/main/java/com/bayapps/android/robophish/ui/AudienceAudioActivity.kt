@@ -20,6 +20,10 @@ class AudienceAudioActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.audience_audio_screen)
         initializeToolbar()
+        val ink = androidx.core.content.ContextCompat.getColor(this, R.color.offline_ink)
+        findViewById<android.view.View>(R.id.toolbar).setBackgroundColor(ink)
+        window.statusBarColor = ink
+        findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawer_layout).setStatusBarBackgroundColor(ink)
         title = getString(R.string.audio_title)
         state = findViewById(R.id.audio_state)
         amountLabel = findViewById(R.id.audio_amount_label)

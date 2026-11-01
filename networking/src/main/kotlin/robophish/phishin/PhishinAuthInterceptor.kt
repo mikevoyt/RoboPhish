@@ -1,20 +1,9 @@
 package robophish.phishin
 
 import okhttp3.Interceptor
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import robophish.ScopedCredentialInterceptor
 
-class PhishinAuthInterceptor(apiKey: PhishinApiKey): Interceptor {
-
-    private val authString = "Bearer ${apiKey.apiKey}"
-
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val original: Request = chain.request()
-
-        val builder: Request.Builder = original.newBuilder()
-                .header("Authorization", authString)
-
-        val request: Request = builder.build()
-        return chain.proceed(request)
-    }
-}
+class PhishinAuthInterceptor(apiKey: PhishinApiKey) : Interceptor by ScopedCredentialInterceptor(
+    "https://phish.in/".toHttpUrl(), "/api/v1/", "Authorization", "Bearer ${apiKey.apiKey}"
+)
