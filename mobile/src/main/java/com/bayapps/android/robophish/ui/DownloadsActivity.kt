@@ -286,7 +286,7 @@ class DownloadsActivity : BaseActivity() {
         private fun bindShow(view: View, row: Row.Show) {
             val show = row.show
             val first = show.first
-            val date = runCatching { LocalDate.parse(first.showDate) }.getOrNull()
+            val date = runCatching { LocalDate.parse(first.showDate?.replace('.', '-')) }.getOrNull()
             view.findViewById<TextView>(R.id.download_date_tile).text = date?.format(DateTimeFormatter.ofPattern("MMM\ndd", Locale.getDefault())) ?: "PHISH"
             view.findViewById<TextView>(R.id.download_show_date).text = date?.format(DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.getDefault())) ?: first.showDate ?: getString(R.string.app_name)
             view.findViewById<TextView>(R.id.download_venue).text = first.venue ?: first.album
