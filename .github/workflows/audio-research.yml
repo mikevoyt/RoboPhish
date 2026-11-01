@@ -16,6 +16,7 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - run: pip install -r research/audio/requirements.txt
       - run: python research/audio/benchmark.py
+      - run: python research/audio/evaluate_realtime.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
