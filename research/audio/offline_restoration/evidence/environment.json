@@ -1,0 +1,17 @@
+{
+  "python": "3.11.2 (main, Feb 16 2023, 02:55:59) [Clang 14.0.0 (clang-1400.0.29.202)]",
+  "platform": "macOS-15.5-arm64-arm-64bit",
+  "architecture": "arm64",
+  "packages": {
+    "numpy": "2.1.3",
+    "scipy": "1.14.1",
+    "soundfile": "0.12.1",
+    "pyloudnorm": "0.1.1",
+    "matplotlib": "3.9.2",
+    "nara_wpe": "0.0.11"
+  },
+  "java": "openjdk version \"21.0.8\" 2025-07-15",
+  "ffmpeg": "ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers",
+  "repository_base": "02762874a1d19de51acd69485ffe4af3222bc9be",
+  "metrics_notes": "PCM16 exact-engine comparison; original MP3s preserved. SciPy fourfold oversampling is a peak estimate, not a certified meter. FFmpeg ebur128 reports LUFS/LRA/true peak separately."
+}

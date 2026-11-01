@@ -1,0 +1,254 @@
+{
+  "library": "nara_wpe==0.0.11 (MIT)",
+  "configuration": {
+    "fft": 2048,
+    "hop": 512,
+    "taps": 6,
+    "delay": 3,
+    "iterations": 2
+  },
+  "rows": [
+    {
+      "date": "1993-08-13",
+      "injected_late_reflections": false,
+      "variant": "wpe_full",
+      "elapsed_seconds": 2.047727750032209,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.9320607473343934,
+      "correlation_change": 0.04636673802787261,
+      "side_mid_change_db": -0.8789249013046794
+    },
+    {
+      "date": "1993-08-13",
+      "injected_late_reflections": false,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 2.047727750032209,
+      "reference_error_improvement_db": null,
+      "crest_change_db": -0.16543875061870317,
+      "correlation_change": 0.016171276710592597,
+      "side_mid_change_db": -0.29100950473992615
+    },
+    {
+      "date": "1993-08-13",
+      "injected_late_reflections": false,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 2.047727750032209,
+      "reference_error_improvement_db": null,
+      "crest_change_db": -0.1393638612294108,
+      "correlation_change": 0.0027848542100464835,
+      "side_mid_change_db": -0.04937577917466829
+    },
+    {
+      "date": "1993-08-13",
+      "injected_late_reflections": true,
+      "variant": "wpe_full",
+      "elapsed_seconds": 3.1568600840400904,
+      "reference_error_improvement_db": -3.253486139564016,
+      "crest_change_db": 0.8719684557229375,
+      "correlation_change": 0.07675460730005668,
+      "side_mid_change_db": -1.4082970540875852
+    },
+    {
+      "date": "1993-08-13",
+      "injected_late_reflections": true,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 3.1568600840400904,
+      "reference_error_improvement_db": 0.14358518726386293,
+      "crest_change_db": 0.22807168356805185,
+      "correlation_change": 0.025146978676172438,
+      "side_mid_change_db": -0.42640833101795117
+    },
+    {
+      "date": "1993-08-13",
+      "injected_late_reflections": true,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 3.1568600840400904,
+      "reference_error_improvement_db": 0.0605132128294219,
+      "crest_change_db": 0.02046435949265124,
+      "correlation_change": 0.00543404955697635,
+      "side_mid_change_db": -0.09031808015735177
+    },
+    {
+      "date": "1995-12-07",
+      "injected_late_reflections": false,
+      "variant": "wpe_full",
+      "elapsed_seconds": 1.6790522079681978,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 1.6626217205807148,
+      "correlation_change": -0.022863387883964248,
+      "side_mid_change_db": 0.5253671123025647
+    },
+    {
+      "date": "1995-12-07",
+      "injected_late_reflections": false,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 1.6790522079681978,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.4689784264179213,
+      "correlation_change": -0.0032618533521437953,
+      "side_mid_change_db": 0.07863614154224763
+    },
+    {
+      "date": "1995-12-07",
+      "injected_late_reflections": false,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 1.6790522079681978,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.7818513838300927,
+      "correlation_change": -0.010906134333269035,
+      "side_mid_change_db": 0.2557926813652909
+    },
+    {
+      "date": "1995-12-07",
+      "injected_late_reflections": true,
+      "variant": "wpe_full",
+      "elapsed_seconds": 3.1058930419385433,
+      "reference_error_improvement_db": -2.9091476785089636,
+      "crest_change_db": 1.531844425718095,
+      "correlation_change": -0.016693163674590616,
+      "side_mid_change_db": 0.3894839435631692
+    },
+    {
+      "date": "1995-12-07",
+      "injected_late_reflections": true,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 3.1058930419385433,
+      "reference_error_improvement_db": 0.1892509528156623,
+      "crest_change_db": 0.43167167369665194,
+      "correlation_change": -0.0012968901942983502,
+      "side_mid_change_db": 0.03285636874815445
+    },
+    {
+      "date": "1995-12-07",
+      "injected_late_reflections": true,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 3.1058930419385433,
+      "reference_error_improvement_db": 0.07267009394352542,
+      "crest_change_db": 0.8392073491028498,
+      "correlation_change": -0.009498288903178831,
+      "side_mid_change_db": 0.22073289365408577
+    },
+    {
+      "date": "2009-08-07",
+      "injected_late_reflections": false,
+      "variant": "wpe_full",
+      "elapsed_seconds": 3.8028782090405002,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.4765699167076214,
+      "correlation_change": -0.006668789253248653,
+      "side_mid_change_db": 0.21010271054388063
+    },
+    {
+      "date": "2009-08-07",
+      "injected_late_reflections": false,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 3.8028782090405002,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.13205619792795176,
+      "correlation_change": -0.00126290379706262,
+      "side_mid_change_db": 0.04046903684505487
+    },
+    {
+      "date": "2009-08-07",
+      "injected_late_reflections": false,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 3.8028782090405002,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.4032765002006471,
+      "correlation_change": -0.007997984762151522,
+      "side_mid_change_db": 0.25027636415823373
+    },
+    {
+      "date": "2009-08-07",
+      "injected_late_reflections": true,
+      "variant": "wpe_full",
+      "elapsed_seconds": 1.6017777500674129,
+      "reference_error_improvement_db": 1.0442397469198532,
+      "crest_change_db": 0.6347960940645301,
+      "correlation_change": -0.007755941360964136,
+      "side_mid_change_db": 0.2389966704660118
+    },
+    {
+      "date": "2009-08-07",
+      "injected_late_reflections": true,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 1.6017777500674129,
+      "reference_error_improvement_db": 0.5878580522460091,
+      "crest_change_db": 0.1827150977766152,
+      "correlation_change": -0.0011822624733518472,
+      "side_mid_change_db": 0.03690305193856602
+    },
+    {
+      "date": "2009-08-07",
+      "injected_late_reflections": true,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 1.6017777500674129,
+      "reference_error_improvement_db": 0.35075292163839755,
+      "crest_change_db": 0.2344869868963393,
+      "correlation_change": -0.006570901363604609,
+      "side_mid_change_db": 0.2040993336777177
+    },
+    {
+      "date": "2024-08-16",
+      "injected_late_reflections": false,
+      "variant": "wpe_full",
+      "elapsed_seconds": 1.6737869170028716,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.6624495124758738,
+      "correlation_change": 0.002892057945483306,
+      "side_mid_change_db": -0.054232277209938395
+    },
+    {
+      "date": "2024-08-16",
+      "injected_late_reflections": false,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 1.6737869170028716,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.20989856018555741,
+      "correlation_change": 0.00303228867765426,
+      "side_mid_change_db": -0.055072095566606194
+    },
+    {
+      "date": "2024-08-16",
+      "injected_late_reflections": false,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 1.6737869170028716,
+      "reference_error_improvement_db": null,
+      "crest_change_db": 0.3686026201266195,
+      "correlation_change": -0.005687667716795963,
+      "side_mid_change_db": 0.10249276875588809
+    },
+    {
+      "date": "2024-08-16",
+      "injected_late_reflections": true,
+      "variant": "wpe_full",
+      "elapsed_seconds": 1.2412112089805305,
+      "reference_error_improvement_db": -0.8005309988682576,
+      "crest_change_db": 0.8682154953755834,
+      "correlation_change": 0.008704081667819774,
+      "side_mid_change_db": -0.1568926192359248
+    },
+    {
+      "date": "2024-08-16",
+      "injected_late_reflections": true,
+      "variant": "wpe_25_percent",
+      "elapsed_seconds": 1.2412112089805305,
+      "reference_error_improvement_db": 0.4683998909846103,
+      "crest_change_db": 0.27371196014265564,
+      "correlation_change": 0.0049720311982284215,
+      "side_mid_change_db": -0.08844448318091747
+    },
+    {
+      "date": "2024-08-16",
+      "injected_late_reflections": true,
+      "variant": "wpe_shared_mask_1_5db",
+      "elapsed_seconds": 1.2412112089805305,
+      "reference_error_improvement_db": 0.2340932787169745,
+      "crest_change_db": 0.39915188258654055,
+      "correlation_change": -0.0034933465544962905,
+      "side_mid_change_db": 0.061815313411187844
+    }
+  ],
+  "decision": "Research-only. Speech-derived dereverberation is not validated crowd-preserving concert restoration.",
+  "limitations": "Four development passages, not full tracks or subjective assessment. Controlled reference is original audience recording before injected extra room reflections."
+}

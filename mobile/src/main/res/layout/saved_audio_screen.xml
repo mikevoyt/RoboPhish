@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:fitsSystemWindows="true" android:background="@color/offline_paper">
+    <include android:id="@+id/toolbar_container" layout="@layout/include_toolbar" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/saved_audio_list"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_container" android:layout_above="@+id/controls_container"
+        android:clipToPadding="false" android:padding="16dp" tools:listitem="@layout/saved_audio_track" />
+    <androidx.cardview.widget.CardView android:id="@id/controls_container"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" app:cardElevation="8dp">
+        <fragment android:id="@+id/fragment_playback_controls"
+            android:name="com.bayapps.android.robophish.ui.PlaybackControlsFragment"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_playback_controls" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

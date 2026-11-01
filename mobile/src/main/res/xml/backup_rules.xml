@@ -3,4 +3,6 @@
     <!-- Audio and system transfer IDs belong to this installation. -->
     <exclude domain="external" path="Music/" />
     <exclude domain="sharedpref" path="downloads_store.xml" />
+    <exclude domain="sharedpref" path="audio_enhancements.xml" />
+    <exclude domain="database" path="androidx.work.workdb" />
 </full-backup-content>

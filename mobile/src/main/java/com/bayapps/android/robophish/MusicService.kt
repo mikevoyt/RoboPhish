@@ -16,6 +16,8 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.ResolvingDataSource
 import com.bayapps.android.robophish.downloads.DownloadStore
 import com.bayapps.android.robophish.downloads.OfflineMedia
+import com.bayapps.android.robophish.audio.AudienceAudioSettings
+import com.bayapps.android.robophish.audio.SavedVersionPlayback
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
@@ -67,7 +69,30 @@ class MusicService : MediaLibraryService() {
                 true
             )
             .build()
-            .apply { setHandleAudioBecomingNoisy(true) }
+            .apply {
+                setHandleAudioBecomingNoisy(true)
+                addListener(object : Player.Listener {
+                    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                        AudienceAudioSettings.get(this@MusicService).playingSavedEnhancement =
+                            SavedVersionPlayback.isEnhanced(mediaItem)
+                    }
+                    override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                        val item = currentMediaItem ?: return
+                        val original = SavedVersionPlayback.fallback(item) ?: return
+                        val index = currentMediaItemIndex
+                        val position = currentPosition.coerceAtLeast(0)
+                        val resume = playWhenReady
+                        // A copy may be deleted after it was queued. Reopen the original container
+                        // at the same time position, never at a WAV byte offset, and keep the queue.
+                        AudienceAudioSettings.get(this@MusicService).playingSavedEnhancement = false
+                        replaceMediaItem(index, original)
+                        seekTo(index, position)
+                        prepare()
+                        playWhenReady = resume
+                        Timber.w(error, "Saved audio unavailable; resumed original recording")
+                    }
+                })
+            }
 
         mediaLibrarySession = MediaLibraryService.MediaLibrarySession.Builder(
             this,
@@ -95,6 +120,7 @@ class MusicService : MediaLibraryService() {
         notificationManager.setPlayer(null)
         mediaLibrarySession.release()
         player.release()
+        AudienceAudioSettings.get(this).playingSavedEnhancement = false
         serviceScope.cancel()
         super.onDestroy()
     }
@@ -190,7 +216,9 @@ class MusicService : MediaLibraryService() {
     private fun resolveMediaItem(item: MediaItem): MediaItem {
         val trackId = MediaIDHelper.extractMusicIDFromMediaID(item.mediaId)
         val saved = DownloadStore.get(this).find(trackId)
-        if (saved != null && OfflineMedia.isPlayable(saved)) return OfflineMedia.toMediaItem(saved)
+        if (saved != null && OfflineMedia.isPlayable(saved)) {
+            return SavedVersionPlayback.resolve(this, saved)
+        }
         if (item.mediaMetadata.extras?.getBoolean(OfflineMedia.OFFLINE_ONLY) == true) {
             throw java.io.IOException("Downloaded file is no longer available")
         }

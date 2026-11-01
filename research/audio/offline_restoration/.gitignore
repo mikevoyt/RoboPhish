@@ -1,0 +1,7 @@
+__pycache__/
+*.class
+*.s16
+*.wav
+*.flac
+*.mp3
+results/

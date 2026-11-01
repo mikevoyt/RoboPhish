@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+    android:background="@drawable/audio_card_bg" android:padding="24dp">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/saved_audio_empty_title" android:textColor="@color/offline_ink"
+        android:textSize="21sp" android:fontFamily="sans-serif-medium" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:text="@string/saved_audio_empty_body"
+        android:textColor="@color/offline_muted" android:textSize="14sp" android:lineSpacingExtra="3dp" />
+    <androidx.appcompat.widget.AppCompatButton android:id="@+id/saved_audio_downloads"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"
+        android:layout_marginTop="20dp" android:background="@drawable/offline_primary_bg" android:backgroundTint="@null"
+        android:text="@string/saved_audio_downloads" android:textAllCaps="false"
+        android:textColor="@android:color/white" android:paddingHorizontal="16dp" />
+</LinearLayout>

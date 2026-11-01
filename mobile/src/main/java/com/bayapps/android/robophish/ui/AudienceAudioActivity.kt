@@ -1,20 +1,27 @@
 package com.bayapps.android.robophish.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import com.bayapps.android.robophish.R
 import com.bayapps.android.robophish.audio.AudienceAudioSettings
 import com.bayapps.android.robophish.audio.AudienceDsp
+import com.bayapps.android.robophish.audio.SavedVersionPlayback
 
 class AudienceAudioActivity : BaseActivity() {
     private val settings by lazy { AudienceAudioSettings.get(this) }
     private lateinit var compare: Button
     private lateinit var state: TextView
     private lateinit var amountLabel: TextView
+    private val playbackListener = object : Player.Listener {
+        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) = updateState()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +32,9 @@ class AudienceAudioActivity : BaseActivity() {
         window.statusBarColor = ink
         findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawer_layout).setStatusBarBackgroundColor(ink)
         title = getString(R.string.audio_title)
+        findViewById<Button>(R.id.audio_saved_versions).setOnClickListener {
+            startActivity(Intent(this, SavedAudioActivity::class.java))
+        }
         state = findViewById(R.id.audio_state)
         amountLabel = findViewById(R.id.audio_amount_label)
         compare = findViewById(R.id.audio_compare)
@@ -70,12 +80,26 @@ class AudienceAudioActivity : BaseActivity() {
         if (::compare.isInitialized) updateState()
     }
 
+    override fun onMediaControllerConnected() {
+        mediaBrowser?.addListener(playbackListener)
+        updateState()
+    }
+
+    override fun onStop() {
+        mediaBrowser?.removeListener(playbackListener)
+        super.onStop()
+    }
+
     private fun updateState() {
         val current = settings.current
+        val savedVersion = SavedVersionPlayback.isEnhanced(mediaBrowser?.currentMediaItem)
         amountLabel.text = getString(R.string.audio_amount, (current.amount * 100).toInt())
-        compare.isEnabled = current.enabled && current.amount > 0
+        compare.isEnabled = current.enabled && current.amount > 0 && !savedVersion
         compare.setText(if (settings.compareOriginal) R.string.audio_hear_enhanced else R.string.audio_hear_original)
-        state.setText(if (!current.enabled || current.amount == 0f || settings.compareOriginal)
-            R.string.audio_original_active else R.string.audio_enhanced_active)
+        state.setText(when {
+            savedVersion -> R.string.audio_saved_active
+            !current.enabled || current.amount == 0f || settings.compareOriginal -> R.string.audio_original_active
+            else -> R.string.audio_enhanced_active
+        })
     }
 }

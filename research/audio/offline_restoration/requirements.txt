@@ -1,0 +1,3 @@
+-r ../requirements.txt
+matplotlib==3.9.2
+nara_wpe==0.0.11

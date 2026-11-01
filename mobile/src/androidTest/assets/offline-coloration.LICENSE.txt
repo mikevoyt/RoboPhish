@@ -1,0 +1,13 @@
+offline-coloration.mp3 is generated entirely from seeded mathematical noise,
+with a deliberately added broad 315 Hz resonance. It contains no third-party
+recording. It is licensed under Apache License 2.0, as in the repository LICENSE.
+
+Reproduce from the repository root:
+  python3 research/audio/offline_restoration/generate_android_fixture.py
+
+The generator verifies the decoded MP3 against the exact Java engine and writes
+its profile, source hash, and engine hashes to:
+  research/audio/offline_restoration/fixtures/offline-coloration-profile.json
+
+This artificial stimulus exercises the changed-output software path; it is not
+evidence of improvement on an audience recording or a listening-test result.

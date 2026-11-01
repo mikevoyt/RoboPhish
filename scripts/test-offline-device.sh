@@ -40,7 +40,7 @@ else
 fi
 adb shell dumpsys connectivity > offline-network-state.txt
 grep -E 'NetworkAgentInfo|Active default network|VALIDATED' offline-network-state.txt || true
-offline_test_classes=com.bayapps.android.robophish.downloads.OfflinePlaybackTest,com.bayapps.android.robophish.audio.AudiencePlaybackTest
+offline_test_classes=com.bayapps.android.robophish.downloads.OfflinePlaybackTest,com.bayapps.android.robophish.audio.AudiencePlaybackTest,com.bayapps.android.robophish.audio.SavedVersionPlaybackTest,com.bayapps.android.robophish.audio.SavedAudioUiTest,com.bayapps.android.robophish.audio.offline.OfflineRenderSafetyTest,com.bayapps.android.robophish.audio.offline.SavedAudioConcurrencyTest
 ./gradlew --no-daemon -Dorg.gradle.java.home="$JAVA_HOME" :mobile:connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.class="$offline_test_classes"
 adb shell test -f /sdcard/Download/robophish-offline/offline-ready.png

@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-01",
+  "device": "task-owned CodexAudio32 emulator",
+  "api_level": 32,
+  "network": "disconnected",
+  "tests": 20,
+  "failures": 0,
+  "concurrency": {
+    "sourceFrames": 13230000,
+    "sourceBytes": 52920044,
+    "observedStartupMs": 401,
+    "renderStateAtPlaybackStart": "PROCESSING",
+    "positionAtStartMs": 141,
+    "positionAfterCancellationMs": 659,
+    "finalJobState": "CANCELLED",
+    "sourceHashUnchanged": true,
+    "partialExists": false,
+    "publishedCopyExists": false,
+    "scope": "One emulator isPlaying observation; not a general startup latency or underrun measurement"
+  },
+  "apk_sha256": "084aa0e037762bfcacc24ded38061e913fcc83c4b3fc9436cbd62909240fd2ce",
+  "limitations": [
+    "Not a physical phone test",
+    "Startup result is one emulator observation, not a universal performance guarantee",
+    "No subjective listening rating is implied"
+  ]
+}

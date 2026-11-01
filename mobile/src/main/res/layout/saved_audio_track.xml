@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:layout_marginBottom="14dp"
+    android:background="@drawable/audio_card_bg" android:padding="20dp">
+    <TextView android:id="@+id/saved_audio_track_title" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:textColor="@color/offline_ink"
+        android:textSize="19sp" android:fontFamily="sans-serif-medium" />
+    <TextView android:id="@+id/saved_audio_track_detail" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="6dp"
+        android:textColor="@color/offline_muted" android:textSize="13sp" android:lineSpacingExtra="2dp" />
+    <TextView android:id="@+id/saved_audio_track_status" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="16dp"
+        android:textColor="@color/offline_green" android:textSize="14sp" android:lineSpacingExtra="2dp" />
+    <ProgressBar android:id="@+id/saved_audio_track_progress" style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent" android:layout_height="6dp" android:layout_marginTop="12dp"
+        android:max="100" android:progressTint="@color/offline_green" android:visibility="gone" />
+    <TextView android:id="@+id/saved_audio_track_estimate" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="8dp"
+        android:textColor="@color/offline_muted" android:textSize="12sp" />
+    <TextView android:id="@+id/saved_audio_track_summary" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="10dp"
+        android:textColor="@color/offline_muted" android:textSize="13sp" android:lineSpacingExtra="3dp"
+        android:visibility="gone" />
+    <TextView android:id="@+id/saved_audio_version_label" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/saved_audio_version"
+        android:textColor="@color/offline_ink" android:textSize="13sp" android:textStyle="bold" />
+    <RadioGroup android:id="@+id/saved_audio_version_choice" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="vertical">
+        <RadioButton android:id="@+id/saved_audio_choose_original" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:minHeight="48dp"
+            android:text="@string/saved_audio_original" android:textColor="@color/offline_ink" android:textSize="14sp" />
+        <RadioButton android:id="@+id/saved_audio_choose_enhanced" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:minHeight="48dp"
+            android:text="@string/saved_audio_enhanced" android:textColor="@color/offline_ink" android:textSize="14sp" />
+    </RadioGroup>
+    <androidx.appcompat.widget.AppCompatButton android:id="@+id/saved_audio_play"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"
+        android:layout_marginTop="12dp" android:background="@drawable/offline_secondary_bg"
+        android:backgroundTint="@null" android:text="@string/saved_audio_play_original" android:textAllCaps="false"
+        android:textColor="@color/offline_ink" android:textSize="14sp" android:paddingHorizontal="16dp" />
+    <androidx.appcompat.widget.AppCompatButton android:id="@+id/saved_audio_action"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"
+        android:layout_marginTop="10dp" android:background="@drawable/offline_primary_bg"
+        android:backgroundTint="@null" android:text="@string/saved_audio_create" android:textAllCaps="false"
+        android:textColor="@android:color/white" android:textSize="14sp" android:paddingHorizontal="16dp" />
+    <androidx.appcompat.widget.AppCompatButton android:id="@+id/saved_audio_clear"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"
+        android:layout_marginTop="10dp" android:background="@drawable/offline_secondary_bg"
+        android:backgroundTint="@null" android:text="@string/saved_audio_dismiss" android:textAllCaps="false"
+        android:textColor="@color/offline_ink" android:textSize="14sp" android:paddingHorizontal="16dp"
+        android:visibility="gone" />
+</LinearLayout>

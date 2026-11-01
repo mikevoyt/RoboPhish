@@ -1,0 +1,4160 @@
+{
+  "core_fingerprint": {
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationProfile.java": "38bf2878a105ae1d6902bc2fc5143a9a2753ec0b2df9caae8fdefccfba2fd64e",
+    "mobile/src/main/java/com/bayapps/android/robophish/audio/offline/OfflineRestorationDsp.java": "2df71c5a28939730b975ce3d84ea5513d52e0058ea88dbee5c9bdf0e6ab4f5d9",
+    "research/audio/offline_restoration/OfflineRender.java": "508d691e1f7d2d9c11084e8ec99ed908aa1e3c26d08dd32309505ea839d0466c"
+  },
+  "summary": {
+    "recordings": 16,
+    "full_track_audio_hours": 2.5975250257070415,
+    "abstentions": 16,
+    "processed": 0,
+    "maximum_static_correction_db": 0.125,
+    "maximum_dynamic_correction_db": 0.0,
+    "checks_passed": 16,
+    "failed": {},
+    "median_loudness_change_lu": 0.0,
+    "max_abs_crest_change_db": 0.0,
+    "max_abs_stereo_correlation_change": 0.0,
+    "max_abs_stereo_width_change_db": 0.0,
+    "minimum_onset_flux_correlation": 0.9999999999999998,
+    "max_oversampled_peak_dbfs": 0.33285757929857096,
+    "max_processed_oversampled_peak_dbfs": null,
+    "subjective_ratings_collected": 0,
+    "interpretation": "Preservation checks are provisional engineering bounds, not an audio quality score or evidence of soundboard equivalence."
+  },
+  "tracks": [
+    {
+      "metadata": {
+        "date": "1993-08-13",
+        "title": "Rift",
+        "url": "https://phish.in/blob/7tyfrsz3obqdxo397qbxmkdgmptf.mp3",
+        "sha256": "088e8899aa16e4ac5c0b7fe309f2e554756a37bc6f9c2f2884701439652e73db",
+        "duration": 353.893333,
+        "source_notes": "PHISH 08-13-93 Murat Theater, Indianapolis, IN\r\n\r\nSource: Nakamichi CM-300's (TS, at back of room, w/ cardioid caps) --> Sony\r\nD7 @ 48K\r\nTaped by Doug Berkman\r\n\r\nTranfer: Sony DTC-A6 > Dio 2448 > CDWAV> Soundforge > CDWAV > SHN\r\nby Bill Gardner, bgardner@telocity.com\r\n\r\nCaveats: Abrupt starts on both sets, on the master dats as mine are one off\r\nthose.\r\n\r\n**Disc 1**\r\n\r\nLengthwise->\r\nLlama\r\nMakisupa Policeman->\r\nFoam\r\nStash\r\nGinseng Sullivan\r\nFluffhead\r\nMy Mind's Got a Mind of its Own\r\nHorn\r\n\r\n**Disc 2**\r\n\r\nDavid Bowie\r\n-SET 2-\r\nBuried Alive->\r\nRift >\r\nBathtub Gin-> \r\nYa Mar\r\nMike's Song->\r\nLifeboy\r\n\r\n**Disc 3**\r\nOh Kee Pa Ceremony->\r\nSuzy Greenberg\r\nCrowd\r\nAmazing Grace\r\nE: Highway to Hell",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 9636455,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 15606696,
+          "analyzedWindows": 7620,
+          "sourcePeak": 0.91339111328125,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.125,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0625,
+          -0.125,
+          -0.0625,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          22.0,
+          22.0,
+          15.5,
+          17.0,
+          21.5,
+          23.5,
+          18.5,
+          16.0,
+          14.0,
+          14.5,
+          13.0,
+          14.0,
+          10.5,
+          8.5,
+          9.0,
+          3.0,
+          1.5,
+          -0.5,
+          -3.5,
+          -10.0,
+          -12.5,
+          -12.5,
+          -16.5,
+          -20.0,
+          -26.5,
+          -41.5
+        ],
+        "analysis_seconds": 1.051236333,
+        "render_seconds": 0.154287959,
+        "frames": 15606696,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.91339111328125,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 15606696,
+        "duration_seconds": 353.8933333333333,
+        "sample_peak_dbfs": -0.7868643623905307,
+        "oversampled_peak_estimate_dbfs": -0.7597140317759143,
+        "rms_dbfs": -19.136221227353346,
+        "crest_db": 18.349356864962814,
+        "stereo_correlation": 0.6990130140083992,
+        "side_mid_db": -7.504569523868421,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 914.086425105429,
+            "mean_magnitude_squared_coherence": 0.7281870822681795
+          },
+          "bass": {
+            "power": 29133.034746072575,
+            "mean_magnitude_squared_coherence": 0.9528433910662156
+          },
+          "low_mid": {
+            "power": 20638.045223625944,
+            "mean_magnitude_squared_coherence": 0.5716830855514891
+          },
+          "mid": {
+            "power": 23271.05438322252,
+            "mean_magnitude_squared_coherence": 0.19967084115371422
+          },
+          "presence": {
+            "power": 2474.100460540147,
+            "mean_magnitude_squared_coherence": 0.2056170933038756
+          },
+          "air": {
+            "power": 301.5286576776478,
+            "mean_magnitude_squared_coherence": 0.14945325043857202
+          },
+          "upper": {
+            "power": 0.028634599165760968,
+            "mean_magnitude_squared_coherence": 0.04058533536885673
+          }
+        },
+        "integrated_lufs": -17.0,
+        "loudness_range_lu": 8.0,
+        "ffmpeg_true_peak_dbtp": -0.8
+      },
+      "enhanced": {
+        "frames": 15606696,
+        "duration_seconds": 353.8933333333333,
+        "sample_peak_dbfs": -0.7868643623905307,
+        "oversampled_peak_estimate_dbfs": -0.7597140317759143,
+        "rms_dbfs": -19.136221227353346,
+        "crest_db": 18.349356864962814,
+        "stereo_correlation": 0.6990130140083992,
+        "side_mid_db": -7.504569523868421,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 914.086425105429,
+            "mean_magnitude_squared_coherence": 0.7281870822681795
+          },
+          "bass": {
+            "power": 29133.034746072575,
+            "mean_magnitude_squared_coherence": 0.9528433910662156
+          },
+          "low_mid": {
+            "power": 20638.045223625944,
+            "mean_magnitude_squared_coherence": 0.5716830855514891
+          },
+          "mid": {
+            "power": 23271.05438322252,
+            "mean_magnitude_squared_coherence": 0.19967084115371422
+          },
+          "presence": {
+            "power": 2474.100460540147,
+            "mean_magnitude_squared_coherence": 0.2056170933038756
+          },
+          "air": {
+            "power": 301.5286576776478,
+            "mean_magnitude_squared_coherence": 0.14945325043857202
+          },
+          "upper": {
+            "power": 0.028634599165760968,
+            "mean_magnitude_squared_coherence": 0.04058533536885673
+          }
+        },
+        "integrated_lufs": -17.0,
+        "loudness_range_lu": 8.0,
+        "ffmpeg_true_peak_dbtp": -0.8
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "1997-12-06",
+        "title": "Cavern",
+        "url": "https://phish.in/blob/hx5z9d5nwm1ja8mo47qigmx059e6.mp3",
+        "sha256": "8ead55db627ca4f97db72691b4c465b3908be448c198e8e53d32a5e214a02e42",
+        "duration": 331.986667,
+        "source_notes": "PHiSH - 12/06/97 \r\nPalace of Auburn Hills\r\nAuburn Hills, Michigan\r\n\r\nTaper: Jason Wilhelm\r\nSource:  Microtech Geffel 210 > OADE M248 > SBM -1 > DA-P1\r\n\r\nTransfer:  Panasonic SV-3700 > HHB CDR-800 > CD > HD(via EAC) > Pro Tools 5.0 > WAV > SHN\r\nTransfered by: Alsosprach & Mattstick\r\n\r\n\r\n**DO NOT ENCODE INTO MP3.......WHAT DID THIS SHOW EVER DO TO YOU**\r\n\r\nDisc One **needs 80 min disc** \r\nSet I\r\n1) Golgi Apparatus\r\n2) Run Like an Antelope \r\n3) Trainsong >\r\n4) Bathtub Gin > \r\n5) Foam \r\n6) Sample in a Jar \r\n7) Fee >\r\n8) Maze \r\n9) Cavern \r\n\r\n(moving D1T9 to Disc 2 will split the show into two 74 min discs)\r\n\r\nDisc Two\r\nSet II\r\n1) Tweezer > \r\n2) Izabella > \r\n3) Twist Around > \r\n4) Piper \r\n5) Sleeping Monkey >\r\n6) Tweezer Reprise \r\nEncore:\r\n7) Rocky Top \r\n\r\nThanks to westkoast and colin@loveboat.com for the DAT, big props to Harris for the gear...!\r\n\r\nNote: Sector Boundary Errors fixed with shntool 7/03",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 6033400,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 14640612,
+          "analyzedWindows": 7134,
+          "sourcePeak": 1.0,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          18.0,
+          19.0,
+          19.0,
+          22.5,
+          24.0,
+          21.0,
+          18.0,
+          14.5,
+          16.0,
+          14.5,
+          12.0,
+          13.0,
+          14.5,
+          11.5,
+          6.0,
+          5.0,
+          1.5,
+          -3.5,
+          -5.5,
+          -7.5,
+          -4.0,
+          -4.5,
+          -9.5,
+          -18.5,
+          -21.5,
+          -38.5
+        ],
+        "analysis_seconds": 1.329623417,
+        "render_seconds": 0.198930833,
+        "frames": 14640612,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 1.0,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 14640612,
+        "duration_seconds": 331.9866666666667,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.19241694809531634,
+        "rms_dbfs": -17.003815784222475,
+        "crest_db": 17.003815784222475,
+        "stereo_correlation": 0.9999999999999043,
+        "side_mid_db": -133.19986263717664,
+        "clip_fraction": 6.35219347387937e-06,
+        "bands": {
+          "sub": {
+            "power": 1258.5494170986947,
+            "mean_magnitude_squared_coherence": 0.9999999999999885
+          },
+          "bass": {
+            "power": 52595.415989134206,
+            "mean_magnitude_squared_coherence": 0.9999999999999961
+          },
+          "low_mid": {
+            "power": 42801.25230641039,
+            "mean_magnitude_squared_coherence": 0.9999999999999879
+          },
+          "mid": {
+            "power": 24286.16561671403,
+            "mean_magnitude_squared_coherence": 0.9999999999998626
+          },
+          "presence": {
+            "power": 2525.6607858376333,
+            "mean_magnitude_squared_coherence": 0.9999999999956688
+          },
+          "air": {
+            "power": 2173.517071058769,
+            "mean_magnitude_squared_coherence": 0.9999999998088441
+          },
+          "upper": {
+            "power": 0.2304627540258008,
+            "mean_magnitude_squared_coherence": 0.9999832148574397
+          }
+        },
+        "integrated_lufs": -14.1,
+        "loudness_range_lu": 5.7,
+        "ffmpeg_true_peak_dbtp": 0.2
+      },
+      "enhanced": {
+        "frames": 14640612,
+        "duration_seconds": 331.9866666666667,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.19241694809531634,
+        "rms_dbfs": -17.003815784222475,
+        "crest_db": 17.003815784222475,
+        "stereo_correlation": 0.9999999999999043,
+        "side_mid_db": -133.19986263717664,
+        "clip_fraction": 6.35219347387937e-06,
+        "bands": {
+          "sub": {
+            "power": 1258.5494170986947,
+            "mean_magnitude_squared_coherence": 0.9999999999999885
+          },
+          "bass": {
+            "power": 52595.415989134206,
+            "mean_magnitude_squared_coherence": 0.9999999999999961
+          },
+          "low_mid": {
+            "power": 42801.25230641039,
+            "mean_magnitude_squared_coherence": 0.9999999999999879
+          },
+          "mid": {
+            "power": 24286.16561671403,
+            "mean_magnitude_squared_coherence": 0.9999999999998626
+          },
+          "presence": {
+            "power": 2525.6607858376333,
+            "mean_magnitude_squared_coherence": 0.9999999999956688
+          },
+          "air": {
+            "power": 2173.517071058769,
+            "mean_magnitude_squared_coherence": 0.9999999998088441
+          },
+          "upper": {
+            "power": 0.2304627540258008,
+            "mean_magnitude_squared_coherence": 0.9999832148574397
+          }
+        },
+        "integrated_lufs": -14.1,
+        "loudness_range_lu": 5.7,
+        "ffmpeg_true_peak_dbtp": 0.2
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": true,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "1998-04-03",
+        "title": "Roses Are Free",
+        "url": "https://phish.in/blob/qk5ujiaeinigf9irrj9e1s515kz8.mp3",
+        "sha256": "e98f711eff26a17a5c2f23fdc0f702f370559c7328fbef5de4d0d19ab7a7617a",
+        "duration": 1635.800884,
+        "source_notes": "Phish\r\nApril 3, 1998\r\nNassau Coliseum\r\nUniondale, NY \r\n\r\nSource: AKG 461s > D8 > standalone > CD > WAV > SHN\r\n\r\nNotes: This show was retracked for 2 80 minute discs. The fade out/in during the \r\nencore break on the master discs was removed by mixing the two tracks together \r\nwith SoundEdit 16.  CD > WAV was done using trackthief. All editing done using \r\nSoundEdit 16. For an OTS, the sound is excellent. Enjoy!  -Matt (phisken@etree.org)\r\n\r\n\r\nDisc 1 (set 1)\r\n----------------------------------\r\n1 - 13:27 - Mike's Song  ->\r\n2 - 04:06 - Old Home Place  >\r\n3 - 16:27 - Weekapaug Groove *\r\n4 - 02:58 - Train Song >\r\n5 - 07:40 - Billy Breathes\r\n6 - 02:40 - Beauty of My Dreams\r\n7 - 05:00 - Dogs Stole Things >\r\n8 - 16:41 - Reba**\r\n9 - 08:27 - My Soul\r\n     --------\r\n     77:31\r\n\r\n\r\nDisc 2 (set 2 and encore)\r\n-----------------------------------\r\n1 - 27:25 - Roses Are Free  ->\r\n2 - 16:11 - Piper***  > \r\n3 - 06:53 - Lovin Cup^  >\r\n4 - 14:30 - Run Like an Antelope^^\r\n      ~~~~\r\n5 - 04:34 - Carini+  >\r\n6 - 06:15 - Halley's Comet  >\r\n7 - 03:13 - Tweezer Reprise\r\n     --------\r\n     79:05\r\n\r\n\r\n* With jam over band \"ooo\"ing - basically a \"Crosseyed and Painless\" jam without \r\nthe actual vocals. \r\n** With whistling. \r\n*** Jammed out a bit, all drop out except Page who solos for about a minute and \r\nthen takes it into \"Loving Cup\". \r\n^During which someone with a backpack jumps onstage, runs across stage, and \r\nis chased by Pete Carini. \r\n^^Which starts out with Fishman saying \"The game is don't let Carini get you -- \r\nit's okay to jump onstage as long as Carini doesn't get you -- don't attack the \r\ndrummer\" and includes a chant throughout of \"Carini's gonna get ya\"; during \r\nwhich the lights go out and a glowstick war ensues. \r\n+Pete Carini is brought on stage.",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 48667952,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 72138819,
+          "analyzedWindows": 35224,
+          "sourcePeak": 0.927734375,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          20.5,
+          20.0,
+          17.0,
+          24.0,
+          24.0,
+          21.5,
+          19.5,
+          17.5,
+          15.0,
+          15.5,
+          15.0,
+          9.5,
+          10.0,
+          11.5,
+          8.0,
+          -2.0,
+          -3.0,
+          -5.0,
+          -9.0,
+          -7.5,
+          -12.5,
+          -17.5,
+          -19.5,
+          -20.5,
+          -27.5,
+          -42.0
+        ],
+        "analysis_seconds": 5.210598917,
+        "render_seconds": 0.711059333,
+        "frames": 72138819,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.927734375,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 72138819,
+        "duration_seconds": 1635.8008843537416,
+        "sample_peak_dbfs": -0.6515270270192837,
+        "oversampled_peak_estimate_dbfs": -0.6416361390404581,
+        "rms_dbfs": -19.291304710196197,
+        "crest_db": 18.639777683176916,
+        "stereo_correlation": 0.8511002426238996,
+        "side_mid_db": -10.940355755072485,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 1793.5281491604437,
+            "mean_magnitude_squared_coherence": 0.3331991280962605
+          },
+          "bass": {
+            "power": 28706.897202383498,
+            "mean_magnitude_squared_coherence": 0.9922456156075383
+          },
+          "low_mid": {
+            "power": 27939.331049468885,
+            "mean_magnitude_squared_coherence": 0.768476906354191
+          },
+          "mid": {
+            "power": 14685.744089234071,
+            "mean_magnitude_squared_coherence": 0.35826215125149485
+          },
+          "presence": {
+            "power": 906.8861430754317,
+            "mean_magnitude_squared_coherence": 0.24473204277020322
+          },
+          "air": {
+            "power": 107.06130120113028,
+            "mean_magnitude_squared_coherence": 0.24398585876189688
+          },
+          "upper": {
+            "power": 0.020664148481343573,
+            "mean_magnitude_squared_coherence": 0.06241611216947578
+          }
+        },
+        "integrated_lufs": -17.3,
+        "loudness_range_lu": 3.9,
+        "ffmpeg_true_peak_dbtp": -0.6
+      },
+      "enhanced": {
+        "frames": 72138819,
+        "duration_seconds": 1635.8008843537416,
+        "sample_peak_dbfs": -0.6515270270192837,
+        "oversampled_peak_estimate_dbfs": -0.6416361390404581,
+        "rms_dbfs": -19.291304710196197,
+        "crest_db": 18.639777683176916,
+        "stereo_correlation": 0.8511002426238996,
+        "side_mid_db": -10.940355755072485,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 1793.5281491604437,
+            "mean_magnitude_squared_coherence": 0.3331991280962605
+          },
+          "bass": {
+            "power": 28706.897202383498,
+            "mean_magnitude_squared_coherence": 0.9922456156075383
+          },
+          "low_mid": {
+            "power": 27939.331049468885,
+            "mean_magnitude_squared_coherence": 0.768476906354191
+          },
+          "mid": {
+            "power": 14685.744089234071,
+            "mean_magnitude_squared_coherence": 0.35826215125149485
+          },
+          "presence": {
+            "power": 906.8861430754317,
+            "mean_magnitude_squared_coherence": 0.24473204277020322
+          },
+          "air": {
+            "power": 107.06130120113028,
+            "mean_magnitude_squared_coherence": 0.24398585876189688
+          },
+          "upper": {
+            "power": 0.020664148481343573,
+            "mean_magnitude_squared_coherence": 0.06241611216947578
+          }
+        },
+        "integrated_lufs": -17.3,
+        "loudness_range_lu": 3.9,
+        "ffmpeg_true_peak_dbtp": -0.6
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2000-09-14",
+        "title": "Drowned",
+        "url": "https://phish.in/blob/bpp6dr3ej8pke69y01zseaeuyjmr.mp3",
+        "sha256": "4a0137e9367e8be7d46c31ab497670c103abba8f6ff758f7760704d45bb92850",
+        "duration": 1882.093333,
+        "source_notes": "-------------------------\r\nPHiSH\r\n-------------------------\r\n09/14/2000\r\nDarien Lake\r\nDarien, NY\r\n\r\n-------------------------\r\nSOURCE:\r\n-------------------------\r\nNeumann u89i (Cardiod, 80Hz roll off, DFC Taper's Section)>\r\nMackie 1202 VLS>\r\nTascam DA-P1 @ 48kHz>\r\nSony PCM-M1>\r\nMontego II S/PDIF>\r\nCool Edit 2000 @ 44.1kHz/CDWav>\r\n.WAV/.SHN\r\n\r\n-------------------------\r\nRECORDED BY:\r\n-------------------------\r\nBryan Austin\r\nbaustin@clemson.edu\r\n\r\nDave Schall\r\npqxp@umich.edu\r\n\r\n-------------------------\r\nCONVERSION BY:\r\n-------------------------\r\nBryan Austin\r\nbaustin@clemson.edu\r\n\r\n-------------------------\r\nDISC 1 (62:59)\r\n-------------------------\r\nSET 1\r\n1.  Crowd\r\n2.  PYITE\r\n3.  Reba\r\n4.  Albuquerque\r\n5.  Carini\r\n6.  Oh Kee Pa Ceremony>\r\n7.  Suzie Greenberg\r\n8.  Suzie Greenberg Jam\r\n\r\n-------------------------\r\nDISC 2 (46:44)\r\n-------------------------\r\nSET 2a\r\n1.  Crowd\r\n2.  Drowned\r\n3.  Cross Eyed and Painless\r\n4.  Dog Faced Boy\r\n\r\n-------------------------\r\nDISC 3 (38:48)\r\n-------------------------\r\nSET 2b\r\n1.  Prince Caspian\r\n2.  Loving Cup\r\n\r\nEncore\r\n3.  Driver\r\n4.  The Inlaw Josie Wales\r\n5.  Sample in a Jar\r\n\r\n-------------------------\r\nNOTE:\r\n-------------------------\r\nI'd prefer that the opening crowd noises are not removed,\r\nbut I could honestly care less. I feel it helps recreate\r\nthe experience. Also, if this source is converted to any\r\nother format(ie- .MP3, .RA,...), please include this file\r\nand add any changes to the source.\r\nThanx & Enjoy!\r\n-Bryan\r\n\r\nSend any questions or comments to:\r\nbaustin@clemson.edu",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 53471228,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 83000316,
+          "analyzedWindows": 40527,
+          "sourcePeak": 0.81634521484375,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          -2.5,
+          6.0,
+          14.5,
+          17.0,
+          18.5,
+          19.0,
+          19.0,
+          19.0,
+          20.0,
+          19.5,
+          17.0,
+          12.5,
+          11.5,
+          10.5,
+          6.5,
+          5.0,
+          -2.5,
+          -6.0,
+          -7.0,
+          -11.0,
+          -10.5,
+          -16.0,
+          -19.0,
+          -21.0,
+          -28.0,
+          -45.0
+        ],
+        "analysis_seconds": 5.520231209,
+        "render_seconds": 0.620008791,
+        "frames": 83000316,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.81634521484375,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 83000316,
+        "duration_seconds": 1882.0933333333332,
+        "sample_peak_dbfs": -1.7625229720494135,
+        "oversampled_peak_estimate_dbfs": -1.7520912211557773,
+        "rms_dbfs": -22.234166135685435,
+        "crest_db": 20.47164316363602,
+        "stereo_correlation": 0.7180424306873313,
+        "side_mid_db": -7.8460657751254885,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 0.7287040812812947,
+            "mean_magnitude_squared_coherence": 0.17630007124707198
+          },
+          "bass": {
+            "power": 3104.5235947179235,
+            "mean_magnitude_squared_coherence": 0.9218172439642881
+          },
+          "low_mid": {
+            "power": 23560.11024224161,
+            "mean_magnitude_squared_coherence": 0.7907061112471565
+          },
+          "mid": {
+            "power": 10418.937715312659,
+            "mean_magnitude_squared_coherence": 0.11064990858431457
+          },
+          "presence": {
+            "power": 474.98730570597996,
+            "mean_magnitude_squared_coherence": 0.12789561338913286
+          },
+          "air": {
+            "power": 59.59274053690821,
+            "mean_magnitude_squared_coherence": 0.16744591556475677
+          },
+          "upper": {
+            "power": 0.016607465416218867,
+            "mean_magnitude_squared_coherence": 0.02133353759588837
+          }
+        },
+        "integrated_lufs": -19.6,
+        "loudness_range_lu": 9.0,
+        "ffmpeg_true_peak_dbtp": -1.8
+      },
+      "enhanced": {
+        "frames": 83000316,
+        "duration_seconds": 1882.0933333333332,
+        "sample_peak_dbfs": -1.7625229720494135,
+        "oversampled_peak_estimate_dbfs": -1.7520912211557773,
+        "rms_dbfs": -22.234166135685435,
+        "crest_db": 20.47164316363602,
+        "stereo_correlation": 0.7180424306873313,
+        "side_mid_db": -7.8460657751254885,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 0.7287040812812947,
+            "mean_magnitude_squared_coherence": 0.17630007124707198
+          },
+          "bass": {
+            "power": 3104.5235947179235,
+            "mean_magnitude_squared_coherence": 0.9218172439642881
+          },
+          "low_mid": {
+            "power": 23560.11024224161,
+            "mean_magnitude_squared_coherence": 0.7907061112471565
+          },
+          "mid": {
+            "power": 10418.937715312659,
+            "mean_magnitude_squared_coherence": 0.11064990858431457
+          },
+          "presence": {
+            "power": 474.98730570597996,
+            "mean_magnitude_squared_coherence": 0.12789561338913286
+          },
+          "air": {
+            "power": 59.59274053690821,
+            "mean_magnitude_squared_coherence": 0.16744591556475677
+          },
+          "upper": {
+            "power": 0.016607465416218867,
+            "mean_magnitude_squared_coherence": 0.02133353759588837
+          }
+        },
+        "integrated_lufs": -19.6,
+        "loudness_range_lu": 9.0,
+        "ffmpeg_true_peak_dbtp": -1.8
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2003-07-30",
+        "title": "Fast Enough for You",
+        "url": "https://phish.in/blob/hnjdo6wjr337bij34mslymr8k2i9.mp3",
+        "sha256": "b0ce636c4ae027f35ea898d4c84e84bae190c2943db73101be5ca9eda292eb4f",
+        "duration": 424.848322,
+        "source_notes": "Phish\r\n7/30/03\r\nTweeter Center\r\nCamden, NJ\r\n\r\nSchoeps MK5(cards/DIN) >>> M222 >>> Elvo NT222 >>> Lunatec V3@48k >>> Sony D-100\r\n\r\n(OTS/DFC/front rail)\r\n\r\nDAP1 > ODL-276 > JB3 > Firewire > PC > Wavelab 4.0c > CD Wave > FLAC Frontend\r\n\r\nTaped by Jason Lonchar\r\nTransferred and tracked by Bean (diskobean@taperssection.com)\r\n\r\n2 SETS\r\n\r\n~d1: set 1~\r\n\r\n01. crowd\r\n02. My Friend, My Friend\r\n03. Lonesome Coyboy Bill\r\n04. Scents And Subtle Sounds*\r\n05. You Ain't Goin' Nowhere**\r\n06. Spock's Brain\r\n07. Chalkdust Torture***\r\n08. On Your Way Down\r\n\r\n~d2: set 1(cont.)~\r\n\r\n01. Fast Enough For You\r\n02. Taste\r\nset 2:\r\n03. crowd\r\n04. Twist\r\n05. Bug\r\n\r\n~d3: set 2(cont.)~\r\n\r\n01. You Enjoy Myself\r\n02. Walls Of The Cave\r\n03. E: Secret Smile \r\n\r\n* - 25+ minutes; \r\n** - first time played, Bob Dylan cover (includes the lyric \"We'll climb that hill no matter how      steep / When we get up to IT\"; reports indicate that the performance was closer to the      Byrds' well-known rendition of the song than to Dylan's original); \r\n*** - very adventurous version; Thanks to Erik Swain for the calls.",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 12922077,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 18735811,
+          "analyzedWindows": 9148,
+          "sourcePeak": 0.997650146484375,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.125,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0625,
+          -0.125,
+          -0.0625,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          18.0,
+          19.0,
+          14.0,
+          16.5,
+          17.5,
+          17.5,
+          19.5,
+          19.0,
+          19.0,
+          21.5,
+          16.0,
+          11.0,
+          10.5,
+          4.5,
+          0.5,
+          -0.5,
+          -3.5,
+          -3.5,
+          -3.5,
+          -8.5,
+          -17.0,
+          -18.5,
+          -22.5,
+          -23.0,
+          -31.0,
+          -48.0
+        ],
+        "analysis_seconds": 1.126784208,
+        "render_seconds": 0.152793375,
+        "frames": 18735811,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.997650146484375,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 18735811,
+        "duration_seconds": 424.84832199546486,
+        "sample_peak_dbfs": -0.020434586859282802,
+        "oversampled_peak_estimate_dbfs": -0.01490721182821331,
+        "rms_dbfs": -19.005232907331354,
+        "crest_db": 18.984798320472073,
+        "stereo_correlation": 0.8829001893549707,
+        "side_mid_db": -12.061006638868445,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 908.9745691939399,
+            "mean_magnitude_squared_coherence": 0.894170053212451
+          },
+          "bass": {
+            "power": 10950.230029793662,
+            "mean_magnitude_squared_coherence": 0.9772148113092204
+          },
+          "low_mid": {
+            "power": 54762.349411223935,
+            "mean_magnitude_squared_coherence": 0.9269411188330978
+          },
+          "mid": {
+            "power": 11076.915143780081,
+            "mean_magnitude_squared_coherence": 0.24130022878050508
+          },
+          "presence": {
+            "power": 1314.6320773774066,
+            "mean_magnitude_squared_coherence": 0.31848690799756424
+          },
+          "air": {
+            "power": 68.64578683120271,
+            "mean_magnitude_squared_coherence": 0.2424494866042404
+          },
+          "upper": {
+            "power": 0.003736519671590682,
+            "mean_magnitude_squared_coherence": 0.02900921899053631
+          }
+        },
+        "integrated_lufs": -16.4,
+        "loudness_range_lu": 12.4,
+        "ffmpeg_true_peak_dbtp": -0.0
+      },
+      "enhanced": {
+        "frames": 18735811,
+        "duration_seconds": 424.84832199546486,
+        "sample_peak_dbfs": -0.020434586859282802,
+        "oversampled_peak_estimate_dbfs": -0.01490721182821331,
+        "rms_dbfs": -19.005232907331354,
+        "crest_db": 18.984798320472073,
+        "stereo_correlation": 0.8829001893549707,
+        "side_mid_db": -12.061006638868445,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 908.9745691939399,
+            "mean_magnitude_squared_coherence": 0.894170053212451
+          },
+          "bass": {
+            "power": 10950.230029793662,
+            "mean_magnitude_squared_coherence": 0.9772148113092204
+          },
+          "low_mid": {
+            "power": 54762.349411223935,
+            "mean_magnitude_squared_coherence": 0.9269411188330978
+          },
+          "mid": {
+            "power": 11076.915143780081,
+            "mean_magnitude_squared_coherence": 0.24130022878050508
+          },
+          "presence": {
+            "power": 1314.6320773774066,
+            "mean_magnitude_squared_coherence": 0.31848690799756424
+          },
+          "air": {
+            "power": 68.64578683120271,
+            "mean_magnitude_squared_coherence": 0.2424494866042404
+          },
+          "upper": {
+            "power": 0.003736519671590682,
+            "mean_magnitude_squared_coherence": 0.02900921899053631
+          }
+        },
+        "integrated_lufs": -16.4,
+        "loudness_range_lu": 12.4,
+        "ffmpeg_true_peak_dbtp": -0.0
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2009-08-07",
+        "title": "The Moma Dance",
+        "url": "https://phish.in/blob/rak6uaq80ql1kh010b9zov29p6at.mp3",
+        "sha256": "3fd4946724604e15a99668b99c8f728de5279759c9dabf570ddbc55ca38c3d43",
+        "duration": 465.513379,
+        "source_notes": "Phish\r\n08/07/2009\r\nGeorge, Washington  The Gorge Amphitheatre\r\n\r\nSource: Schoeps mk22> KCY> Schoeps VMS02IB> Apogee Mini-Me> SD 722 (@24bit/96kHz)\r\nLocation: FOB, DFC, ORTF\r\n\r\nTransfer: SD 722> Samplitude SE 9.1.1(resample/dither)> CDWave> flac(16/44.1)\r\nTaped, Transferred & Seeded by: taylorc (08/08/2009)\r\n\r\n\r\nSet I\r\nt01 [09:05] Down with Disease\r\nt02 [10:06] Ocelot\r\nt03 [08:25] Pebbles and Marbles\r\nt04 [08:54] Possum\r\nt05 [02:43] Sleep\r\nt06 [07:22] Destiny Unbound\r\nt07 [14:15] Stash\r\nt08 [17:49] Sneakin' Sally Through the Alley\r\nt09 [04:39] Cavern\r\n\r\nSet II\r\nt10 [08:24] The Moma Dance\r\nt11 [13:18] Light>\r\nt12 [08:24] Taste\r\nt13 [14:57] Fluffhead\r\nt14 [05:33] Joy\r\nt15 [18:00] Bathtub Gin>\r\nt16 [16:11] Harry Hood\r\nt17 [02:57] crowd\r\n\r\nEncore\r\nt18 [10:02] Slave to the Traffic Light\r\n\r\n\r\nNotes:\r\nSet I [1:23:18] Set II [1:27:44] Encore [10:02]",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 14587667,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 20529140,
+          "analyzedWindows": 10022,
+          "sourcePeak": 0.831695556640625,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          19.0,
+          22.0,
+          17.5,
+          19.5,
+          26.5,
+          22.0,
+          14.5,
+          10.0,
+          13.5,
+          15.0,
+          15.0,
+          10.0,
+          11.5,
+          10.5,
+          8.5,
+          2.5,
+          -3.0,
+          -4.0,
+          -4.5,
+          -9.0,
+          -12.5,
+          -18.5,
+          -20.0,
+          -22.5,
+          -30.5,
+          -43.5
+        ],
+        "analysis_seconds": 1.595234042,
+        "render_seconds": 0.176836583,
+        "frames": 20529140,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.831695556640625,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 20529140,
+        "duration_seconds": 465.51337868480726,
+        "sample_peak_dbfs": -1.6007123748437992,
+        "oversampled_peak_estimate_dbfs": -1.5951849998127292,
+        "rms_dbfs": -19.64388830744744,
+        "crest_db": 18.043175932603642,
+        "stereo_correlation": 0.7453842102910492,
+        "side_mid_db": -8.353840838901252,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 281.8183117716785,
+            "mean_magnitude_squared_coherence": 0.4898414204796877
+          },
+          "bass": {
+            "power": 31518.80951797932,
+            "mean_magnitude_squared_coherence": 0.9751527977789501
+          },
+          "low_mid": {
+            "power": 17816.331521006163,
+            "mean_magnitude_squared_coherence": 0.8059011554688891
+          },
+          "mid": {
+            "power": 17426.2969976804,
+            "mean_magnitude_squared_coherence": 0.26832164467985015
+          },
+          "presence": {
+            "power": 1177.1290452536223,
+            "mean_magnitude_squared_coherence": 0.24516850659087655
+          },
+          "air": {
+            "power": 56.50339322661855,
+            "mean_magnitude_squared_coherence": 0.1344230818970929
+          },
+          "upper": {
+            "power": 0.008895841506838245,
+            "mean_magnitude_squared_coherence": 0.00712542205569512
+          }
+        },
+        "integrated_lufs": -17.5,
+        "loudness_range_lu": 5.8,
+        "ffmpeg_true_peak_dbtp": -1.6
+      },
+      "enhanced": {
+        "frames": 20529140,
+        "duration_seconds": 465.51337868480726,
+        "sample_peak_dbfs": -1.6007123748437992,
+        "oversampled_peak_estimate_dbfs": -1.5951849998127292,
+        "rms_dbfs": -19.64388830744744,
+        "crest_db": 18.043175932603642,
+        "stereo_correlation": 0.7453842102910492,
+        "side_mid_db": -8.353840838901252,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 281.8183117716785,
+            "mean_magnitude_squared_coherence": 0.4898414204796877
+          },
+          "bass": {
+            "power": 31518.80951797932,
+            "mean_magnitude_squared_coherence": 0.9751527977789501
+          },
+          "low_mid": {
+            "power": 17816.331521006163,
+            "mean_magnitude_squared_coherence": 0.8059011554688891
+          },
+          "mid": {
+            "power": 17426.2969976804,
+            "mean_magnitude_squared_coherence": 0.26832164467985015
+          },
+          "presence": {
+            "power": 1177.1290452536223,
+            "mean_magnitude_squared_coherence": 0.24516850659087655
+          },
+          "air": {
+            "power": 56.50339322661855,
+            "mean_magnitude_squared_coherence": 0.1344230818970929
+          },
+          "upper": {
+            "power": 0.008895841506838245,
+            "mean_magnitude_squared_coherence": 0.00712542205569512
+          }
+        },
+        "integrated_lufs": -17.5,
+        "loudness_range_lu": 5.8,
+        "ffmpeg_true_peak_dbtp": -1.6
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 0.9999999999999998,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2018-07-17",
+        "title": "Carini",
+        "url": "https://phish.in/blob/5qly3i757swkgfkzae5udas88pwj.mp3",
+        "sha256": "b7169d78b69b07fc41aa533a08616054f36630e30c5da84d6391d807215d1a50",
+        "duration": 573.986667,
+        "source_notes": "Phish\nJuly 17th, 2018\nLake Tahoe Outdoor Arena at Harvey's \nStateline, NV\n\nSource: Schoeps mk41v's(DIN)>kc5>m222>nt222>788t + Neumann ak43's(NOS)>lc3>lemosax>788t\nLocation: OTS/LOC\nTransfer: 788t>Wavelab 6>CD Wave>Wavelab 6>Flac\nTaped and Transferred by: Derek Davis\n\nSet 1\n\n01 Intro\n02 Free ~>\n03 Possum\n04 The Moma Dance\n05 Ghost ~>\n06 Funky Bitch\n07 Stash \n08 Character Zero\n\nSet 2\n\n01 Intro\n02 No Men In No Man's Land ~>\n03 Carini ~>\n04 Slave To The Traffic Light\n05 Bouncing Around The Room\n06 Soul Planet ~>\n07 Steam\n08 Harry Hood\nEncore\n09 Contact\n10 Julius",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 17475150,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 25312812,
+          "analyzedWindows": 12359,
+          "sourcePeak": 0.999969482421875,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          21.0,
+          21.0,
+          19.0,
+          19.5,
+          20.5,
+          23.0,
+          19.0,
+          11.0,
+          22.0,
+          14.0,
+          15.0,
+          10.0,
+          8.0,
+          5.0,
+          5.0,
+          0.0,
+          -5.5,
+          -5.5,
+          -6.0,
+          -11.5,
+          -14.5,
+          -17.5,
+          -19.5,
+          -21.5,
+          -26.5,
+          -40.5
+        ],
+        "analysis_seconds": 1.714608625,
+        "render_seconds": 0.236305542,
+        "frames": 25312812,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.999969482421875,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 25312812,
+        "duration_seconds": 573.9866666666667,
+        "sample_peak_dbfs": -0.00026507636037961915,
+        "oversampled_peak_estimate_dbfs": 0.04963012799986819,
+        "rms_dbfs": -17.662028551150254,
+        "crest_db": 17.661763474789872,
+        "stereo_correlation": 0.8986645779478668,
+        "side_mid_db": -12.702732390519895,
+        "clip_fraction": 1.1851705768604453e-07,
+        "bands": {
+          "sub": {
+            "power": 1893.664548471968,
+            "mean_magnitude_squared_coherence": 0.34371408950840404
+          },
+          "bass": {
+            "power": 29780.96725650999,
+            "mean_magnitude_squared_coherence": 0.9689254901658743
+          },
+          "low_mid": {
+            "power": 61208.336310050225,
+            "mean_magnitude_squared_coherence": 0.7775834681940529
+          },
+          "mid": {
+            "power": 13786.530468121406,
+            "mean_magnitude_squared_coherence": 0.4115832613652295
+          },
+          "presence": {
+            "power": 1010.9694018098525,
+            "mean_magnitude_squared_coherence": 0.3699045078396167
+          },
+          "air": {
+            "power": 112.56772905988862,
+            "mean_magnitude_squared_coherence": 0.27998629812601616
+          },
+          "upper": {
+            "power": 0.016589802949019992,
+            "mean_magnitude_squared_coherence": 0.027826915733170143
+          }
+        },
+        "integrated_lufs": -15.7,
+        "loudness_range_lu": 5.8,
+        "ffmpeg_true_peak_dbtp": 0.0
+      },
+      "enhanced": {
+        "frames": 25312812,
+        "duration_seconds": 573.9866666666667,
+        "sample_peak_dbfs": -0.00026507636037961915,
+        "oversampled_peak_estimate_dbfs": 0.04963012799986819,
+        "rms_dbfs": -17.662028551150254,
+        "crest_db": 17.661763474789872,
+        "stereo_correlation": 0.8986645779478668,
+        "side_mid_db": -12.702732390519895,
+        "clip_fraction": 1.1851705768604453e-07,
+        "bands": {
+          "sub": {
+            "power": 1893.664548471968,
+            "mean_magnitude_squared_coherence": 0.34371408950840404
+          },
+          "bass": {
+            "power": 29780.96725650999,
+            "mean_magnitude_squared_coherence": 0.9689254901658743
+          },
+          "low_mid": {
+            "power": 61208.336310050225,
+            "mean_magnitude_squared_coherence": 0.7775834681940529
+          },
+          "mid": {
+            "power": 13786.530468121406,
+            "mean_magnitude_squared_coherence": 0.4115832613652295
+          },
+          "presence": {
+            "power": 1010.9694018098525,
+            "mean_magnitude_squared_coherence": 0.3699045078396167
+          },
+          "air": {
+            "power": 112.56772905988862,
+            "mean_magnitude_squared_coherence": 0.27998629812601616
+          },
+          "upper": {
+            "power": 0.016589802949019992,
+            "mean_magnitude_squared_coherence": 0.027826915733170143
+          }
+        },
+        "integrated_lufs": -15.7,
+        "loudness_range_lu": 5.8,
+        "ffmpeg_true_peak_dbtp": 0.0
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 0.9999999999999999,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2023-08-05",
+        "title": "Tweezer",
+        "url": "https://phish.in/blob/emrmyogh04z8jhen6xcrov6fc607.mp3",
+        "sha256": "05e77aa2ab17598d4ec22e2e67741e89e52fded2c260704ac7f1628c90eb50e1",
+        "duration": 319.884375,
+        "source_notes": "phish\n05 august 2023\nmadison square garden\nnew york, ny\n\nlocation:\tots, dfc; on stand approx. 8'\n\nsource:\t\tneumann u89i (hypers, DINa) -> eaa psp2 -> sd mixpre 10ii; \n\t\trecorded @ 192 kHz, 32 bit (float); seeded @ 96 kHz 24 bit\n\ntransfer:\tmixpre 10ii -> usb-c -> alienware x-14\n\nedits:\t\tchannels summed & balanced, fades added, normalized, resampled, dithered, fladc'd & track split in \n\t\tmagix sound forge 16.1.1; flac files tagged using foobar2000\n\ntaped by:\tteam no drama\n\ncontact:\tjadedphan@hotmail.com\n\n192 kHz 24 bit files available upon request\n\nset I:\n\n01. rowdy wooks\n02. loving cup\n03. maze\n04. martian monster\n05. the divided sky\n06. prince caspian ->\n07. nicu\n08. steam\n09. drift while you're sleeping\n\nset II:\n\n01. rowdy wooks\n02. set your soul free\n03. tweezer ->\n04. guy forget ->\n05. tweezer ->\n06. what's the use? ->\n07. scents & subtle sounds ->\n08. everything's right ->\n09. backwards down the number line\n10. tweezer reprise\n11. encore break:\n12. harry hood",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 9990132,
+        "sample_rate": 48000,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 48000,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 15354450,
+          "analyzedWindows": 7497,
+          "sourcePeak": 0.939666748046875,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          20.5,
+          21.5,
+          -88.5,
+          19.0,
+          18.5,
+          20.0,
+          20.5,
+          17.0,
+          15.5,
+          14.5,
+          10.0,
+          15.5,
+          15.0,
+          11.0,
+          9.5,
+          7.0,
+          3.5,
+          -0.5,
+          -3.5,
+          -7.0,
+          -10.5,
+          -10.5,
+          -13.0,
+          -16.0,
+          -24.5,
+          -42.0
+        ],
+        "analysis_seconds": 1.786205292,
+        "render_seconds": 0.279032416,
+        "frames": 15354450,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.939666748046875,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 15354450,
+        "duration_seconds": 319.884375,
+        "sample_peak_dbfs": -0.5405228247162809,
+        "oversampled_peak_estimate_dbfs": -0.5349954496852118,
+        "rms_dbfs": -19.902570231134387,
+        "crest_db": 19.362047406418107,
+        "stereo_correlation": 0.5003980509042526,
+        "side_mid_db": -4.7674973013697235,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 37.062679000307554,
+            "mean_magnitude_squared_coherence": 0.5253019038555414
+          },
+          "bass": {
+            "power": 14518.156095873692,
+            "mean_magnitude_squared_coherence": 0.7592835659259548
+          },
+          "low_mid": {
+            "power": 19881.65458053138,
+            "mean_magnitude_squared_coherence": 0.4369040527002923
+          },
+          "mid": {
+            "power": 27583.032751331684,
+            "mean_magnitude_squared_coherence": 0.0864691096945885
+          },
+          "presence": {
+            "power": 2034.8894636051728,
+            "mean_magnitude_squared_coherence": 0.20608031315114597
+          },
+          "air": {
+            "power": 290.2240926733107,
+            "mean_magnitude_squared_coherence": 0.23097773566403138
+          },
+          "upper": {
+            "power": 0.04031582182993006,
+            "mean_magnitude_squared_coherence": 0.003876089219225582
+          }
+        },
+        "integrated_lufs": -17.5,
+        "loudness_range_lu": 7.2,
+        "ffmpeg_true_peak_dbtp": -0.5
+      },
+      "enhanced": {
+        "frames": 15354450,
+        "duration_seconds": 319.884375,
+        "sample_peak_dbfs": -0.5405228247162809,
+        "oversampled_peak_estimate_dbfs": -0.5349954496852118,
+        "rms_dbfs": -19.902570231134387,
+        "crest_db": 19.362047406418107,
+        "stereo_correlation": 0.5003980509042526,
+        "side_mid_db": -4.7674973013697235,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 37.062679000307554,
+            "mean_magnitude_squared_coherence": 0.5253019038555414
+          },
+          "bass": {
+            "power": 14518.156095873692,
+            "mean_magnitude_squared_coherence": 0.7592835659259548
+          },
+          "low_mid": {
+            "power": 19881.65458053138,
+            "mean_magnitude_squared_coherence": 0.4369040527002923
+          },
+          "mid": {
+            "power": 27583.032751331684,
+            "mean_magnitude_squared_coherence": 0.0864691096945885
+          },
+          "presence": {
+            "power": 2034.8894636051728,
+            "mean_magnitude_squared_coherence": 0.20608031315114597
+          },
+          "air": {
+            "power": 290.2240926733107,
+            "mean_magnitude_squared_coherence": 0.23097773566403138
+          },
+          "upper": {
+            "power": 0.04031582182993006,
+            "mean_magnitude_squared_coherence": 0.003876089219225582
+          }
+        },
+        "integrated_lufs": -17.5,
+        "loudness_range_lu": 7.2,
+        "ffmpeg_true_peak_dbtp": -0.5
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "1995-12-07",
+        "title": "Taste That Surrounds",
+        "url": "https://phish.in/blob/0h8jdngm87jac3sfdc4ph43gk9nh.mp3",
+        "sha256": "bcf1c134bb0d1474c80d719ca988822bfa3bcc5ea40a3412f3c8e62c247d0d8a",
+        "duration": 455.76,
+        "source_notes": "12-07-95 Niagara Falls Convention Center, Niagara Falls, NY \r\n\r\nSource: AT 4031 --> Tascam DA-P1\r\nTaper: Don Wright\r\n\r\nDAT --> CDR --> SHN Transfer:\r\nSony DTC-A6 --> DIO Maudio 2448 --> SF 4.5b --> CDArchtect --> Plex 8x \r\nCDR --> EAC --> SHN \r\n\r\nDisc 1\r\n1: The Old Home Place, \r\nThe Curtain-> \r\nAC/DC Bag\r\nDemand >\r\nRift\r\nSlave to the Traffic Light\r\nGuyute\r\nBouncing Around the Room\r\nPossum\r\nHello My Baby* \r\n\r\nDisc 2\r\n2: Split Open and Melt\r\nStrange Design\r\nTaste That Surrounds\r\nReba\r\nJulius\r\n\r\n\r\nDisc 3\r\nSleeping Monkey\r\nSparkle\r\nMike's Song-> \r\nWeekapaug Groove*\r\nAmazing Grace \r\nE: Uncle Pen\r\n\r\nShow Notes: Reba included a Pop Goes the Weasel tease and, unfortunately, a botched \r\nending. The Melt jam included a tease of In-A-Gadda-Da-Vida.",
+        "source_tags": "RMSTR",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 18419228,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 20099016,
+          "analyzedWindows": 9813,
+          "sourcePeak": 1.0,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          21.5,
+          21.0,
+          21.5,
+          25.5,
+          19.5,
+          19.0,
+          17.5,
+          16.0,
+          18.0,
+          11.0,
+          11.0,
+          14.5,
+          5.5,
+          9.5,
+          6.5,
+          2.5,
+          4.5,
+          -1.0,
+          -4.5,
+          0.0,
+          -4.0,
+          -7.5,
+          -10.0,
+          -10.5,
+          -20.5,
+          -37.0
+        ],
+        "analysis_seconds": 1.4035955,
+        "render_seconds": 0.186568917,
+        "frames": 20099016,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 1.0,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 20099016,
+        "duration_seconds": 455.76,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.33285757929857096,
+        "rms_dbfs": -16.65057221539725,
+        "crest_db": 16.65057221539725,
+        "stereo_correlation": 0.7267461632989894,
+        "side_mid_db": -8.004574204665923,
+        "clip_fraction": 3.9802943586890025e-07,
+        "bands": {
+          "sub": {
+            "power": 5994.291597169335,
+            "mean_magnitude_squared_coherence": 0.9457335186951243
+          },
+          "bass": {
+            "power": 61242.82142291284,
+            "mean_magnitude_squared_coherence": 0.9051233419295506
+          },
+          "low_mid": {
+            "power": 30606.329198483418,
+            "mean_magnitude_squared_coherence": 0.8638369054143707
+          },
+          "mid": {
+            "power": 28639.413509940652,
+            "mean_magnitude_squared_coherence": 0.48607272004646873
+          },
+          "presence": {
+            "power": 7445.37458448615,
+            "mean_magnitude_squared_coherence": 0.4560418590835968
+          },
+          "air": {
+            "power": 2206.584818419396,
+            "mean_magnitude_squared_coherence": 0.15923153169098314
+          },
+          "upper": {
+            "power": 0.5279103942029097,
+            "mean_magnitude_squared_coherence": 0.022776469950292224
+          }
+        },
+        "integrated_lufs": -14.4,
+        "loudness_range_lu": 5.5,
+        "ffmpeg_true_peak_dbtp": 0.4
+      },
+      "enhanced": {
+        "frames": 20099016,
+        "duration_seconds": 455.76,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.33285757929857096,
+        "rms_dbfs": -16.65057221539725,
+        "crest_db": 16.65057221539725,
+        "stereo_correlation": 0.7267461632989894,
+        "side_mid_db": -8.004574204665923,
+        "clip_fraction": 3.9802943586890025e-07,
+        "bands": {
+          "sub": {
+            "power": 5994.291597169335,
+            "mean_magnitude_squared_coherence": 0.9457335186951243
+          },
+          "bass": {
+            "power": 61242.82142291284,
+            "mean_magnitude_squared_coherence": 0.9051233419295506
+          },
+          "low_mid": {
+            "power": 30606.329198483418,
+            "mean_magnitude_squared_coherence": 0.8638369054143707
+          },
+          "mid": {
+            "power": 28639.413509940652,
+            "mean_magnitude_squared_coherence": 0.48607272004646873
+          },
+          "presence": {
+            "power": 7445.37458448615,
+            "mean_magnitude_squared_coherence": 0.4560418590835968
+          },
+          "air": {
+            "power": 2206.584818419396,
+            "mean_magnitude_squared_coherence": 0.15923153169098314
+          },
+          "upper": {
+            "power": 0.5279103942029097,
+            "mean_magnitude_squared_coherence": 0.022776469950292224
+          }
+        },
+        "integrated_lufs": -14.4,
+        "loudness_range_lu": 5.5,
+        "ffmpeg_true_peak_dbtp": 0.4
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 0.9999999999999998,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "1996-12-06",
+        "title": "Sparkle",
+        "url": "https://phish.in/blob/ol5lvnm4wji66rcrqedoezlaays4.mp3",
+        "sha256": "8883d367bbb8ea4461404530f5c229083d67ae9f1e8961b9f711783e6975b4fb",
+        "duration": 217.208345,
+        "source_notes": "PHiSH - 12/06/96\r\nAlladin Theatre, Las Vegas, NV\r\n\r\nsource: Schoeps621>Oade>DAP1>D(3)\r\ntransfer: Casio DA-R100 > M-Audio 24/96 via Coax SPDIF > Wavelab (fades, L2 + BBE > sample rate convert & rendered w/ UV22HR) > CD-WAV > SHNv3\r\n\r\ntransfer by shakedown@furthurnet.org on 02/02/2004\r\n\r\nDISC ONE\r\nset I:\r\n01. Wilson\r\n02. Peaches En Regalia\r\n03. Poor Heart\r\n04. 2001 >\r\n05. Llama\r\n06. You Enjoy Myself\r\n07. Cars Trucks Buses\r\n08. Down with Disease >\r\n09. Frankenstien\r\n\r\nDISC TWO\r\nset II:\r\n01. Julius\r\n02. Sparkle\r\n03. Mike's Song >\r\n04. Simple\r\n05. Harry Hood \r\n06. Weekapaug Groove\r\n\r\nDISC THREE\r\nset II(cont):\r\n01. Sweet Adeline\r\n02. Good Time Bad Times\r\nencore:\r\n03. Harpua >\r\n04. Suspicious Minds >\r\n05. Harpua \r\n06. Suzy Greenberg\r\n\r\nShow Notes:\r\n\r\nRead Charlie Dirksens YEM review here: http://www.phish.net/reviews/yem/12-06-96.html\r\n\r\nMost of Harpua features Les Claypool and Larry LaLonde from Primus. After the opening, Les does a rap about a weed, then more Harpua and the Jimmy story (Jimmy and Poster Nutbag going to Vegas). They stop and camp, where they start yodelling. John McEuen and Heather and Anamiekl August did a country/yodel tune.\r\n\r\nThe story continues with Jimmy & Poster meet up with four \"Elvii\" on the edge of Las Vegas and have a duel.  The four Elvis's sing the first few verses of \"Suspicious Minds\" and then Fish continues. Jimmy (Fish?) is victorious. Then the dog/cat fight. Harpua wins and the song finishes.\r\n\r\nAt some point everyone returns and then Brian Mantia, the drummer for Primus, shows up for \"Suzy Greenberg\". Everyone stays onstage for Suzy Greenberg, which includes a \"Suzy-Q\" jam.\r\n\r\n\r\n=================\r\nAnother Operation 96 seed from Lenny Stubbe's DAT collection.",
+        "source_tags": "Lore",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 6917940,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 9578888,
+          "analyzedWindows": 4677,
+          "sourcePeak": 0.741851806640625,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          20.5,
+          22.0,
+          17.0,
+          16.0,
+          16.0,
+          15.0,
+          20.5,
+          15.5,
+          15.5,
+          17.0,
+          10.5,
+          15.0,
+          14.5,
+          10.5,
+          12.0,
+          5.0,
+          4.0,
+          -3.5,
+          -2.5,
+          -5.0,
+          -10.5,
+          -11.5,
+          -12.0,
+          -18.0,
+          -23.5,
+          -32.5
+        ],
+        "analysis_seconds": 0.6959395,
+        "render_seconds": 0.117292917,
+        "frames": 9578888,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.741851806640625,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 9578888,
+        "duration_seconds": 217.20834467120181,
+        "sample_peak_dbfs": -2.5936568266588433,
+        "oversampled_peak_estimate_dbfs": -2.5881294516277737,
+        "rms_dbfs": -21.270387570901427,
+        "crest_db": 18.676730744242583,
+        "stereo_correlation": 0.5217406094747199,
+        "side_mid_db": -5.003885167564239,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 1255.5419151467079,
+            "mean_magnitude_squared_coherence": 0.4675323345896253
+          },
+          "bass": {
+            "power": 10229.860793257274,
+            "mean_magnitude_squared_coherence": 0.8557638883607074
+          },
+          "low_mid": {
+            "power": 14740.140807638218,
+            "mean_magnitude_squared_coherence": 0.6840929258400834
+          },
+          "mid": {
+            "power": 18676.900845888653,
+            "mean_magnitude_squared_coherence": 0.20833663875177685
+          },
+          "presence": {
+            "power": 1740.0734099202045,
+            "mean_magnitude_squared_coherence": 0.34633973720036504
+          },
+          "air": {
+            "power": 315.53980492166926,
+            "mean_magnitude_squared_coherence": 0.23982827328423398
+          },
+          "upper": {
+            "power": 1.9228503488623723,
+            "mean_magnitude_squared_coherence": 0.0027523913771855483
+          }
+        },
+        "integrated_lufs": -18.8,
+        "loudness_range_lu": 6.5,
+        "ffmpeg_true_peak_dbtp": -2.6
+      },
+      "enhanced": {
+        "frames": 9578888,
+        "duration_seconds": 217.20834467120181,
+        "sample_peak_dbfs": -2.5936568266588433,
+        "oversampled_peak_estimate_dbfs": -2.5881294516277737,
+        "rms_dbfs": -21.270387570901427,
+        "crest_db": 18.676730744242583,
+        "stereo_correlation": 0.5217406094747199,
+        "side_mid_db": -5.003885167564239,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 1255.5419151467079,
+            "mean_magnitude_squared_coherence": 0.4675323345896253
+          },
+          "bass": {
+            "power": 10229.860793257274,
+            "mean_magnitude_squared_coherence": 0.8557638883607074
+          },
+          "low_mid": {
+            "power": 14740.140807638218,
+            "mean_magnitude_squared_coherence": 0.6840929258400834
+          },
+          "mid": {
+            "power": 18676.900845888653,
+            "mean_magnitude_squared_coherence": 0.20833663875177685
+          },
+          "presence": {
+            "power": 1740.0734099202045,
+            "mean_magnitude_squared_coherence": 0.34633973720036504
+          },
+          "air": {
+            "power": 315.53980492166926,
+            "mean_magnitude_squared_coherence": 0.23982827328423398
+          },
+          "upper": {
+            "power": 1.9228503488623723,
+            "mean_magnitude_squared_coherence": 0.0027523913771855483
+          }
+        },
+        "integrated_lufs": -18.8,
+        "loudness_range_lu": 6.5,
+        "ffmpeg_true_peak_dbtp": -2.6
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "1999-07-10",
+        "title": "Golgi Apparatus",
+        "url": "https://phish.in/blob/bar72yhamoffl0kahy7dkhgr0ptk.mp3",
+        "sha256": "0caaa86f9296741ce24db8f3e38da9fc122fc1a7f1f88d2505e98a3856144cd8",
+        "duration": 307.402472,
+        "source_notes": "Phish\r\n07/10/1999\r\nCamden, New Jersey E Centre\r\n\r\nSource: (OTS) Schoeps CMC6/mk41> Apogee AD-1000> Tascam DA-P1 (@44.1kHz)\r\nTaped by: Taylor Caine\r\n\r\nTransfer: Tascam DA-40> M-Audio Audiophile 2496> Samplitude 7.0 (fades)> CDWave> flac\r\nTransferred & Seeded by: TaylorC (07/18/2007)\r\n\r\n\r\nSet I\r\nt01 [07:40] Wilson\r\nt02 [14:18] Chalkdust Torture >\r\nt03 [08:06] Roggae\r\nt04 [05:57] Water in the Sky\r\nt05 [07:18] Back at the Chicken Shack\r\nt06 [03:58] Sparkle\r\nt07 [16:16] Bathtub Gin\r\nt08 [05:07] Golgi Apparatus\r\n\r\nSet II\r\nt09 [20:24] Tweezer >\r\nt10 [07:27] Mountains in the Mist\r\nt11 [14:04] Birds of a Feather >\r\nt12 [07:08] When the Circus Comes\r\nt13 [21:59] Fluffhead\r\n\r\nEncore\r\nt14 [06:02] While My Guitar Gently Weeps\r\nt15 [04:16] Tweezer Reprise\r\n\r\n\r\nNotes:\r\n\r\nSet I [1:08:40] Set II [1:11:02] Encore [10:18]\r\nAdded Fades at start/end of Set I, start of Set II & end of Encore\r\nCD-R Tracking Option 1: D1 (t01-t08), D2 (t09-t12), D3 (t13-t15)\r\nCD-R Tracking Option 2: D1 (t01-t08 w/t14+t15), D2 (t09-t13)",
+        "source_tags": "Lore",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 8958845,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 13556449,
+          "analyzedWindows": 6618,
+          "sourcePeak": 0.906097412109375,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          14.0,
+          17.5,
+          23.0,
+          25.0,
+          22.5,
+          20.0,
+          20.0,
+          16.0,
+          16.5,
+          16.0,
+          13.5,
+          11.0,
+          12.0,
+          9.0,
+          7.5,
+          6.0,
+          -0.5,
+          -1.0,
+          -2.5,
+          -5.0,
+          -11.5,
+          -14.5,
+          -20.0,
+          -21.5,
+          -28.5,
+          -42.0
+        ],
+        "analysis_seconds": 1.286691125,
+        "render_seconds": 0.135388375,
+        "frames": 13556449,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.906097412109375,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 13556449,
+        "duration_seconds": 307.4024716553288,
+        "sample_peak_dbfs": -0.8565021995009835,
+        "oversampled_peak_estimate_dbfs": -0.8509748244699139,
+        "rms_dbfs": -15.361568065329383,
+        "crest_db": 14.5050658658284,
+        "stereo_correlation": 0.6462406879217073,
+        "side_mid_db": -6.620396490787307,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 573.3465122779465,
+            "mean_magnitude_squared_coherence": 0.4661174021593877
+          },
+          "bass": {
+            "power": 74855.58457075949,
+            "mean_magnitude_squared_coherence": 0.9202987786724457
+          },
+          "low_mid": {
+            "power": 64329.01537062348,
+            "mean_magnitude_squared_coherence": 0.6143119687424488
+          },
+          "mid": {
+            "power": 37848.11169155302,
+            "mean_magnitude_squared_coherence": 0.06432616869972776
+          },
+          "presence": {
+            "power": 5083.617019469315,
+            "mean_magnitude_squared_coherence": 0.2751845924244641
+          },
+          "air": {
+            "power": 421.4665393532533,
+            "mean_magnitude_squared_coherence": 0.26171981005932443
+          },
+          "upper": {
+            "power": 0.3060552414210597,
+            "mean_magnitude_squared_coherence": 0.05350100311581675
+          }
+        },
+        "integrated_lufs": -13.0,
+        "loudness_range_lu": 6.1,
+        "ffmpeg_true_peak_dbtp": -0.9
+      },
+      "enhanced": {
+        "frames": 13556449,
+        "duration_seconds": 307.4024716553288,
+        "sample_peak_dbfs": -0.8565021995009835,
+        "oversampled_peak_estimate_dbfs": -0.8509748244699139,
+        "rms_dbfs": -15.361568065329383,
+        "crest_db": 14.5050658658284,
+        "stereo_correlation": 0.6462406879217073,
+        "side_mid_db": -6.620396490787307,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 573.3465122779465,
+            "mean_magnitude_squared_coherence": 0.4661174021593877
+          },
+          "bass": {
+            "power": 74855.58457075949,
+            "mean_magnitude_squared_coherence": 0.9202987786724457
+          },
+          "low_mid": {
+            "power": 64329.01537062348,
+            "mean_magnitude_squared_coherence": 0.6143119687424488
+          },
+          "mid": {
+            "power": 37848.11169155302,
+            "mean_magnitude_squared_coherence": 0.06432616869972776
+          },
+          "presence": {
+            "power": 5083.617019469315,
+            "mean_magnitude_squared_coherence": 0.2751845924244641
+          },
+          "air": {
+            "power": 421.4665393532533,
+            "mean_magnitude_squared_coherence": 0.26171981005932443
+          },
+          "upper": {
+            "power": 0.3060552414210597,
+            "mean_magnitude_squared_coherence": 0.05350100311581675
+          }
+        },
+        "integrated_lufs": -13.0,
+        "loudness_range_lu": 6.1,
+        "ffmpeg_true_peak_dbtp": -0.9
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2015-08-22",
+        "title": "46 Days",
+        "url": "https://phish.in/blob/vw86iw2yb051qdg0b5dvpdb7a7pn.mp3",
+        "sha256": "d72a2faeaef273d19195c9a006f24276f2ba8ec9d39f1a76dad8c8c45faa73b8",
+        "duration": 853.653333,
+        "source_notes": "Phish\n2015-08-22\nWatkins Glen International\nWatkins Glen, NY\n\nSource:Schoeps mk4v (ortf)>kcy aki> M222> NT222>Sonosax SX-M2>744t 24/96\nLocation:FOB\nTransfer:SDHC>Audacity 16/44.1>Amadeus Pro>xACT\nTaped By: Chris King\n\nSet 1\n01.Divided Sky\n02.The Moma Dance >\n03.Mound\n04.Army Of One\n05.Scabbard >\n06.Sample In A Jar\n07.Tube\n08.Halfway To The Moon\n09.Camel Walk\n10.How Many People Are You?\n11.When the Circus Comes\n12.Undermind >\n13.Run Like An Antelope\n\nSet 2\n01.Wolfman's Brother\n02.Halley's Comet >\n03.46 Days ->\n04.Backwards Down The Number Line >\n05.Tweezer >\n06.Prince Caspian\n\nSet 3\n01.Meatstick\n02.Blaze On ->\n03.Possum >\n04.Cities >\n05.Light >\n06.555\n07.Wading In The Velvet Sea >\n08.Walls Of The Cave\n09.Encore\n10.Boogie On Reggae Woman >\n11.Tweezer Reprise\n\n---------------------------------------\n\nPhish\n2015-08-23\n\"Drive-In Jam\"\nWatkins Glen International\nWatkins Glen, NY\n\nSource:Schoeps mk4v (ortf)>kcy aki> M222> NT222>Sonosax SX-M2>744t 24/96\nLocation:FOB\nTransfer:SDHC>Audacity 16/44.1>Amadeus Pro>xACT\nTaped By: Chris King\n\nSecret Set\n\n01. Drive-In Jam",
+        "source_tags": "",
+        "sbd_flag": null,
+        "audio_status": "complete",
+        "split": "development",
+        "prior_study": true,
+        "bytes": 24088459,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 37646112,
+          "analyzedWindows": 18381,
+          "sourcePeak": 0.618865966796875,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          21.5,
+          24.5,
+          17.0,
+          15.5,
+          21.5,
+          23.0,
+          16.0,
+          16.5,
+          16.5,
+          16.0,
+          12.5,
+          13.5,
+          11.0,
+          9.5,
+          5.5,
+          5.5,
+          0.5,
+          -2.5,
+          -5.0,
+          -9.0,
+          -12.0,
+          -12.0,
+          -13.0,
+          -17.5,
+          -21.0,
+          -42.5
+        ],
+        "analysis_seconds": 2.426922875,
+        "render_seconds": 0.29716975,
+        "frames": 37646112,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.618865966796875,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 37646112,
+        "duration_seconds": 853.6533333333333,
+        "sample_peak_dbfs": -4.1680679948339865,
+        "oversampled_peak_estimate_dbfs": -4.1525762465510745,
+        "rms_dbfs": -22.701812275699226,
+        "crest_db": 18.53374428086524,
+        "stereo_correlation": 0.7616015204671546,
+        "side_mid_db": -8.640382668677791,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 398.51531593168846,
+            "mean_magnitude_squared_coherence": 0.6223682572506201
+          },
+          "bass": {
+            "power": 17019.386151051065,
+            "mean_magnitude_squared_coherence": 0.9480524886808481
+          },
+          "low_mid": {
+            "power": 7526.216558683509,
+            "mean_magnitude_squared_coherence": 0.7674069794583104
+          },
+          "mid": {
+            "power": 8082.7131580265595,
+            "mean_magnitude_squared_coherence": 0.3518243506310474
+          },
+          "presence": {
+            "power": 603.9782729936551,
+            "mean_magnitude_squared_coherence": 0.3699483203702258
+          },
+          "air": {
+            "power": 153.06462824050806,
+            "mean_magnitude_squared_coherence": 0.32811677182472065
+          },
+          "upper": {
+            "power": 0.09329249651640945,
+            "mean_magnitude_squared_coherence": 0.0338110101623677
+          }
+        },
+        "integrated_lufs": -21.0,
+        "loudness_range_lu": 5.0,
+        "ffmpeg_true_peak_dbtp": -4.2
+      },
+      "enhanced": {
+        "frames": 37646112,
+        "duration_seconds": 853.6533333333333,
+        "sample_peak_dbfs": -4.1680679948339865,
+        "oversampled_peak_estimate_dbfs": -4.1525762465510745,
+        "rms_dbfs": -22.701812275699226,
+        "crest_db": 18.53374428086524,
+        "stereo_correlation": 0.7616015204671546,
+        "side_mid_db": -8.640382668677791,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 398.51531593168846,
+            "mean_magnitude_squared_coherence": 0.6223682572506201
+          },
+          "bass": {
+            "power": 17019.386151051065,
+            "mean_magnitude_squared_coherence": 0.9480524886808481
+          },
+          "low_mid": {
+            "power": 7526.216558683509,
+            "mean_magnitude_squared_coherence": 0.7674069794583104
+          },
+          "mid": {
+            "power": 8082.7131580265595,
+            "mean_magnitude_squared_coherence": 0.3518243506310474
+          },
+          "presence": {
+            "power": 603.9782729936551,
+            "mean_magnitude_squared_coherence": 0.3699483203702258
+          },
+          "air": {
+            "power": 153.06462824050806,
+            "mean_magnitude_squared_coherence": 0.32811677182472065
+          },
+          "upper": {
+            "power": 0.09329249651640945,
+            "mean_magnitude_squared_coherence": 0.0338110101623677
+          }
+        },
+        "integrated_lufs": -21.0,
+        "loudness_range_lu": 5.0,
+        "ffmpeg_true_peak_dbtp": -4.2
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 0.9999999999999998,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "1994-10-31",
+        "title": "Yer Blues",
+        "track_id": 4671,
+        "url": "https://phish.in/blob/sgyr9o8qda8ysjinhjyfstg9ylp5.mp3",
+        "duration": 218.373333,
+        "source_notes": "Phish\r\nOctober 31, 1994\r\nGlens Falls Civic Center\r\nGlens Falls, NY\r\n\r\nsource:\r\nAKG 460b/ck61 > custom pre-amp > Sony TCD-D7 (@ 48 kHz)\r\n\r\ntransfer:\r\nTascam DA-20MKII > Tascam HD-P2 > CF card > usb 2.0 > pc > r8brain v1.9 (resample to 44.1 kHz) > CD Wave v1.97 > Samplitude SE v9.1.1 (fades, patch, +10dB on \"Amazing Grace\") > FLAC v1.2.1 (Level 8)\r\n\r\nrecorded by David Flaschner\r\ntransferred by Jason Sobel (jasonsobel@gmail.com)\r\nseeded November 12, 2008\r\n\r\nnotes:\r\nFLAC tags added with metaflac v1.2.1\r\nThe original 48 kHz files from the DAT transfer have been archived and are available upon request\r\nBig thanks to Dave Flaschner for letting me borrow the master DATs!\r\n\r\nDisc 1 - [79:01]\r\nSet I\r\n01 - [00:34] - set 1 intro\r\n02 - [04:27] - Frankenstein\r\n03 - [03:46] - Sparkle\r\n04 - [08:25] - Simple\r\n05 - [16:52] - The Divided Sky\r\n06 - [14:51] - Harpua\r\n07 - [07:51] - Julius\r\n08 - [01:29] - The Horse >\r\n09 - [05:08] - Silent in the Morning\r\n10 - [15:39] - Reba\r\n\r\nDisc 2 - [52:28]\r\nSet I continued\r\n01 - [05:04] - Golgi Apparatus\r\nSet II\r\n02 - [01:24] - Speak to Me >\r\n03 - [00:19] - Ed Sullivan Intro\r\n04 - [02:29] - Back in the USSR\r\n05 - [04:02] - Dear Prudence\r\n06 - [02:10] - Glass Onion\r\n07 - [02:44] - Ob La Di Ob La Da\r\n08 - [00:53] - Wild Honey Pie\r\n09 - [02:55] - The Continuing Story of Bungalow Bill\r\n10 - [06:00] - While My Guitar Gently Weeps\r\n11 - [02:45] - Happiness is a Warm Gun\r\n12 - [02:15] - Martha My Dear\r\n13 - [02:03] - I'm So Tired\r\n14 - [02:18] - Blackbird\r\n15 - [02:00] - Piggies\r\n16 - [03:27] - Rocky Raccoon\r\n17 - [02:56] - Don't Pass Me By\r\n18 - [00:19] - HYHU\r\n19 - [02:06] - Why Don't We Do it in the Road\r\n20 - [01:34] - I Will\r\n21 - [02:46] - Julia\r\n\r\nDisc 3 - [45:44]\r\nSet II continued\r\n01 - [02:21] - Birthday Jam\r\n02 - [03:38] - Yer Blues\r\n03 - [02:34] - Mother Nature's Son\r\n04 - [03:15] - Everybody's Got Something to Hide Except for Me and My Monkey\r\n05 - [02:56] - Sexy Sadie\r\n06 - [04:24] - Helter Skelter\r\n07 - [02:31] - Long Long Long\r\n08 - [05:23] - Revolution\r\n09 - [02:39] - Honey Pie\r\n10 - [02:42] - Savoy Truffle\r\n11 - [04:41] - Cry Baby Cry\r\n12 - [05:31] - Revolution 9\r\n\r\nDisc 4 - [76:40]\r\nSet III\r\n01 - [13:43] - David Bowie\r\n02 - [03:42] - Bouncing Around the Room\r\n03 - [10:49] - Slave to the Traffic Light\r\n04 - [05:38] - Rift\r\n05 - [05:31] - Sleeping Monkey\r\n06 - [02:14] - Poor Heart\r\n07 - [10:39] - Run Like an Antelope\r\n08 - [03:13] - encore break\r\n09 - [01:54] - Amazing Grace\r\n10 - [07:25] - Costume Contest\r\n11 - [10:27] - The Squirming Coil\r\n12 - [01:25] - outro\r\n\r\nshow notes:\r\nHarpua included the Vibrations of Life and Death, and a War Pigs tease.\r\n\r\npatch notes:\r\nOn Dave's AKG source, there wa sa minor drop-out in \"Savoy Truffle\".\r\nThis minor drop-out was patched with the following source:\r\n\r\nSchoeps cmc3/mk41 > Oade Deluxe 12v PS > Denon dtr80p (@ 48 kHz)\r\nhttp://db.etree.org/shn/3602\r\n\r\nThe volume of the Schoeps patch source was raised by +6dB to better match Dave's AKG source.\r\nThe Schoeps patch source was used at the following location:\r\nSavy Truffle: [00:41] to [00:43]\r\n",
+        "source_tags": "Costume Lore",
+        "venue": "Glens Falls Civic Center",
+        "location": "Glens Falls, NY",
+        "split": "development",
+        "prior_study": false,
+        "sha256": "49ef977d5954b50b40d53cfc63fac9ff1c811c5144424a2ed4e87b1475f6dcb5",
+        "bytes": 6574668,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 9630264,
+          "analyzedWindows": 4702,
+          "sourcePeak": 0.758636474609375,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          16.5,
+          19.0,
+          16.5,
+          13.5,
+          12.0,
+          14.5,
+          14.5,
+          15.5,
+          14.5,
+          13.0,
+          16.0,
+          18.0,
+          13.5,
+          12.5,
+          11.0,
+          8.5,
+          2.5,
+          1.5,
+          -1.5,
+          -0.5,
+          -6.5,
+          -11.0,
+          -12.0,
+          -13.5,
+          -22.0,
+          -33.5
+        ],
+        "analysis_seconds": 0.598589667,
+        "render_seconds": 0.07795975,
+        "frames": 9630264,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.758636474609375,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 9630264,
+        "duration_seconds": 218.37333333333333,
+        "sample_peak_dbfs": -2.3993256122909643,
+        "oversampled_peak_estimate_dbfs": -2.3937982372598943,
+        "rms_dbfs": -18.029896872706857,
+        "crest_db": 15.630571260415895,
+        "stereo_correlation": 0.5853345600366918,
+        "side_mid_db": -5.744855443025476,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 544.3370846395984,
+            "mean_magnitude_squared_coherence": 0.31361690019924193
+          },
+          "bass": {
+            "power": 11256.582644224023,
+            "mean_magnitude_squared_coherence": 0.912535071763982
+          },
+          "low_mid": {
+            "power": 20908.784633854517,
+            "mean_magnitude_squared_coherence": 0.7699254612076025
+          },
+          "mid": {
+            "power": 58111.34892129292,
+            "mean_magnitude_squared_coherence": 0.42960782300645023
+          },
+          "presence": {
+            "power": 7236.81542531144,
+            "mean_magnitude_squared_coherence": 0.3876484245083725
+          },
+          "air": {
+            "power": 935.277350708484,
+            "mean_magnitude_squared_coherence": 0.20915821834323928
+          },
+          "upper": {
+            "power": 3.0753587253962413,
+            "mean_magnitude_squared_coherence": 0.00799354367175556
+          }
+        },
+        "integrated_lufs": -15.0,
+        "loudness_range_lu": 4.1,
+        "ffmpeg_true_peak_dbtp": -2.4
+      },
+      "enhanced": {
+        "frames": 9630264,
+        "duration_seconds": 218.37333333333333,
+        "sample_peak_dbfs": -2.3993256122909643,
+        "oversampled_peak_estimate_dbfs": -2.3937982372598943,
+        "rms_dbfs": -18.029896872706857,
+        "crest_db": 15.630571260415895,
+        "stereo_correlation": 0.5853345600366918,
+        "side_mid_db": -5.744855443025476,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 544.3370846395984,
+            "mean_magnitude_squared_coherence": 0.31361690019924193
+          },
+          "bass": {
+            "power": 11256.582644224023,
+            "mean_magnitude_squared_coherence": 0.912535071763982
+          },
+          "low_mid": {
+            "power": 20908.784633854517,
+            "mean_magnitude_squared_coherence": 0.7699254612076025
+          },
+          "mid": {
+            "power": 58111.34892129292,
+            "mean_magnitude_squared_coherence": 0.42960782300645023
+          },
+          "presence": {
+            "power": 7236.81542531144,
+            "mean_magnitude_squared_coherence": 0.3876484245083725
+          },
+          "air": {
+            "power": 935.277350708484,
+            "mean_magnitude_squared_coherence": 0.20915821834323928
+          },
+          "upper": {
+            "power": 3.0753587253962413,
+            "mean_magnitude_squared_coherence": 0.00799354367175556
+          }
+        },
+        "integrated_lufs": -15.0,
+        "loudness_range_lu": 4.1,
+        "ffmpeg_true_peak_dbtp": -2.4
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2004-06-18",
+        "title": "Wilson",
+        "track_id": 21877,
+        "url": "https://phish.in/blob/7s3fwveucglw2t8epgqovtn53vzj.mp3",
+        "duration": 295.106712,
+        "source_notes": "PHiSH\r\n06.18.2004\r\nKeyspan Park \r\nBrooklyn, NY\r\n\r\nsource: (FOB/DFC) Schoeps M-S config \r\n\tMK8/MK4v > KCY actives > VMS_5u > modSBM1 > JB3 \r\ntransfer: JB3 > Wavelab4 w/ M-S matrix plugin > CDwave (tracks) > FLAC\r\n\r\ntaped and transferred by krunchy \r\nmuch props to EB for the assistance \r\n\r\nDISC1:\r\n   Set 1\r\n1. AC/DC Bag \r\n2. Camel Walk \r\n3. Crowd Control \r\n4. Stash \r\n5. Cars Trucks Buses \r\n6. Carini -> \r\n7. My Sweet One -> \r\n8. Character Zero > \r\n9. Tweezer\r\n\r\nDISC 2:\r\n   Set 2\r\n1. Wilson -> \r\n2. Down With Disease \r\n3. 99 Problems* \r\n4. Big Pimpin'* \r\n5. Chalk Dust Torture \r\n6. Harry Hood  \r\n7. Taste\r\n\r\nDISC 3:\r\n   Encore\r\n1. Bug > \r\n2. Tweezer Reprise",
+        "source_tags": "",
+        "venue": "KeySpan Park",
+        "location": "Brooklyn, NY",
+        "split": "development",
+        "prior_study": false,
+        "sha256": "d817b7656468f67e533f696253bf259be7dc54352eb5f9d5d25161f9050c0cc6",
+        "bytes": 9526553,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 13014206,
+          "analyzedWindows": 6354,
+          "sourcePeak": 1.0,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.125,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0625,
+          -0.125,
+          -0.0625,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          22.0,
+          24.5,
+          15.5,
+          14.0,
+          19.5,
+          24.0,
+          18.0,
+          14.5,
+          16.5,
+          15.0,
+          11.0,
+          14.0,
+          12.0,
+          4.0,
+          5.0,
+          3.5,
+          0.0,
+          -2.0,
+          -3.5,
+          -7.0,
+          -14.0,
+          -16.5,
+          -24.5,
+          -29.0,
+          -35.5,
+          -48.5
+        ],
+        "analysis_seconds": 0.907728833,
+        "render_seconds": 0.137626167,
+        "frames": 13014206,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 1.0,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 13014206,
+        "duration_seconds": 295.10671201814057,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.04338569908192848,
+        "rms_dbfs": -15.539080706933534,
+        "crest_db": 15.539080706933534,
+        "stereo_correlation": 0.397709829484195,
+        "side_mid_db": -3.6357968735812536,
+        "clip_fraction": 4.956122563297369e-06,
+        "bands": {
+          "sub": {
+            "power": 6327.896536927064,
+            "mean_magnitude_squared_coherence": 0.7166233127018046
+          },
+          "bass": {
+            "power": 65210.50055355815,
+            "mean_magnitude_squared_coherence": 0.6375440622724041
+          },
+          "low_mid": {
+            "power": 66649.03110802626,
+            "mean_magnitude_squared_coherence": 0.37555540747001503
+          },
+          "mid": {
+            "power": 35424.28043783984,
+            "mean_magnitude_squared_coherence": 0.3616119344628378
+          },
+          "presence": {
+            "power": 3905.3301762396413,
+            "mean_magnitude_squared_coherence": 0.4094732695084252
+          },
+          "air": {
+            "power": 89.32853267706163,
+            "mean_magnitude_squared_coherence": 0.08198373476052652
+          },
+          "upper": {
+            "power": 0.02167566038331718,
+            "mean_magnitude_squared_coherence": 0.19036788833178475
+          }
+        },
+        "integrated_lufs": -13.6,
+        "loudness_range_lu": 8.4,
+        "ffmpeg_true_peak_dbtp": 0.0
+      },
+      "enhanced": {
+        "frames": 13014206,
+        "duration_seconds": 295.10671201814057,
+        "sample_peak_dbfs": 0.0,
+        "oversampled_peak_estimate_dbfs": 0.04338569908192848,
+        "rms_dbfs": -15.539080706933534,
+        "crest_db": 15.539080706933534,
+        "stereo_correlation": 0.397709829484195,
+        "side_mid_db": -3.6357968735812536,
+        "clip_fraction": 4.956122563297369e-06,
+        "bands": {
+          "sub": {
+            "power": 6327.896536927064,
+            "mean_magnitude_squared_coherence": 0.7166233127018046
+          },
+          "bass": {
+            "power": 65210.50055355815,
+            "mean_magnitude_squared_coherence": 0.6375440622724041
+          },
+          "low_mid": {
+            "power": 66649.03110802626,
+            "mean_magnitude_squared_coherence": 0.37555540747001503
+          },
+          "mid": {
+            "power": 35424.28043783984,
+            "mean_magnitude_squared_coherence": 0.3616119344628378
+          },
+          "presence": {
+            "power": 3905.3301762396413,
+            "mean_magnitude_squared_coherence": 0.4094732695084252
+          },
+          "air": {
+            "power": 89.32853267706163,
+            "mean_magnitude_squared_coherence": 0.08198373476052652
+          },
+          "upper": {
+            "power": 0.02167566038331718,
+            "mean_magnitude_squared_coherence": 0.19036788833178475
+          }
+        },
+        "integrated_lufs": -13.6,
+        "loudness_range_lu": 8.4,
+        "ffmpeg_true_peak_dbtp": 0.0
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2010-10-31",
+        "title": "Spanish Moon",
+        "track_id": 23764,
+        "url": "https://phish.in/blob/3nexrskdlrx18306enyg1uz4d56h.mp3",
+        "duration": 571.693333,
+        "source_notes": "Phish\r\n10/31/2010\r\nAtlantic City, New Jersey  Boardwalk Hall\r\n\r\nSource: Schoeps mk41> KC5> M222> NT222> EAA PSP-2> SD 744t (@24bit/96kHz)\r\nLocation: OTS, DFC, 9' Stand, NOS\r\n\r\nTransfer: SD 744t> Samplitude SE 9.1.1(dither/resample)> CDWave> flac(16/44.1)\r\nTaped, Transferred & Seeded by: taylorc (11/01/2010)\r\n\r\n\r\nSet I\r\nt01 [01:35] Intro\r\nt02 [04:48] Frankenstein\r\nt03 [03:01] Big Black Furry Creature from Mars\r\nt04 [08:14] Ghost >\r\nt05 [04:04] Spooky\r\nt06 [16:50] The Divided Sky\r\nt07 [05:10] Roses Are Free >\r\nt08 [05:53] Funky Bitch\r\nt09 [07:45] Boogie On Reggae Woman\r\nt10 [13:31] Stash\r\nt11 [06:44] Character Zero\r\n\r\nSet II\r\nt12 [01:36] Join The Band\r\nt13 [04:39] Fat Man In The BathTub\r\nt14 [04:19] All That You Dream\r\nt15 [04:09] Oh Atlanta\r\nt16 [05:08] Old Folks Boogie\r\nt17 [04:04] Time Loves A Hero >\r\nt18 [05:42] Day or Night\r\nt19 [05:09] Mercenary Territory\r\nt20 [09:31] Spanish Moon\r\nt21 [08:56] Dixie Chicken >\r\nt22 [07:39] Tripe Face Boogie\r\nt23 [04:43] Rocket In My Pocket\r\nt24 [04:51] Willin'\r\nt25 [02:04] Don't Bogart That Joint\r\nt26 [03:46] A Apolitical Blues\r\nt27 [04:57] Sailin' Shoes\r\nt28 [06:59] Feats Don't Fail Me Now\r\nt29 [07:29] Outro\r\n\r\nSet III\r\nt29 [01:00] Intro\r\nt30 [10:49] Down with Disease >\r\nt31 [07:40] Back on the Train >\r\nt32 [10:37] Gotta Jibboo >\r\nt33 [05:20] Camel Walk\r\nt34 [05:28] Suzy Greenberg\r\nt35 [07:55] Wilson >\r\nt36 [11:10] Harry Hood >\r\nt37 [00:57] The Horse >\r\nt38 [04:52] Silent in the Morning\r\nt39 [17:10] You Enjoy Myself\r\nt40 [03:09] crowd/banter\r\n\r\nEncore\r\nt41 [09:38] Julius\r\n\r\n\r\nNotes:\r\nSpooky, last played 04/14/1993 (751 shows)\r\nSet II, Waiting For Columbus (Little Feat)\r\nSet II & Encore w/Giovanni Hidalgo, Aaron Johnson, Stuart Bogie, \r\nIan Hendrickson, Michael Leonhart and Eric Biondo\r\nWillin' w/Mike (piano), Fish (vocals), Page (bass), Trey (drums)\r\nSet II Outro consists of entire band marching around floor\r\nSet I [1:17:35] Set II [1:35:41] Set III [1:26:07] Encore [9:38]",
+        "source_tags": "Costume Lore",
+        "venue": "Boardwalk Hall",
+        "location": "Atlantic City, NJ",
+        "split": "development",
+        "prior_study": false,
+        "sha256": "a306020e9eb1e437a131350908c4c71582bcd31967cc2327c7d8ae9e0209fadf",
+        "bytes": 16174978,
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 25211676,
+          "analyzedWindows": 12310,
+          "sourcePeak": 0.93865966796875,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          13.5,
+          21.5,
+          22.0,
+          22.0,
+          24.5,
+          20.5,
+          18.5,
+          21.0,
+          18.0,
+          13.0,
+          9.5,
+          9.0,
+          11.0,
+          7.5,
+          7.0,
+          4.0,
+          1.0,
+          -0.5,
+          -5.5,
+          -9.5,
+          -14.0,
+          -17.0,
+          -17.0,
+          -20.5,
+          -28.5,
+          -41.5
+        ],
+        "analysis_seconds": 1.99565125,
+        "render_seconds": 0.214767375,
+        "frames": 25211676,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.93865966796875,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 25211676,
+        "duration_seconds": 571.6933333333334,
+        "sample_peak_dbfs": -0.5498368472193919,
+        "oversampled_peak_estimate_dbfs": -0.5396320756383195,
+        "rms_dbfs": -19.218006548247477,
+        "crest_db": 18.668169701028088,
+        "stereo_correlation": 0.7924650849208423,
+        "side_mid_db": -9.359453849969373,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 80.2533634766126,
+            "mean_magnitude_squared_coherence": 0.44843332526957536
+          },
+          "bass": {
+            "power": 29987.642821836544,
+            "mean_magnitude_squared_coherence": 0.928717298081716
+          },
+          "low_mid": {
+            "power": 33988.49895657239,
+            "mean_magnitude_squared_coherence": 0.6993281945912022
+          },
+          "mid": {
+            "power": 9438.564491321968,
+            "mean_magnitude_squared_coherence": 0.1701823376837947
+          },
+          "presence": {
+            "power": 1542.3320436213862,
+            "mean_magnitude_squared_coherence": 0.400875066031983
+          },
+          "air": {
+            "power": 132.62418302415185,
+            "mean_magnitude_squared_coherence": 0.3695003397170249
+          },
+          "upper": {
+            "power": 0.029759266641772128,
+            "mean_magnitude_squared_coherence": 0.057997557721179066
+          }
+        },
+        "integrated_lufs": -17.0,
+        "loudness_range_lu": 6.9,
+        "ffmpeg_true_peak_dbtp": -0.5
+      },
+      "enhanced": {
+        "frames": 25211676,
+        "duration_seconds": 571.6933333333334,
+        "sample_peak_dbfs": -0.5498368472193919,
+        "oversampled_peak_estimate_dbfs": -0.5396320756383195,
+        "rms_dbfs": -19.218006548247477,
+        "crest_db": 18.668169701028088,
+        "stereo_correlation": 0.7924650849208423,
+        "side_mid_db": -9.359453849969373,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 80.2533634766126,
+            "mean_magnitude_squared_coherence": 0.44843332526957536
+          },
+          "bass": {
+            "power": 29987.642821836544,
+            "mean_magnitude_squared_coherence": 0.928717298081716
+          },
+          "low_mid": {
+            "power": 33988.49895657239,
+            "mean_magnitude_squared_coherence": 0.6993281945912022
+          },
+          "mid": {
+            "power": 9438.564491321968,
+            "mean_magnitude_squared_coherence": 0.1701823376837947
+          },
+          "presence": {
+            "power": 1542.3320436213862,
+            "mean_magnitude_squared_coherence": 0.400875066031983
+          },
+          "air": {
+            "power": 132.62418302415185,
+            "mean_magnitude_squared_coherence": 0.3695003397170249
+          },
+          "upper": {
+            "power": 0.029759266641772128,
+            "mean_magnitude_squared_coherence": 0.057997557721179066
+          }
+        },
+        "integrated_lufs": -17.0,
+        "loudness_range_lu": 6.9,
+        "ffmpeg_true_peak_dbtp": -0.5
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 1.0,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    },
+    {
+      "metadata": {
+        "date": "2024-08-16",
+        "title": "Character Zero",
+        "track_id": 37862,
+        "url": "https://phish.in/blob/96pct1q73e1exkcyrjttsciy4zft.mp3",
+        "duration": 443.885604,
+        "source_notes": "Phish\r\nMondegreen\r\nThe Woodland's\r\nDover, DE\r\nFriday August 16th, 2024 all\r\n\r\nset1: 01:25:48\r\nd1t01. Bouncing Around The Room\r\nd1t02. Kill Devil Falls>\r\nd1t03. Peaches En Regalia\r\nd1t04. Free\r\nd1t05. Divided Sky\r\nd1t06. Tube\r\nd1t07. Mountains In The Mist\r\nd1t08. Reba>\r\nd1t09. Twist>\r\nd1t10. Character Zero\r\n\r\nset2: 01:47:27\r\nd2t01. My Friend, My Friend>\r\nd2t02. No Men In No Man's Land>\r\nd2t03. Ruby Waves\r\nd2t04. Pillow Jets>\r\nd2t05. Your Pet Cat>\r\nd2t06. Ruby Waves>\r\nd2t07. Ghost>\r\nd2t08. No Men In No Man's Land>\r\nd2t09. Fluffhead\r\nd2t10. encore break\r\nd2t11. (E) Harry Hood>\r\nd2t12. First Tube\r\n\r\nset3: 59:43\r\nd3t01. Mondegreen Ambient Jam\r\n\r\n\r\ntidbits: Kill Devil Falls was unfinished. Reba did not contain the whistling ending. Trey and Mike teased Moby Dick at the end of MFMF, and it did not contain the \"Myfe\" ending.\r\nFor the \"secret\" third set, the stage was draped with a ribboned screen on which abstract images, trees, flowers and animals were projected, with the band playing behind.\r\nAs the jam ended, the date and the words \"PLAY\" and \"REC\" appeared onscreen to give the appearance of looking through a camcorder's viewfinder.\r\nAfter the band left the stage, the images flickered and ended, and the status changed to \"STOP.\"\r\n\r\n\r\nLocation: FOB crew, 75ft? from stage, close to center ~\r\n\r\nMic config: Shapeways DIN bar, Schoeps A20S shock, DPA UA0896 screens, Windtech clamp>FOB stand clamp bar @ 7 ft ~\r\n\r\nSource: Neumann SKM 140(AK40's/LC3's/KM100's)>xlr>Lunatec V3(Oade neutral ACM mod)>AES/EBU>Sound Devices 722 @24bit/48kHz ~\r\n\r\nTransfer, editing, mastering & conversion: SD722 master file @24bit/48kHz CF>Sound Forge Pro 16.1.4>CD Wave v1.98(tracking)>FLAC16 via TLH v2.8.4(level 8), tag w/Tag Scanner6.1.17, ffp & md5-TLH\r\n\r\nNotes: ~ S.F. 16.1 (set1/3 normalize to -0.10db, set2 cFx limter +6.0db,fades, resample highest quality w/ anti-alias filter, POW-R#1 dither to 44.1/16) ~\r\n~ Editing performed in 24bit/48kHz realm ~\r\n~ Recording, transfer, editing, mastering & conversion by Steven Weld ~\r\n~ Special thanks to the Front Of Board crew for the clamp space! ~\r\n~ Many Thanks to Phish & crew and the venue staff for allowing us to record and share the music ~\r\n",
+        "source_tags": "Lore",
+        "venue": "The Woodlands",
+        "location": "Dover, DE",
+        "split": "development",
+        "prior_study": false,
+        "sha256": "d11d11f84740cf237f2d7bc70977ef142de123f1b50c5c164fe2bd0cc6a3e0bc",
+        "bytes": 14656007,
+        "sample_rate": 48000,
+        "channels": 2
+      },
+      "engine": {
+        "profile": {
+          "sampleRate": 48000,
+          "channels": 2,
+          "analysisFftSize": 2048,
+          "algorithmVersion": "offline-v1",
+          "summary": "No clear correction found. This copy keeps the original audio unchanged.",
+          "analyzedFrames": 21306509,
+          "analyzedWindows": 10403,
+          "sourcePeak": 0.974029541015625,
+          "outputGain": 1.0,
+          "maximumCorrectionDb": 0.0,
+          "passthrough": true
+        },
+        "band_centers_hz": [
+          50.0,
+          63.0,
+          80.0,
+          100.0,
+          125.0,
+          160.0,
+          200.0,
+          250.0,
+          315.0,
+          400.0,
+          500.0,
+          630.0,
+          800.0,
+          1000.0,
+          1250.0,
+          1600.0,
+          2000.0,
+          2500.0,
+          3150.0,
+          4000.0,
+          5000.0,
+          6300.0,
+          8000.0,
+          10000.0,
+          12500.0,
+          16000.0
+        ],
+        "static_gain_db": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "dynamic_threshold_db": [
+          22.0,
+          21.5,
+          -88.5,
+          17.5,
+          17.5,
+          24.5,
+          22.0,
+          17.5,
+          12.5,
+          12.5,
+          12.5,
+          14.0,
+          13.0,
+          8.0,
+          7.0,
+          4.0,
+          2.0,
+          2.0,
+          0.0,
+          -2.0,
+          -3.0,
+          -7.5,
+          -11.5,
+          -20.0,
+          -30.0,
+          -45.5
+        ],
+        "analysis_seconds": 1.350216625,
+        "render_seconds": 0.199576125,
+        "frames": 21306509,
+        "processed_windows": 0,
+        "dynamic_windows": 0,
+        "maximum_dynamic_reduction_db": 0.0,
+        "output_peak": 0.974029541015625,
+        "new_clipped_samples": 0
+      },
+      "original": {
+        "frames": 21306509,
+        "duration_seconds": 443.88560416666667,
+        "sample_peak_dbfs": -0.228557426996006,
+        "oversampled_peak_estimate_dbfs": -0.20984746939165866,
+        "rms_dbfs": -17.92603653939033,
+        "crest_db": 17.697479112394326,
+        "stereo_correlation": 0.6528560086599914,
+        "side_mid_db": -6.7767861890766525,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 345.7958086913254,
+            "mean_magnitude_squared_coherence": 0.26998063131796995
+          },
+          "bass": {
+            "power": 32995.10599207465,
+            "mean_magnitude_squared_coherence": 0.7009445701842502
+          },
+          "low_mid": {
+            "power": 39084.23260612839,
+            "mean_magnitude_squared_coherence": 0.7053282947755135
+          },
+          "mid": {
+            "power": 22714.52464646896,
+            "mean_magnitude_squared_coherence": 0.24265380397360903
+          },
+          "presence": {
+            "power": 5713.943190084818,
+            "mean_magnitude_squared_coherence": 0.2025011328787119
+          },
+          "air": {
+            "power": 553.9133586092622,
+            "mean_magnitude_squared_coherence": 0.15218921314567205
+          },
+          "upper": {
+            "power": 0.08193876912774767,
+            "mean_magnitude_squared_coherence": 0.014283211764845365
+          }
+        },
+        "integrated_lufs": -15.8,
+        "loudness_range_lu": 4.1,
+        "ffmpeg_true_peak_dbtp": -0.2
+      },
+      "enhanced": {
+        "frames": 21306509,
+        "duration_seconds": 443.88560416666667,
+        "sample_peak_dbfs": -0.228557426996006,
+        "oversampled_peak_estimate_dbfs": -0.20984746939165866,
+        "rms_dbfs": -17.92603653939033,
+        "crest_db": 17.697479112394326,
+        "stereo_correlation": 0.6528560086599914,
+        "side_mid_db": -6.7767861890766525,
+        "clip_fraction": 0.0,
+        "bands": {
+          "sub": {
+            "power": 345.7958086913254,
+            "mean_magnitude_squared_coherence": 0.26998063131796995
+          },
+          "bass": {
+            "power": 32995.10599207465,
+            "mean_magnitude_squared_coherence": 0.7009445701842502
+          },
+          "low_mid": {
+            "power": 39084.23260612839,
+            "mean_magnitude_squared_coherence": 0.7053282947755135
+          },
+          "mid": {
+            "power": 22714.52464646896,
+            "mean_magnitude_squared_coherence": 0.24265380397360903
+          },
+          "presence": {
+            "power": 5713.943190084818,
+            "mean_magnitude_squared_coherence": 0.2025011328787119
+          },
+          "air": {
+            "power": 553.9133586092622,
+            "mean_magnitude_squared_coherence": 0.15218921314567205
+          },
+          "upper": {
+            "power": 0.08193876912774767,
+            "mean_magnitude_squared_coherence": 0.014283211764845365
+          }
+        },
+        "integrated_lufs": -15.8,
+        "loudness_range_lu": 4.1,
+        "ffmpeg_true_peak_dbtp": -0.2
+      },
+      "comparison": {
+        "loudness_match_gain_db": 0.0,
+        "loudness_change_lu": -0.0,
+        "crest_change_db": 0.0,
+        "lra_change_lu": 0.0,
+        "stereo_correlation_change": 0.0,
+        "side_mid_change_db": 0.0,
+        "frame_count_equal": true,
+        "raw_side_mid_change_db": 0.0,
+        "near_mono_both": false,
+        "envelope_correlation": 0.9999999999999998,
+        "onset_flux_correlation": 1.0,
+        "low_level_passage_gain_median_db": 0.0,
+        "low_level_passage_gain_p05_db": 0.0,
+        "band_power_change_db_matched": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "band_coherence_change": {
+          "sub": 0.0,
+          "bass": 0.0,
+          "low_mid": 0.0,
+          "mid": 0.0,
+          "presence": 0.0,
+          "air": 0.0,
+          "upper": 0.0
+        },
+        "provisional_checks": {
+          "same_frame_count": true,
+          "no_new_integer_clipping": true,
+          "peak_margin_or_bit_exact_abstention": true,
+          "crest_preservation": true,
+          "stereo_correlation": true,
+          "stereo_width": true,
+          "envelope": true,
+          "onsets": true,
+          "low_level_passages": true
+        },
+        "all_preservation_checks_pass": true
+      }
+    }
+  ]
+}

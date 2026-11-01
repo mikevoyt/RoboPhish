@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:paddingBottom="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="24dp" android:background="@drawable/audio_hero_bg">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/saved_audio_eyebrow" android:textColor="#BDE5DC" android:textSize="11sp"
+            android:textStyle="bold" android:letterSpacing="0.1" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" android:text="@string/saved_audio_headline"
+            android:textColor="@android:color/white" android:textSize="28sp" android:fontFamily="sans-serif-medium" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" android:text="@string/saved_audio_intro" android:textColor="#D9E9E6"
+            android:textSize="14sp" android:lineSpacingExtra="3dp" />
+        <TextView android:id="@+id/saved_audio_counts" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="20dp"
+            android:textColor="@android:color/white" android:textSize="15sp" android:textStyle="bold" />
+        <TextView android:id="@+id/saved_audio_storage" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="8dp"
+            android:textColor="#D9E9E6" android:textSize="13sp" />
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="18dp" android:paddingHorizontal="6dp"
+        android:text="@string/saved_audio_quality_hint" android:textColor="@color/offline_muted"
+        android:textSize="13sp" android:lineSpacingExtra="3dp" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:paddingHorizontal="6dp"
+        android:text="@string/saved_audio_storage_hint" android:textColor="@color/offline_muted"
+        android:textSize="13sp" android:lineSpacingExtra="3dp" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:paddingHorizontal="6dp"
+        android:text="@string/saved_audio_choose_hint" android:textColor="@color/offline_muted"
+        android:textSize="13sp" android:lineSpacingExtra="3dp" />
+    <TextView android:id="@+id/saved_audio_now_playing" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="12dp" android:paddingHorizontal="6dp"
+        android:textColor="@color/offline_green" android:textSize="13sp" android:textStyle="bold"
+        android:accessibilityLiveRegion="polite" android:visibility="gone" />
+</LinearLayout>
